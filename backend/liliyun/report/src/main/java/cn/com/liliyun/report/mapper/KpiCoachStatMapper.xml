@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.report.mapper.KpiCoachStatMapper" >
+  <resultMap id="AreaResultMap" type="cn.com.liliyun.report.model.KpiCoachStatRecord" >
+    
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="subject" property="subjectid" jdbcType="INTEGER" />
+    <result column="result" property="result" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="coachname" property="coachname" jdbcType="VARCHAR" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="teachtypeid" property="teachtypeid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  
+  <select id="statByArea1" resultMap="AreaResultMap" parameterType="cn.com.liliyun.report.model.KpiCoachStatParam">
+    select d.coachid,d.teachtypeid, d.name as coachname,d.areaid, a.storeid, b.subject,0 as result,count(b.result) as count from t_student a join  t_orderexam_item b on a.id=b.studentid join t_coach_student c on a.id=c.studentid join t_coach d on c.coachid=d.coachid 
+    where subject in (1,3,5,7) and result=0
+    <if test="begindate != null ">
+		and examdate > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and examdate <= #{enddate}]]> 
+	</if>
+	<if test="subjectid != null ">
+		and b.subject = #{subjectid}
+	</if>
+	<if test="areaid != null ">
+		and d.areaid = #{areaid}
+	</if>
+	<if test="name != null and name !=''">
+		and d.name = #{name}
+	</if>
+    group by d.coachid, a.storeid,b.subject
+  </select>
+
+  <select id="statByArea2" resultMap="AreaResultMap" parameterType="cn.com.liliyun.report.model.KpiCoachStatParam">
+    select d.coachid,d.name as coachname,d.areaid, a.storeid, b.subject,result, count(b.subject) as count from t_student a join  t_trainexam_item b on a.id=b.studentid join t_coach_student c on a.id=c.studentid join t_coach d on c.coachid=d.coachid 
+    where subject in (1,3,5,7) 
+    <if test="begindate != null ">
+		and examdate > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and examdate <= #{enddate}]]> 
+	</if>
+	<if test="subjectid != null ">
+		and b.subject = #{subjectid}
+	</if>
+	<if test="areaid != null ">
+		and d.areaid = #{areaid}
+	</if>
+	<if test="name != null and name !=''">
+		and d.name = #{name}
+	</if>
+    group by d.coachid, a.storeid,b.subject,b.result
+  </select>
+</mapper>

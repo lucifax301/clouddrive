@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.business.mapper.BusinessMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.business.model.Business" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="template" property="template" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, businessid,name, description ,template
+    
+    
+  </sql>
+  <select id="get" resultMap="BaseResultMap" parameterType="cn.com.liliyun.business.model.Business">
+    select 
+    <include refid="Base_Column_List" />
+    from t_business
+    where id = #{id}
+  </select>
+  <select id="getByBusinessid" resultMap="BaseResultMap" parameterType="cn.com.liliyun.business.model.Business">
+    select 
+    <include refid="Base_Column_List" />
+    from t_business
+    where businessid = #{businessid}
+  </select>
+  
+  <select id="list" resultMap="BaseResultMap" parameterType="cn.com.liliyun.business.model.Business" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_business
+    
+  </select>
+  
+  <delete id="delete" parameterType="cn.com.liliyun.business.model.Business">
+  	delete from t_business where id=#{id}
+  </delete>
+  
+  <update id="update" parameterType="cn.com.liliyun.business.model.Business">
+  	update t_business set description=#{description},name=#{name},businessid=#{businessid},template=#{template} where id=#{id}
+  </update>
+  
+  <insert id="add" parameterType="cn.com.liliyun.business.model.Business" >
+    insert into t_business (businessid,name, description,template)
+    values ( #{businessid},#{name}, #{description},#{template})
+  </insert>
+  
+  	
+  	
+</mapper>

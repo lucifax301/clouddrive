@@ -1,0 +1,147 @@
+<section id="thispage" privilege = "030103"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教学组长搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+
+						<select name="areaid" id="area" data-toggle="selectpicker" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+
+					<label class="row-label"></label>
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var head_coach_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '教练列表',
+			toolbarItem: 'none',
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: false,
+			showToolbar: false,
+			dataUrl: config.openBasePath + 'coach/listhead?headcoachflag=1',
+			columns: [{
+					name: 'name',
+					label: '教学组长',
+					align: 'center',
+					render: function(value, data) {
+						//要传的值，组装成对象
+						var morejson = {
+							id: data.coachid
+						}
+						//return "<a onclick='viewcoach(" + data.coachid + ")'  data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' data-more='" + JSON.stringify(morejson) + "'>" + value + "</a>"
+						return value;
+					}
+				}, {
+					name: 'overcoach',
+					label: '管辖教练',
+					align: 'center',
+					render: function(value, data) {
+						var morejson = {
+							id: data.coachid
+						}
+						return "<a onclick='head_coach_list.showmancoach(" + data.coachid + ")'  data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' data-more='" + JSON.stringify(morejson) + "'>" + value + "</a>"
+					}
+				}, {
+					name: 'area',
+					label: '片区',
+					align: 'center'
+				}, {
+					name: 'overcoachcar',
+					label: '管辖教练车',
+					align: 'center'
+				}, {
+					name: 'muser',
+					label: '操作人员',
+					align: 'center'
+				}, {
+					name: 'mtime',
+					label: '最后修改时间',
+					align: 'center'
+				}, {
+					name: 'teachstate',
+					label: '操作',
+					align: 'center',
+					render: function(value, data) {
+						return "<a onclick='head_coach_list.editcoach(" + data.coachid + ")' data-privilege='030103_datagrid-list_02' class='btn-blue btn vhide' data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "编辑" + "</a>";
+					}
+				}
+
+			],
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+		}),
+
+	viewcoach: function(id) {
+		clz.setWindowJson(id);
+		BJUI.navtab({
+			id: 'head-coach-setting-view-'+id,
+			width: 900,
+			height: 800,
+			url: 'html/coach/head-coach-setting.html',
+			title: '教练详情',
+			onClose: function() {
+				
+				head_coach_list.list.datagrid('refresh', true);
+				
+			}
+
+		})
+	},
+
+	editcoach: function(id) {
+		var morejson = {
+			id: id
+		}
+
+		BJUI.navtab({
+			id: 'head-coach-setting-' + id,
+			url: 'html/coach/head-coach-setting.html',
+			title: '管辖教练详情',
+			more: JSON.stringify(morejson),
+			onClose: function() {
+				BJUI.navtab('switchTab', head_coach_list.curtab);
+				head_coach_list.list.datagrid('refresh', true);
+			}
+
+		})
+	},
+
+	showmancoach: function (id) {
+		clz.setWindowJson(id);
+		BJUI.dialog({
+			id: 'manager-coach-list'+id,
+			width: 900,
+			height: 800,
+			url: 'html/coach/manager-coach-list.html',
+			title: '教练列表',
+			onClose: function() {
+				head_coach_list.list.datagrid('refresh', true);
+			}
+
+		})
+	}
+	}
+</script>

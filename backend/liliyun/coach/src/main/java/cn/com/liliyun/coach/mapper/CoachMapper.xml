@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.CoachMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.Coach" >
+    <id column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="instid" property="instid" jdbcType="INTEGER" />
+    <result column="inscode" property="inscode" jdbcType="VARCHAR" />
+    <result column="coachnum" property="coachnum" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="fingerprint" property="fingerprint" jdbcType="INTEGER" />
+    <result column="photo_url" property="photo_url" jdbcType="VARCHAR" />
+    <result column="fingerprint_url" property="fingerprint_url" jdbcType="VARCHAR" />
+    <result column="drilicence" property="drilicence" jdbcType="VARCHAR" />
+    <result column="fstdrilicdate" property="fstdrilicdate" jdbcType="VARCHAR" />
+    <result column="occupationno" property="occupationno" jdbcType="VARCHAR" />
+    <result column="occupationlevel" property="occupationlevel" jdbcType="VARCHAR" />
+    <result column="dripermitted" property="dripermitted" jdbcType="VARCHAR" />
+    <result column="teachpermitted" property="teachpermitted" jdbcType="VARCHAR" />
+    <result column="employstatus" property="employstatus" jdbcType="VARCHAR" />
+    <result column="hiredate" property="hiredate" jdbcType="VARCHAR" />
+    <result column="leavedate" property="leavedate" jdbcType="VARCHAR" />
+    <result column="trainareaid" property="trainareaid" jdbcType="BIGINT" />
+
+    <result column="operate" property="operate" jdbcType="TINYINT" />
+    <result column="errorcode" property="errorcode" jdbcType="INTEGER" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="utime" property="utime" jdbcType="TIMESTAMP" />
+    <result column="ltime" property="ltime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="xid" property="xid" jdbcType="INTEGER" />
+    
+    
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="headcoachid" property="headcoachid" jdbcType="INTEGER" />
+    <result column="teachtypeid" property="teachtypeid" jdbcType="INTEGER" />
+    <result column="jobid" property="jobid" jdbcType="INTEGER" />
+    <result column="carno" property="carno" jdbcType="VARCHAR" />
+    <result column="teachcartype" property="teachcartype" jdbcType="VARCHAR" />
+    <result column="teachstate" property="teachstate" jdbcType="VARCHAR" />
+    <result column="studentload" property="studentload" jdbcType="INTEGER" />
+    <result column="curstudentload" property="curstudentload" jdbcType="INTEGER" />
+    <result column="headcoachflag" property="headcoachflag" jdbcType="INTEGER" />
+    <result column="mainstoreid" property="mainstoreid" jdbcType="INTEGER" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    coachid, instid, inscode, coachnum, name, sex, idcard, mobile, address, photo, fingerprint, 
+    photo_url, fingerprint_url, drilicence, fstdrilicdate, occupationno, occupationlevel,expireDate,
+    dripermitted, teachpermitted, employstatus, hiredate, leavedate, trainareaid, operate, errorcode, 
+    message, utime, ltime, cuid, muid, ctime, mtime,teachStartDate,workType,teaching,driving ,xid,
+    trainareaid,areaid,headcoachid,teachtypeid,jobid,carno,teachcartype,teachstate,studentload,curstudentload,headcoachflag,mainstoreid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.Coach" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </select>
+  <!-- 新增/编辑 唯一性校验 -->
+   <select id="selectByterm" resultType="cn.com.liliyun.coach.model.Coach" parameterType="cn.com.liliyun.coach.model.Coach" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach where 1=1
+    <if test="idcard != null">
+		and idcard = #{idcard}
+	</if>	
+     <if test="mobile != null">
+		and mobile = #{mobile}
+	</if>
+	 <if test="drilicence != null">
+		and drilicence = #{drilicence}
+	</if>
+	<if test="name != null">
+		and name = #{name}
+	</if>
+  </select>
+  
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.Coach" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach
+    where 1=1 
+	<if test="coachid != null and coachid!=''">
+		and coachid = #{coachid}
+	</if>
+	<if test="name != null and name!=''">
+		and name like concat(#{name},'%')
+	</if>		
+	<if test="mobile != null and mobile!=''">
+		and mobile like concat(#{mobile},'%')
+	</if>
+	<if test="areaid != null ">
+		and areaid = #{areaid}
+	</if>
+	<if test="jobid != null ">
+		and jobid = #{jobid}
+	</if>
+	<if test="teachstate != null ">
+		and teachstate = #{teachstate}
+	</if>
+	
+	<if test="employstatus != null and employstatus!=''">
+		and employstatus = #{employstatus}
+	</if>	
+	<if test="idcard != null and idcard !=''">
+		and idcard = #{idcard}
+	</if>
+	<if test="workType != null and workType !=''">
+		and workType = #{workType}
+	</if>
+	<if test="headcoachflag != null ">
+		and headcoachflag = #{headcoachflag}
+	</if>
+	<if test="headcoachid != null ">
+		and headcoachid = #{headcoachid}
+	</if>
+	<if test="teachcartype != null and teachcartype !=''">
+		and teachcartype = #{teachcartype}
+	</if>
+	<if test="teachtypeid != null ">
+		and teachtypeid = #{teachtypeid}
+	</if>
+	<if test="teachstate != null">
+		and teachstate = #{teachstate}
+	</if>
+	<if test="storeid != null">
+		and coachid in 
+		(select coachid from t_coach_store where storeid = #{storeid})
+	</if>
+	<if test="carno != null and carno !=''">
+		and carno = #{carno}
+	</if>
+	<if test="classid != null">
+		and coachid in 
+		(select coachid from t_coach_classinfo where classinfoid = #{classid})
+	</if>
+	<if test="studentid != null">
+		and coachid not in 
+		(select coachid from t_coach_student where studentid = #{studentid})
+	</if>
+	<if test="domain !=null">
+	    	<if test="domain.storeid !=null ">
+	    		and coachid in (select coachid from t_coach_store where storeid=#{domain.storeid}) 
+	    	</if>
+	    	<if test="domain.areaid !=null ">
+	    		and areaid=#{domain.areaid}
+	    	</if>
+	    	
+	</if>
+	
+	order by coachid desc
+  </select>
+  
+  <select id="selectNoassign" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.Coach" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach
+    where headcoachflag=0 and (headcoachid=0 or headcoachid is null)
+	<if test="coachid != null and coachid!=''">
+		and coachid = #{coachid}
+	</if>
+	<if test="name != null and name!=''">
+		and name like concat(#{name},'%')
+	</if>		
+	<if test="mobile != null and mobile!=''">
+		and mobile like concat(#{mobile},'%')
+	</if>
+	<if test="areaid != null ">
+		and areaid = #{areaid}
+	</if>
+	<if test="jobid != null ">
+		and jobid = #{jobid}
+	</if>
+	<if test="teachstate != null ">
+		and teachstate = #{teachstate}
+	</if>
+	
+	<if test="employstatus != null and employstatus!=''">
+		and employstatus = #{employstatus}
+	</if>	
+	<if test="idcard != null and idcard !=''">
+		and idcard = #{idcard}
+	</if>
+	<if test="workType != null and workType !=''">
+		and workType = #{workType}
+	</if>
+	
+	<if test="teachcartype != null and teachcartype !=''">
+		and teachcartype = #{teachcartype}
+	</if>
+	<if test="teachtypeid != null ">
+		and teachtypeid = #{teachtypeid}
+	</if>
+	<if test="teachstate != null">
+		and teachstate = #{teachstate}
+	</if>
+	<if test="storeid != null">
+		and coachid in 
+		(select coachid from t_coach_store where storeid = #{storeid})
+	</if>
+	<if test="carno != null and carno !=''">
+		and carno = #{carno}
+	</if>
+	order by coachid desc
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey"  parameterType="cn.com.liliyun.coach.model.Coach" >
+    delete from t_coach
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.coach.model.Coach" >
+    insert into t_coach (coachid, instid, inscode, 
+      coachnum, name, sex, 
+      idcard, mobile, address, 
+      photo, fingerprint, photo_url, 
+      fingerprint_url, drilicence, fstdrilicdate, 
+      occupationno, occupationlevel, dripermitted, 
+      teachpermitted, employstatus, hiredate, 
+      leavedate, trainareaid, operate, errorcode, 
+      message, utime, ltime, 
+      cuid, muid, ctime, 
+      mtime,headcoachflag)
+    values (#{coachid,jdbcType=INTEGER}, #{instid,jdbcType=INTEGER}, #{inscode,jdbcType=VARCHAR}, 
+      #{coachnum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{photo,jdbcType=VARCHAR}, #{fingerprint,jdbcType=INTEGER}, #{photo_url,jdbcType=VARCHAR}, 
+      #{fingerprint_url,jdbcType=VARCHAR}, #{drilicence,jdbcType=VARCHAR}, #{fstdrilicdate,jdbcType=VARCHAR}, 
+      #{occupationno,jdbcType=VARCHAR}, #{occupationlevel,jdbcType=VARCHAR}, #{dripermitted,jdbcType=VARCHAR}, 
+      #{teachpermitted,jdbcType=VARCHAR}, #{employstatus,jdbcType=VARCHAR}, #{hiredate,jdbcType=VARCHAR}, 
+      #{leavedate,jdbcType=VARCHAR}, #{trainareaid,jdbcType=BIGINT}, #{operate,jdbcType=TINYINT}, #{errorcode,jdbcType=INTEGER}, 
+      #{message,jdbcType=VARCHAR}, #{utime,jdbcType=TIMESTAMP}, #{ltime,jdbcType=TIMESTAMP}, 
+      #{cuid,jdbcType=BIGINT}, #{muid,jdbcType=BIGINT}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{mtime,jdbcType=TIMESTAMP},#{headcoachflag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.coach.model.Coach" useGeneratedKeys="true" keyProperty="coachid">
+    insert into t_coach
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="coachid != null" >
+        coachid,
+      </if>
+      <if test="instid != null" >
+        instid,
+      </if>
+      <if test="inscode != null" >
+        inscode,
+      </if>
+      <if test="coachnum != null" >
+        coachnum,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="photo != null" >
+        photo,
+      </if>
+      <if test="fingerprint != null" >
+        fingerprint,
+      </if>
+      <if test="photo_url != null" >
+        photo_url,
+      </if>
+      <if test="fingerprint_url != null" >
+        fingerprint_url,
+      </if>
+      <if test="drilicence != null" >
+        drilicence,
+      </if>
+      <if test="fstdrilicdate != null" >
+        fstdrilicdate,
+      </if>
+      <if test="occupationno != null" >
+        occupationno,
+      </if>
+      <if test="occupationlevel != null" >
+        occupationlevel,
+      </if>
+      <if test="dripermitted != null" >
+        dripermitted,
+      </if>
+      <if test="teachpermitted != null" >
+        teachpermitted,
+      </if>
+      <if test="employstatus != null" >
+        employstatus,
+      </if>
+      <if test="hiredate != null" >
+        hiredate,
+      </if>
+      <if test="leavedate != null" >
+        leavedate,
+      </if>
+      <if test="trainareaid != null" >
+        trainareaid,
+      </if>
+      <if test="operate != null" >
+        operate,
+      </if>
+      <if test="errorcode != null" >
+        errorcode,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="utime != null" >
+        utime,
+      </if>
+      <if test="ltime != null" >
+        ltime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if> 
+      <if test="expireDate != null" >
+        expireDate,
+      </if>
+      <if test="teachStartDate != null and teachStartDate !=''" >
+        teachStartDate,
+      </if>
+      <if test="workType != null" >
+        workType,
+      </if>
+      <if test="teaching != null and teaching != ''" >
+        teaching,
+      </if>
+      <if test="driving != null and driving != ''" >
+        driving,
+      </if>
+      
+      <if test="trainareaid != null " >
+        trainareaid,
+      </if>
+      <if test="areaid != null " >
+        areaid,
+      </if>
+      <if test="headcoachid != null " >
+        headcoachid,
+      </if>
+      <if test="teachtypeid != null " >
+        teachtypeid,
+      </if>
+      <if test="jobid != null " >
+        jobid,
+      </if>
+      <if test="teachcartype != null and teachcartype != ''" >
+        teachcartype,
+      </if>
+      <if test="teachstate != null " >
+        teachstate,
+      </if>
+      <if test="studentload != null " >
+        studentload,
+      </if>
+      <if test="headcoachflag != null " >
+        headcoachflag,
+      </if>
+      <if test="mainstoreid != null " >
+        mainstoreid,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="coachid != null" >
+        #{coachid,jdbcType=INTEGER},
+      </if>
+      <if test="instid != null" >
+        #{instid,jdbcType=INTEGER},
+      </if>
+      <if test="inscode != null" >
+        #{inscode,jdbcType=VARCHAR},
+      </if>
+      <if test="coachnum != null" >
+        #{coachnum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerprint != null" >
+        #{fingerprint,jdbcType=INTEGER},
+      </if>
+      <if test="photo_url != null" >
+        #{photo_url,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerprint_url != null" >
+        #{fingerprint_url,jdbcType=VARCHAR},
+      </if>
+      <if test="drilicence != null" >
+        #{drilicence,jdbcType=VARCHAR},
+      </if>
+      <if test="fstdrilicdate != null" >
+        #{fstdrilicdate,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationno != null" >
+        #{occupationno,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationlevel != null" >
+        #{occupationlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="dripermitted != null" >
+        #{dripermitted,jdbcType=VARCHAR},
+      </if>
+      <if test="teachpermitted != null" >
+        #{teachpermitted,jdbcType=VARCHAR},
+      </if>
+      <if test="employstatus != null" >
+        #{employstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="hiredate != null" >
+        #{hiredate,jdbcType=VARCHAR},
+      </if>
+      <if test="leavedate != null" >
+        #{leavedate,jdbcType=VARCHAR},
+      </if>
+      <if test="trainareaid != null" >
+        #{trainareaid,jdbcType=BIGINT},
+      </if>
+      <if test="operate != null" >
+        #{operate,jdbcType=TINYINT},
+      </if>
+      <if test="errorcode != null" >
+        #{errorcode,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ltime != null" >
+        #{ltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="expireDate != null" >
+        #{expireDate,jdbcType=VARCHAR},
+      </if>
+      <if test="teachStartDate != null and teachStartDate !=''" >
+        #{teachStartDate,jdbcType=VARCHAR},
+      </if>
+       <if test="workType != null" >
+        #{workType,jdbcType=VARCHAR},
+      </if>
+       <if test="teaching != null and teaching != ''" >
+        #{teaching,jdbcType=VARCHAR},
+      </if>
+       <if test="driving != null and driving != ''" >
+        #{driving,jdbcType=VARCHAR},
+      </if> 
+      <if test="trainareaid != null " >
+        #{trainareaid},
+      </if>
+      <if test="areaid != null " >
+        #{areaid},
+      </if>
+      <if test="headcoachid != null " >
+        #{headcoachid},
+      </if>
+      <if test="teachtypeid != null " >
+        #{teachtypeid},
+      </if>
+      <if test="jobid != null " >
+        #{jobid},
+      </if>
+      <if test="teachcartype != null and teachcartype != ''" >
+        #{teachcartype},
+      </if>
+      <if test="teachstate != null " >
+        #{teachstate},
+      </if>
+      <if test="studentload != null " >
+        #{studentload},
+      </if>
+      <if test="headcoachflag != null " >
+        #{headcoachflag},
+      </if>
+      <if test="mainstoreid != null " >
+        #{mainstoreid},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.coach.model.Coach" >
+    update t_coach
+    <set >
+      <if test="instid != null" >
+        instid = #{instid,jdbcType=INTEGER},
+      </if>
+      <if test="inscode != null" >
+        inscode = #{inscode,jdbcType=VARCHAR},
+      </if>
+      <if test="coachnum != null" >
+        coachnum = #{coachnum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerprint != null" >
+        fingerprint = #{fingerprint,jdbcType=INTEGER},
+      </if>
+      <if test="photo_url != null" >
+        photo_url = #{photo_url,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerprint_url != null" >
+        fingerprint_url = #{fingerprint_url,jdbcType=VARCHAR},
+      </if>
+      <if test="drilicence != null" >
+        drilicence = #{drilicence,jdbcType=VARCHAR},
+      </if>
+      <if test="fstdrilicdate != null" >
+        fstdrilicdate = #{fstdrilicdate,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationno != null" >
+        occupationno = #{occupationno,jdbcType=VARCHAR},
+      </if>
+      <if test="occupationlevel != null" >
+        occupationlevel = #{occupationlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="dripermitted != null" >
+        dripermitted = #{dripermitted,jdbcType=VARCHAR},
+      </if>
+      <if test="teachpermitted != null" >
+        teachpermitted = #{teachpermitted,jdbcType=VARCHAR},
+      </if>
+      <if test="employstatus != null" >
+        employstatus = #{employstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="hiredate != null" >
+        hiredate = #{hiredate,jdbcType=VARCHAR},
+      </if>
+      <if test="leavedate != null" >
+        leavedate = #{leavedate,jdbcType=VARCHAR},
+      </if>
+      <if test="trainareaid != null" >
+        trainareaid = #{trainareaid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="studentload != null" >
+        studentload = #{studentload,jdbcType=INTEGER},
+      </if>
+      <if test="teachtypeid != null" >
+        teachtypeid = #{teachtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="jobid != null" >
+        jobid = #{jobid,jdbcType=INTEGER},
+      </if>
+      <if test="teachstate != null" >
+        teachstate = #{teachstate,jdbcType=INTEGER},
+      </if>
+      <if test="operate != null" >
+        operate = #{operate,jdbcType=TINYINT},
+      </if>
+      <if test="errorcode != null" >
+        errorcode = #{errorcode,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        utime = #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ltime != null" >
+        ltime = #{ltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teachStartDate != null" >
+        teachStartDate = #{teachStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null" >
+        workType = #{workType,jdbcType=VARCHAR},
+      </if>
+      <if test="teaching != null" >
+        teaching = #{teaching,jdbcType=VARCHAR},
+      </if>
+      <if test="driving != null" >
+        driving = #{driving,jdbcType=VARCHAR},
+      </if> 
+      <if test="expireDate != null" >
+        expireDate = #{expireDate,jdbcType=VARCHAR},
+      </if> 
+      <if test="xid != null" >
+        xid = #{xid,jdbcType=INTEGER},
+      </if> 
+      <if test="mainstoreid != null" >
+        mainstoreid = #{mainstoreid,jdbcType=INTEGER},
+      </if>
+      <if test="headcoachid != null" >
+        headcoachid = #{headcoachid,jdbcType=INTEGER},
+      </if>
+      <if test="teachcartype != null" >
+        teachcartype = #{teachcartype,jdbcType=INTEGER},
+      </if>
+      <if test="headcoachflag != null " >
+        headcoachflag = #{headcoachflag,jdbcType=INTEGER},
+      </if>
+      
+    </set>
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.coach.model.Coach" >
+    update t_coach
+    set instid = #{instid,jdbcType=INTEGER},
+      inscode = #{inscode,jdbcType=VARCHAR},
+      coachnum = #{coachnum,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      fingerprint = #{fingerprint,jdbcType=INTEGER},
+      photo_url = #{photo_url,jdbcType=VARCHAR},
+      fingerprint_url = #{fingerprint_url,jdbcType=VARCHAR},
+      drilicence = #{drilicence,jdbcType=VARCHAR},
+      fstdrilicdate = #{fstdrilicdate,jdbcType=VARCHAR},
+      occupationno = #{occupationno,jdbcType=VARCHAR},
+      occupationlevel = #{occupationlevel,jdbcType=VARCHAR},
+      dripermitted = #{dripermitted,jdbcType=VARCHAR},
+      teachpermitted = #{teachpermitted,jdbcType=VARCHAR},
+      employstatus = #{employstatus,jdbcType=VARCHAR},
+      hiredate = #{hiredate,jdbcType=VARCHAR},
+      leavedate = #{leavedate,jdbcType=VARCHAR},
+      trainareaid = #{trainareaid,jdbcType=BIGINT},
+      operate = #{operate,jdbcType=TINYINT},
+      errorcode = #{errorcode,jdbcType=INTEGER},
+      message = #{message,jdbcType=VARCHAR},
+      utime = #{utime,jdbcType=TIMESTAMP},
+      ltime = #{ltime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=BIGINT},
+      muid = #{muid,jdbcType=BIGINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateTeachState" parameterType="cn.com.liliyun.coach.model.Coach" >
+    update t_coach
+    set teachstate = #{teachstate,jdbcType=INTEGER}
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateEmploystatus" parameterType="cn.com.liliyun.coach.model.Coach" >
+    update t_coach
+    set employstatus = #{employstatus,jdbcType=INTEGER}
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateCarno" parameterType="cn.com.liliyun.coach.model.Coach" >
+    update t_coach
+    set carno = #{carno,jdbcType=INTEGER}
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateHeadcoach" parameterType="java.util.List" >
+    update t_coach
+    set headcoachid = #{headcoachid,jdbcType=INTEGER}
+    where coachid in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.coachid}  
+    </foreach>  
+    
+  </update>
+  
+  <update id="batchUpdateTeachType" parameterType="java.util.List" >
+    update t_coach
+    set teachtypeid = #{teachtypeid,jdbcType=INTEGER}
+    where coachid in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.coachid}  
+    </foreach>  
+    
+  </update>
+  
+  <update id="batchUpdateStudentLoad" parameterType="java.util.List" >
+    update t_coach
+    set 
+    studentload=#{studentload}
+    where coachid in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.coachid}  
+    </foreach>  
+    
+  </update>
+  
+  
+  <select id="getCoachcarcount" parameterType="java.util.List" resultType="int">
+    select count(carno) from t_coach
+    where coachid in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.coachid}  
+    </foreach>  
+    
+  </select>
+  
+  <update id="incrementCoachStudent" parameterType="cn.com.liliyun.coach.model.Coach" >
+    update t_coach
+    set curstudentload = curstudentload+1
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="decrementCoachStudent" parameterType="cn.com.liliyun.coach.model.Coach" >
+    update t_coach
+    set curstudentload = curstudentload-1
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getCount" resultType="int" parameterType="cn.com.liliyun.coach.model.Coach" >
+    select count(1) from t_coach
+  </select>
+  
+  <!-- 插入图片 -->
+    <insert id="saveImage" parameterType="cn.com.liliyun.common.model.UploadImage">  
+        insert into t_uploadimage
+        (module,businessId,imgeType,imgeKey,imgeSize) 
+        values
+        (#{module},#{businessId},#{imgeType},#{imgeKey},#{imgeSize})  
+    </insert>
+    
+    <!-- 查询一辆车绑定的教练列表 -->
+    <select id="selectCoachListOfcar" parameterType="cn.com.liliyun.coach.model.Coach" resultType="cn.com.liliyun.trainorg.model.CoachCoachCar">
+    select coachid,carid,isvalid
+    from t_coach_coachcar where 1 = 1
+      <if test="carid != null">
+        and carid = #{carid,jdbcType=INTEGER}
+      </if> 
+  	</select> 
+  	
+  	<!-- 查询教练绑定学员列表 -->
+  	<resultMap id="coa_stu_Map" type="cn.com.liliyun.coach.model.CoachStudentDTO" >
+  		<result column="coachName" property="coachName" jdbcType="VARCHAR" />
+  		<result column="className" property="className" jdbcType="VARCHAR" />
+  	</resultMap>
+  	
+  	<select id="getNotStuListOfCoach" parameterType="cn.com.liliyun.coach.model.CoachStudentDTO" resultMap="coa_stu_Map">
+  		SELECT stud.studentid,stud.name,stud.sex,stud.phone,stud.cardtype,stud.idcard,stud.traintype,stud.applydate,stud.applyexam,co.coachid,cm.classid,
+		co.name AS coachName,cm.classname AS className ,pd.proxyName,sa.scopeName,ts.storename
+		FROM 
+		(SELECT * FROM t_student stu WHERE  stu.studentid NOT IN (SELECT cs.studentId FROM t_coach_student cs WHERE cs.coachId = #{coachid}) ) AS stud 
+		LEFT JOIN t_coach_student AS tcs ON stud.studentid = tcs.studentId
+		LEFT JOIN t_coach AS co ON co.coachid = tcs.coachId
+		LEFT JOIN t_class_manage cm ON cm.classid = stud.classid
+		LEFT JOIN t_proxy_dealer pd ON pd.proxyId = stud.proxyid
+		LEFT JOIN t_scope_area sa ON sa.scopeId = stud.scopeid
+		LEFT JOIN t_store ts ON ts.storeid = stud.storeid
+		WHERE 1=1
+  	</select>
+  	
+  	<select id="getStuListOfCoach" parameterType="cn.com.liliyun.coach.model.CoachStudentDTO" resultMap="coa_stu_Map">
+  		SELECT stud.studentid,stud.name,stud.sex,stud.phone,stud.cardtype,stud.idcard,stud.traintype,stud.applydate,
+		co.coachid,co.name AS coachName,
+		cs.studentId,tcs.coachId ,
+		cm.classname AS className ,pd.proxyName,sa.scopeName,ts.storename
+		FROM (SELECT * FROM t_coach_student WHERE coachId=#{coachid}) AS cs 
+		LEFT JOIN t_coach_student tcs ON tcs.studentId = cs.studentId 
+		LEFT JOIN t_student stud ON stud.studentid = cs.studentId
+		LEFT JOIN  t_coach co ON co.coachid = tcs.coachId 
+		LEFT JOIN t_proxy_dealer pd ON pd.proxyId = stud.proxyid  
+		LEFT JOIN t_scope_area sa ON sa.scopeId = stud.scopeid 
+		LEFT JOIN t_store ts ON ts.storeid = stud.storeid  
+		LEFT JOIN  t_class_manage cm ON cm.classid = stud.classid 
+		ORDER BY cs.studentId
+  	</select>
+  	
+  	<select id="getCoachLoadStudentInfo" parameterType="cn.com.liliyun.coach.model.CoachLoadStudentInfo" resultType="cn.com.liliyun.coach.model.CoachLoadStudentInfo">
+    select b.applyexam,count(b.id) as count from t_coach_student a join t_student b on a.studentid=b.id 
+    where a.coachid=#{coachid}
+    group by b.applyexam
+  	</select> 
+  	
+</mapper>

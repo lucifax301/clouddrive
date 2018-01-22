@@ -1,0 +1,168 @@
+<section id="thispage" privilege = "030303"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" 
+    data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+    <div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>记录搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+          	<div class="bjui-row col-4">
+	            <label class="row-label">姓名：</label>
+	            <div class="row-input">
+	                <input type="text" name="name">
+	            </div>
+	            <label class="row-label">证件号码：</label>
+	            <div class="row-input">
+	                <input type="text" name="idcard">
+	            </div>
+	            <label class="row-label">报名班别：</label>
+	            <div class="row-input">
+	                <select name="classid" data-toggle="selectpicker" data-width="100%"
+	                    data-datajson="classlist" data-optiontype = "id,name">
+	                </select>
+	            </div>
+	            <!--<label class="row-label">学车状态：</label>
+	            <div class="row-input">
+	                <select name="applyexam" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="201">科目一培训合格</option>
+						<option value="202">科目一培训不合格</option>
+						<option value="203">科目一预约成功</option>
+						<option value="204">科目一预约失败</option>
+						<option value="205">科目一考试合格</option>
+						<option value="206">科目一考试不合格</option>
+						<option value="301">科目二培训合格</option>
+						<option value="302">科目二培训不合格</option>
+						<option value="303">科目二预约成功</option>
+						<option value="304">科目二预约失败</option>
+						<option value="305">科目二考试合格</option>
+						<option value="306">科目二考试不合格</option>
+						<option value="401">科目三培训合格</option>
+						<option value="402">科目三培训不合格</option>
+						<option value="403">科目三预约成功</option>
+						<option value="404">科目三预约失败</option>
+						<option value="405">科目三考试合格</option>
+						<option value="406">科目三考试不合格</option>
+						<option value="501">科目四预约成功</option>
+						<option value="502">科目四预约失败</option>
+						<option value="503">科目四考试合格</option>
+						<option value="504">科目四考试不合格</option>
+						<option value="999">获得驾驶证</option>
+					</select>
+	            </div>-->
+	            <label class="row-label">所属区域：</label>
+	              <div class="row-input">
+	                  <select name="arealist_filter" data-toggle="selectpicker" data-width="48.5%"
+	                          data-datajson="arealist" data-refdata="storelist,{value},areaid" data-nextselect="#store" data-keys="{'label':'name','value':'id'}" data-optiontype="id,name">
+	                  </select>
+	                  <select name="storeid" id="store" data-toggle="selectpicker" data-width="48.5%"
+	                           data-optiontype = "id,name">
+	                  </select>
+	              </div>
+	            <label class="row-label">绑定教练姓名：</label>
+	            <div class="row-input">
+	                <input type="text" name="coachname">
+	            </div>
+	            <label class="row-label">绑定教练状态：</label>
+	            <div class="row-input">
+	                <select name="isvalid" data-toggle="selectpicker" data-width="100%">
+	                    <option value="">全部</option>
+	                    <option value="0">未绑定</option>
+	                    <option value="1">已绑定</option>
+	                </select>
+	            </div>
+	            <label class="row-label">审核状态：</label>
+	            <div class="row-input">
+	                <select name="state" data-toggle="selectpicker" data-width="100%">
+	                    <option value="" selected>全部</option>
+	                    <option value="0">无需审核</option>
+	                    <option value="1">待审核</option>
+	                    <option value="2">审核通过</option>
+	                    <option value="3">审核拒绝</option>
+	                </select>
+	            </div>
+		        
+        	</div>
+
+		        <div class="text-center">
+		        	<div class="btn-group">
+		            <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		            <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		            </div>
+		        </div>
+        </div>
+    </div>
+</form>
+<table id="datagrid-list" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+
+    var grid1 = $.CurrentNavtab.find('#datagrid-list').datagrid({
+        //toolbarItem: 'edit',
+        gridTitle: '学员列表',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '72%',
+        showCheckboxcol: false,
+        showToolbar: false,
+        dataUrl: config.openBasePath + 'student/studentCoach',
+        columns: [
+            {name:'name',label:'学员姓名',align:'center',render:function(value, data){
+                return "<a href='html/common/student/student-view.html' data-toggle='navtab' data-options='{id:\"student-view-table"+data.studentid+"\" , title:\"查看学员信息\"}' data-more='" + JSON.stringify(data) + "'>" + value + "</a>"
+            }},
+            {name:'idcard',label:'证件号码',align:'center'},
+            {name:'phone',label:'联系电话',align:'center'},
+            {name:'flownum',label:'流水号',align:'center'},
+            {name:'classid',label:'报名班别',align:'center',render:formatClassCell},
+            {name:'applyexam',label:'学车状态',align:'center',render:function(value, data) { 
+            	return studentStatus(data.applyexam, data.applystatus)}
+            },
+            {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+            {name:'storeid',label:'门店',align:'center',render:formatStoreCell},
+            {name:'isvalid',label:'绑定状态',align:'center',render:function (value) {return value == 1?'已绑定':'未绑定'}},
+            {name:'coachnum',label:'教练编号',align:'center'},
+            {name:'coachname',label:'教练姓名',align:'center'},
+            {name:'coachmobile',label:'教练电话',align:'center'},
+            {name:'state',label:'审核状态',align:'center',render:studentCoachState},
+            {name:'state',label:'操作',align:'center',render:studentCoachHandle}
+        ]
+    });
+
+    function studentCoachHandle(value, data){
+    	var viewButton = "<button onclick='studentCoachHandler(1," + JSON.stringify(data) + ")' class='btn-green'>查看</button>";
+        var assignButton = "<button data-privilege='030303_datagrid-list_11' onclick='studentCoachHandler(2," + JSON.stringify(data) + ")' class='btn-blue vhide'>分配教练</button>";
+        var changeButton = "<button data-privilege='030303_datagrid-list_11' onclick='studentCoachHandler(3," + JSON.stringify(data) + ")' class='btn-red vhide'>变更教练</button>";
+        var reviewButton = "<button data-privilege='030303_datagrid-list_12' onclick='studentCoachHandler(4," + JSON.stringify(data) + ")' class='btn-blue vhide'>审核</button>";
+        if (value == 1) {
+        	return reviewButton + viewButton;
+        } else if (data.applyexam > 4 || (data.applyexam == 3 && data.applystatus > 2)) {
+        	return changeButton + viewButton;
+        } else {
+        	return assignButton + viewButton;
+        }
+    }
+
+	function studentCoachHandler(type, json) {
+		json.type = type;
+		var title;
+		switch(type) {
+			case 1:
+	            title = '查看教练详情'; break;
+        	case 2:
+	            title = '分配教练详情'; break;
+        	case 3:
+	            title = '变更教练详情'; break;
+        	case 4:
+	            title = '变更教练审核'; break;
+        	default:break;
+		}
+		BJUI.navtab({
+            id:'coach-view-' + json.studentid,
+            url:'html/license/student/coach-assign.html',
+            title: title,
+            onClose:function(){
+                grid1.datagrid('refresh',true);
+            },
+            more:json
+		});
+	}
+</script>

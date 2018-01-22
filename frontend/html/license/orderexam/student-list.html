@@ -1,0 +1,171 @@
+<section id="thispage" privilege = "020303"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>预约报考搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">批次号：</label>
+				<div class="row-input">
+					<input type="text" name="tableid">
+				</div>
+				<label class="row-label">预约科目：</label>
+				<div class="row-input">
+					<select name="subject" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="1">科目一预约</option>
+						<option value="2">科目二预约</option>
+						<option value="3">科目三预约</option>
+						<option value="4">科目四预约</option>
+					</select>
+				</div>
+				<label class="row-label">起始日期：</label>
+				<div class="row-input">
+					<input type="text" name="stime" data-toggle="datepicker" placeholder="录入起始时间">
+				</div>
+				<label class="row-label">结束时间：</label>
+				<div class="row-input">
+					<input type="text" name="etime" data-toggle="datepicker" placeholder="录入结束时间">
+				</div>
+
+			</div>
+				<div class="text-center">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var license_orderexam = {
+		addbatch: function() {
+			BJUI.dialog({
+				id: 'dialog-add',
+				url: 'html/license/orderexam/student-add.html',
+				title: '报考预约批量录入',
+				width: 1000,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+					$(document).off("change", "[name='name']")
+				}
+			})
+		},
+		importdata: function() {
+			BJUI.dialog({
+				id: 'dialog-orderexam-upload-excel',
+				url: 'html/license/orderexam/upload.html',
+				title: '报考预约数据导入',
+				mask: true,
+				maxable: false,
+				resizable: false
+			})
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'orderexam/export',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		detail: function(tableid) {
+			clz.setWindowJson(tableid);
+			BJUI.dialog({
+				id: 'dialog-orderexam-detail',
+				url: 'html/license/orderexam/orderexam-view.html',
+				title: '批次报考预约详情',
+				width: 1000,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false,
+			})
+		},
+		formatSubject: function(value) {
+			switch (value) {
+				case 1:
+					return "科目一预约";
+				case 2:
+					return "科目二预约";
+				case 3:
+					return "科目三预约";
+				case 4:
+					return "科目四预约";
+			}
+		},
+		formatResult: function(value) {
+			switch (value) {
+				case 0:
+					return "预约成功";
+				case 1:
+					return "预约失败";
+			}
+		},
+		formatChangedate: function(value) {
+			switch (value) {
+				case 0:
+					return "否";
+				case 1:
+					return "是";
+			}
+		}
+	}
+	var license_orderexam_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '学员报考预约列表',
+		toolbarItem: '',
+		toolbarCustom:
+			"<button data-privilege='020303_datagrid-list_01' class='btn-blue ml5' data-icon='edit' onclick='license_orderexam.addbatch()'>录入</button>" +
+			"<button data-privilege='020303_datagrid-list_11' class='btn-blue ml5' data-icon='edit' onclick='license_orderexam.importdata()'>导入</button>",
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		//showCheckboxcol: true,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'orderexam/list',
+		columns: [{
+			name: 'tableid',
+			label: '批次号',
+			align: 'center',
+			render: function(value, data) {
+				return "<a href='javascript:' onclick='license_orderexam.detail(\"" + data.tableid + "\")'>" + value + "</a>"
+			}
+		}, {
+			name: 'subject',
+			label: '科目',
+			align: 'center',
+			render: license_orderexam.formatSubject
+		}, {
+			name: 'itemcount',
+			label: '预约总人次',
+			align: 'center'
+		}, {
+			name: 'okcount',
+			label: '预约成功人次',
+			align: 'center'
+		}, {
+			name: 'failcount',
+			label: '预约失败人次',
+			align: 'center'
+		},
+//			{
+//			name: 'changecount',
+//			label: '改期人次',
+//			align: 'center'
+//		},
+			{
+			name: 'cname',
+			label: '录入人',
+			align: 'center'
+		}, {
+			name: 'ctime',
+			label: '录入时间',
+			align: 'center'
+		}]
+	});
+</script>

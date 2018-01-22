@@ -1,0 +1,537 @@
+<section id="thispage" privilege = "060203"></section>
+<div class="c-tabs-box h-100">
+	<div class="c-tabs-header">
+		<li class="active" data-tabs='id1'>门店—支付方式</li>
+		<li data-tabs='id2'>支付方式—终端号—门店</li>
+		<li data-tabs='id3'>门店—票据类型</li>
+		<li data-tabs='id4'>票据类型—门店</li>
+		<li data-tabs='id5'>支付方式—终端号—门店B</li>
+	</div>
+	
+	<div class="c-tabs-body active h-100" id="id1">
+		<div class="widget-box mt0">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#table1')}">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">银行名称：</label>
+					<div class="row-input">
+						<select name="posbankname"  data-toggle="selectpicker" size="15" data-width="100%" data-dataurl="/httpaccess/pos/posbanknameALL" data-optiontype="bankname,bankname">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">起始时间：</label>
+					<div class="row-input fill-2">
+						<div class="fl w-45">
+							<input type="text" name="receiptdatelow" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+						<div class="fl w-10 text-center">-</div>
+						<div class="fl w-45">
+							<input type="text" name="receiptdatetop" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+					</div>
+				</div>
+				<div class="text-center">
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+		<table id="table1"  class="table table-bordered notablebg"></table>
+	</div>
+	<div class="c-tabs-body h-100" id="id2">
+		<div class="widget-box mt0">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#table2')}">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">银行名称：</label>
+					<div class="row-input">
+						<select name="posbankname" data-toggle="selectpicker" size="15" data-width="100%" data-dataurl="/httpaccess/pos/posbanknameALL" data-optiontype="bankname,bankname">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">是否差异：</label>
+					<div class="row-input">
+						<select name="isdiff" data-toggle="selectpicker" size="15" data-width="100%">
+							<option value="">全部</option>
+							<option value="1">有差异</option>
+							<option value="0">无差异</option>
+						</select>
+					</div>
+					<br>
+					<label class="row-label">起始时间：</label>
+					<div class="row-input fill-2">
+						<div class="fl w-45">
+							<input type="text" name="receiptdatelow" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+						<div class="fl w-10 text-center">-</div>
+						<div class="fl w-45">
+							<input type="text" name="receiptdatetop" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+					</div>
+				</div>
+				<div class="text-center">
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+		<table id="table2"  class="table table-bordered notablebg"></table>
+	</div>
+	<div class="c-tabs-body h-100" id="id3">
+		<div class="widget-box mt0">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#table3')}">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">起始时间：</label>
+					<div class="row-input fill-2">
+						<div class="fl w-45">
+							<input type="text" name="receiptdatelow" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+						<div class="fl w-10 text-center">-</div>
+						<div class="fl w-45">
+							<input type="text" name="receiptdatetop" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+					</div>
+				</div>
+				<div class="text-center">
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+		<table id="table3" class="table table-bordered notablebg"></table>
+	</div>
+	<div class="c-tabs-body h-100" id="id4">
+		<div class="widget-box mt0">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#table4')}">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">起始时间：</label>
+					<div class="row-input fill-2">
+						<div class="fl w-45">
+							<input type="text" name="receiptdatelow" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+						<div class="fl w-10 text-center">-</div>
+						<div class="fl w-45">
+							<input type="text" name="receiptdatetop" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+					</div>
+				</div>
+				<div class="text-center">
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+		<table id="table4" class="table table-bordered notablebg"></table>
+	</div>
+	<div class="c-tabs-body h-100" id="id5">
+		<div class="widget-box mt0">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#table5')}">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">是否差异：</label>
+					<div class="row-input">
+						<select name="isdiff" data-toggle="selectpicker" size="15" data-width="100%">
+							<option value="">全部</option>
+							<option value="1">有差异</option>
+							<option value="0">无差异</option>
+						</select>
+					</div>
+					<label class="row-label">起始时间：</label>
+					<div class="row-input fill-2">
+						<div class="fl w-45">
+							<input type="text" name="receiptdatelow" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+						<div class="fl w-10 text-center">-</div>
+						<div class="fl w-45">
+							<input type="text" name="receiptdatetop" data-toggle="datepicker" data-rule="date" readonly> 
+						</div>
+					</div>
+				</div>
+				<div class="text-center">
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+		<table id="table5" class="table table-bordered notablebg"></table>
+	</div>
+</div>
+
+<script>
+	
+	var finace_stat_otherstatList = {
+		tableinit_num:[1,0,0,0,0],
+		init(){
+			finace_stat_otherstatList.init_table_1()
+			$.CurrentNavtab.find('.c-tabs-header li').click(function(){
+				var tableid = '',
+					eq =$(this).index()+1;
+
+				switch(eq){
+					case 1:
+						tableid = 'table1'
+						if(finace_stat_otherstatList.tableinit_num[0]==0){
+							finace_stat_otherstatList.init_table_1()
+							finace_stat_otherstatList.tableinit_num[0]++
+						}
+					break;
+					case 2:
+						tableid = 'table2'
+						if(finace_stat_otherstatList.tableinit_num[1]==0){
+							finace_stat_otherstatList.init_table_2()
+							finace_stat_otherstatList.tableinit_num[1]++
+						}
+					break;
+					case 3:
+						tableid = 'table3'
+						if(finace_stat_otherstatList.tableinit_num[2]==0){
+							finace_stat_otherstatList.init_table_3()
+							finace_stat_otherstatList.tableinit_num[2]++
+						}
+					break;
+					case 4:
+						tableid = 'table4'
+						if(finace_stat_otherstatList.tableinit_num[3]==0){
+							finace_stat_otherstatList.init_table_4()
+							finace_stat_otherstatList.tableinit_num[3]++
+						}
+					break;
+					case 5:
+						tableid = 'table5'
+						if(finace_stat_otherstatList.tableinit_num[4]==0){
+							finace_stat_otherstatList.init_table_5()
+							finace_stat_otherstatList.tableinit_num[4]++
+						}
+					break;
+				}
+				
+			})
+		},
+		transfer(type){
+			var ajaxurl = '';
+			var table;
+			switch(type){
+				case 2:
+					ajaxurl = 'financeReceipt/confirm';
+					table = $.CurrentNavtab.find('#table2');
+				break;
+				case 5:
+					ajaxurl = 'financeReceipt/confirm';
+					table = $.CurrentNavtab.find('#table5');
+				break;
+				default: return;
+			}
+			var data = table.data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			} else if (data[0].diffmoney != 0) {
+				BJUI.alertmsg('error', '数据存在差异，不允许结转！', {});
+				return;
+			}
+            BJUI.ajax('doajax',{
+            	type:'POST',
+            	url:config.openBasePath + ajaxurl,
+            	data: {ids:data[0].ids},
+            	okCallback(data){
+            		table.datagrid('reload', true);
+            	}
+            })
+		},
+		init_table_1() {
+			var table = $.CurrentNavtab.find('#table1').datagrid({
+				height: '70%',
+				gridTitle: '门店—支付方式',
+				showToolbar: false,
+				filterThead: false,
+				showNoDataTip: false,
+				paging: false,
+				showCheckboxcol: false,
+				dataUrl: config.openBasePath + 'stat/getStorePayStat',
+				columns: [{
+						name: 'store',
+						label: '门店',
+						align: 'center',
+					},
+					{
+						name: 'bank',
+						label: '银行',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '系统数据金额',
+						align: 'center',
+					},
+
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#table1'),
+						cols: [1],
+						keybg: '小计'
+					})
+				}
+			})
+		},
+		init_table_2() {
+			var table = $.CurrentNavtab.find('#table2').datagrid({
+				height: '70%',
+				gridTitle: '支付方式—终端号—门店',
+				showToolbar: true,
+				filterThead: false,
+				toolbarItem: '',
+				toolbarCustom:'<button type="button" data-privilege="060203_datagrid-list_11" class="btn-blue ml5" onclick="finace_stat_otherstatList.transfer(2)" data-icon="legal">数据结转</button>',
+				showNoDataTip: false,
+				paging: false,
+				showCheckboxcol: true,
+				dataUrl: config.openBasePath + 'stat/getBankPosStoreStat',
+				columns: [{
+						name: 'bank',
+						label: '银行',
+						align: 'center',
+					},
+					{
+						name: 'posnum',
+						label: 'Pos机终端号',
+						align: 'center',
+					},
+					{
+						name: 'storeid',
+						label: '门店',
+						align: 'center',
+						render: formatStoreCell
+					},
+					{
+						name: 'posmoney',
+						label: '系统数据金额',
+						align: 'center',
+					},
+					{
+						name: 'rposmoney',
+						label: '实际进账金额',
+						align: 'center',
+					},
+					{
+						name: 'diffmoney',
+						label: '差异金额',
+						align: 'center',
+					},
+					{
+						name: 'confirmmoney',
+						label: '已结转金额',
+						align: 'center',
+					},
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#table2'),
+						cols: [2,3],
+						keybg: '合计'
+					})
+				}
+			})
+		},
+		init_table_3() {
+			var table = $.CurrentNavtab.find('#table3').datagrid({
+				height: '70%',
+				gridTitle: '门店—票据类型',
+				showToolbar: false,
+				filterThead: false,
+				showNoDataTip: false,
+				paging: false,
+				showCheckboxcol: false,
+				dataUrl: config.openBasePath + 'stat/getStoreTypeStat',
+				columns: [{
+						name: 'store',
+						label: '门店',
+						align: 'center',
+					},
+					{
+						name: 'typestr',
+						label: '票据类型',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '系统数据金额',
+						align: 'center',
+					},
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#table3'),
+						cols: [1],
+						keybg: '小计'
+					})
+				}
+			})
+		},
+		init_table_4() {
+			var table = $.CurrentNavtab.find('#table4').datagrid({
+				height: '70%',
+				gridTitle: '票据类型—门店',
+				showToolbar: false,
+				filterThead: false,
+				showNoDataTip: false,
+				paging: false,
+				showCheckboxcol: false,
+				dataUrl: config.openBasePath + 'stat/getTypeStoreStat',
+				columns: [{
+						name: 'typestr',
+						label: '票据类型',
+						align: 'center',
+					},
+					{
+						name: 'store',
+						label: '门店',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '系统数据金额',
+						align: 'center',
+					},
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#table4'),
+						cols: [1],
+						keybg: '小计'
+					})
+				}
+			})
+		},
+		init_table_5() {
+			var table = $.CurrentNavtab.find('#table5').datagrid({
+				height: '70%',
+				tableWidth: '100%',
+				gridTitle: '支付方式—终端号—门店B',
+				showToolbar: true,
+				filterThead: false,
+				toolbarItem: '',
+				toolbarCustom:'<button type="button" data-privilege="060203_datagrid-list_11" class="btn-blue ml5" onclick="finace_stat_otherstatList.transfer(5)" data-icon="legal">数据结转</button>',
+				showNoDataTip: false,
+				paging: false,
+				showCheckboxcol: true,
+				dataUrl: config.openBasePath + 'stat/getCompanyPosStoreStat',
+				columns: [{
+						name: 'poscompany',
+						label: 'Pos公司',
+						align: 'center',
+					},
+					{
+						name: 'posnum',
+						label: 'Pos机终端号',
+						align: 'center',
+					},
+					{
+						name: 'storeid',
+						label: '门店',
+						align: 'center',
+						render: formatStoreCell
+					},
+					{
+						name: 'posmoney',
+						label: '系统数据金额',
+						align: 'center',
+					},
+					{
+						name: 'rposmoney',
+						label: '实际进账金额',
+						align: 'center',
+					},
+					{
+						name: 'diffmoney',
+						label: '差异金额',
+						align: 'center',
+					},
+					{
+						name: 'confirmmoney',
+						label: '已结转金额',
+						align: 'center',
+					},
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#table5'),
+						cols: [2,3],
+						keybg: '合计'
+					})
+				}
+			})
+		},
+		
+	}
+	finace_stat_otherstatList.init()
+</script>

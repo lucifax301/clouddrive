@@ -1,0 +1,307 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="edit-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>查看市场活动申请</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+					<div id="auditdiv" style="display:none">
+						<div class="row-input fill-2">
+							<button type="button" class="btn-blue btn vhide" data-privilege='050101_datagrid-list_11' data-icon="" onclick="market_apply_template.audit(1)">审核通过</button>
+							<button type="button" class="btn-blue btn vhide" data-privilege='050101_datagrid-list_11' data-icon="" onclick="market_apply_template.audit(2)">审核不通过</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="bjui-row col-3">
+
+					<div >
+						<label class="row-label">所属片区</label>
+						<div class="row-input required">
+							<select name="areaid" id="areaid" data-toggle="selectpicker" data-width="100%" data-rule="required">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+
+						<label class="row-label">门店</label>
+						<div class="row-input required">
+							<select name="storeid" id="storeid" data-toggle="selectpicker" data-width="100%" data-rule="required">
+								<option value="0">请选择</option>
+
+							</select>
+						</div>
+					</div>
+
+					<div >
+						<label class="row-label">活动时间:</label>
+						<div class="row-input required">
+							<input type="text" name="begindate" data-width="100%" data-rule="required">
+						</div>
+						<label class="row-label">到:</label>
+						<div class="row-input required">
+							<input type="text" name="enddate" data-width="100%" data-rule="required">
+						</div>
+					</div>
+
+					<div >
+						<label class="row-label">单日场地租金:</label>
+						<div class="row-input required">
+							<input type="text" name="rent" data-width="100%" data-rule="required;number">
+						</div>
+						<label class="row-label">现场工作人员:</label>
+						<div class="row-input required">
+							<input type="text" name="staff" data-width="100%" data-rule="required;number">
+						</div>
+					</div>
+
+					<div >
+						<label class="row-label">活动地点:</label>
+						<div class="row-input required">
+							<input type="text" name="address" data-width="100%" data-rule="required">
+						</div>
+					</div>
+
+					<div >
+						<label class="row-label">活动名称:</label>
+						<div class="row-input required">
+							<input type="text" name="activityname" data-width="100%" data-rule="required">
+						</div>
+						<label class="row-label">物料发放反馈时间:</label>
+						<div class="row-input required">
+							<input type="text" name="feedbackdate" data-width="100%">
+						</div>
+					</div>
+
+					<div >
+						<label class="row-label">活动原因/物料明细:</label>
+						<div class="row-input">
+							<input type="hidden" name="attach" />
+							<input type="hidden" name="attachid" />
+							<div id="filediv"></div>
+						</div>
+					</div>
+
+					<div >
+						<label class="row-label">申请理由:</label>
+						<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="reason" maxlength="60" placeholder="请输入申请理由"></textarea>
+						</div>
+					</div>
+
+					<div >
+						<label class="row-label">备注:</label>
+						<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="remark" maxlength="300" placeholder="请输入备注"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>审核信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="col-3">
+							<table class='table table-bordered' id="flowinfo">
+								<tr>
+									<td>申请人</td>
+									<td id="applyuser"></td>
+									<td>片区</td>
+									<td id="area"></td>
+									<td>申请时间</td>
+									<td id="applydate"></td>
+								</tr>
+							</table>
+						</div>
+						
+					</div>
+				</div>
+		<input type="hidden" name="id" id="id" />
+	</form>
+
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+    </ul>
+   </div>
+</div>
+<script>
+	var flowdata = clz.getNavtab_more();
+	console.log(flowdata)
+	var market_apply_template = {
+		loadapplyinfo: function() {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + '/marketing/getByTran?transactionid=' + flowdata.transactionid,
+				loadingmask: true,
+				async: false,
+				okCallback: function(json, options) {
+					console.log(json)
+					
+					clz.CurrentDom_init({
+						current: 'Navtab',
+						timetype: [{
+							name: 'begindate',
+							type: 'yyyy-MM-dd'
+						}, {
+							name: 'enddate',
+							type: 'yyyy-MM-dd'
+						}, {
+							name: 'feedbackdate',
+							type: 'yyyy-MM-dd'
+						}],
+						form_name: 'edit-form',
+						data: json.result
+					});
+					
+					var data = json.result;
+					
+					$.CurrentNavtab.find('#areaid').attr("data-dataurl", "/httpaccess/area/list");
+					
+					
+					market_apply_template.showstore(data.areaid);
+					$.CurrentNavtab.find('#filediv').html('<a target="_blank" href="http://obqfnhv9x.bkt.clouddn.com/'+data.attachid+'">'+data.attach+'</a>')
+					$.CurrentNavtab.find("input[type=text]").each(
+						function() {
+							$(this).attr("readonly", "readonly")
+						}
+					)
+					$.CurrentNavtab.find("select").each(
+						function() {
+							$(this).attr("disabled", "true")
+						}
+					);
+					
+					
+					$.CurrentNavtab.find("#applyid").val(data.id);
+					$.CurrentNavtab.find("#applyuser").html(data.applyuser);
+					$.CurrentNavtab.find("#area").html(formatAreaCell(data.areaid));
+					$.CurrentNavtab.find("#applydate").html(data.createdate);
+					if(data.status == 0) { //申请是待审核状态
+						if(data.modapplystat == 1 || data.modapplystat == 2) {
+		
+							if(data.modapplystat == 1) { //可以审核
+								$("#auditdiv").css("display", "")
+							} else if(data.modapplystat == 2) { //可以取消
+		
+							}
+		
+						}
+		
+					}
+					if(data.extend){
+						market_apply_template.loadflowinfo(data.extend)
+					}
+					
+				}
+			});
+		},
+		
+		
+		loadflowinfo: function(flowdata) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/flow/listflowstep?flowid="+flowdata.id,
+				loadingmask: true,
+				async: true,
+				
+				okCallback: function(json, options) {
+					console.log(json);
+					if(json.result&&json.result.list){
+						var sdata=json.result.list;
+						var text="";
+						for(var i=0;i<sdata.length;i++){
+							var status="";
+							
+							if(sdata[i].status==0){
+								status="未处理"
+							}else if(sdata[i].status==1){
+								status="审核通过"
+							}else if(sdata[i].status==2){
+								status="审核不通过"
+							}
+							text=text+"<tr><td>审核人</td><td>"+sdata[i].user +  "</td><td>处理结果</td><td>"+status+"</td><td>处理时间</td><td>" +(sdata[i].status==0?"":sdata[i].updatedate) + "</td></tr>"
+						}
+					}
+					
+					$.CurrentNavtab.find("#flowinfo").append($(text));
+					$.CurrentNavtab.find("#flowinfo").trigger(BJUI.eventType.initUI)
+					//flowinfo
+				}
+			})
+			
+		},
+		
+		showstore(areaid) {
+
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/store/list?areaid=" + areaid,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					if(json.result && json.result.list) {
+						renderselect($.CurrentNavtab.find('#storeid'), json.result.list)
+
+					}
+				}
+			})
+		},
+		savemarket() {
+			if($.CurrentNavtab.find('#edit-form').isValid())
+				BJUI.alertmsg('confirm', '确认提交申请吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/marketing/updatemarket",
+							loadingmask: true,
+							data: $.CurrentNavtab.find("#edit-form").serializeArray(),
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', '提交成功！', {})
+								BJUI.navtab('closeCurrentTab');
+							}
+						})
+					}
+				})
+
+		},
+		audit(state) {
+			if(state == 1)
+				BJUI.alertmsg('confirm', '确认审核通过？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						market_apply_template.doaudit(1)
+					}
+				})
+			if(state == 2)
+				BJUI.alertmsg('confirm', '确认审核不通过？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						market_apply_template.doaudit(2)
+					}
+				})
+		},
+
+		doaudit(state) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/marketing/auditmarket",
+				loadingmask: true,
+				data: {
+					id: $.CurrentNavtab.find("#id").val(),
+					status: state
+				},
+				okCallback: function(json, options) {
+					BJUI.alertmsg('ok', '提交成功！', {})
+					BJUI.navtab('closeCurrentTab')
+				}
+			})
+		}
+	}
+
+	market_apply_template.loadapplyinfo();
+</script>

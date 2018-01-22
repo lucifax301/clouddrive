@@ -1,0 +1,133 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="view-form">
+    	<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>理论课信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+		        <div class="bjui-row col-4">
+		            <label class="row-label">课程名称:</label>
+		            <div class="row-input fill-2">
+		                <input type="text" name="lessonname" type="text" class="clear-style" readOnly >
+		            </div>
+		            <label class="row-label">课程状态:</label>
+		            <div class="row-input">
+		                <input type="text" name="stateName" class="clear-style red" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">上课日期:</label>
+		            <div class="row-input">
+		                <input type="text" name="starttime" class="clear-style" readOnly>
+		            </div>
+		            <label class="row-label">上课时间:</label>
+		            <div class="row-input">
+		                <input type="text" name="lessontime" class="clear-style" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">携带证件:</label>
+		            <div class="row-input">
+		                <input type="text" name="idcard" class="clear-style" readOnly>
+		            </div>
+		            <label class="row-label">上课地点:</label>
+		            <div class="row-input fill-2">
+		                <input type="text" name="place" class="clear-style" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">上课名额:</label>
+		            <div class="row-input">
+		                <input type="text" name="recomnum" class="clear-style" readOnly>
+		            </div>
+		        </div>
+	        </div>
+        </div>
+    </form>
+
+    <table id="theory-students" class="table table-bordered"></table>
+    <div class="c-bottom-button mt30">
+        <li><button type="button" class="btn-red" data-icon="close" onclick="theoryReview('9')">拒绝</button></li>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="theoryReview('3')">同意</button></li>
+    </div>
+</div>
+
+        <script type="text/javascript">
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'student/theoryLesson?theoryid=' + clz.getNavtab_more().id + '&isReview=1',
+                type: 'GET',
+                loadingmask: true,
+                okCallback: function(json, options) {
+                    console.log('返回内容：\n'+ JSON.stringify(json));
+                    json.result.theory.stateName = clz.filter.theoryState(json.result.theory.state);
+                    json.result.theory.lessontime = clz.filter.time({date:json.result.theory.starttime,type:'hh:mm'}) + '-' + clz.filter.time({date:json.result.theory.endtime,type:'hh:mm'})
+                    clz.CurrentDom_init({
+						current:'Navtab',
+                        form_name : 'view-form',
+                        data : json.result.theory,
+                        timetype:[
+                            {
+                                name:'starttime',
+                                type:'yyyy-MM-dd'
+                            }
+                        ]
+                    });
+                    var grid =$.CurrentNavtab.find('#theory-students').datagrid({
+                        gridTitle : '门店列表',
+                        //toolbarCustom:'<button type="button" class="btn-blue" onclick="addstudent('+clz.getNavtab_more().id+')">安排学员</button>',
+                        paging: false,
+                        height: '65%',
+                        width:'50%',
+                        showToolbar:false,
+                        toolbarItem:'',
+                        showCheckboxcol: false,
+                        showEditbtnscol:false,
+                        data: json.result.list,
+                        columns: [
+                            {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+                            {name:'storeid',label:'门店名称',align:'center',render:formatStoreCell},
+                            {name:'storenum',label:'门店代码',align:'center'},
+                            {name:'tel',label:'门店电话',align:'center'},
+                            {name:'acceptedStu',label:'门店当前受理学员数',align:'center'},
+                            {name:'recomnum',label:'上课名额',align:'center'},
+                            {name:'arrangenum',label:'已安排人数',align:'center',render:storeDetail}
+                        ],
+                        editMode:false
+                    });
+                }
+            });
+
+            function storeDetail(num, data) {
+                var morejson = {
+                    id:data.theoryid,
+                    storeid:data.storeid
+                };
+                return '<a href="#" onclick="navtabLookupReview('+morejson.id+','+morejson.storeid + ')" type="button">'+ num +'</a>';
+            }
+
+            function navtabLookupReview(id,sroreid){
+                var morejson = {
+                    id:id,
+                    sroreid:sroreid
+                };
+                var table=$.CurrentNavtab.find('#theory-students');
+                BJUI.navtab({
+                    id:'menu-table-' + morejson.id + '-' + morejson.storeid,
+                    url:'html/license/theory/theory-view.html',
+                    title:'查看理论课',
+                    onClose:function(){
+                       table.datagrid('refresh');
+                    },
+                    more:morejson
+                })
+            }
+            function theoryReview(state) {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'student/update/theoryLesson',
+                    type: 'POST',
+                    loadingmask: true,
+                    data: 'theoryid=' + clz.getNavtab_more().id + '&state=' + state,
+                    okCallback: function(json, options) {
+                        BJUI.navtab('closeCurrentTab');
+                    }
+                })
+            }
+        </script>

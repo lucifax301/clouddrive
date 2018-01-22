@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.student.mapper.MaterialItemMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.MaterialItem" >
+    <id column="tableid" property="tableid" jdbcType="CHAR" />
+    <result column="studentid" property="studentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="cardnum" property="cardnum" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="subject" property="subject" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tableid, studentid, name, idcard, cardnum, content, subject, storeid, areaid, cuid, 
+    cname, ctime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.student.model.MaterialItem" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_material_item
+    where tableid = #{tableid,jdbcType=CHAR}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.student.model.MaterialItem" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_material_item
+    <where>
+      <if test="tableid != null and tableid !=''" >
+        and tableid = #{tableid,jdbcType=CHAR}
+      </if>
+      <if test="subject != null" >
+        and subject = #{subject,jdbcType=CHAR}
+      </if>
+      <if test="cardnum != null and cardnum != ''" >
+        and cardnum = #{cardnum,jdbcType=CHAR}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.student.model.MaterialItem" >
+    delete from t_material_item
+    where tableid = #{tableid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.student.model.MaterialItem" >
+    insert into t_material_item (tableid, studentid, name, 
+      idcard, cardnum, content, 
+      subject, storeid, areaid, 
+      cuid, cname, ctime
+      )
+    values (#{tableid,jdbcType=CHAR}, #{studentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{cardnum,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{subject,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, 
+      #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List" >
+  	insert into t_material_item (tableid, studentid, name, 
+      idcard, cardnum, content, 
+      subject, storeid, areaid, 
+      cuid, cname, ctime)
+  		values
+	    <foreach collection="list" item="item" index="index" separator=",">
+           (
+              #{item.tableid,jdbcType=CHAR}, #{item.studentid,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, 
+		      #{item.idcard,jdbcType=VARCHAR}, #{item.cardnum,jdbcType=VARCHAR}, #{item.content,jdbcType=VARCHAR}, 
+		      #{item.subject,jdbcType=INTEGER}, #{item.storeid,jdbcType=INTEGER}, #{item.areaid,jdbcType=INTEGER}, 
+		      #{item.cuid,jdbcType=INTEGER}, #{item.cname,jdbcType=VARCHAR}, #{item.ctime,jdbcType=TIMESTAMP}
+      	   )
+       	</foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.student.model.MaterialItem" >
+    insert into t_material_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tableid != null" >
+        tableid,
+      </if>
+      <if test="studentid != null" >
+        studentid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="cardnum != null" >
+        cardnum,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tableid != null" >
+        #{tableid,jdbcType=CHAR},
+      </if>
+      <if test="studentid != null" >
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="cardnum != null" >
+        #{cardnum,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.student.model.MaterialItem" >
+    update t_material_item
+    <set >
+      <if test="studentid != null" >
+        studentid = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="cardnum != null" >
+        cardnum = #{cardnum,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where tableid = #{tableid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.student.model.MaterialItem" >
+    update t_material_item
+    set studentid = #{studentid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      cardnum = #{cardnum,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      areaid = #{areaid,jdbcType=INTEGER},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP}
+    where tableid = #{tableid,jdbcType=CHAR}
+  </update>
+</mapper>

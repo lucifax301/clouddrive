@@ -1,0 +1,199 @@
+<section id="thispage" privilege = "070101"></section>
+<div class="bjui-pageContent">
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list">
+</table>
+</div>
+<script type="text/javascript">
+	var class_type_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '带教班型列表',
+			toolbarCustom: "<button data-privilege='070101_datagrid-list_01' class='btn btn-blue' data-icon='plus' onclick='class_type_list.addclasstype()'>添加</button> ",
+			//toolbarItem: 'add,edit,del',
+			toolbarItem: 'none',
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/coachSetting/listClassType',
+			columns: [{
+				name: 'type',
+				label: '带教班型',
+				align: 'center',
+				render: function(value, data) {
+						
+						return "<a href='javascript:' onclick='class_type_list.view(" + JSON.stringify(data) + ")' >" + value + "</a>"
+				}
+			}, {
+				name: 'createDate',
+				label: '添加时间',
+				align: 'center'
+			}, {
+				name: 'cuser',
+				label: '添加人',
+				align: 'center'
+			}, {
+				name: 'remark',
+				label: '备注',
+				align: 'center'
+			},  {
+				name: 'op',
+				label: '操作',
+				align: 'center',
+				render: classtypeOperation
+			}, ],
+			editMode: {
+				navtab: {
+					width: '460',
+					height: '300',
+					title: '带教班型',
+					mask: true,
+					onClose: function() {
+						console.log(class_type_list.curtab)
+						BJUI.navtab('switchTab', class_type_list.curtab);
+						BJUI.navtab('refresh', class_type_list.curtab)
+
+					}
+				}
+			},
+			beforeEdit: function() {
+				window.class_type_object = class_type_list.list.data('selectedDatas') == null ? null : class_type_list.list.data('selectedDatas')[0];
+				return true;
+			},
+			add_url: 'html/setting/class-type-add.html',
+			edit_url: 'html/setting/class-type-edit.html',
+			delUrl: config.openBasePath + '/coachSetting/deleteClassType',
+			delPK: 'id',
+			afterSave: function() {
+				//grid.datagrid('refresh',true);
+				BJUI.navtab('refresh')
+			},
+			afterDelete: function() {
+				//grid.datagrid('refresh',true);
+				BJUI.navtab('refresh')
+			},
+			delPK: 'id',
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+
+		}),
+		addclasstype: function() {
+			BJUI.navtab({
+				id: 'class-type-add',
+				url: 'html/setting/class-type-add.html',
+				title: '新增带教班型',
+				onClose: function() {
+					BJUI.navtab('switchTab', class_type_list.curtab);
+					clz.getdictionary({name:'classlist',refresh:true})
+					//BJUI.navtab('refresh')
+					class_type_list.list.datagrid('refresh', true);
+				}
+			})
+		},
+		deleteclasstype: function(typeinfo) {
+//			var data = class_type_list.list.data('selectedDatas');
+//			if(!data || data.length == 0) {
+//				BJUI.alertmsg('error', '没有选中数据！', {})
+//				return
+//			}
+//
+//			var ids = "";
+//			for(var i = 0; i < data.length; i++) {
+//				ids = ids + data[i].id;
+//				if(i < data.length - 1) {
+//					ids = ids + ","
+//				}
+//			}
+			var ids=typeinfo.id;
+
+			BJUI.alertmsg('confirm', '确认删除选择班型吗？', {
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "/coachSetting/deleteClassType",
+						data: {
+							ids: ids
+						},
+						loadingmask: true,
+						okCallback: function(json, options) {
+							//teachtype_list.list.datagrid('refresh',true);
+							//BJUI.navtab('refresh')
+							clz.getdictionary({name:'classtypelist',refresh:true})
+					
+							class_type_list.list.datagrid('refresh', true);
+						}
+					})
+				}
+			})
+		},
+		editclasstype: function(typeinfo) {
+//			var data = class_type_list.list.data('selectedDatas');
+//			if(!data || data.length == 0) {
+//				BJUI.alertmsg('error', '没有选中数据！', {})
+//				return
+//			}
+//			if(data.length > 1) {
+//				BJUI.alertmsg('error', '请选择一个班型！', {})
+//				return
+//			}
+
+			BJUI.navtab({
+				id: 'class-type-edit-' + typeinfo.id,
+				url: 'html/setting/class-type-edit.html',
+				title: '编辑带教班型',
+				more: JSON.stringify(typeinfo),
+				onClose: function() {
+					BJUI.navtab('switchTab', class_type_list.curtab);
+					BJUI.navtab('refresh')
+				}
+			})
+		},
+		view: function(typeinfo) {
+
+			BJUI.navtab({
+				id: 'class-type-view-' + typeinfo.id,
+				url: 'html/setting/class-type-view.html',
+				title: '查看带教班型',
+				more: JSON.stringify(typeinfo),
+				onClose: function() {
+					BJUI.navtab('switchTab', class_type_list.curtab);
+					BJUI.navtab('refresh')
+				}
+			})
+		},
+
+		handleUser: function(id, status) {
+			var title = status == 1 ? "启用" : "停用";
+			var newstatus = status == 1 ? 0 : 1;
+			BJUI.alertmsg('confirm', '是否将该班型' + title + '?', {
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "/coachSetting/updateClassTypeStatus?id=" + id + '&status=' + newstatus,
+						loadingmask: true,
+						okCallback: function(json, options) {
+//							BJUI.navtab('refresh')
+				clz.getdictionary({name:'classtypelist',refresh:true})
+					
+					class_type_list.list.datagrid('refresh', true);
+						}
+					})
+				}
+			})
+		}
+	}
+
+	function classtypeOperation(value, data) {
+		var html;
+//		if(data.status == 0) {
+//			html = '<button type="button" class="btn-red" onclick="class_type_list.handleUser(' + data.id + ',' + data.status + ')">停用</button>'
+//		} else {
+//			html = '<button type="button" class="btn-green" onclick="class_type_list.handleUser(' + data.id + ',' + data.status + ')">启用</button>'
+//		}
+		html="<button class='btn btn-blue vhide' data-icon='edit' data-privilege='070101_datagrid-list_02' onclick='class_type_list.editclasstype("+JSON.stringify(data)+")'>编辑</button> <button class='btn btn-red vhide' data-icon='times' data-privilege='070101_datagrid-list_03' onclick='class_type_list.deleteclasstype("+JSON.stringify(data)+")'>删除</button>"
+		return html
+	}
+</script>

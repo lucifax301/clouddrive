@@ -1,0 +1,673 @@
+<div class="bjui-pageContent">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>教练信息</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<span><label id="auditstatus"></label></span>
+			<br/>
+			<span><label id="name"></label></span>
+			<br/>
+			<span>手机号：</span>
+			<label id="mobile"></label>
+			<span>教练车：</span>
+			<label id="carno"></label>
+			<span>负荷学员：</span>
+			<label id="curstudentload"></label>
+
+		</div>
+	</div>
+
+	<div class="c-tabs-box">
+
+		<div class="coachinfo" id="id1">
+			<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+				<input type="hidden" name="coachid" id="coachid" />
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>审核信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="col-3">
+							<table class='table table-bordered' id="flowinfo">
+								<tr>
+									<td>申请人</td>
+									<td id="applyuser"></td>
+									<td>片区</td>
+									<td id="area"></td>
+									<td>申请时间</td>
+									<td id="applydate"></td>
+								</tr>
+							</table>
+						</div>
+
+						<div class="bjui-row col-3">
+							<div id="actiondiv" style="display:none" class="btn-group">
+								<button type="button" class="btn-blue btn" id="auditbtn" style="display: none;" data-icon="" onclick="coach_mod_apply_template.audit(1)">审核通过</button>
+								<button type="button" class="btn-blue btn" id="unauditbtn" style="display: none;" data-icon="" onclick="coach_mod_apply_template.audit(2)">审核不通过</button>
+								<button type="button" class="btn-blue btn" id="cancelbtn" style="display: none;" data-icon="" onclick="coach_mod_apply_template.audit(3)">撤回</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>基本资料</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">姓名</label>
+							<div class="row-input required">
+								<input type="text" name="name" data-rule="required;length[1~60]">
+							</div>
+							<label class="row-label">手机号码</label>
+							<div class="row-input required">
+								<input type="text" name="mobile" data-rule="required,mobile">
+							</div>
+							<label class="row-label">性别</label>
+							<div class="row-input required">
+								<select name="sex" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="0">男</option>
+									<option value="1">女</option>
+								</select>
+							</div>
+							<label class="row-label">身份证号</label>
+							<div class="row-input required">
+								<input type="text" name="idcard" data-rule="required">
+							</div>
+							<label class="row-label">准教车型</label>
+							<div class="row-input required">
+								<select name="teachpermitted" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="C1">C1</option>
+									<option value="C2">C2</option>
+									<option value="C3">C3</option>
+									<option value="C4">C4</option>
+									<option value="C5">C5</option>
+									<option value="A1">A1</option>
+									<option value="A2">A2</option>
+									<option value="A3">A3</option>
+									<option value="B1">B1</option>
+									<option value="B2">B2</option>
+									<option value="D">D</option>
+									<option value="E">E</option>
+									<option value="F">F</option>
+									<option value="M">M</option>
+									<option value="N">N</option>
+									<option value="P">P</option>
+								</select>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>供职信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">供职方式</label>
+							<div class="row-input required">
+								<select name="workType" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="1">直营</option>
+									<option value="2">加盟</option>
+									<option value="3">挂靠</option>
+								</select>
+							</div>
+							<label class="row-label">供职状态</label>
+							<div class="row-input required">
+								<select name="employstatus" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="0">在职</option>
+									<option value="1">离职</option>
+								</select>
+							</div>
+							<label class="row-label">入职日期</label>
+							<div class="row-input required">
+								<input type="text" name="hiredate" id="hiredate" data-rule="required">
+							</div>
+							<label class="row-label">离职日期</label>
+							<div class="row-input">
+								<input type="text" name="leavedate">
+							</div>
+							<label class="row-label">所属片区</label>
+							<div class="row-input">
+								<select name="areaid" id="areaid" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="0">请选择</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>驾驶证信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">驾驶证号</label>
+							<div class="row-input required">
+								<input type="text" name="drilicence" data-rule="required">
+							</div>
+							<label class="row-label">准驾车型</label>
+							<div class="row-input required">
+								<select name="dripermitted" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="C1">C1</option>
+									<option value="C2">C2</option>
+									<option value="C3">C3</option>
+									<option value="C4">C4</option>
+									<option value="C5">C5</option>
+									<option value="A1">A1</option>
+									<option value="A2">A2</option>
+									<option value="A3">A3</option>
+									<option value="B1">B1</option>
+									<option value="B2">B2</option>
+									<option value="D">D</option>
+									<option value="E">E</option>
+									<option value="F">F</option>
+									<option value="M">M</option>
+									<option value="N">N</option>
+									<option value="P">P</option>
+								</select>
+							</div>
+							<label class="row-label">初领日期</label>
+							<div class="row-input required">
+								<input type="text" name="fstdrilicdate" data-rule="required">
+							</div>
+							<label class="row-label">有效期至</label>
+							<div class="row-input">
+								<input type="text" name="expireDate">
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>职能信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+
+							<label class="row-label">教学组长</label>
+							<div class="row-input">
+								<select name="headcoachid" class="canmod" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/coach/list" data-optiontype="coachid,name">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教类型</label>
+							<div class="row-input">
+								<select name="teachtypeid" class="canmod" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/coachSetting/listTeachType" data-optiontype="id,type">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教职务</label>
+							<div class="row-input">
+								<select name="jobid" class="canmod" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/coachSetting/listJob" data-optiontype="id,job">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教车型</label>
+							<div class="row-input">
+								<select name="teachcartype" class="canmod" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/coachSetting/listCarType" data-optiontype="type,type">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教状态</label>
+							<div class="row-input">
+								<select name="teachstate" class="canmod" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="0">请选择</option>
+									<option value="1">正常分配</option>
+									<option value="2">暂停分配</option>
+								</select>
+							</div>
+							<label class="row-label">负荷标准</label>
+							<div class="row-input">
+								<input type="text" class="canmod" name="studentload">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>带教信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">带教班别</label>
+							<div class="row-input fill-3" id="classgroup">
+
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">关联门店</label>
+							<div class="row-input fill-3" id="storegroup">
+
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">主要门店</label>
+							<div class="row-input fill-3">
+								<select name="mainstoreid" id="mainstoreid" disabled="disabled" data-toggle="selectpicker" data-width="100">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">科目二考场</label>
+							<div class="row-input fill-3" id="step2group">
+
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">科目三考场</label>
+							<div class="row-input fill-3" id="step3group">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<input type="hidden" id="applyid" />
+	</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+	var flowdata = clz.getNavtab_more();
+
+	var coach_mod_apply_template = {
+
+		loadapplyinfo: function(flowdata) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + '/coach/getModApply?transactionid=' + flowdata.transactionid,
+				loadingmask: true,
+				async: false,
+				okCallback: function(json, options) {
+					var data = json.result;
+					$.CurrentNavtab.find("#coachid").val(data.coachid);
+					$.CurrentNavtab.find("#applyid").val(data.id);
+					$.CurrentNavtab.find("#applyuser").html(data.applyuser);
+					$.CurrentNavtab.find("#area").html(formatAreaCell(data.areaid));
+					$.CurrentNavtab.find("#applydate").html(data.createdate);
+					if(data.status == 0) $.CurrentNavtab.find("#auditstatus").html("审核状态: 未审核");
+					if(data.status == 1) $.CurrentNavtab.find("#auditstatus").html("审核状态: 审核通过");
+					if(data.status == 2) $.CurrentNavtab.find("#auditstatus").html("审核状态: 审核拒绝");
+					if(data.status == 3) $.CurrentNavtab.find("#auditstatus").html("审核状态: 已撤回");
+
+					coach_mod_apply_template.loadcoachinfo(data.id);
+					coach_mod_apply_template.loadflowinfo();
+				}
+			});
+		},
+
+		loadcoachinfo: function(id) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/coach/getCoachModinfo",
+				loadingmask: true,
+				async: false,
+				data: {
+					coachid: $.CurrentNavtab.find("#coachid").val(),
+					applyid: id
+				},
+				okCallback: function(json, options) {
+					console.log(json)
+					clz.CurrentDom_init({
+						current: 'Navtab',
+						form_name: 'edit-form',
+						data: json.result,
+						callback: function(data) {
+
+							$.CurrentNavtab.find('#areaid').attr("data-dataurl", "/httpaccess/area/list");
+
+							var info = coach_mod_apply_template.loadmodextendinfo(id);
+
+							coach_mod_apply_template.showclassinfo(info)
+
+							coach_mod_apply_template.showstore(data, info);
+							coach_mod_apply_template.showstep2area(info);
+							coach_mod_apply_template.showstep3area(info);
+							coach_mod_apply_template.disabledom();
+							$.CurrentNavtab.find("#name").html(data.name)
+							$.CurrentNavtab.find("#mobile").html(data.mobile)
+							$.CurrentNavtab.find("#carno").html(data.carno)
+							$.CurrentNavtab.find("#curstudentload").html(data.curstudentload)
+							if(json.result.modapplystat == 1||json.result.modapplystat == 2){
+								$.CurrentNavtab.find("#actiondiv").css("display", "")
+								if(json.result.modapplystat == 1){//可以审核
+									$.CurrentNavtab.find("#auditbtn").css("display", "")
+									$.CurrentNavtab.find("#unauditbtn").css("display", "")
+								}else if(json.result.modapplystat == 2){//可以取消
+									$.CurrentNavtab.find("#cancelbtn").css("display", "")
+								}
+								
+							}
+							$.CurrentNavtab.find("#viewcoachphoto").attr("src", "http://obqfnhv9x.bkt.clouddn.com/" + data.photo)
+						}
+					});
+					var changeinfo=json.extend;
+						for(var item in changeinfo){
+							//console.log(item+" "+changeinfo[item])
+							showRedColor(item);
+						}
+				}
+			})
+		},
+
+		loadmodextendinfo: function(id) {
+			var edata;
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/coach/getCoachModinfoextendinfo",
+				loadingmask: true,
+				async: false,
+				data: {
+					coachid: $.CurrentNavtab.find("#coachid").val(),
+					applyid: id
+				},
+				okCallback: function(json, options) {
+					console.log(json);
+					edata = json.result
+				}
+			})
+			return edata
+		},
+		
+		loadflowinfo: function() {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/flow/listflowstep?flowid="+flowdata.id,
+				loadingmask: true,
+				async: true,
+				
+				okCallback: function(json, options) {
+					console.log(json);
+					if(json.result&&json.result.list){
+						var sdata=json.result.list;
+						var text="";
+						for(var i=0;i<sdata.length;i++){
+							var status="";
+							
+							if(sdata[i].status==0){
+								status="未处理"
+							}else if(sdata[i].status==1){
+								status="审核通过"
+							}else if(sdata[i].status==2){
+								status="审核不通过"
+							}
+							text=text+"<tr><td>审核人</td><td>"+sdata[i].user +  "</td><td>处理结果</td><td>"+status+"</td><td>处理时间</td><td>" +(sdata[i].status==0?"":sdata[i].updatedate) + "</td></tr>"
+						}
+					}
+					
+					$.CurrentNavtab.find("#flowinfo").append($(text));
+					$.CurrentNavtab.find("#flowinfo").trigger(BJUI.eventType.initUI)
+					//flowinfo
+				}
+			})
+			
+		},
+
+		showclassinfo: function(info) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/class/list",
+				loadingmask: true,
+				okCallback: function(json, options) {
+					//console.log(json.result.list)
+					if(json.result && json.result.list) {
+						
+						if(!info.classinfoid) info.classinfoid = "";
+						var cif = info.classinfoid.split(",");
+						for(var i = 0; i < json.result.list.length; i++) {
+							for(var j = 0; j < cif.length; j++) {
+								if(json.result.list[i].id == cif[j]) {
+									json.result.list[i].checked = true;
+								}
+							}
+
+						}
+
+						for(var i = json.result.list.length - 1; i >= 0; i--) {
+							if(!json.result.list[i].checked) {
+								json.result.list.splice(i, 1);
+							}
+						}
+
+						clz.output_checkbox({
+							data: json.result.list, //数据格式 id name
+							domid: 'classgroup', // 输出容器id
+							name: 'classinfoid', //checkbox 的name属性
+							chedata: info.classinfoid, //选中的值， 逗号分隔    1,2
+							place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+						})
+						if(info.classinfoid){
+								showRedColor2('classinfoid');
+							}
+					}
+					coach_mod_apply_template.disablecheckbox();
+				}
+			})
+		},
+
+		showstore: function(coachinfo, info) {
+
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/store/list?areaid=" + coachinfo.areaid,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					//console.log(json.result.list)
+					if(json.result && json.result.list) {
+						if(!info.storeid) info.storeid = "";
+						var cif = info.storeid.split(",");
+						for(var i = 0; i < json.result.list.length; i++) {
+							for(var j = 0; j < cif.length; j++) {
+								if(json.result.list[i].id == cif[j]) {
+									json.result.list[i].checked = true;
+								}
+							}
+						}
+
+						renderselect($.CurrentNavtab.find('#mainstoreid'), json.result.list);
+						$.CurrentNavtab.find('#mainstoreid').val(coachinfo.mainstoreid);
+						$.CurrentNavtab.find('#mainstoreid').selectpicker('refresh')
+
+						clz.output_checkbox({
+							data: json.result.list, //数据格式 id name
+							domid: 'storegroup', // 输出容器id
+							name: 'storeid', //checkbox 的name属性
+							chedata: info.storeid, //选中的值， 逗号分隔    1,2
+							place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+						})
+						if(info.storeid){
+								showRedColor2('storeid');
+							}
+					}
+					coach_mod_apply_template.disablecheckbox();
+				}
+			})
+
+		},
+
+		showstep2area: function(info) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/examarea/list?subject=2",
+				loadingmask: true,
+				okCallback: function(json, options) {
+					//console.log(json.result.list)
+					if(json.result && json.result.list) {
+						if(!info.step2areaid) info.step2areaid = "";
+						var cif = info.step2areaid.split(",");
+						for(var i = 0; i < json.result.list.length; i++) {
+							for(var j = 0; j < cif.length; j++) {
+								if(json.result.list[i].id == cif[j]) {
+									json.result.list[i].checked = true;
+								}
+							}
+						}
+
+						clz.output_checkbox({
+							data: json.result.list, //数据格式 id name
+							domid: 'step2group', // 输出容器id
+							name: 'step2areaid', //checkbox 的name属性
+							chedata: info.step2areaid, //选中的值， 逗号分隔    1,2
+							place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+						})
+						if(info.step2areaid){
+								showRedColor2('step2areaid');
+							}
+					}
+					coach_mod_apply_template.disablecheckbox();
+				}
+			})
+		},
+
+		showstep3area: function(info) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/examarea/list?subject=3",
+				loadingmask: true,
+				okCallback: function(json, options) {
+					//console.log(json.result.list)
+					if(json.result && json.result.list) {
+						if(!info.step3areaid) info.step3areaid = "";
+						var cif = info.step3areaid.split(",");
+						for(var i = 0; i < json.result.list.length; i++) {
+							for(var j = 0; j < cif.length; j++) {
+								if(json.result.list[i].id == cif[j]) {
+									json.result.list[i].checked = true;
+								}
+							}
+
+						}
+
+						clz.output_checkbox({
+							data: json.result.list, //数据格式 id name
+							domid: 'step3group', // 输出容器id
+							name: 'step3areaid', //checkbox 的name属性
+							chedata: info.step3areaid, //选中的值， 逗号分隔    1,2
+							place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+						})
+						if(info.step3areaid){
+								showRedColor2('step3areaid');
+						}
+					}
+					coach_mod_apply_template.disablecheckbox();
+				}
+			})
+		},
+
+		disablecheckbox: function() {
+			$.CurrentNavtab.find("input[type=checkbox]").each(
+				function() {
+					//console.log($(this).attr("checked"))
+					if(!$(this).attr("checked")) {
+						$(this).css("display", "none")
+						$(this).attr("disabled", "disabled")
+					} else
+						$(this).attr("disabled", "true")
+					$(this).trigger(BJUI.eventType.initUI)
+				}
+			)
+		},
+
+		audit: function(state) {
+			if(state == 1)
+				BJUI.alertmsg('confirm', '确认审核通过？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						coach_mod_apply_template.doaudit(1)
+					}
+				})
+			if(state == 2)
+				BJUI.alertmsg('confirm', '确认审核不通过？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						coach_mod_apply_template.doaudit(2)
+					}
+				})
+			if(state == 3)
+				BJUI.alertmsg('confirm', '确认撤回申请吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						coach_mod_apply_template.doaudit(3)
+					}
+				})	
+		},
+
+		doaudit: function(state) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/coach/auditModApply",
+				loadingmask: true,
+				data: {
+					applyid: $.CurrentNavtab.find("#applyid").val(),
+					state: state
+				},
+				okCallback: function(json, options) {
+					BJUI.alertmsg('ok', '提交成功！', {})
+					//BJUI.navtab('closeCurrentTab')
+					$.CurrentNavtab.find("#actiondiv").css("display", "none")
+					BJUI.navtab('refresh');
+				}
+			})
+		},
+		disabledom: function() {
+			$.CurrentNavtab.find("input[type=text]").each(
+				function() {
+
+					$(this).attr("readonly", "readonly")
+
+				}
+			)
+			$.CurrentNavtab.find("select").each(
+				function() {
+
+					$(this).attr("disabled", "true")
+
+				}
+			)
+		}
+	}
+
+	clz.CurrentDom_init({
+		current: 'Navtab',
+		form_name: 'edit-form',
+		callback: function(data) {
+
+			coach_mod_apply_template.loadapplyinfo(flowdata)
+
+		}
+	})
+	
+	function showRedColor(name) {
+        $.CurrentNavtab.find('input[name="'+name+'"],select[name="'+name+'"],textarea[name="'+name+'"]')
+            .parent("div").prev("label").css("color","red"); 
+    }
+	function showRedColor2(name) {
+        $.CurrentNavtab.find('input[name="'+name+'"]').each(function(){
+        	//console.log($(this).parent("div").parent().parent("div").parent("div").attr("class"))
+        	$(this).parent("div").parent().parent("div").parent("div").prev("label").css("color","red");
+        })
+             
+    }
+</script>

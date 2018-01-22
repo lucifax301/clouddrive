@@ -1,0 +1,36 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="add-form">
+        <div class="bjui-row col-1">
+            <label class="row-label">帐号:</label>
+            <div class="row-input required">
+                <input type="text" name="account" data-rule="required">
+            </div>
+            <label class="row-label">银行:</label>
+            <div class="row-input required">
+                 <input type="text" name="bankname" data-rule="required">
+            </div>
+            <label class="row-label">Pos公司:</label>
+            <div class="row-input required">
+                 <input type="text" name="poscompany" data-rule="required">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="submit" class="btn-blue" data-icon="save">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+    var finance_posaccount_add = {
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Dialog',
+				url: config.openBasePath + 'pos/addPosAccount',
+				form_name: 'add-form'
+			})
+		}
+	}
+    finance_posaccount_add.init();
+</script>

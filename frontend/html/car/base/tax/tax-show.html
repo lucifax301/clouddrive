@@ -1,0 +1,60 @@
+<div class="bjui-pageContent">
+    <div class="">
+       <form class="datagrid-edit-form" data-toggle="validate"  id="show-form">
+			<input type="hidden" name="id">
+			<div style="background-color:#eee; padding:1px;"></div>
+			<div class="bjui-row col-3">             
+           <label class="row-label">车船税(元)</label>
+            <div class="row-input ">
+                <input type="text" name="tax" id="tax" data-rule="" disabled="true">
+            </div>          
+            <label class="row-label">缴费日期</label>
+            <div class="row-input">
+                <input type="text" name="payDate" id="payDate" data-toggle="datepicker" data-rule="" disabled="true">
+            </div>
+            <label class="row-label">下次缴费日期</label>
+            <div class="row-input ">
+                <input type="text" name="nextTest" id="nextTest" data-toggle="datepicker" data-rule="" disabled="true">
+            </div>  
+            <label class="row-label">经办人</label>
+            <div class="row-input ">
+                <input type="text" name="cname" id="cname" data-rule="" disabled="true">
+            </div>           
+            <label class="row-label">备注</label>
+            <div class="row-input fill-2 ">
+                <input type="text" name="remark" id="remark" data-rule="" disabled="true">
+            </div>
+       </div>
+     </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+    </ul>
+</div>
+<script type="text/javascript">	
+	BJUI.ajax('doajax', {
+              url: config.openBasePath + 'car/getCarTax?id=' + clz.getNavtab_more().id,
+              type: 'GET',
+              loadingmask: true,
+              okCallback: function(json, options) {
+                  console.log(json); 
+                  clz.CurrentDom_init({
+					current:'Navtab',
+                      form_name : 'show-form',
+                      data : json.result,    
+                      timetype:[
+									    		{
+										        name:'payDate',
+										        type:'yyyy-MM-dd'
+										      },
+										      {
+										        name:'nextTest',
+										        type:'yyyy-MM-dd'
+										      }
+									    ]                  
+                  });                   
+              }
+  });
+</script>

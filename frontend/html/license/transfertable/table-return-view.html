@@ -1,0 +1,29 @@
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+    </div>
+</div>
+<script>
+    var data = clz.getWindowJson();
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        paging: false,
+        height: '95%',
+        dataUrl: config.openBasePath + 'transfertable/itemlist',
+        postData : data,
+        columns: [
+            {name:'tableid',label:'批次号',align:'center',
+                render :function(val,data) {
+                    return data.returntableid;
+            }},
+            {name:'idcard',label:'证件号码',align:'center'},
+            {name:'name',label:'姓名',align:'center'},
+            {name:'photoback',label:'照片回执',align:'center'},
+            {name:'status',label:'状态',align:'center',render:transferItemStatus},
+            {name:'rtnreason',label:'退表原因',align:'center'}
+        ]
+    });
+</script>
+    

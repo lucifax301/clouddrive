@@ -1,0 +1,94 @@
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+	
+</div>
+	
+<table id="datagrid-list" class="table table-bordered">
+	<tr><td>信息类型</td><td>备注</td><td>最后更新时间</td><td>操作</td></tr>
+	<tr><td>驾校信息</td><td>驾校信息备案及修改、驾校评价、驾校投诉</td><td>最后更新时间</td><td><a href="#" onclick="sync_data.uploadschool()">更新数据</a></td></tr>
+	<tr><td>员工信息</td><td>教练员新增、修改、教练评价、教练投诉，考核员新增及修改，安全员新增及修改</td><td>最后更新时间</td><td><a href="#" onclick="sync_data.uploadcoach()">更新数据</a></td></tr>
+	<tr><td>资产信息</td><td>教练车新增及修改、计时终端新增及修改、教学区域新增及修改</td><td>最后更新时间</td><td><a href="#" onclick="sync_data.uploadresource()">更新数据</a></td></tr>
+	<tr><td>学员信息</td><td>学员新增及修改，学员培训信息、学员教学日志、结业及评价与投诉</td><td>最后更新时间</td><td><a href="#" onclick="sync_data.uploadstudent()">更新数据</a></td></tr>
+	<tr><td>运营信息</td><td>收费标准备案及修改</td><td>最后更新时间</td><td><a href="#" onclick="sync_data.uploadclassinfo()">更新数据</a></td></tr>
+</table>
+<script type="text/javascript">
+	
+	var sync_data={
+		uploadschool(){
+			BJUI.alertmsg('confirm', '确认提交吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/sync/school",
+							loadingmask: true,
+							okCallback: function(json, options) {
+								BJUI.alertmsg('ok', json.msg, {})
+								
+							}
+						})
+					}
+				})
+		},
+		uploadresource(){
+			BJUI.alertmsg('confirm', '确认提交吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/sync/resource",
+							loadingmask: true,
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', json.msg, {})
+								
+							}
+						})
+					}
+				})
+		},
+		uploadstudent(){
+			BJUI.alertmsg('confirm', '确认提交吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/sync/student",
+							loadingmask: true,
+							okCallback: function(json, options) {
+								BJUI.alertmsg('ok', json.msg, {})
+								
+							}
+						})
+					}
+				})
+		},
+		uploadcoach(){
+			BJUI.alertmsg('confirm', '确认提交吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/sync/coach",
+							loadingmask: true,
+							okCallback: function(json, options) {
+								BJUI.alertmsg('ok', json.msg, {})
+								
+							}
+						})
+					}
+				})
+		},
+		uploadclassinfo(){
+			BJUI.alertmsg('confirm', '确认提交吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/sync/classinfo",
+							loadingmask: true,
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', json.msg, {})
+								
+							}
+						})
+					}
+				})
+		}
+	}
+</script>

@@ -1,0 +1,300 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form"  id="formedit">
+		<input type="hidden" name="id">
+		<div class="bjui-row col-2">
+			<div class="y-comment">
+				<label class="row-label">班别名称：</label>
+				<div class="row-input">
+					<input type="text" name="name" readonly="readonly" data-rule="required;length[1~12]">
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">带教班型：</label>
+				<div class="row-input">
+					<select name="classtypeid" disabled="disabled" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/coachSetting/listAllClassType?status=0" data-optiontype="id,type">
+								
+					</select>
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">学车形式：</label>
+				<div class="row-input required">
+					<select name="type" data-toggle="selectpicker" data-width="100%" data-rule="required" disabled="disabled">
+								<option value="0">一次性收费</option>
+								<option value="1">计时收费</option>
+					</select>
+				</div>
+			</div>
+			<div class="y-comment" style="display: none;" id="paymodediv">
+				<label class="row-label">付费模式：</label>
+				<div class="row-input required">
+					<select name="paymode" data-toggle="selectpicker" data-width="100%" data-rule="required"  disabled="disabled">
+								<option value="1">先学后付</option>
+								<option value="2">先付后学</option>
+								<option value="9">其他</option>
+					</select>
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">价格包含费用：</label>
+				<div id="financeSubjectIdsDiv" class="row-input required fill-2">
+	  	  			<input type="hidden" name="financeSubjectIds" id="financeSubjectIds">
+				</div>
+			</div>			
+			<div class="y-comment">
+				<label class="row-label">班别班型：</label>
+				<div class="row-input fill-2">
+					<div class="y-comment" >
+						<div class="fl mr20 mt1">
+							<input type="checkbox" name="c1flag" disabled="disabled" value="1"  data-toggle="icheck" data-label="C1车型" checked>
+						</div>
+						<div class="fl y-comment">
+							<div class="mb5 y-comment">
+							<b class="fl mt2 w100 text-right">价格：</b>
+							<div class="fl">
+								<input type="text" name="c1amount" readonly="readonly" id="c1amount" maxlength="5" data-rule="required;plusdigits" class="w200" placeholder="请输入价格">
+							</div>
+							<i class="fl mt2">元</i>
+							</div>
+							<div class="jishishoufei y-comment" style="display: none;">
+							<b class="fl mt2 w100 text-right">每小时单价：</b>
+							<div class="fl">
+								<input type="text" name="c1houramount"  readonly="readonly" id="c1houramount" maxlength="5"  class="w200" placeholder="请输入价格">
+							</div>
+							<i class="fl mt2">元</i>
+							</div>
+						</div>
+					</div>
+					<div class="y-comment mt10">
+						<div class="fl mr20 mt1">
+							<input type="checkbox" name="c2flag" value="1" disabled="disabled"  data-toggle="icheck" data-label="C2车型" checked >
+						</div>
+						<div class="fl y-comment">
+							<div  class="mb5 y-comment">
+							<b class="fl mt2 w100 text-right">价格：</b>
+							<div class="fl">
+								<input type="text" name="c2amount" readonly="readonly" id="c2amount" maxlength="5" data-rule="required;plusdigits" class="w200" placeholder="请输入价格">
+							</div>
+							<i class="fl mt2">元</i>
+							</div>
+							<div class="jishishoufei y-comment" style="display: none;">
+							<b class="fl mt2 w100 text-right">每小时单价：</b>
+							<div class="fl">
+								<input type="text" name="c2houramount" readonly="readonly" id="c2houramount" maxlength="5"  class="w200" placeholder="请输入价格">
+							</div>
+							<i class="fl mt2">元</i>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<!--
+			<div class="y-comment">
+				<label class="row-label">价格组成：</label>
+				<div class="row-input fill-2 ">
+					<div class="bjui-row col-2 pt0">
+						<div class="row-input">
+							<input type="text" name="newtype" data-rule="length[0~12]" placeholder="新增费用类型名称">
+						</div>
+						<div class="row-input">
+							<a href="javascript:" class="btn-blue btn" onclick="class_type_add_class.typeadd()"><i class="fa fa-plus"></i>新增</a>
+						</div>
+						<div class="border-all" id="typeadd">
+							<label class="row-label">受理费</label>
+							<div class="row-input y-box-flex">
+								<input type="text" name="hahaha1"><span>元</span>
+							</div>
+							<label class="row-label">工本费</label>
+							<div class="row-input">
+								<input type="text" name="hahaha2"><span>元</span>
+							</div>
+							<label class="row-label">考试费</label>
+							<div class="row-input">
+								<input type="text" name="hahaha3"><span>元</span>
+							</div>
+							<label class="row-label">长训费</label>
+							<div class="row-input">
+								<input type="text" name="hahaha4"><span>元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			-->
+			
+			<div class="y-comment">
+				<label class="row-label">高端班属性：</label>
+				<div class="row-input  fill-2">
+					<input type="radio" name="highflag" value="0" data-toggle="icheck" data-label="非高端班" checked disabled="disabled">
+					<input type="radio" name="highflag" value="1" data-toggle="icheck" data-label="高端班" disabled="disabled" >
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">外地班属性：</label>
+				<div class="row-input  fill-2">
+					<input type="radio" name="localflag" value="0" data-toggle="icheck" data-label="非外地班" checked disabled="disabled">
+					<input type="radio" name="localflag" value="1" data-toggle="icheck" data-label="外地班" disabled="disabled" >
+
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">备注：</label>
+				<div class="row-input">
+					<input type="text" name="classdesc" readonly="readonly" data-rule="required;length[0~200]" placeholder="请输入备注">
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="status" />
+		</form>
+</div>
+<div class="bjui-pageFooter">
+	<ul>
+		<li><button type="button" class="btn-red" data-icon="close" onclick="class_type_edit_class.leaveaddclass()">取消</button></li>
+		
+	</ul>
+</div>
+<script type="text/javascript">
+	var classinfo=clz.getWindowJson();
+	console.log(classinfo)
+	var class_type_edit_class = {
+		curdata:{},
+		init(){
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "financeSubject/listAll",
+				loadingmask: true,
+				async: true,
+				type:"GET",
+				okCallback: function(data) {
+					var financeSubjectIdsDiv = $.CurrentDialog.find('#financeSubjectIdsDiv');
+					var list=data.result.list;
+					var financeSubjectIds=classinfo.financeSubjectIds?classinfo.financeSubjectIds.split(","):[];
+					for(var i=0;i<list.length;i++){
+						var isExist=false;
+						for(var j=0;j<financeSubjectIds.length;j++){
+							if(list[i].id==financeSubjectIds[j]){
+								isExist=true;
+								break;
+							}
+						}
+						if(isExist){
+							financeSubjectIdsDiv.append("<input type='checkbox' disabled='disabled' data-rule='checked' checked='checked' name='financeSubjectId' data-toggle='icheck' value='"+list[i].id+"' data-label='"+list[i].subject+"' />  ");
+						}else{
+							financeSubjectIdsDiv.append("<input type='checkbox' disabled='disabled' data-rule='checked'  name='financeSubjectId' data-toggle='icheck' value='"+list[i].id+"' data-label='"+list[i].subject+"' />  ");
+						}
+					}
+					financeSubjectIdsDiv.trigger(BJUI.eventType.initUI)//重新渲染BJUI
+				}
+			})
+			
+			clz.CurrentDom_init({
+				form_name: 'formedit',
+				//table_name: 'datagrid-list',
+				current: 'Dialog',
+				data:classinfo,
+				callback:function(data){
+					curdata=data;
+					console.log(curdata)
+					
+					if(!data.c1flag){
+						$.CurrentDialog.find('#c1amount').attr("disabled",true);
+					}
+					if(!data.c2flag){
+						$.CurrentDialog.find('#c2amount').attr("disabled",true);
+					}
+					
+					var type = $.CurrentDialog.find('[name="type"]').val();
+					if(type==0){
+						$.CurrentDialog.find('.jishishoufei').hide();
+						$.CurrentDialog.find('.jishishoufei').find('input').val('');
+						$.CurrentDialog.find('#c1houramount').removeAttr("data-rule");
+						$.CurrentDialog.find('#c2houramount').removeAttr("data-rule");
+						$.CurrentDialog.find('#paymodediv').hide();
+					}else if(type==1){
+						$.CurrentDialog.find('.jishishoufei').show();
+						$.CurrentDialog.find('#c1houramount').attr('data-rule','required;plusdigits')
+						$.CurrentDialog.find('#c2houramount').attr('data-rule','required;plusdigits')
+						$.CurrentDialog.find('#paymodediv').show();
+					}
+				}
+			})
+			
+		},
+		typeaddNum:1,
+		typeadd(){
+			var dom = $.CurrentDialog.find('#typeadd'),
+				text = $.CurrentDialog.find('input[name="newtype"]').val(),
+				html;
+			if(text == ''){return}
+			$.CurrentDialog.find('input[name="newtype"]').val('');
+			html = '<label class="row-label">'+text+'</label><div class="row-input y-box-flex"><input type="text" name="moretype" data-name="'+text+'"><span>元</span></div>';
+			dom.append(html)
+			this.typeaddNum++;
+			dom.trigger(BJUI.eventType.initUI)//重新渲染BJUI
+		},
+		savejobtype(){
+			var checkboxnum = 0;
+			if($.CurrentDialog.find('input[name="c1flag"]').is(':checked')){checkboxnum++}
+			if($.CurrentDialog.find('input[name="c2flag"]').is(':checked')){checkboxnum++}
+			if(checkboxnum==0){
+				 BJUI.alertmsg('error', '至少选择一个班型！')
+				return
+			}
+			if(!$.CurrentDialog.find('#formedit').isValid()){return}
+			var data = clz.parseForm($.CurrentDialog.find('#formedit'))
+			
+			BJUI.alertmsg('confirm', '确认修改带教班别吗？', {
+				okCall: function() {
+					
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'class/edit',
+						loadingmask: true,
+						data: data,
+						okCallback: function(json, options) {
+							BJUI.alertmsg('ok', '修改带教班别成功！', {})
+							//$.CurrentNavtab.find("#classtypeid").val()
+							BJUI.dialog('closeCurrent')
+							
+						}
+					});
+				}
+			})
+			
+			
+		},
+		leaveaddclass(){
+			
+			if($.CurrentDialog.find("#formedit").find("input[name=name]").val()!=curdata.name||$.CurrentDialog.find("#formedit").find("input[name=c1amount]").val()!=curdata.c1amount||$.CurrentDialog.find("#formedit").find("input[name=c2amount]").val()!=curdata.c2amount){
+			BJUI.alertmsg('confirm', '离开本页面后，编辑的内容将不会保存，是否离开？', {
+				okCall: function() {
+					BJUI.dialog('closeCurrent')
+				}
+			})
+			}else{
+				BJUI.dialog('closeCurrent')
+			}
+		}
+	}
+	class_type_edit_class.init();
+	//BJUI.dialog('reload',{title:'aa'})
+	$.CurrentDialog.find('input[name="c1flag"]').on('ifUnchecked', function(event){
+  		$.CurrentDialog.find('#c1amount').attr("disabled",true);
+  		$.CurrentDialog.find('#c1amount').val("");
+  		$.CurrentDialog.find('#c1amount').parents('.y-comment').find('.n-invalid').removeClass('n-invalid')
+  		$.CurrentDialog.find('#c1amount').parents('.y-comment').find('.n-bottom').remove()
+  		 
+	});
+	$.CurrentDialog.find('input[name="c1flag"]').on('ifChecked', function(event){
+  		$.CurrentDialog.find('#c1amount').removeAttr("disabled")
+	});
+	$.CurrentDialog.find('input[name="c2flag"]').on('ifUnchecked', function(event){
+  		$.CurrentDialog.find('#c2amount').attr("disabled",true);
+  		$.CurrentDialog.find('#c2amount').val("");
+  		$.CurrentDialog.find('#c2amount').parents('.y-comment').find('.n-invalid').removeClass('n-invalid')
+  		$.CurrentDialog.find('#c2amount').parents('.y-comment').find('.n-bottom').remove()
+	});
+	$.CurrentDialog.find('input[name="c2flag"]').on('ifChecked', function(event){
+  		$.CurrentDialog.find('#c2amount').removeAttr("disabled")
+	});
+</script>

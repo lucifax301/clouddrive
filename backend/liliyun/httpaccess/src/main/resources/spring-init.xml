@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- 支持标注 -->
+	<context:annotation-config />
+	
+	<context:component-scan base-package="cn.com.liliyun">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<import resource="classpath*:dubbo-client.xml"/>
+	<import resource="classpath*:trainorg-client.xml"/>
+	<import resource="classpath*:coach-client.xml"/>
+	<import resource="classpath*:student-client.xml"/>
+	<import resource="classpath*:user-client.xml"/>
+	<import resource="classpath*:car-client.xml"/>
+	<import resource="classpath*:authcode-client.xml"/>
+	
+	<import resource="classpath*:system-client.xml"/>
+	<import resource="classpath*:market-client.xml"/>
+	<import resource="classpath*:report-client.xml"/>
+	<import resource="classpath*:business-client.xml"/>
+	<import resource="classpath*:finance-client.xml"/>
+	<bean id="devProperties" class="cn.com.liliyun.httpaccess.util.DevProperties">
+		<property name="dev" value="1" />
+	</bean>
+</beans>

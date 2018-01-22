@@ -1,0 +1,1075 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarMapper">
+	<resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.Car">
+		<id column="car_id" property="carId" jdbcType="INTEGER" />
+		<result column="motor_id" property="motorId" jdbcType="INTEGER" />
+		<result column="motor_code" property="motorCode" jdbcType="VARCHAR" />
+		<result column="motor_date" property="motorDate" jdbcType="TIMESTAMP" />
+		<result column="motor_fcode" property="motorFcode" jdbcType="VARCHAR" />
+		<result column="car_no" property="carNo" jdbcType="VARCHAR" />
+		<result column="carno_color" property="carnoColor" jdbcType="INTEGER" />
+		<result column="former_carno" property="formerCarno" jdbcType="VARCHAR" />
+		<result column="frame_num" property="frameNum" jdbcType="VARCHAR" />
+		<result column="engine_model" property="engineModel" jdbcType="VARCHAR" />
+		<result column="engine_num" property="engineNum" jdbcType="VARCHAR" />
+		<result column="car_vin" property="carVin" jdbcType="VARCHAR" />
+		<result column="car_model" property="carModel" jdbcType="VARCHAR" />
+		<result column="car_type" property="carType" jdbcType="VARCHAR" />
+		<result column="car_brand" property="carBrand" jdbcType="VARCHAR" />
+		<result column="car_owner" property="carOwner" jdbcType="VARCHAR" />
+		<result column="asset_num" property="assetNum" jdbcType="VARCHAR" />
+		<result column="reg_office" property="regOffice" jdbcType="VARCHAR" />
+		<result column="file_no" property="fileNo" jdbcType="VARCHAR" />
+		<result column="area_id" property="areaId" jdbcType="INTEGER" />
+		<result column="trainarea_id" property="trainareaId" jdbcType="INTEGER" />
+		<result column="area" property="area" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="drive_type" property="driveType" jdbcType="INTEGER" />
+		<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="drive_num" property="driveNum" jdbcType="VARCHAR" />
+		<result column="drive_photo" property="drivePhoto" jdbcType="VARCHAR" />
+		<result column="school_id" property="schoolId" jdbcType="INTEGER" />
+		<result column="city_id" property="cityId" jdbcType="INTEGER" />
+		<result column="car_color" property="carColor" jdbcType="INTEGER" />
+		<result column="fuel" property="fuel" jdbcType="INTEGER" />
+		<result column="car_img_id" property="carImgId" jdbcType="VARCHAR" />
+		<result column="car_img" property="carImg" jdbcType="VARCHAR" />
+		<result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+		<result column="leave_date" property="leaveDate" jdbcType="DATE" />
+		<result column="buy_date" property="buyDate" jdbcType="DATE" />
+		<result column="buy_fee" property="buyFee" jdbcType="INTEGER" />
+		<result column="reg_date" property="regDate" jdbcType="DATE" />
+		<result column="verify_end" property="verifyEnd" jdbcType="DATE" />
+		<result column="accept_date" property="acceptDate" jdbcType="DATE" />
+		<result column="retire_date" property="retireDate" jdbcType="DATE" />
+		<result column="scrap_date" property="scrapDate" jdbcType="DATE" />
+		<result column="insurance_end" property="insuranceEnd"
+			jdbcType="DATE" />
+		<result column="coach_id" property="coachId" jdbcType="INTEGER" />
+		<result column="coach_name" property="coachName" jdbcType="VARCHAR" />
+		<result column="oil_card" property="oilCard" jdbcType="VARCHAR" />
+		<result column="park_addr" property="parkAddr" jdbcType="VARCHAR" />
+		<result column="cuid" property="cuid" jdbcType="INTEGER" />
+		<result column="muid" property="muid" jdbcType="INTEGER" />
+		<result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+		<result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+		<result column="power" property="power" jdbcType="INTEGER" />
+		<result column="wheel_rear" property="wheelRear" jdbcType="INTEGER" />
+		<result column="wheel_front" property="wheelFront" jdbcType="INTEGER" />
+		<result column="tyre_spec" property="tyreSpec" jdbcType="INTEGER" />
+		<result column="tyre_num" property="tyreNum" jdbcType="INTEGER" />
+		<result column="wheelbase" property="wheelbase" jdbcType="INTEGER" />
+		<result column="height" property="height" jdbcType="INTEGER" />
+		<result column="width" property="width" jdbcType="INTEGER" />
+		<result column="length" property="length" jdbcType="INTEGER" />
+		<result column="displacement" property="displacement" jdbcType="INTEGER" />
+		<result column="property" property="property" jdbcType="INTEGER" />
+		<result column="delay_scrap" property="delayScrap" jdbcType="INTEGER" />
+		<result column="teachsubject" property="teachSubject" jdbcType="INTEGER" />
+		<result column="org" property="org" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		car_id, motor_id, motor_code, motor_date, motor_fcode, car_no, carno_color,
+		former_carno,
+		frame_num, engine_model, engine_num, car_vin, car_model, car_type, car_brand,
+		car_owner,
+		asset_num, reg_office, file_no, area_id, trainarea_id, area, status, drive_type,
+		brand_id, brand_name, drive_num, drive_photo, school_id, city_id,
+		car_color, fuel,
+		car_img_id, car_img, manufacturer, leave_date, buy_date, buy_fee, reg_date,
+		verify_end,
+		accept_date, retire_date, scrap_date, insurance_end, coach_id, coach_name, cuid,
+		muid, ctime, mtime, power, wheel_rear, wheel_front, tyre_spec,
+		tyre_num, wheelbase,
+		height, width, length, displacement,oil_card,park_addr,property,delay_scrap,teachsubject,org
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="cn.com.liliyun.car.model.Car">
+		select
+		<include refid="Base_Column_List" />
+		from t_car
+		where car_id = #{carId,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectByCarNo" resultMap="BaseResultMap"
+		parameterType="cn.com.liliyun.car.model.Car">
+		select
+		<include refid="Base_Column_List" />
+		from t_car
+		where car_no = #{carNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="queryByOilCards" resultMap="BaseResultMap" parameterType="java.util.List">  
+		 select car_id,oil_card,car_no
+		 from t_car where oil_card in  
+		 <foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item.oilCard}  
+		 </foreach>  
+	</select>  
+	
+    <delete id="deleteCarList" parameterType="cn.com.liliyun.car.model.Car" >
+    delete from t_car
+    where car_id  in (${ids})
+  	</delete>
+
+	<select id="queryCarList" resultMap="BaseResultMap"
+		parameterType="cn.com.liliyun.car.model.Car">
+		select
+		<include refid="Base_Column_List" />
+		from t_car where 1=1
+		<if test="carNo != null and carNo != ''">
+			and car_no like "%"#{carNo}"%"
+		</if>
+		<if test="frameNum != null and frameNum != ''">
+			and frame_num = #{frameNum,jdbcType=VARCHAR}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status,jdbcType=TINYINT}
+		</if>
+		<if test="areaId != null and areaId != ''">
+			and area_id = #{areaId,jdbcType=INTEGER}
+		</if>
+		<if test="coachName != null and coachName != ''">
+			and coach_name like concat(concat('%',#{coachName}),'%')
+		</if>
+		<if test="brandId != null and brandId != ''">
+			and brand_id = #{brandId,jdbcType=INTEGER}
+		</if>
+		<if test="brandName != null and brandName != ''">
+			and brand_name = #{brandName,jdbcType=VARCHAR}
+		</if>
+		<if test="carType != null and carType != ''">
+			and car_type = #{carType}
+		</if>
+		<if test="carOwner != null and carOwner != ''">
+			and car_owner like %"#{carOwner}"%" 
+		</if>
+		<if test="status != null ">
+			and status = #{status}
+		</if>
+		<if test="oilCard != null ">
+			and oil_card = #{oilCard}
+		</if>
+		order by mtime desc
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.car.model.Car">
+		delete from t_car
+		where car_id = #{carId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="cn.com.liliyun.car.model.Car">
+		insert into t_car (car_id, motor_id, motor_code,
+		motor_date, motor_fcode, car_no,
+		carno_color, former_carno, frame_num,
+		engine_model, engine_num, car_vin,
+		car_model, car_type, car_brand,
+		car_owner, asset_num, reg_office,
+		file_no, area_id, trainarea_id,
+		area, status, drive_type,
+		brand_id, brand_name, drive_num,
+		drive_photo, school_id, city_id,
+		car_color, fuel, car_img_id,
+		car_img, manufacturer, leave_date,
+		buy_date, buy_fee, reg_date,
+		verify_end, accept_date, retire_date,
+		scrap_date, insurance_end, coach_id,
+		coach_name, cuid, muid,
+		ctime, mtime, power,
+		wheel_rear, wheel_front, tyre_spec,
+		tyre_num, wheelbase, height,
+		width, length, displacement
+		)
+		values (#{carId,jdbcType=INTEGER}, #{motorId,jdbcType=INTEGER},
+		#{motorCode,jdbcType=VARCHAR},
+		#{motorDate,jdbcType=TIMESTAMP}, #{motorFcode,jdbcType=VARCHAR}, #{carNo,jdbcType=VARCHAR},
+		#{carnoColor,jdbcType=INTEGER}, #{formerCarno,jdbcType=VARCHAR},
+		#{frameNum,jdbcType=VARCHAR},
+		#{engineModel,jdbcType=VARCHAR}, #{engineNum,jdbcType=VARCHAR}, #{carVin,jdbcType=VARCHAR},
+		#{carModel,jdbcType=VARCHAR}, #{carType,jdbcType=VARCHAR},
+		#{carBrand,jdbcType=VARCHAR},
+		#{carOwner,jdbcType=VARCHAR}, #{assetNum,jdbcType=VARCHAR}, #{regOffice,jdbcType=VARCHAR},
+		#{fileNo,jdbcType=VARCHAR}, #{areaId,jdbcType=INTEGER},
+		#{trainareaId,jdbcType=INTEGER},
+		#{area,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{driveType,jdbcType=INTEGER},
+		#{brandId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR},
+		#{driveNum,jdbcType=VARCHAR},
+		#{drivePhoto,jdbcType=VARCHAR}, #{schoolId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER},
+		#{carColor,jdbcType=INTEGER}, #{fuel,jdbcType=INTEGER},
+		#{carImgId,jdbcType=VARCHAR},
+		#{carImg,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR}, #{leaveDate,jdbcType=DATE},
+		#{buyDate,jdbcType=DATE}, #{buyFee,jdbcType=INTEGER},
+		#{regDate,jdbcType=DATE},
+		#{verifyEnd,jdbcType=DATE}, #{acceptDate,jdbcType=DATE}, #{retireDate,jdbcType=DATE},
+		#{scrapDate,jdbcType=DATE}, #{insuranceEnd,jdbcType=DATE},
+		#{coachId,jdbcType=INTEGER},
+		#{coachName,jdbcType=VARCHAR}, #{cuid,jdbcType=INTEGER}, #{muid,jdbcType=INTEGER},
+		#{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP},
+		#{power,jdbcType=INTEGER},
+		#{wheelRear,jdbcType=INTEGER}, #{wheelFront,jdbcType=INTEGER}, #{tyreSpec,jdbcType=INTEGER},
+		#{tyreNum,jdbcType=INTEGER}, #{wheelbase,jdbcType=INTEGER},
+		#{height,jdbcType=INTEGER},
+		#{width,jdbcType=INTEGER}, #{length,jdbcType=INTEGER}, #{displacement,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.com.liliyun.car.model.Car" useGeneratedKeys="true" keyProperty="carId">
+		insert into t_car
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="carId != null">
+				car_id,
+			</if>
+			<if test="motorId != null">
+				motor_id,
+			</if>
+			<if test="motorCode != null">
+				motor_code,
+			</if>
+			<if test="motorDate != null">
+				motor_date,
+			</if>
+			<if test="motorFcode != null">
+				motor_fcode,
+			</if>
+			<if test="carNo != null">
+				car_no,
+			</if>
+			<if test="carnoColor != null">
+				carno_color,
+			</if>
+			<if test="formerCarno != null">
+				former_carno,
+			</if>
+			<if test="frameNum != null">
+				frame_num,
+			</if>
+			<if test="engineModel != null">
+				engine_model,
+			</if>
+			<if test="engineNum != null">
+				engine_num,
+			</if>
+			<if test="carVin != null">
+				car_vin,
+			</if>
+			<if test="carModel != null">
+				car_model,
+			</if>
+			<if test="carType != null">
+				car_type,
+			</if>
+			<if test="carBrand != null">
+				car_brand,
+			</if>
+			<if test="carOwner != null">
+				car_owner,
+			</if>
+			<if test="assetNum != null">
+				asset_num,
+			</if>
+			<if test="regOffice != null">
+				reg_office,
+			</if>
+			<if test="fileNo != null">
+				file_no,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="trainareaId != null">
+				trainarea_id,
+			</if>
+			<if test="area != null">
+				area,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="driveType != null">
+				drive_type,
+			</if>
+			<if test="brandId != null">
+				brand_id,
+			</if>
+			<if test="brandName != null">
+				brand_name,
+			</if>
+			<if test="driveNum != null">
+				drive_num,
+			</if>
+			<if test="drivePhoto != null">
+				drive_photo,
+			</if>
+			<if test="schoolId != null">
+				school_id,
+			</if>
+			<if test="cityId != null">
+				city_id,
+			</if>
+			<if test="carColor != null">
+				car_color,
+			</if>
+			<if test="fuel != null">
+				fuel,
+			</if>
+			<if test="carImgId != null">
+				car_img_id,
+			</if>
+			<if test="carImg != null">
+				car_img,
+			</if>
+			<if test="manufacturer != null">
+				manufacturer,
+			</if>
+			<if test="leaveDate != null">
+				leave_date,
+			</if>
+			<if test="buyDate != null">
+				buy_date,
+			</if>
+			<if test="buyFee != null">
+				buy_fee,
+			</if>
+			<if test="regDate != null">
+				reg_date,
+			</if>
+			<if test="verifyEnd != null">
+				verify_end,
+			</if>
+			<if test="acceptDate != null">
+				accept_date,
+			</if>
+			<if test="retireDate != null">
+				retire_date,
+			</if>
+			<if test="scrapDate != null">
+				scrap_date,
+			</if>
+			<if test="insuranceEnd != null">
+				insurance_end,
+			</if>
+			<if test="coachId != null">
+				coach_id,
+			</if>
+			<if test="coachName != null">
+				coach_name,
+			</if>
+			<if test="cuid != null">
+				cuid,
+			</if>
+			<if test="muid != null">
+				muid,
+			</if>
+			<if test="ctime != null">
+				ctime,
+			</if>
+			<if test="mtime != null">
+				mtime,
+			</if>
+			<if test="power != null">
+				power,
+			</if>
+			<if test="wheelRear != null">
+				wheel_rear,
+			</if>
+			<if test="wheelFront != null">
+				wheel_front,
+			</if>
+			<if test="tyreSpec != null">
+				tyre_spec,
+			</if>
+			<if test="tyreNum != null">
+				tyre_num,
+			</if>
+			<if test="wheelbase != null">
+				wheelbase,
+			</if>
+			<if test="height != null">
+				height,
+			</if>
+			<if test="width != null">
+				width,
+			</if>
+			<if test="length != null">
+				length,
+			</if>
+			<if test="displacement != null">
+				displacement,
+			</if>
+			<if test="oilCard != null">
+				oil_card,
+			</if>
+			<if test="parkAddr != null">
+				park_addr,
+			</if>
+			<if test="property != null">
+				property,
+			</if>
+			<if test="delayScrap != null">
+				delay_scrap,
+			</if>
+			<if test="teachSubject != null">
+				teachsubject,
+			</if>
+			<if test="org != null">
+				org,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="carId != null">
+				#{carId,jdbcType=INTEGER},
+			</if>
+			<if test="motorId != null">
+				#{motorId,jdbcType=INTEGER},
+			</if>
+			<if test="motorCode != null">
+				#{motorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="motorDate != null">
+				#{motorDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="motorFcode != null">
+				#{motorFcode,jdbcType=VARCHAR},
+			</if>
+			<if test="carNo != null">
+				#{carNo,jdbcType=VARCHAR},
+			</if>
+			<if test="carnoColor != null">
+				#{carnoColor,jdbcType=INTEGER},
+			</if>
+			<if test="formerCarno != null">
+				#{formerCarno,jdbcType=VARCHAR},
+			</if>
+			<if test="frameNum != null">
+				#{frameNum,jdbcType=VARCHAR},
+			</if>
+			<if test="engineModel != null">
+				#{engineModel,jdbcType=VARCHAR},
+			</if>
+			<if test="engineNum != null">
+				#{engineNum,jdbcType=VARCHAR},
+			</if>
+			<if test="carVin != null">
+				#{carVin,jdbcType=VARCHAR},
+			</if>
+			<if test="carModel != null">
+				#{carModel,jdbcType=VARCHAR},
+			</if>
+			<if test="carType != null">
+				#{carType,jdbcType=VARCHAR},
+			</if>
+			<if test="carBrand != null">
+				#{carBrand,jdbcType=VARCHAR},
+			</if>
+			<if test="carOwner != null">
+				#{carOwner,jdbcType=VARCHAR},
+			</if>
+			<if test="assetNum != null">
+				#{assetNum,jdbcType=VARCHAR},
+			</if>
+			<if test="regOffice != null">
+				#{regOffice,jdbcType=VARCHAR},
+			</if>
+			<if test="fileNo != null">
+				#{fileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				#{areaId,jdbcType=INTEGER},
+			</if>
+			<if test="trainareaId != null">
+				#{trainareaId,jdbcType=INTEGER},
+			</if>
+			<if test="area != null">
+				#{area,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="driveType != null">
+				#{driveType,jdbcType=INTEGER},
+			</if>
+			<if test="brandId != null">
+				#{brandId,jdbcType=INTEGER},
+			</if>
+			<if test="brandName != null">
+				#{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="driveNum != null">
+				#{driveNum,jdbcType=VARCHAR},
+			</if>
+			<if test="drivePhoto != null">
+				#{drivePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="schoolId != null">
+				#{schoolId,jdbcType=INTEGER},
+			</if>
+			<if test="cityId != null">
+				#{cityId,jdbcType=INTEGER},
+			</if>
+			<if test="carColor != null">
+				#{carColor,jdbcType=INTEGER},
+			</if>
+			<if test="fuel != null">
+				#{fuel,jdbcType=INTEGER},
+			</if>
+			<if test="carImgId != null">
+				#{carImgId,jdbcType=VARCHAR},
+			</if>
+			<if test="carImg != null">
+				#{carImg,jdbcType=VARCHAR},
+			</if>
+			<if test="manufacturer != null">
+				#{manufacturer,jdbcType=VARCHAR},
+			</if>
+			<if test="leaveDate != null">
+				#{leaveDate,jdbcType=DATE},
+			</if>
+			<if test="buyDate != null">
+				#{buyDate,jdbcType=DATE},
+			</if>
+			<if test="buyFee != null">
+				#{buyFee,jdbcType=INTEGER},
+			</if>
+			<if test="regDate != null">
+				#{regDate,jdbcType=DATE},
+			</if>
+			<if test="verifyEnd != null">
+				#{verifyEnd,jdbcType=DATE},
+			</if>
+			<if test="acceptDate != null">
+				#{acceptDate,jdbcType=DATE},
+			</if>
+			<if test="retireDate != null">
+				#{retireDate,jdbcType=DATE},
+			</if>
+			<if test="scrapDate != null">
+				#{scrapDate,jdbcType=DATE},
+			</if>
+			<if test="insuranceEnd != null">
+				#{insuranceEnd,jdbcType=DATE},
+			</if>
+			<if test="coachId != null">
+				#{coachId,jdbcType=INTEGER},
+			</if>
+			<if test="coachName != null">
+				#{coachName,jdbcType=VARCHAR},
+			</if>
+			<if test="cuid != null">
+				#{cuid,jdbcType=INTEGER},
+			</if>
+			<if test="muid != null">
+				#{muid,jdbcType=INTEGER},
+			</if>
+			<if test="ctime != null">
+				#{ctime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="mtime != null">
+				#{mtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="power != null">
+				#{power,jdbcType=INTEGER},
+			</if>
+			<if test="wheelRear != null">
+				#{wheelRear,jdbcType=INTEGER},
+			</if>
+			<if test="wheelFront != null">
+				#{wheelFront,jdbcType=INTEGER},
+			</if>
+			<if test="tyreSpec != null">
+				#{tyreSpec,jdbcType=INTEGER},
+			</if>
+			<if test="tyreNum != null">
+				#{tyreNum,jdbcType=INTEGER},
+			</if>
+			<if test="wheelbase != null">
+				#{wheelbase,jdbcType=INTEGER},
+			</if>
+			<if test="height != null">
+				#{height,jdbcType=INTEGER},
+			</if>
+			<if test="width != null">
+				#{width,jdbcType=INTEGER},
+			</if>
+			<if test="length != null">
+				#{length,jdbcType=INTEGER},
+			</if>
+			<if test="displacement != null">
+				#{displacement,jdbcType=INTEGER},
+			</if>
+			<if test="oilCard != null">
+				#{oilCard,jdbcType=VARCHAR},
+			</if>
+			<if test="parkAddr != null">
+				#{parkAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="property != null">
+				#{property,jdbcType=VARCHAR},
+			</if>
+			<if test="delayScrap != null">
+				#{delayScrap,jdbcType=INTEGER},
+			</if>
+			<if test="teachSubject != null">
+				#{teachSubject,jdbcType=INTEGER},
+			</if>
+			<if test="org != null">
+				#{org,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.Car">
+		update t_car
+		<set>
+			<if test="motorId != null">
+				motor_id = #{motorId,jdbcType=INTEGER},
+			</if>
+			<if test="motorCode != null">
+				motor_code = #{motorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="motorDate != null">
+				motor_date = #{motorDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="motorFcode != null">
+				motor_fcode = #{motorFcode,jdbcType=VARCHAR},
+			</if>
+			<if test="carNo != null">
+				car_no = #{carNo,jdbcType=VARCHAR},
+			</if>
+			<if test="carnoColor != null">
+				carno_color = #{carnoColor,jdbcType=INTEGER},
+			</if>
+			<if test="formerCarno != null">
+				former_carno = #{formerCarno,jdbcType=VARCHAR},
+			</if>
+			<if test="frameNum != null">
+				frame_num = #{frameNum,jdbcType=VARCHAR},
+			</if>
+			<if test="engineModel != null">
+				engine_model = #{engineModel,jdbcType=VARCHAR},
+			</if>
+			<if test="engineNum != null">
+				engine_num = #{engineNum,jdbcType=VARCHAR},
+			</if>
+			<if test="carVin != null">
+				car_vin = #{carVin,jdbcType=VARCHAR},
+			</if>
+			<if test="carModel != null">
+				car_model = #{carModel,jdbcType=VARCHAR},
+			</if>
+			<if test="carType != null">
+				car_type = #{carType,jdbcType=VARCHAR},
+			</if>
+			<if test="carBrand != null">
+				car_brand = #{carBrand,jdbcType=VARCHAR},
+			</if>
+			<if test="carOwner != null">
+				car_owner = #{carOwner,jdbcType=VARCHAR},
+			</if>
+			<if test="assetNum != null">
+				asset_num = #{assetNum,jdbcType=VARCHAR},
+			</if>
+			<if test="regOffice != null">
+				reg_office = #{regOffice,jdbcType=VARCHAR},
+			</if>
+			<if test="fileNo != null">
+				file_no = #{fileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId,jdbcType=INTEGER},
+			</if>
+			<if test="trainareaId != null">
+				trainarea_id = #{trainareaId,jdbcType=INTEGER},
+			</if>
+			<if test="area != null">
+				area = #{area,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="driveType != null">
+				drive_type = #{driveType,jdbcType=INTEGER},
+			</if>
+			<if test="brandId != null">
+				brand_id = #{brandId,jdbcType=INTEGER},
+			</if>
+			<if test="brandName != null">
+				brand_name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="driveNum != null">
+				drive_num = #{driveNum,jdbcType=VARCHAR},
+			</if>
+			<if test="drivePhoto != null">
+				drive_photo = #{drivePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="schoolId != null">
+				school_id = #{schoolId,jdbcType=INTEGER},
+			</if>
+			<if test="cityId != null">
+				city_id = #{cityId,jdbcType=INTEGER},
+			</if>
+			<if test="carColor != null">
+				car_color = #{carColor,jdbcType=INTEGER},
+			</if>
+			<if test="fuel != null">
+				fuel = #{fuel,jdbcType=INTEGER},
+			</if>
+			<if test="carImgId != null">
+				car_img_id = #{carImgId,jdbcType=VARCHAR},
+			</if>
+			<if test="carImg != null">
+				car_img = #{carImg,jdbcType=VARCHAR},
+			</if>
+			<if test="manufacturer != null">
+				manufacturer = #{manufacturer,jdbcType=VARCHAR},
+			</if>
+			<if test="leaveDate != null">
+				leave_date = #{leaveDate,jdbcType=DATE},
+			</if>
+			<if test="buyDate != null">
+				buy_date = #{buyDate,jdbcType=DATE},
+			</if>
+			<if test="buyFee != null">
+				buy_fee = #{buyFee,jdbcType=INTEGER},
+			</if>
+			<if test="regDate != null">
+				reg_date = #{regDate,jdbcType=DATE},
+			</if>
+			<if test="verifyEnd != null">
+				verify_end = #{verifyEnd,jdbcType=DATE},
+			</if>
+			<if test="acceptDate != null">
+				accept_date = #{acceptDate,jdbcType=DATE},
+			</if>
+			<if test="retireDate != null">
+				retire_date = #{retireDate,jdbcType=DATE},
+			</if>
+			<if test="scrapDate != null">
+				scrap_date = #{scrapDate,jdbcType=DATE},
+			</if>
+			<if test="insuranceEnd != null">
+				insurance_end = #{insuranceEnd,jdbcType=DATE},
+			</if>
+			<if test="coachId != null">
+				coach_id = #{coachId,jdbcType=INTEGER},
+			</if>
+			<if test="coachName != null">
+				coach_name = #{coachName,jdbcType=VARCHAR},
+			</if>
+			<if test="cuid != null">
+				cuid = #{cuid,jdbcType=INTEGER},
+			</if>
+			<if test="muid != null">
+				muid = #{muid,jdbcType=INTEGER},
+			</if>
+			<if test="ctime != null">
+				ctime = #{ctime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="mtime != null">
+				mtime = #{mtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="power != null">
+				power = #{power,jdbcType=INTEGER},
+			</if>
+			<if test="wheelRear != null">
+				wheel_rear = #{wheelRear,jdbcType=INTEGER},
+			</if>
+			<if test="wheelFront != null">
+				wheel_front = #{wheelFront,jdbcType=INTEGER},
+			</if>
+			<if test="tyreSpec != null">
+				tyre_spec = #{tyreSpec,jdbcType=INTEGER},
+			</if>
+			<if test="tyreNum != null">
+				tyre_num = #{tyreNum,jdbcType=INTEGER},
+			</if>
+			<if test="wheelbase != null">
+				wheelbase = #{wheelbase,jdbcType=INTEGER},
+			</if>
+			<if test="height != null">
+				height = #{height,jdbcType=INTEGER},
+			</if>
+			<if test="width != null">
+				width = #{width,jdbcType=INTEGER},
+			</if>
+			<if test="length != null">
+				length = #{length,jdbcType=INTEGER},
+			</if>
+			<if test="displacement != null">
+				displacement = #{displacement,jdbcType=INTEGER},
+			</if>
+			<if test="oilCard != null">
+				oil_card = #{oilCard,jdbcType=VARCHAR},
+			</if>
+			<if test="parkAddr != null">
+				park_addr = #{parkAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="property != null">
+				property = #{property,jdbcType=VARCHAR},
+			</if>
+			<if test="delayScrap != null">
+				delay_scrap = #{delayScrap,jdbcType=INTEGER},
+			</if>
+			<if test="teachSubject != null">
+				teachsubject = #{teachSubject,jdbcType=INTEGER},
+			</if>
+			<if test="org != null">
+				org = #{org,jdbcType=INTEGER},
+			</if>
+		</set>
+		where car_id = #{carId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.Car">
+		update t_car
+		set motor_id = #{motorId,jdbcType=INTEGER},
+		motor_code = #{motorCode,jdbcType=VARCHAR},
+		motor_date = #{motorDate,jdbcType=TIMESTAMP},
+		motor_fcode = #{motorFcode,jdbcType=VARCHAR},
+		car_no = #{carNo,jdbcType=VARCHAR},
+		carno_color = #{carnoColor,jdbcType=INTEGER},
+		former_carno = #{formerCarno,jdbcType=VARCHAR},
+		frame_num = #{frameNum,jdbcType=VARCHAR},
+		engine_model = #{engineModel,jdbcType=VARCHAR},
+		engine_num = #{engineNum,jdbcType=VARCHAR},
+		car_vin = #{carVin,jdbcType=VARCHAR},
+		car_model = #{carModel,jdbcType=VARCHAR},
+		car_type = #{carType,jdbcType=VARCHAR},
+		car_brand = #{carBrand,jdbcType=VARCHAR},
+		car_owner = #{carOwner,jdbcType=VARCHAR},
+		asset_num = #{assetNum,jdbcType=VARCHAR},
+		reg_office = #{regOffice,jdbcType=VARCHAR},
+		file_no = #{fileNo,jdbcType=VARCHAR},
+		area_id = #{areaId,jdbcType=INTEGER},
+		trainarea_id = #{trainareaId,jdbcType=INTEGER},
+		area = #{area,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		drive_type = #{driveType,jdbcType=INTEGER},
+		brand_id = #{brandId,jdbcType=INTEGER},
+		brand_name = #{brandName,jdbcType=VARCHAR},
+		drive_num = #{driveNum,jdbcType=VARCHAR},
+		drive_photo = #{drivePhoto,jdbcType=VARCHAR},
+		school_id = #{schoolId,jdbcType=INTEGER},
+		city_id = #{cityId,jdbcType=INTEGER},
+		car_color = #{carColor,jdbcType=INTEGER},
+		fuel = #{fuel,jdbcType=INTEGER},
+		car_img_id = #{carImgId,jdbcType=VARCHAR},
+		car_img = #{carImg,jdbcType=VARCHAR},
+		manufacturer = #{manufacturer,jdbcType=VARCHAR},
+		leave_date = #{leaveDate,jdbcType=DATE},
+		buy_date = #{buyDate,jdbcType=DATE},
+		buy_fee = #{buyFee,jdbcType=INTEGER},
+		reg_date = #{regDate,jdbcType=DATE},
+		verify_end = #{verifyEnd,jdbcType=DATE},
+		accept_date = #{acceptDate,jdbcType=DATE},
+		retire_date = #{retireDate,jdbcType=DATE},
+		scrap_date = #{scrapDate,jdbcType=DATE},
+		insurance_end = #{insuranceEnd,jdbcType=DATE},
+		coach_id = #{coachId,jdbcType=INTEGER},
+		coach_name = #{coachName,jdbcType=VARCHAR},
+		cuid = #{cuid,jdbcType=INTEGER},
+		muid = #{muid,jdbcType=INTEGER},
+		ctime = #{ctime,jdbcType=TIMESTAMP},
+		mtime = #{mtime,jdbcType=TIMESTAMP},
+		power = #{power,jdbcType=INTEGER},
+		wheel_rear = #{wheelRear,jdbcType=INTEGER},
+		wheel_front = #{wheelFront,jdbcType=INTEGER},
+		tyre_spec = #{tyreSpec,jdbcType=INTEGER},
+		tyre_num = #{tyreNum,jdbcType=INTEGER},
+		wheelbase = #{wheelbase,jdbcType=INTEGER},
+		height = #{height,jdbcType=INTEGER},
+		width = #{width,jdbcType=INTEGER},
+		length = #{length,jdbcType=INTEGER},
+		displacement = #{displacement,jdbcType=INTEGER}
+		where car_id = #{carId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateCarList" parameterType="cn.com.liliyun.car.model.Car">
+		update t_car
+		<set>
+			<if test="motorId != null">
+				motor_id = #{motorId,jdbcType=INTEGER},
+			</if>
+			<if test="motorCode != null">
+				motor_code = #{motorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="motorDate != null">
+				motor_date = #{motorDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="motorFcode != null">
+				motor_fcode = #{motorFcode,jdbcType=VARCHAR},
+			</if>
+			<if test="carNo != null">
+				car_no = #{carNo,jdbcType=VARCHAR},
+			</if>
+			<if test="carnoColor != null">
+				carno_color = #{carnoColor,jdbcType=INTEGER},
+			</if>
+			<if test="formerCarno != null">
+				former_carno = #{formerCarno,jdbcType=VARCHAR},
+			</if>
+			<if test="frameNum != null">
+				frame_num = #{frameNum,jdbcType=VARCHAR},
+			</if>
+			<if test="engineModel != null">
+				engine_model = #{engineModel,jdbcType=VARCHAR},
+			</if>
+			<if test="engineNum != null">
+				engine_num = #{engineNum,jdbcType=VARCHAR},
+			</if>
+			<if test="carVin != null">
+				car_vin = #{carVin,jdbcType=VARCHAR},
+			</if>
+			<if test="carModel != null">
+				car_model = #{carModel,jdbcType=VARCHAR},
+			</if>
+			<if test="carType != null">
+				car_type = #{carType,jdbcType=VARCHAR},
+			</if>
+			<if test="carBrand != null">
+				car_brand = #{carBrand,jdbcType=VARCHAR},
+			</if>
+			<if test="carOwner != null">
+				car_owner = #{carOwner,jdbcType=VARCHAR},
+			</if>
+			<if test="assetNum != null">
+				asset_num = #{assetNum,jdbcType=VARCHAR},
+			</if>
+			<if test="regOffice != null">
+				reg_office = #{regOffice,jdbcType=VARCHAR},
+			</if>
+			<if test="fileNo != null">
+				file_no = #{fileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId,jdbcType=INTEGER},
+			</if>
+			<if test="trainareaId != null">
+				trainarea_id = #{trainareaId,jdbcType=INTEGER},
+			</if>
+			<if test="area != null">
+				area = #{area,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="driveType != null">
+				drive_type = #{driveType,jdbcType=INTEGER},
+			</if>
+			<if test="brandId != null">
+				brand_id = #{brandId,jdbcType=INTEGER},
+			</if>
+			<if test="brandName != null">
+				brand_name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="driveNum != null">
+				drive_num = #{driveNum,jdbcType=VARCHAR},
+			</if>
+			<if test="drivePhoto != null">
+				drive_photo = #{drivePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="schoolId != null">
+				school_id = #{schoolId,jdbcType=INTEGER},
+			</if>
+			<if test="cityId != null">
+				city_id = #{cityId,jdbcType=INTEGER},
+			</if>
+			<if test="carColor != null">
+				car_color = #{carColor,jdbcType=INTEGER},
+			</if>
+			<if test="fuel != null">
+				fuel = #{fuel,jdbcType=INTEGER},
+			</if>
+			<if test="carImgId != null">
+				car_img_id = #{carImgId,jdbcType=VARCHAR},
+			</if>
+			<if test="carImg != null">
+				car_img = #{carImg,jdbcType=VARCHAR},
+			</if>
+			<if test="manufacturer != null">
+				manufacturer = #{manufacturer,jdbcType=VARCHAR},
+			</if>
+			<if test="leaveDate != null">
+				leave_date = #{leaveDate,jdbcType=DATE},
+			</if>
+			<if test="buyDate != null">
+				buy_date = #{buyDate,jdbcType=DATE},
+			</if>
+			<if test="buyFee != null">
+				buy_fee = #{buyFee,jdbcType=INTEGER},
+			</if>
+			<if test="regDate != null">
+				reg_date = #{regDate,jdbcType=DATE},
+			</if>
+			<if test="verifyEnd != null">
+				verify_end = #{verifyEnd,jdbcType=DATE},
+			</if>
+			<if test="acceptDate != null">
+				accept_date = #{acceptDate,jdbcType=DATE},
+			</if>
+			<if test="retireDate != null">
+				retire_date = #{retireDate,jdbcType=DATE},
+			</if>
+			<if test="scrapDate != null">
+				scrap_date = #{scrapDate,jdbcType=DATE},
+			</if>
+			<if test="insuranceEnd != null">
+				insurance_end = #{insuranceEnd,jdbcType=DATE},
+			</if>
+			<if test="coachId != null">
+				coach_id = #{coachId,jdbcType=INTEGER},
+			</if>
+			<if test="coachName != null">
+				coach_name = #{coachName,jdbcType=VARCHAR},
+			</if>
+			<if test="cuid != null">
+				cuid = #{cuid,jdbcType=INTEGER},
+			</if>
+			<if test="muid != null">
+				muid = #{muid,jdbcType=INTEGER},
+			</if>
+			<if test="ctime != null">
+				ctime = #{ctime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="mtime != null">
+				mtime = #{mtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="power != null">
+				power = #{power,jdbcType=INTEGER},
+			</if>
+			<if test="wheelRear != null">
+				wheel_rear = #{wheelRear,jdbcType=INTEGER},
+			</if>
+			<if test="wheelFront != null">
+				wheel_front = #{wheelFront,jdbcType=INTEGER},
+			</if>
+			<if test="tyreSpec != null">
+				tyre_spec = #{tyreSpec,jdbcType=INTEGER},
+			</if>
+			<if test="tyreNum != null">
+				tyre_num = #{tyreNum,jdbcType=INTEGER},
+			</if>
+			<if test="wheelbase != null">
+				wheelbase = #{wheelbase,jdbcType=INTEGER},
+			</if>
+			<if test="height != null">
+				height = #{height,jdbcType=INTEGER},
+			</if>
+			<if test="width != null">
+				width = #{width,jdbcType=INTEGER},
+			</if>
+			<if test="length != null">
+				length = #{length,jdbcType=INTEGER},
+			</if>
+			<if test="displacement != null">
+				displacement = #{displacement,jdbcType=INTEGER},
+			</if>
+		</set>
+		where car_id in (${ids})
+	</update>
+	
+	<update id="updateCoachCar" parameterType="cn.com.liliyun.car.model.CoachCar">
+		update t_coach set carno=#{carno} where coachid=#{coachid}
+	</update>
+
+	<select id="getCount" resultType="int" parameterType="cn.com.liliyun.car.model.Car" >
+		select count(1) from t_car
+	</select>
+</mapper>

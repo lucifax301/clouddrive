@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.CoachModApplyMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.CoachModApply" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="applyuserid" property="applyuserid" jdbcType="INTEGER" />
+    <result column="audituserid" property="audituserid" jdbcType="INTEGER" />
+    <result column="applyuser" property="applyuser" jdbcType="VARCHAR" />
+    <result column="audituser" property="audituser" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="auditdate" property="auditdate" jdbcType="TIMESTAMP" />
+    <result column="coachname" property="coachname" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.id, a.businessid, a.coachid,a.transactionid,  applyuserid, audituserid, a.status,a.remark,a.detail,a.createdate,a.auditdate,b.name as coachname,b.areaid,applyuser,audituser
+  </sql>
+  <select id="getApply" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.CoachModApply" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_mod_apply a join t_coach b on a.coachid=b.coachid
+    where a.id = #{id}
+  </select>
+  
+  <select id="getApplyByTransaction" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.CoachModApply" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_mod_apply a join t_coach b on a.coachid=b.coachid
+    where a.transactionid = #{transactionid}
+  </select>
+  
+  
+  <select id="getApplyByCoachid" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.CoachModApply" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_mod_apply a join t_coach b on a.coachid=b.coachid
+    where a.coachid = #{coachid} and status=0
+  </select>
+  
+  
+  <select id="listApply" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_mod_apply a join t_coach b on a.coachid=b.coachid
+    <where>
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>	
+    <if test="status != null ">
+		and a.status = #{status}
+	</if>
+	 
+	<if test="name != null ">
+		and b.name like concat(#{name},'%')
+	</if>
+	<if test="begindate != null ">
+		and a.createdate >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and a.createdate < #{enddate}]]> 
+	</if>
+	</where>
+	order by id desc
+  </select>
+
+
+  <insert id="addApply" parameterType="cn.com.liliyun.coach.model.CoachModApply" >
+    insert into t_coach_mod_apply (businessid,transactionid, coachid, applyuserid,applyuser,audituserid,remark,detail,createdate)
+    values (#{businessid},#{transactionid}, #{coachid},#{applyuserid},#{applyuser},#{audituserid}, #{remark},#{detail}, now())
+  </insert>
+  
+  <update id="updateApply" parameterType="cn.com.liliyun.coach.model.CoachModApply" >
+    update t_coach_mod_apply
+    <set >
+      <if test="detail != null" >
+        detail = #{detail},
+      </if>
+      
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateApplyStatus" parameterType="cn.com.liliyun.coach.model.CoachModApply" >
+    update t_coach_mod_apply
+    set status=#{status},remark=#{remark},audituserid=#{audituserid},audituser=#{audituser},auditdate=#{auditdate}
+    where id = #{id} and status=0
+  </update>
+</mapper>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.user.mapper.ConfigMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.user.model.Config" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="school_id" property="schoolId" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="INTEGER" />
+    <result column="memu_id" property="memuId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="file_type" property="fileType" jdbcType="TINYINT" />
+    <result column="file_id" property="fileId" jdbcType="INTEGER" />
+    <result column="table_id" property="tableId" jdbcType="INTEGER" />
+    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="img_twox_url" property="imgTwoxUrl" jdbcType="VARCHAR" />
+    <result column="img_threex_url" property="imgThreexUrl" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="ext" property="ext" jdbcType="VARCHAR" />
+    <result column="dtime" property="dtime" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="TINYINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, company_id, city_id, school_id, channel, memu_id, type, file_type, file_id, table_id, 
+    table_name, name, img_twox_url, img_threex_url, url, ext, dtime, start_time, end_time, 
+    is_del, ctime, creater, mtime, updater
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_u_config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getConfigList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.user.model.Config" >
+    select 
+    	<include refid="Base_Column_List" />
+    from t_u_config
+  		 where 1=1
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_u_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.user.model.Config" >
+    insert into t_u_config (id, company_id, city_id, 
+      school_id, channel, memu_id, 
+      type, file_type, file_id, 
+      table_id, table_name, name, 
+      img_twox_url, img_threex_url, url, 
+      ext, dtime, start_time, 
+      end_time, is_del, ctime, 
+      creater, mtime, updater
+      )
+    values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, 
+      #{schoolId,jdbcType=INTEGER}, #{channel,jdbcType=INTEGER}, #{memuId,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER}, #{fileType,jdbcType=TINYINT}, #{fileId,jdbcType=INTEGER}, 
+      #{tableId,jdbcType=INTEGER}, #{tableName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{imgTwoxUrl,jdbcType=VARCHAR}, #{imgThreexUrl,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{ext,jdbcType=VARCHAR}, #{dtime,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{creater,jdbcType=VARCHAR}, #{mtime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.user.model.Config" >
+    insert into t_u_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="schoolId != null" >
+        school_id,
+      </if>
+      <if test="channel != null" >
+        channel,
+      </if>
+      <if test="memuId != null" >
+        memu_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="fileType != null" >
+        file_type,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="tableId != null" >
+        table_id,
+      </if>
+      <if test="tableName != null" >
+        table_name,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="imgTwoxUrl != null" >
+        img_twox_url,
+      </if>
+      <if test="imgThreexUrl != null" >
+        img_threex_url,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="ext != null" >
+        ext,
+      </if>
+      <if test="dtime != null" >
+        dtime,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+    </trim>
+    
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null" >
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=INTEGER},
+      </if>
+      <if test="memuId != null" >
+        #{memuId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=TINYINT},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=INTEGER},
+      </if>
+      <if test="tableId != null" >
+        #{tableId,jdbcType=INTEGER},
+      </if>
+      <if test="tableName != null" >
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="imgTwoxUrl != null" >
+        #{imgTwoxUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgThreexUrl != null" >
+        #{imgThreexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="ext != null" >
+        #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="dtime != null" >
+        #{dtime,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.user.model.Config" >
+    update t_u_config
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null" >
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=INTEGER},
+      </if>
+      <if test="memuId != null" >
+        memu_id = #{memuId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null" >
+        file_type = #{fileType,jdbcType=TINYINT},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=INTEGER},
+      </if>
+      <if test="tableId != null" >
+        table_id = #{tableId,jdbcType=INTEGER},
+      </if>
+      <if test="tableName != null" >
+        table_name = #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="imgTwoxUrl != null" >
+        img_twox_url = #{imgTwoxUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgThreexUrl != null" >
+        img_threex_url = #{imgThreexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="ext != null" >
+        ext = #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="dtime != null" >
+        dtime = #{dtime,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.user.model.Config" >
+    update t_u_config
+    set company_id = #{companyId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      school_id = #{schoolId,jdbcType=INTEGER},
+      channel = #{channel,jdbcType=INTEGER},
+      memu_id = #{memuId,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      file_type = #{fileType,jdbcType=TINYINT},
+      file_id = #{fileId,jdbcType=INTEGER},
+      table_id = #{tableId,jdbcType=INTEGER},
+      table_name = #{tableName,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      img_twox_url = #{imgTwoxUrl,jdbcType=VARCHAR},
+      img_threex_url = #{imgThreexUrl,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      ext = #{ext,jdbcType=VARCHAR},
+      dtime = #{dtime,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      creater = #{creater,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.ClassManageMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.ClassManage" >
+    <id column="classid" property="classid" jdbcType="INTEGER" />
+    <result column="classname" property="classname" jdbcType="VARCHAR" />
+    <result column="opentime" property="opentime" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="singleamount" property="singleamount" jdbcType="INTEGER" />
+    <result column="personnum" property="personnum" jdbcType="INTEGER" />
+    <result column="graduatednum" property="graduatednum" jdbcType="INTEGER" />
+    <result column="passrate" property="passrate" jdbcType="VARCHAR" />
+    <result column="period" property="period" jdbcType="VARCHAR" />
+    <result column="classdesc" property="classdesc" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="BIGINT" />
+    <result column="muid" property="muid" jdbcType="BIGINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    classid, classname, opentime, type, amount, singleamount, personnum, graduatednum,
+    passrate, period, classdesc, cuid, muid, ctime, mtime 
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.ClassManage" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class_manage
+    where classid = #{classid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.ClassManage" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class_manage where 1=1
+	<if test="classid != null">
+		and classid = #{classid}
+	</if>		
+	<if test="condition != null">
+		and classname like concat(concat('%',#{condition}),'%')
+	</if>
+	<if test="classname != null">
+		and classname = #{classname}
+	</if>
+	order by mtime desc
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.coach.model.ClassManage" >
+    delete from t_class_manage
+    where classid = #{classid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.coach.model.ClassManage" >
+    insert into t_class_manage (classid, classname, opentime, 
+      type, amount, singleamount, 
+      personnum, graduatednum, passrate, 
+      period, classdesc, cuid, muid, ctime, mtime)
+    values (#{classid,jdbcType=INTEGER}, #{classname,jdbcType=VARCHAR}, #{opentime,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{singleamount,jdbcType=INTEGER}, 
+      #{personnum,jdbcType=INTEGER}, #{graduatednum,jdbcType=INTEGER}, #{passrate,jdbcType=VARCHAR}, 
+      #{period,jdbcType=VARCHAR}, #{classdesc,jdbcType=VARCHAR}, #{cuid,jdbcType=BIGINT}, #{muid,jdbcType=BIGINT}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{mtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.coach.model.ClassManage" >
+    insert into t_class_manage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="classid != null" >
+        classid,
+      </if>
+      <if test="classname != null" >
+        classname,
+      </if>
+      <if test="opentime != null" >
+        opentime,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="singleamount != null" >
+        singleamount,
+      </if>
+      <if test="personnum != null" >
+        personnum,
+      </if>
+      <if test="graduatednum != null" >
+        graduatednum,
+      </if>
+      <if test="passrate != null" >
+        passrate,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="classdesc != null" >
+        classdesc,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="classid != null" >
+        #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="classname != null" >
+        #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="opentime != null" >
+        #{opentime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="singleamount != null" >
+        #{singleamount,jdbcType=INTEGER},
+      </if>
+      <if test="personnum != null" >
+        #{personnum,jdbcType=INTEGER},
+      </if>
+      <if test="graduatednum != null" >
+        #{graduatednum,jdbcType=INTEGER},
+      </if>
+      <if test="passrate != null" >
+        #{passrate,jdbcType=VARCHAR},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=VARCHAR},
+      </if>
+      <if test="classdesc != null" >
+        #{classdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.coach.model.ClassManage" >
+    update t_class_manage
+    <set >
+      <if test="classname != null" >
+        classname = #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="opentime != null" >
+        opentime = #{opentime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="singleamount != null" >
+        singleamount = #{singleamount,jdbcType=INTEGER},
+      </if>
+      <if test="personnum != null" >
+        personnum = #{personnum,jdbcType=INTEGER},
+      </if>
+      <if test="graduatednum != null" >
+        graduatednum = #{graduatednum,jdbcType=INTEGER},
+      </if>
+      <if test="passrate != null" >
+        passrate = #{passrate,jdbcType=VARCHAR},
+      </if>
+      <if test="period != null" >
+        period = #{period,jdbcType=VARCHAR},
+      </if>
+      <if test="classdesc != null" >
+        classdesc = #{classdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where classid = #{classid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.coach.model.ClassManage" >
+    update t_class_manage
+    set classname = #{classname,jdbcType=VARCHAR},
+      opentime = #{opentime,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      singleamount = #{singleamount,jdbcType=INTEGER},
+      personnum = #{personnum,jdbcType=INTEGER},
+      graduatednum = #{graduatednum,jdbcType=INTEGER},
+      passrate = #{passrate,jdbcType=VARCHAR},
+      period = #{period,jdbcType=VARCHAR},
+      classdesc = #{classdesc,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=BIGINT},
+      muid = #{muid,jdbcType=BIGINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where classid = #{classid,jdbcType=INTEGER}
+  </update>
+</mapper>

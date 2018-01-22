@@ -1,0 +1,120 @@
+<div class="bjui-pageContent">
+	<form id="add-form">
+		<div class="bjui-row col-3">
+			<label class="row-label" style="width: 100px;">学车进度：</label>
+			<select id="applyexam" name="applyexam" data-toggle="selectpicker" data-width="15%" data-rule="required">
+				<option value="">请选择</option>
+				<option value="1">科目一</option>
+				<option value="2">科目二</option>
+				<option value="3">科目三</option>
+				<option value="4">科目四</option>
+			</select>
+			<label class="row-label" style="width: 100px;">二级科目：</label>
+			<select id="subject" name="subject" data-toggle="selectpicker" data-width="15%"
+                    data-dataurl="/httpaccess/financeSubject/list" data-optiontype="id,subject" data-rule="required">
+            </select>
+		   	<label class="row-label" style="width: 130px;">单人缴费额(元)：</label>
+			<input id="money" type="text" name="money" data-rule="required;plusnumber" size="12">
+		</div>
+	</form>
+	<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+	
+	var license_fee_add = {
+		save : function() {
+			if($.CurrentDialog.find('#add-form').isValid()) {		
+				var data = clz.getDialogGridData("datagrid-list");
+				if (data.length < 1) {
+					BJUI.alertmsg('warn', '没有提交的数据！');
+					return false;
+				}
+				var ids = new Array();
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].billnum == "" || data[i].idcard == "") {
+                        BJUI.alertmsg('warn', '请填写完整信息后再提交！');
+                        return false;
+					}
+                    ids.push(data[i].idcard);
+				}
+				if (hasReapeat(ids)) {
+					BJUI.alertmsg('warn', '证件号码存在重复数据,请处理后再提交！');
+					return false;
+				}			
+				BJUI.ajax('doajax', {
+	            	url: config.openBasePath + 'financefee/add',
+		            data : {
+		            	applyexam : $.CurrentDialog.find("#applyexam").val(),
+						subject : $.CurrentDialog.find("#subject").val(),
+						money : $.CurrentDialog.find("#money").val(),
+		            	json : JSON.stringify(data)
+		            },
+		            type : 'POST',
+		            loadingmask: true,
+		            okCallback: function(json, options) {
+						BJUI.dialog('closeCurrent');
+						license_fee_list.datagrid("refresh",true);
+		            }
+        		});  
+	        }
+		}
+	};
+	
+    var license_fee_add_list = $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del',
+        toolbarCustom: "<button class='btn-blue' data-icon='save' onclick='license_fee_add.save()' style='margin-left:-10px;'>保存</button>",
+        height: '80%',
+        paging : false,
+        showCheckboxcol: true,
+        showToolbar: true,
+        data : [],
+        inlineEditMult : true,
+        saveAll : true,
+        showLinenumber : false,
+        columns: [
+        	{name:'name',label:'姓名', width:'15%',align:'center',rule:'required;length[~10]'},
+            {name:'idcard',label:'证件号码', width:'40%',align:'center',rule:'required',attrs:{readonly:'readonly'}},
+            {name:'billnum',label:'缴费单号', width:'40%',align:'center',rule:'required'}
+        ]
+    });
+
+    
+    $(document).on("change","[name='name']",function(){
+        if ($.trim($(this).val()) == "") {
+            return;
+        }
+        var idcard = $(this).parent().next("td").find("input");
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'student/list',
+            data : {name : $(this).val()},
+            type : 'GET',
+            loadingmask: true,
+            okCallback: function(json, options) {
+            	var students = json.result.list;
+                if (students.length == 0) {
+                    idcard.val("未知学员");
+                } else {    
+                	if (students.length > 1) {
+                		var data = {};
+                		data.students = students;
+                		data.idcardObj = idcard;
+                		clz.setWindowJson(data);
+        		        BJUI.dialog({
+				            id:'dialog-multi-student',
+				            url:'html/license/fee/multi-student-list.html',
+				            title:'重名学员列表',
+				            width: 400,
+				            height: 300,
+				            mask: true,
+				            maxable : false,
+				            resizable: false
+				        });
+                	} else {
+                		idcard.val(students[0].idcard); 
+                		idcard.change();
+                	}      
+                }
+            }
+        });  
+    })
+</script>

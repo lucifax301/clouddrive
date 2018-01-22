@@ -1,0 +1,83 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="review-form">
+        <div class="bjui-row col-2">
+            <label class="row-label">学员姓名:</label>
+            <div class="row-input required">
+            	<input name="id" type="hidden">
+                <input name="stuname" type="text" data-rule="" readonly>
+            </div>
+            <label class="row-label">身份证号:</label>
+            <div class="row-input required">
+                <input name="stuidcard" type="text" data-rule="" readonly>
+            </div>
+            <label class="row-label">报名日期:</label>
+            <div class="row-input required">
+                 <input type="text" name="signupdate" data-rule="date" readonly>
+            </div>
+            <label class="row-label">班别:</label>
+            <div class="row-input required">
+                 <input type="text" name="classinfo" data-rule="" readonly>
+            </div>
+            <label class="row-label">申请人:</label>
+            <div class="row-input required">
+                 <input type="text" name="applier" data-rule="" readonly>
+            </div>
+            <label class="row-label">申请时间:</label>
+            <div class="row-input required">
+                 <input type="text" name="applydate" data-rule="" readonly>
+            </div>
+            <label class="row-label">申请原因:</label>
+            <div class="row-input fill-2">
+                <textarea type="text" name="applyreason" data-rule="" rows="4" readonly></textarea>
+            </div>
+            <hr class="mt10 mb10" style=" border-top: 1px solid #cccccc;">
+            <label class="row-label">处理意见:</label>
+            <div class="row-input fill-2">
+            	<input type="radio" name="modifystate" value="2" data-toggle="icheck" data-label="同意">
+            	<input type="radio" name="modifystate" value="3" data-toggle="icheck" data-label="拒绝">
+            </div>
+            <label class="row-label">备注:</label>
+            <div class="row-input fill-2">
+                <textarea type="text" name="reviewremark" data-rule="" rows="4"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="finance_receipt_review.save()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+    var finance_receipt_review = {
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Dialog',
+				url: config.openBasePath + 'financeReceipt/apply',
+				form_name: 'review-form',
+				data: clz.getWindowJson(),
+				timetype:[
+					{name:'signupdate',type:'yyyy-MM-dd'},
+					{name:'applydate',type:'yyyy-MM-dd hh:mm'}
+				],
+				before: function(data){
+					data.modifystate = 1;
+				}
+			})
+		},
+		save: function() {
+			if($.CurrentDialog.find('#edit-form').isValid()){
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'financeReceipt/apply',
+                    loadingmask: true,
+                    data :  $.CurrentDialog.find('#review-form').serializeArray(),
+                    okCallback: function(json, options) {
+                        BJUI.dialog('closeCurrent');
+                    }
+                });
+	        }
+		}
+	}
+    finance_receipt_review.init();
+</script>

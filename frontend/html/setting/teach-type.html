@@ -1,0 +1,77 @@
+<section id="thispage" privilege = "070201"></section>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var teachtype_list = {
+	list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '带教类型列表',
+        toolbarItem: 'add,edit,del',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '85%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath+'/coachSetting/listTeachType',
+        columns: [
+            {name:'type',label:'带教类型',align:'center'},
+            {name:'createDate',label:'添加时间',align:'center'},
+            {name:'cuser',label:'添加人',align:'center'},
+            {name:'remark',label:'备注',align:'center'},
+			{name:'status',label:'状态',align:'center',render:function(value){return String(value)=='0'?'正常':'停用'}},
+            {name:'op',label:'操作',align:'center',render:teactypeOperation},
+        ],
+        editMode: {dialog:{width:'460',height:'300',title:'带教类型',mask:true,onClose(){
+        	teachtype_list.list.datagrid('refresh',true);
+        	clz.getdictionary({name:'teachtypelist',refresh:true})
+        }}},
+        beforeEdit : function(){
+            window.teach_type_object = teachtype_list.list.data('selectedDatas')  == null ? null : teachtype_list.list.data('selectedDatas')[0];
+            return true;
+		},
+        add_url :  'html/setting/teach-type-add.html',
+        edit_url: 'html/setting/teach-type-edit.html',
+        delUrl : config.openBasePath + '/coachSetting/deleteTeachType',
+		delPK : 'id',
+		afterSave:function(){
+			teachtype_list.list.datagrid('refresh',true);
+			//BJUI.navtab('refresh');
+		},
+		afterDelete:function(){
+			//teachtype_list.list.datagrid('refresh',true);
+			BJUI.navtab('refresh')
+		},
+		delPK : 'id',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        
+
+    }),
+
+    
+
+    handleUser:function (id,status) {
+        var title = status == 1 ? "启用" : "停用";
+		var newstatus=status == 1 ? 0 : 1;
+        BJUI.alertmsg('confirm', '确认' + title +'操作该类型！', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/coachSetting/updateTeachTypeStatus?id=" + id+'&status='+newstatus,
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        teachtype_list.list.datagrid('refresh',true);
+                        clz.getdictionary({name:'teachtypelist',refresh:true})
+						//BJUI.navtab('refresh')
+                    }
+                })
+            }
+        })
+    }
+	}
+
+	function teactypeOperation (value,data) {
+        var html;
+        if (data.status == 0) {
+            html = '<button type="button" data-privilege="070201_datagrid-list_09" class="btn-red vhide" onclick="teachtype_list.handleUser('+data.id+','+data.status+')">停用</button>'
+        } else {
+            html = '<button type="button" data-privilege="070201_datagrid-list_09" class="btn-green vhide" onclick="teachtype_list.handleUser('+data.id+','+data.status+')">启用</button>'
+        }
+        return html
+    }
+</script>

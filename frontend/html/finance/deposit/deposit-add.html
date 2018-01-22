@@ -1,0 +1,78 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="add-form">
+        <div class="bjui-row col-1">
+            <label class="row-label">实际开票日期:</label>
+            <div class="row-input required">
+                <input name="receiptdate" type="text" data-toggle="datepicker" data-rule="required;date">
+            </div>
+            <label class="row-label">实际存款日期:</label>
+            <div class="row-input required">
+                <input name="depositdate" type="text" data-toggle="datepicker" data-rule="required;date">
+            </div>
+            <label class="row-label">存款人:</label>
+            <div class="row-input required">
+                 <input type="text" name="depositor" data-rule="required">
+            </div>
+            <label class="row-label">存款金额:</label>
+            <div class="row-input required">
+                 <input type="text" name="amount" data-rule="required;number">
+            </div>
+            <label class="row-label">当日现金余额:</label>
+            <div class="row-input required">
+                 <input type="text" name="remaincash" data-rule="required;number">
+            </div>
+            <label class="row-label">存入帐号:</label>
+            <div class="row-input required">
+                <select name="accountid" data-toggle="selectpicker" data-width="100%" data-rule="required" onchange="finance_deposit_add.account()">
+				</select>
+            </div>
+            <label class="row-label">存入银行:</label>
+            <div class="row-input required">
+            	<input type="hidden" name="account">
+                <input type="text" name="bankname" data-rule="required" readonly>
+            </div>
+            <label class="row-label">回款说明:</label>
+            <div class="row-input">
+                 <input type="text" name="receipt" data-rule="">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="submit" class="btn-blue" data-icon="save">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+    var finance_deposit_add = {
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Dialog',
+				url: config.openBasePath + 'financeDeposit/add',
+				form_name: 'add-form',
+				before: function() {
+					BJUI.ajax("doajax",{
+						url: config.openBasePath + "pos/cashAccountAll",
+						type: "GET",
+						okCallback: function(data) {
+							var html=  '<option value="">请选择</option>';
+							$.each(data.result.list, function(i,m) {
+								html+= '<option value="'+ m.id+'" data-account="'+ m.account+'" data-bankname="'+ m.bankname+'">'+ m.account +'</option>'
+							});
+							$.CurrentDialog.find("*[name='accountid']").html(html)
+							$.CurrentDialog.find("*[name='accountid']").selectpicker('refresh')
+						}
+					})
+				}
+			})
+		},
+		account: function() {
+			var data = $.CurrentDialog.find("*[name='accountid']").find("option:selected").data();
+			$.each(data, function(i,m) {
+				$.CurrentDialog.find("*[name='" + i +"']").val(m);
+			})
+		}
+	}
+    finance_deposit_add.init();
+</script>

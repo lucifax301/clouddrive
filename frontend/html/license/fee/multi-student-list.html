@@ -1,0 +1,33 @@
+<table id="multi-student-datagrid-list" class="table table-bordered"></table>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="selectStudent()">选择学员</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+	var data = clz.getWindowJson();
+	var multi_student_list = $.CurrentDialog.find('#multi-student-datagrid-list').datagrid({
+        toolbarItem: '',
+        paging: false,
+        height: '80%',
+        showCheckboxcol: true,
+        fieldSortable : false,
+        showToolbar: false,
+        data : data.students,
+        columns: [
+            {name:'name',label:'学员姓名',align:'center'},
+            {name:'idcard',label:'证件号码',align:'center'}
+        ]
+    });
+    
+    function selectStudent() {
+    	var selectdata = checkSelectData(multi_student_list);
+        if (selectdata == null) {
+            return;
+        }
+        data.idcardObj.val(selectdata[0].idcard);
+        data.idcardObj.change();
+        BJUI.dialog('closeCurrent');
+    }
+</script>

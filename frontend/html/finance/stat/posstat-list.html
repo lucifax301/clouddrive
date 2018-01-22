@@ -1,0 +1,131 @@
+<section id="thispage" privilege = "060202"></section>
+<div class="widget-box">
+	<div class="widget-title">
+		<span class="icon"> <i class="fa fa-th"></i> </span>
+		<h5>Pos流水统计搜索</h5>
+	</div>
+	<div class="widget-content nopadding">
+		<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}" id="search-form">
+			<div class="bjui-row col-4">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">Pos公司：</label>
+				<div class="row-input">
+					<select name="poscompany" data-toggle="selectpicker" size="15" data-width="100%" data-dataurl="/httpaccess/pos/poscompanyALL" data-optiontype="poscompany,poscompany">
+					</select>
+				</div>
+				<label class="row-label">交易时间：</label>
+				<div class="row-input fill-2">
+					<div class="fl w-45">
+						<input type="text" name="tradedatelow" data-toggle="datepicker" data-rule="date">
+					</div>
+					<div class="fl w-10 text-center">-</div>
+					<div class="fl w-45">
+						<input type="text" name="tradedatetop" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<table class="table table-bordered notablebg" data-tabprivilege="datagrid-list" id="datagrid-list"></table>
+<script>
+	var finace_stat_posstatList = {
+		init() {
+			var table = $.CurrentNavtab.find('#datagrid-list').datagrid({
+				height: '75%',
+				tableWidth: '90%',
+				gridTitle: 'Pos流水统计',
+				showToolbar: true,
+				filterThead: false,
+				toolbarItem: '',
+				toolbarCustom: finace_stat_posstatList.toolbarCustom(),
+				paging: false,
+				dataUrl: config.openBasePath + 'stat/getFinancePosFlowList',
+				columns: [{
+						name: 'poscompany',
+						label: 'Pos公司',
+						align: 'center',
+					},
+					{
+						name: 'posnum',
+						label: 'Pos号',
+						align: 'center',
+					},
+					{
+						name: 'storeid',
+						label: '门店',
+						align: 'center',
+						render: formatStoreCell
+					},
+					{
+						name: 'trademoney',
+						label: '实际进账金额',
+						align: 'center',
+					},
+					{
+						name: 'settlemoney',
+						label: '结算金额',
+						align: 'center',
+					},
+					{
+						name: 'poundage',
+						label: '手续费',
+						align: 'center',
+					},
+					{
+						name: 'tradenum',
+						label: '参考号',
+						align: 'center',
+					},
+					{
+						name: 'bank',
+						label: '发卡银行',
+						align: 'center',
+					},
+
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#datagrid-list'),
+						cols: [1,2],
+						keybg: '合计'
+					})
+				}
+			})
+		},
+		toolbarCustom() {
+			return "<button type='button' data-privilege='060202_datagrid-list_11' class='btn btn-blue ml5' data-icon='' onclick='finace_stat_posstatList.importExcel(1)'>银联商务导入</button> " + 
+			"<button type='button' data-privilege='060202_datagrid-list_11' class='btn btn-blue ml5' data-icon='' onclick='finace_stat_posstatList.importExcel(2)'>北京技术导入</button> " + 
+			"<button type='button' data-privilege='060202_datagrid-list_11' class='btn btn-blue ml5' data-icon='' onclick='finace_stat_posstatList.importExcel(3)'>银盛导入</button>";
+		},
+		importExcel(value) {
+			var text = '';
+			if (value == 1) text = '银联商务';
+			else if (value == 2) text = '北京技术';
+			else if (value == 3) text = '银盛';
+			clz.setWindowJson(value);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_Posstat_upload',
+				url: 'html/finance/stat/upload.html',
+				title: '导入Pos流水（' + text +'）',
+				mask: true,
+				onClose: function() {
+					table.datagrid('reload', true);
+				}
+			})
+		}
+	}
+	finace_stat_posstatList.init()
+</script>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.ComplainMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Complain" >
+    <id column="complainid" property="complainid" jdbcType="INTEGER" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="complainuser" property="complainuser" jdbcType="VARCHAR" />
+    <result column="complainmobile" property="complainmobile" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="manageuser" property="manageuser" jdbcType="VARCHAR" />
+    <result column="managetype" property="managetype" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="manageremark" property="manageremark" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="BIGINT" />
+    <result column="muid" property="muid" jdbcType="BIGINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="returncount" property="returncount" jdbcType="INTEGER" />
+    <result column="cusername" property="cusername" jdbcType="VARCHAR" />
+    <result column="musername" property="musername" jdbcType="VARCHAR" />
+    <result column="returnnum" property="returnnum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    c.complainid, c.summary, c.content, c.complainuser, c.complainmobile, c.remark, c.manageuser, c.managetype, 
+    c.status, c.manageremark, c.cuid, c.muid, c.ctime, c.mtime, c.returncount, c.cusername, c.musername
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Complain" >
+    select 
+    <include refid="Base_Column_List" />, (select count(*) from t_complain_return where complainid = c.complainid) as returnnum
+    from t_complain c
+    where c.complainid = #{complainid,jdbcType=INTEGER}
+    order by c.ctime desc
+  </select>
+  
+    
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Complain" >
+    select 
+    <include refid="Base_Column_List" />, (select count(*) from t_complain_return where complainid = c.complainid) as returnnum 
+    from t_complain c
+    where 1=1
+    <if test="summary != null and summary != ''">
+        and c.summary = #{summary,jdbcType=VARCHAR}
+    </if>
+    <if test="content != null and content != ''">
+        and c.content = #{content,jdbcType=VARCHAR}
+    </if>   
+    <if test="condition != null">
+        and (c.summary like concat(concat('%',#{condition}),'%')
+        or c.content like concat(concat('%',#{condition}),'%'))
+    </if>
+    order by c.mtime desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Complain" >
+    delete from t_complain
+    where complainid = #{complainid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.Complain" >
+    insert into t_complain (complainid, summary, content, 
+      complainuser, complainmobile, remark, 
+      manageuser, managetype, status, 
+      manageremark, cuid, muid, 
+      ctime, mtime, returncount, 
+      cusername, musername)
+    values (#{complainid,jdbcType=INTEGER}, #{summary,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{complainuser,jdbcType=VARCHAR}, #{complainmobile,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{manageuser,jdbcType=VARCHAR}, #{managetype,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{manageremark,jdbcType=VARCHAR}, #{cuid,jdbcType=BIGINT}, #{muid,jdbcType=BIGINT}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP}, #{returncount,jdbcType=INTEGER}, 
+      #{cusername,jdbcType=VARCHAR}, #{musername,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.Complain" >
+    insert into t_complain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="complainid != null" >
+        complainid,
+      </if>
+      <if test="summary != null" >
+        summary,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="complainuser != null" >
+        complainuser,
+      </if>
+      <if test="complainmobile != null" >
+        complainmobile,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="manageuser != null" >
+        manageuser,
+      </if>
+      <if test="managetype != null" >
+        managetype,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="manageremark != null" >
+        manageremark,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="returncount != null" >
+        returncount,
+      </if>
+      <if test="cusername != null" >
+        cusername,
+      </if>
+      <if test="musername != null" >
+        musername,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="complainid != null" >
+        #{complainid,jdbcType=INTEGER},
+      </if>
+      <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="complainuser != null" >
+        #{complainuser,jdbcType=VARCHAR},
+      </if>
+      <if test="complainmobile != null" >
+        #{complainmobile,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="manageuser != null" >
+        #{manageuser,jdbcType=VARCHAR},
+      </if>
+      <if test="managetype != null" >
+        #{managetype,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="manageremark != null" >
+        #{manageremark,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returncount != null" >
+        #{returncount,jdbcType=INTEGER},
+      </if>
+      <if test="cusername != null" >
+        #{cusername,jdbcType=VARCHAR},
+      </if>
+      <if test="musername != null" >
+        #{musername,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.Complain" >
+    update t_complain
+    <set >
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="complainuser != null" >
+        complainuser = #{complainuser,jdbcType=VARCHAR},
+      </if>
+      <if test="complainmobile != null" >
+        complainmobile = #{complainmobile,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="manageuser != null" >
+        manageuser = #{manageuser,jdbcType=VARCHAR},
+      </if>
+      <if test="managetype != null" >
+        managetype = #{managetype,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="manageremark != null" >
+        manageremark = #{manageremark,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returncount != null" >
+        returncount = #{returncount,jdbcType=INTEGER},
+      </if>
+      <if test="cusername != null" >
+        cusername = #{cusername,jdbcType=VARCHAR},
+      </if>
+      <if test="musername != null" >
+        musername = #{musername,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where complainid = #{complainid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Complain" >
+    update t_complain
+    set summary = #{summary,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      complainuser = #{complainuser,jdbcType=VARCHAR},
+      complainmobile = #{complainmobile,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      manageuser = #{manageuser,jdbcType=VARCHAR},
+      managetype = #{managetype,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      manageremark = #{manageremark,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=BIGINT},
+      muid = #{muid,jdbcType=BIGINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      returncount = #{returncount,jdbcType=INTEGER},
+      cusername = #{cusername,jdbcType=VARCHAR},
+      musername = #{musername,jdbcType=VARCHAR}
+    where complainid = #{complainid,jdbcType=INTEGER}
+  </update>
+</mapper>

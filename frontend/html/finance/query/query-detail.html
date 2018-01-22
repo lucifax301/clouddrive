@@ -1,0 +1,433 @@
+<div class="bjui-pageContent">
+    <form id="detail-form">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"> <i class="fa fa-th"></i></span>
+                <h5>学员财务信息</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <div class="bjui-row col-4">
+                    <label class="row-label">姓名：</label>
+                    <div class="row-input">
+                        <input id="studentid" type="hidden" name="studentid">
+                        <input type="text" name="name" readonly="true">
+                    </div>
+                    <label class="row-label">报名日期：</label>
+                    <div class="row-input">
+                        <input type="text" name="applydate" readonly="true">
+                    </div>
+                    <label class="row-label">证件号码：</label>
+                    <div class="row-input">
+                        <input type="text" name="idcard" readonly="true">
+                    </div>
+                    <label class="row-label">手机号码：</label>
+                    <div class="row-input">
+                        <input type="text" name="phone" readonly="true">
+                    </div>
+                    <label class="row-label">门店：</label>
+                    <div class="row-input">
+                        <select disabled="true" name="storeid" data-toggle="selectpicker" data-width="100%"
+                                data-dataurl="/httpaccess/store/list?pageNo=-1" data-optiontype="id,name">
+                        </select>
+                    </div>
+                    <label class="row-label">班别：</label>
+                    <div class="row-input">
+                        <select disabled="true" name="classid" data-toggle="selectpicker" data-width="100%"
+                                data-dataurl="/httpaccess/class/list?pageNo=-1" data-optiontype="id,name">
+                        </select>
+                    </div>
+                    <label class="row-label">车型：</label>
+                    <div class="row-input">
+                        <select disabled="true" name="traintype" data-toggle="selectpicker" data-width="100%">
+                            <option value="C1">C1</option>
+                            <option value="C2">C2</option>
+                        </select>
+                    </div>
+                    <label class="row-label">合同金额：</label>
+                    <div class="row-input">
+                        <input type="text" name="contractmoney" readonly="true">
+                    </div>
+                    <label class="row-label">已交费：</label>
+                    <div class="row-input">
+                        <input type="text" name="paymoney" readonly="true">
+                    </div>
+                    <label class="row-label">减免额：</label>
+                    <div class="row-input">
+                        <input type="text" name="submoney" readonly="true">
+                    </div>
+                    <label class="row-label">欠费总额：</label>
+                    <div class="row-input">
+                        <input type="text" name="owemoney" readonly="true">
+                    </div>
+                    <label class="row-label">欠减免费：</label>
+                    <div class="row-input">
+                        <input type="text" name="owesubmoney" readonly="true">
+                    </div>
+                    <label class="row-label">欠培训费：</label>
+                    <div class="row-input">
+                        <input type="text" name="owetrainmoney" readonly="true">
+                    </div>
+                    <label class="row-label">欠补考费：</label>
+                    <div class="row-input">
+                        <input type="text" name="oweresitmoney" readonly="true">
+                    </div>
+                    <label class="row-label">欠费状态：</label>
+                    <div class="row-input">
+                        <select disabled="true" name="owestatus" data-toggle="selectpicker" data-width="100%">
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </div>
+                    <label class="row-label">退费状态：</label>
+                    <div class="row-input">
+                        <select disabled="true" name="returnstatus" data-toggle="selectpicker" data-width="100%">
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </div>
+                    <label class="row-label">培训教练：</label>
+                    <div class="row-input">
+                        <input type="text" name="coachname" readonly="true">
+                    </div>
+                    <label class="row-label">客服名称：</label>
+                    <div class="row-input">
+                        <input type="text" name="cname" readonly="true">
+                    </div>
+                    <label class="row-label">毕业时间：</label>
+                    <div class="row-input">
+                        <input type="text" name="graduatedate" readonly="true">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="c-tabs-box">
+        <div class="c-tabs-header">
+            <li class="active" data-tabs='financerecord'>财务记录</li>
+            <li data-tabs='licenserecord' onclick="finance_query_detail.licenseRecord()">办证记录</li>
+            <li data-tabs='examrecord' onclick="finance_query_detail.examRecord()">考试记录</li>
+        </div>
+        <div class="c-tabs-body active" id="financerecord">
+            <table id="finance-list" class="table table-bordered"></table>
+        </div>
+        <div class="c-tabs-body active" id="licenserecord">
+            <table id="license-list" class="table table-bordered"></table>
+        </div>
+        <div class="c-tabs-body active" id="examrecord">
+            <table id="exam-list" class="table table-bordered"></table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var data = clz.getNavtab_more();
+    var studentid = data.studentid;
+    $.CurrentNavtab.find('#finance-list').datagrid({
+        gridTitle: '学员财务记录列表',
+        toolbarItem: '',
+        paging: {
+            pageSize: 15,
+            selectPageSize: '15,50,100,500'
+        },
+        height: '500',
+        showCheckboxcol: false,
+        showToolbar: false,
+        dataUrl: config.openBasePath + 'financefee/listitem',
+        postData: {studentid: studentid},
+        columns: [{
+            name: 'areaid',
+            label: '片区',
+            align: 'center',
+            render: formatAreaCell
+        }, {
+            name: 'storeid',
+            label: '门店',
+            align: 'center',
+            render: formatStoreCell
+        }, {
+            name: 'name',
+            label: '学员姓名',
+            align: 'center'
+        }, {
+            label: '二级科目',
+            name: 'subject2',
+            align: 'center',
+            render: formatSubjectCell
+        }, {
+            label: '开票日期',
+            name: 'billdate',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+        }, {
+            label: '票据号',
+            name: 'billnum',
+            align: 'center'
+        }, {
+            label: '票据类型',
+            name: 'billtype',
+            align: 'center',
+            render: function (value) {
+                switch (value) {
+                    case 0:
+                        return "A类";
+                    case 1:
+                        return "B类";
+                }
+            }
+        }, {
+            label: '金额',
+            name: 'money',
+            align: 'center'
+        }, {
+            name: 'checkstatus',
+            label: '审核状态',
+            align: 'center',
+            render: function (value) {
+                switch (value) {
+                    case 0:
+                        return "待审核";
+                    case 1:
+                        return "审核拒绝";
+                    case 2:
+                        return "审核通过";
+                    case 3:
+                        return "票据审核";
+                }
+            }
+        }, {
+            name: 'tableid',
+            label: '批次号',
+            align: 'center'
+        }, {
+            label: '录入时间',
+            name: 'ctime',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+
+        }, {
+            name: 'cname',
+            label: '录入人',
+            align: 'center'
+        }, {
+            label: '审核时间',
+            name: 'checktime',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+
+        }, {
+            name: 'checkname',
+            label: '审核人',
+            align: 'center'
+        }, {
+            name: 'remark',
+            label: '备注',
+            align: 'center'
+        }, {
+            label: '收费员',
+            name: 'feename',
+            align: 'center'
+
+        }, {
+            label: '收费日期',
+            name: 'feetime',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+
+        }, {
+            name: 'mtime',
+            label: '修改日期',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+        }, {
+            name: 'mname',
+            label: '修改人',
+            align: 'center'
+        }]
+    });
+    clz.CurrentDom_init({
+        current: 'Navtab',
+        form_name: 'detail-form',
+        before: function (data) {
+            var formdata;
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'financefee/init',
+                data: {id: studentid},
+                type: "GET",
+                async: false,
+                loadingmask: false,
+                okCallback: function (json, options) {
+                    formdata = json.result;
+                }
+            });
+            return formdata;
+        },
+        returnFloat: 'oweresitmoney,paymoney,submoney,contractmoney,owetrainmoney,owemoney,owesubmoney',
+        timetype: [
+            {
+                name: 'applydate',
+                type: 'yyyy-MM-dd'
+            }
+        ]
+    });
+
+    var finance_query_detail = {
+        licenseRecord: function () {
+            $.CurrentNavtab.find('#license-list').datagrid({
+                gridTitle: '学员办证记录列表',
+                toolbarItem: '',
+                paging: {
+                    pageSize: 15,
+                    selectPageSize: '15,50,100,500'
+                },
+                height: '500',
+                showCheckboxcol: false,
+                fieldSortable: false,
+                showToolbar: false,
+                dataUrl: config.openBasePath + 'student/changeloglist',
+                postData: {studentid: studentid},
+                columns: [
+//                    {
+//                    name: 'areaid',
+//                    label: '片区',
+//                    align: 'center',
+//                    render:function(value,data){return clz.configRender({name:'arealist',val:value,key:'id',dataname:'name'})}
+//                }, {
+//                    name: 'storeid',
+//                    label: '门店',
+//                    align: 'center',
+//                    render:function(value,data){return clz.configRender({name:'storelist',val:value,key:'id',dataname:'name'})}
+//                },
+                    {
+                    name: 'subjectname',
+                    label: '办证科目',
+                    align: 'center'
+                }, {
+                    name: 'ctime',
+                    label: '办证日期',
+                    align: 'center',
+                    render: function (value) {
+                        return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+                    }
+                }, {
+                    label: '备注',
+                    name: 'billdate',
+                    align: 'center',
+                    render: function (value) {
+                        return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+                    }
+                }, {
+                    label: '单号',
+                    name: 'tableid',
+                    align: 'center'
+                }, {
+                    label: '操作员',
+                    name: 'cname',
+                    align: 'center'
+                }, {
+                    label: '操作日期',
+                    name: 'ctime',
+                    align: 'center'
+                }]
+            });
+        },
+        examRecord: function () {
+            $.CurrentNavtab.find('#exam-list').datagrid({
+                gridTitle: '学员考试记录列表',
+                toolbarItem: '',
+                paging: {
+                    pageSize: 15,
+                    selectPageSize: '15,50,100,500'
+                },
+                height: '500',
+                showCheckboxcol: false,
+                fieldSortable: false,
+                showToolbar: false,
+                dataUrl: config.openBasePath + 'resultexam/itemlist',
+                postData: {studentid: studentid},
+                columns: [{
+                    name: 'subject',
+                    label: '考试科目',
+                    align: 'center',
+                    render: function (value) {
+                        switch (value) {
+                            case 1:
+                                return "科目一考试";
+                            case 2:
+                                return "科目二考试";
+                            case 3:
+                                return "科目三考试";
+                            case 4:
+                                return "科目四考试";
+                        }
+                    }
+                }, {
+                    name: 'result',
+                    label: '结果',
+                    align: 'center',
+                    render: function (value) {
+                        switch (value) {
+                            case 0:
+                                return "合格";
+                            case 1:
+                                return "不合格";
+                            case 2:
+                                return "未到";
+                            case 3:
+                                return "未考";
+                            case 4:
+                                return "取消";
+                        }
+                    }
+                }, {
+                    name: 'examdate',
+                    label: '考试日期',
+                    align: 'center',
+                    render: function (value) {
+                        return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+                    }
+                }, {
+                    name: 'examtime',
+                    label: '考试时间',
+                    align: 'center'
+                }, {
+                    label: '教练',
+                    name: 'coachname',
+                    align: 'center'
+                }, {
+                    label: '考场',
+                    name: 'examplace',
+                    align: 'center'
+                }, {
+                    label: '备注',
+                    name: 'remark',
+                    align: 'center'
+                }, {
+                    label: '学员姓名',
+                    name: 'name',
+                    align: 'center'
+                }, {
+                    label: '车型',
+                    name: 'traintype',
+                    align: 'center'
+                }, {
+                    name: 'cname',
+                    label: '操作人',
+                    align: 'center'
+                }, {
+                    name: 'ctime',
+                    label: '操作时间',
+                    align: 'center'
+                }]
+            });
+        }
+    }
+</script>

@@ -1,0 +1,117 @@
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>招生明细搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">所属片区：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist" data-refdata="storelist,{value},areaid" data-nextselect="#store" data-keys="{'label':'name','value':'id'}" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">所属门店：</label>
+				<div class="row-input">
+					<select name="storeid" id="store" data-toggle="selectpicker" data-width="100%" >
+					</select>
+				</div>
+				<label class="row-label">营销活动：</label>
+				<div class="row-input">
+					<select name="activityid" id="activityid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/sales/list" data-optiontype="id,activityname">
+					</select>
+				</div>
+				
+				<label class="row-label">起始时间：</label>
+				<div class="row-input">
+					<input type="text" name="stime" readonly="readonly" data-toggle="datepicker" placeholder="报名起始时间">
+				</div>
+				<label class="row-label">结束时间：</label>
+				<div class="row-input">
+					<input type="text" name="etime" readonly="readonly" data-toggle="datepicker" placeholder="报名结束时间">
+				</div>
+				<label class="row-label">学员姓名：</label>
+				<div class="row-input">
+					<input type="text" name="name">
+				</div>
+				<label class="row-label">身份证号：</label>
+				<div class="row-input">
+					<input type="text" name="idcard">
+				</div>
+				
+				
+				
+			</div>
+				<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+				</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var tempsaleschannel;
+	BJUI.ajax('doajax', {
+					async:false,
+                    url: config.openBasePath + '/saleschannel/listall',
+                    loadingmask: false,
+                    okCallback: function(json, options) {
+                    	tempsaleschannel=json.result.list
+                    }
+                })
+
+	var enrol_studentquery_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        toolbarItem: 'none',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+        showCheckboxcol: false,
+        showToolbar: false,
+        dataUrl: config.openBasePath + 'student/enrollist',
+        columns: [
+        	{name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+            {name:'storeid',label:'门店',align:'center',render:formatStoreCell},
+            {name:'name',label:'学员姓名',align:'center',render:function(value, data){
+                return "<a href='html/common/student/student-view.html' data-toggle='navtab' data-options='{id:\"student-view-table"+data.id+"\" , title:\"查看学员信息\"}' data-more='" + JSON.stringify(data) + "'>" + value + "</a>"
+            }},
+            {name:'idcard',label:'学员身份证',align:'center'},
+            {name:'classid',label:'报名班别',align:'center',render:function(value){
+						return clz.configRender({name:'classlist',val:value,key:'id'})
+					}},
+            {name:'traintype',label:'报名车型',align:'center'},
+            {name:'applydate',label:'报名日期',align:'center',render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}},
+            
+            
+            {name:'signmoney',label:'班型价格',align:'center'},
+            {name:'discountprice',label:'优惠金额',align:'center',render:function(value,data){
+            	return data.submoney+data.couponmoney
+            }},
+            {name:'contractmoney',label:'报名费用',align:'center'},
+            {name:'channel',label:'营销渠道',align:'center',render:saleschannelrender},
+            {name:'activity',label:'营销活动',align:'center'},
+        ]
+    });
+    
+    
+    function saleschannelrender(value){
+    	for(var i=0 ;i< tempsaleschannel.length ;i++){
+            if(value == tempsaleschannel[i].id){
+                return tempsaleschannel[i].channel;
+            }else{
+            	if(tempsaleschannel[i].data){
+            		var data2=tempsaleschannel[i].data;
+            		
+            		for(var j=0 ;j< data2.length ;j++){
+            			if(value == data2[j].id){
+            				return data2[i].channel;
+            			}
+            		}
+            	}else{
+                	continue;
+               	}
+            }
+        } 
+    }
+</script>

@@ -1,0 +1,646 @@
+<section id="thispage" privilege="050301"></section>
+<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}" id="search-form">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>记录搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-3">
+				<label class="row-label">片区和门店：</label>
+				<div class="row-input y-comment">
+					<div class="w-45 fl">
+					<select name="areaid" data-toggle="selectpicker" data-nextselect="#storeId" data-refdata="storelist_filter,{value},areaid"  data-datajson="arealist_filter" data-optiontype="id,name" data-keys="{'label':'name','value':'id'}" data-width="100%">
+					</select>
+					</div>
+					<div class="text-center w-10 fl">-</div>
+					<div class="w-45 fl">
+					<select name="storeid" id="storeId" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+					</select>
+					</div>
+				</div>
+				<label class="row-label">服务类型：</label>
+				<div class="row-input">
+					<select name="servicetype" id="servicetype" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+					</select>
+				</div>
+				<label class="row-label">服务子类型：</label>
+				<div class="row-input">
+					<select name="servicesubtype" id="servicesubtype" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+					</select>
+				</div>
+				<label class="row-label">服务来源：</label>
+				<div class="row-input">
+					<select name="servicesource" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="1">服务门店</option>
+						<option value="2">呼叫中心</option>
+						<option value="3">客户来电</option>
+						<option value="4">客户上门</option>
+						<option value="5">主管部门</option>
+						<option value="6">市场活动</option>
+						<option value="7">网上投诉</option>
+						<option value="8">回访投诉</option>
+						<option value="0">其他</option>
+					</select>
+				</div>
+				<label class="row-label">服务方式：</label>
+				<div class="row-input">
+					<select id="servicemode" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="1">去电</option>
+						<option value="2">上门服务</option>
+						<option value="3">客户来电</option>
+						<option value="4">客户上门</option>
+					</select>
+				</div>
+				<label class="row-label">处理状态：</label>
+				<div class="row-input">
+					<select id="handlestate" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">未处理</option>
+						<option value="1">已处理</option>
+						<option value="2">无需处理</option>
+					</select>
+				</div>
+				<label class="row-label">
+		        	<select id="searchname" data-toggle="selectpicker" data-width="60%" onchange="customer_servicerecord_list.setSearchname()">
+		        		<option value="name">姓名:</option>
+		                <option value="idcard">身份证:</option>
+		                <option value="phone">手机号码:</option>
+		            </select>
+        		</label>
+				<div class="row-input">
+					<input type="text" name="name" id="searchnameval">
+				</div>
+				<label class="row-label">服务时间：</label>
+				<div class="row-input">
+					<div class="w-40 fl">
+						<input name="ctimelow" type="text" readonly="readonly" data-toggle="datepicker" data-rule="date">
+					</div>
+					<span class="fl text-center pl10 pr10">-</span>
+					<div class="w-40 fl">
+						<input name="ctimetop" type="text" readonly="readonly" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+
+			</div>
+
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="button" class="btn-blue" data-icon="times" onclick="customer_servicerecord_list.doreset()">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<input id="res" name="res" type="reset" style="display:none;" />
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var customer_servicerecord_list = {
+		init: function() {
+			var servicetypemenu = [{
+				'val': '1',
+				'txt': '催交资料',
+				'menu': [{
+					'val': '101',
+					'txt': '报名资料'
+				}, {
+					'val': '102',
+					'txt': '重交资料'
+				}, {
+					'val': '103',
+					'txt': '转校资料'
+				}, {
+					'val': '104',
+					'txt': '转车型资料'
+				}]
+			}, {
+				'val': '2',
+				'txt': '理论培训及采集指纹',
+				'menu': [{
+					'val': '200',
+					'txt': '无'
+				}]
+			}, {
+				'val': '3',
+				'txt': '科目一测试',
+				'menu': [{
+					'val': '300',
+					'txt': '无'
+				}]
+			}, {
+				'val': '4',
+				'txt': '报考试',
+				'menu': [{
+					'val': '401',
+					'txt': '科目一考试'
+				}, {
+					'val': '402',
+					'txt': '科目二考试'
+				}, {
+					'val': '403',
+					'txt': '科目三考试'
+				}, {
+					'val': '404',
+					'txt': '科目四考试'
+				}, {
+					'val': '405',
+					'txt': '改期'
+				}, {
+					'val': '406',
+					'txt': '转场'
+				}, {
+					'val': '400',
+					'txt': '其它'
+				}]
+			}, {
+				'val': '5',
+				'txt': '考试批复',
+				'menu': [{
+					'val': '501',
+					'txt': '科目一考试'
+				}, {
+					'val': '502',
+					'txt': '科目二考试'
+				}, {
+					'val': '503',
+					'txt': '科目三考试'
+				}, {
+					'val': '504',
+					'txt': '科目四考试'
+				}, {
+					'val': '505',
+					'txt': '改期'
+				}, {
+					'val': '500',
+					'txt': '其它'
+				}]
+			}, {
+				'val': '6',
+				'txt': '学员回访',
+				'menu': [{
+					'val': '601',
+					'txt': '交资料'
+				}, {
+					'val': '602',
+					'txt': '科目一培训'
+				}, {
+					'val': '603',
+					'txt': '科目一练题'
+				}, {
+					'val': '604',
+					'txt': '转学'
+				}, {
+					'val': '605',
+					'txt': '缺考'
+				}, {
+					'val': '606',
+					'txt': '补考'
+				}, {
+					'val': '607',
+					'txt': '领证'
+				}, {
+					'val': '608',
+					'txt': '更换教练'
+				}, {
+					'val': '609',
+					'txt': '服务质量'
+				}, {
+					'val': '610',
+					'txt': '暂停学车'
+				}, {
+					'val': '611',
+					'txt': '恢复学车'
+				}, {
+					'val': '612',
+					'txt': '学习证剩5月到期'
+				}, {
+					'val': '613',
+					'txt': '报名日期到期'
+				}, {
+					'val': '600',
+					'txt': '其它'
+				}]
+			}, {
+				'val': '7',
+				'txt': '学车安排',
+				'menu': [{
+					'val': '701',
+					'txt': '教练分配'
+				}, {
+					'val': '702',
+					'txt': '学车体验'
+				}, {
+					'val': '703',
+					'txt': '模拟体验'
+				}, {
+					'val': '704',
+					'txt': '科目二训练'
+				}, {
+					'val': '705',
+					'txt': '科目三训练'
+				}, {
+					'val': '706',
+					'txt': '考前强化'
+				}, {
+					'val': '707',
+					'txt': '考前测试'
+				}, {
+					'val': '700',
+					'txt': '其它'
+				}]
+			}, {
+				'val': '8',
+				'txt': '其它',
+				'menu': [{
+					'val': '800',
+					'txt': '无'
+				}]
+			}];
+			var servicetypesel = ["servicetype", "servicesubtype"];
+			var servicetypecs = new CascadeSelect(servicetypesel, servicetypemenu);
+
+			var record_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: {
+						pageSize: 15,
+						selectPageSize: '15,50,100,500'
+					},
+					toolbarItem: 'add',
+					toolbarCustom: customer_servicerecord_list.toolbarCustom(),
+					gridTitle: '客户服务记录',
+					height: '70%',
+					showCheckboxcol: true,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'customer/customerRecordList',
+					columns: [{
+						name: 'ctime',
+						label: '服务时间',
+						align: 'center',
+						render: function(value) {
+							return clz.filter.time({
+								date: value,
+								type: 'yyyy-MM-dd hh:mm'
+							})
+						}
+					}, {
+						name: 'name',
+						label: '学员姓名',
+						align: 'center'
+					}, {
+						name: 'phone',
+						label: '手机号码',
+						align: 'center'
+					}, {
+						name: 'classname',
+						label: '班别',
+						align: 'center'
+					}, {
+						name: 'servicesource',
+						label: '服务来源',
+						align: 'center',
+						render: customer_servicerecord_list.formatServicesource
+					}, {
+						name: 'servicetype',
+						label: '服务类型',
+						align: 'center',
+						render: customer_servicerecord_list.formatServicetype
+					}, {
+						name: 'servicemode',
+						label: '服务方式',
+						align: 'center',
+						render: customer_servicerecord_list.formatServicemode
+					}, {
+						name: 'cname',
+						label: '提交人',
+						align: 'center'
+					}, {
+						name: 'handlername',
+						label: '处理人',
+						align: 'center'
+					}, {
+						name: 'handlestate',
+						label: '处理状态',
+						align: 'center',
+						render: customer_servicerecord_list.status
+					}],
+					editMode: {
+						navtab: {
+							id: 'add_customerrecord',
+							title: '新增客户服务记录',
+							onClose: function() {
+								record_list.datagrid('reload', true);
+							}
+						}
+					},
+					add_url: "html/customer/servicerecord/service-add.html",
+					exportOption: {
+						type: 'file',
+						options: {
+							type: 'GET',
+							url: config.openBasePath + 'customer/customerRecord/export',
+							data: $.CurrentNavtab.find('#search-form').serializeArray()
+						}
+					},
+				});
+		},
+		status: function(value) {
+			switch(value) {
+				case 0:
+					return "未处理";
+				case 1:
+					return "已处理";
+				case 2:
+					return "无需处理";
+			}
+		},
+		setSearchname: function() {
+			var value = $.CurrentNavtab.find("#searchname").val();
+			$.CurrentNavtab.find("#searchnameval").attr("name", value);
+		},
+		handlerecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择至少一条记录！', {})
+				return;
+			}
+			var ids = '';
+			for(var i = 0; i < data.length; i++) {
+				ids = ids + ',' + data[i].id;
+			}
+			ids = ids.substr(1);
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + 'customer/handleCustomerRecord',
+				loadingmask: true,
+				data: "ids=" + ids,
+				okCallback: function(json, options) {
+					$.CurrentNavtab.find('#datagrid-list').datagrid('reload', true);
+				}
+			})
+		},
+		doreset: function() {
+			$.CurrentNavtab.find("#res").click();
+			$.CurrentNavtab.find("#servicesubtype").empty()
+			$.CurrentNavtab.find("#servicesubtype").append('<option value="">请选择</option>');
+			$.CurrentNavtab.find("select").selectpicker('refresh');
+			//$.CurrentNavtab.find("#search-form").trigger("reset");
+		},
+		editrecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行编辑操作！', {});
+				return;
+			}
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.navtab({
+				id: 'service-edit-' + data[0].id,
+				url: 'html/customer/servicerecord/service-edit.html',
+				title: '编辑客户服务记录',
+				onClose: function() {
+					table.datagrid('reload', true);
+				},
+				more: data[0]
+			})
+
+		},
+		toolbarCustom: function() {
+			return "<button type='button' class='btn btn-blue' data-icon='sign-out' data-privilege='050301_datagrid-list_06' onclick='customer_servicerecord_list.exportdata()'>导出</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='legal' data-privilege='050301_datagrid-list_11' onclick='customer_servicerecord_list.handlerecord()'>处理</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='edit' data-privilege='050301_datagrid-list_02' onclick='customer_servicerecord_list.editrecord()'>编辑</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='search' onclick='customer_servicerecord_list.viewrecord()'>查看</button>"
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'customer/customerRecord/export',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		viewrecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+				return;
+			}
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.navtab({
+				id: 'service-view-' + data[0].id,
+				url: 'html/customer/servicerecord/service-view.html',
+				title: '查看客户服务记录',
+				onClose: function() {
+					table.datagrid('reload', true);
+				},
+				more: data[0]
+			})
+		},
+		formatServicesource: function(value) {
+			switch(value) {
+				case 1:
+					return '服务门店';
+				case 2:
+					return '呼叫中心';
+				case 3:
+					return '客户来电';
+				case 4:
+					return '客户上门';
+				case 5:
+					return '主管部门';
+				case 6:
+					return '市场活动';
+				case 7:
+					return '网上投诉';
+				case 8:
+					return '回访投诉';
+				case 0:
+					return '其他';
+			}
+		},
+		formatServicetype: function(value, data) {
+			var servicetype, servicesubtype;
+			switch(value) {
+				case 1:
+					servicetype = '催交资料';
+					break;
+				case 2:
+					servicetype = '理论课培训及采集指纹';
+					break;
+				case 4:
+					servicetype = '科目一测试';
+					break;
+				case 3:
+					servicetype = '报考试';
+					break;
+				case 5:
+					servicetype = '考试批复';
+					break;
+				case 6:
+					servicetype = '学员回访';
+					break;
+				case 7:
+					servicetype = '学车安排';
+					break;
+				case 8:
+					servicetype = '其它';
+					break;
+				default:
+					servicetype = '';
+			}
+			switch(data.servicesubtype) {
+				case 101:
+					servicesubtype = '报名资料';
+					break;
+				case 102:
+					servicesubtype = '重交资料';
+					break;
+				case 103:
+					servicesubtype = '转校资料';
+					break;
+				case 104:
+					servicesubtype = '转车型资料';
+					break;
+				case 200:
+					servicesubtype = '无';
+					break;
+				case 300:
+					servicesubtype = '无';
+					break;
+				case 401:
+					servicesubtype = '科目一考试';
+					break;
+				case 402:
+					servicesubtype = '科目二考试';
+					break;
+				case 403:
+					servicesubtype = '科目三考试';
+					break;
+				case 404:
+					servicesubtype = '科目四考试';
+					break;
+				case 405:
+					servicesubtype = '改期';
+					break;
+				case 406:
+					servicesubtype = '转场';
+					break;
+				case 400:
+					servicesubtype = '其它';
+					break;
+				case 501:
+					servicesubtype = '科目一考试';
+					break;
+				case 502:
+					servicesubtype = '科目二考试';
+					break;
+				case 503:
+					servicesubtype = '科目三考试';
+					break;
+				case 504:
+					servicesubtype = '科目四考试';
+					break;
+				case 505:
+					servicesubtype = '改期';
+					break;
+				case 500:
+					servicesubtype = '其它';
+					break;
+				case 601:
+					servicesubtype = '交资料';
+					break;
+				case 602:
+					servicesubtype = '科目一培训';
+					break;
+				case 603:
+					servicesubtype = '科目一练题';
+					break;
+				case 604:
+					servicesubtype = '转学';
+					break;
+				case 605:
+					servicesubtype = '缺考';
+					break;
+				case 606:
+					servicesubtype = '补考';
+					break;
+				case 607:
+					servicesubtype = '领证';
+					break;
+				case 608:
+					servicesubtype = '更换教练';
+					break;
+				case 609:
+					servicesubtype = '服务质量';
+					break;
+				case 610:
+					servicesubtype = '暂停学车';
+					break;
+				case 611:
+					servicesubtype = '恢复学车';
+					break;
+				case 612:
+					servicesubtype = '学习证剩5月到期';
+					break;
+				case 613:
+					servicesubtype = '报名日期到期';
+					break;
+				case 600:
+					servicesubtype = '其它';
+					break;
+				case 701:
+					servicesubtype = '教练分配';
+					break;
+				case 702:
+					servicesubtype = '学车体验';
+					break;
+				case 703:
+					servicesubtype = '模拟体验';
+					break;
+				case 704:
+					servicesubtype = '科目二训练';
+					break;
+				case 705:
+					servicesubtype = '科目三训练';
+					break;
+				case 706:
+					servicesubtype = '考前强化';
+					break;
+				case 707:
+					servicesubtype = '考前测试';
+					break;
+				case 700:
+					servicesubtype = '其它';
+					break;
+				case 800:
+					servicesubtype = '无';
+					break;
+				default:
+					servicesubtype = '';
+			}
+			var result = servicetype + '-' + servicesubtype;
+			return result != '-' ? result : '';
+		},
+		formatServicemode: function(value) {
+			switch(value) {
+				case 1:
+					return '去电';
+				case 2:
+					return '上门服务';
+				case 3:
+					return '客户来电';
+				case 4:
+					return '客户上门';
+			}
+		}
+	}
+
+	customer_servicerecord_list.init();
+</script>

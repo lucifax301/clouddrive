@@ -1,0 +1,113 @@
+<div class="bjui-pageHeader" >
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>分配记录搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-refdata="storelist,{value},areaid" data-nextselect="#store" data-keys="{'label':'name','value':'id'}" data-optiontype="id,name">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+					<label class="row-label">门店：</label>
+					<div class="row-input">
+						<select name="storeid" id="store" data-toggle="selectpicker" size="15" data-width="100%" >
+							<option value="">请选择</option>
+						</select>
+					</div>
+					<label class="row-label">带教类型：</label>
+					<div class="row-input">
+						<select name="teachtypeid" id="teachtype" data-toggle="selectpicker" data-width="100%" size="15" data-datajson="teachtypelist" data-optiontype="id,type">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+					<label class="row-label">分配方式：</label>
+					<div class="row-input">
+						<select name="assigntype" id="assigntype" data-toggle="selectpicker" data-width="100%" size="15">
+							<option value="">请选择</option>
+							<option value="0">系统分配</option>
+							<option value="1">人工分配</option>
+						</select>
+					</div>
+
+					<label class="row-label">教练名称：</label>
+					<div class="row-input">
+						<input type="text" name="name" class="form-control" data-width="100%" placeholder="请输入教练姓名查询">
+					</div>
+
+					<label class="row-label">分配日期：</label>
+					<div class="row-input fill-2">
+						<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" data-width="100%" placeholder="点击选择日期"></div>
+						<div class="w-10 fl text-center">-</div>
+						<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" data-width="100%" placeholder="点击选择日期"></div>
+					</div>
+					
+				</div>
+				<div class="text-center">
+						<div class="btn-group">
+							<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+							<button type="reset" class="btn-blue" data-icon="times">重置</button>
+						</div>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var student_assign_list = {
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '分配记录',
+			toolbarItem: 'export',
+			paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+			height: '85%',
+			showCheckboxcol: false,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'coach/stuAssignRecord',
+			columns: [
+				{ name: 'area', label: '片区', align: 'center' },
+				{ name: 'store', label: '门店', align: 'center' },
+				{ name: 'teachtype', label: '带教类型', align: 'center' },
+				{ name: 'name', label: '教练', align: 'center' },
+				{
+					name: 'count',
+					label: '学员数量',
+					align: 'center',
+					render: function(value, data) {
+						var morejson = {
+							id: data.coachid
+						}
+						return "<a href='javascript:' onclick='showassignstu(" + data.coachid + ")'  >" + value + "</a>"
+					}
+
+				}
+
+			],
+			exportOption : {type:"file", options:{
+            url : config.openBasePath + "coach/stuAssignRecord/export",
+            data : $("#search-form").serializeArray()
+            }
+        	}
+		})
+
+	}
+
+	function showassignstu(id) {
+		clz.setWindowJson(id);
+		BJUI.dialog({
+			id: 'assign-student-list',
+			width: 900,
+			height: 800,
+			url: 'html/coach/assign-student-list.html',
+			title: '分配学员列表',
+			onClose: function() {
+				student_assign_list.list.datagrid('refresh', true);
+			}
+
+		})
+	}
+</script>

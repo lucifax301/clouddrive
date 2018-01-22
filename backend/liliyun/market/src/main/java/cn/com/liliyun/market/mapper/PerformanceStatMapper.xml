@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.market.mapper.PerformanceStatMapper" >
+  <resultMap id="CoachResultMap" type="cn.com.liliyun.market.model.CoachPerformanceStatItem" >
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="StaffResultMap" type="cn.com.liliyun.market.model.StaffPerformanceStatItem" >
+  	<result column="staffid" property="staffid" jdbcType="INTEGER" />
+    <result column="deptid" property="deptid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="statByCoach" resultMap="CoachResultMap" parameterType="cn.com.liliyun.market.model.PerformanceParam">
+    select a.areaid, a.storeid,b.coachid,b.name, count(a.id) as count from t_student a join  t_coach b on a.reccoachid=b.coachid 
+    where 1=1
+    <if test="begindate != null ">
+		and a.applydate  > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and a.applydate  <= #{enddate}]]> 
+	</if>
+	
+	<if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+	<if test="storeid != null ">
+		and a.storeid = #{storeid}
+	</if>
+	<if test="name != null and name !=''">
+		and b.name LIKE concat(concat('%',#{name}),'%')
+	</if>
+	
+    group by a.areaid,a.storeid,b.coachid
+  </select>
+  
+  <select id="statByStaff" resultMap="StaffResultMap" parameterType="cn.com.liliyun.market.model.PerformanceParam">
+    select b.deptid, b.id, b.name, count(a.id) as count from t_student a join  t_staff b on a.recuid=b.id 
+    where 1=1
+    <if test="begindate != null ">
+		and a.applydate  > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and a.applydate  <= #{enddate}]]> 
+	</if>
+	
+	<if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+	<if test="storeid != null ">
+		and a.storeid = #{storeid}
+	</if>
+	<if test="name != null and name !=''">
+		and b.name LIKE concat(concat('%',#{name}),'%')
+	</if>
+	
+    group by b.deptid,b.id
+  </select>
+  
+</mapper>

@@ -1,0 +1,172 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>新增市场活动</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+
+					<div class="">
+						<label class="row-label">所属片区</label>
+						<div class="row-input required">
+							<select name="applyareaid" data-toggle="selectpicker" data-width="100%" data-rule="required" data-datajson="arealist" data-optiontype="id,name" onchange="market_add.showstore(this.value)">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+
+						<label class="row-label">门店</label>
+						<div class="row-input required">
+							<select name="applystoreid" id="storeid" data-toggle="selectpicker" data-width="100%" data-rule="required">
+								<option value="0">请选择</option>
+
+							</select>
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">活动时间:</label>
+						<div class="row-input required">
+							<input type="text" name="begindate" readonly="readonly" id="begindate" data-width="100%" data-toggle="datepicker" data-rule="required" placeholder="点击选择开始日期">
+						</div>
+						<label class="row-label">到:</label>
+						<div class="row-input required">
+							<input type="text" name="enddate" readonly="readonly" id="enddate" data-width="100%" data-toggle="datepicker" onchange="market_add.checkddate()" data-rule="required" placeholder="点击选择结束日期">
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">单日场地租金:</label>
+						<div class="row-input required">
+							<input type="text" name="rent" data-width="100%" maxlength="6" data-rule="required;digits" placeholder="请输入单日场地租金">
+						</div>
+						<label class="row-label">现场工作人员:</label>
+						<div class="row-input required">
+							<input type="text" name="staff" data-width="100%" maxlength="5" data-rule="required;digits" placeholder="请输入现场工作人员预估人数">
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">活动地点:</label>
+						<div class="row-input required">
+							<input type="text" name="address" data-width="100%" maxlength="100" data-rule="required" placeholder="请输入活动地点">
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">活动名称:</label>
+						<div class="row-input required">
+							<input type="text" name="activityname" data-width="100%" maxlength="36" data-rule="required" placeholder="请输入活动名称">
+						</div>
+						<label class="row-label">物料发放反馈时间:</label>
+						<div class="row-input required">
+							<input type="text" name="feedbackdate" data-width="100%" data-toggle="datepicker" readonly="readonly" placeholder="点击选择日期">
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">活动原因/物料明细:</label>
+						<div class="row-input">
+							<input type="button" class="btn-blue btn" value="上传附件" onclick="market_add.importmarketfile()">
+							<input type="hidden" id="attach" name="attach" />
+							<input type="hidden" name="attachid" id="attachid" />
+							<div id="filediv"></div>
+						</div>
+
+					</div>
+
+					<div class="">
+						<label class="row-label">申请理由:</label>
+						<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="reason" maxlength="60" placeholder="请输入申请理由"></textarea>
+						</div>
+
+					</div>
+
+					<div class="">
+						<label class="row-label">备注:</label>
+						<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="remark" maxlength="300" placeholder="请输入备注"></textarea>
+						</div>
+
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="type" value="1" />
+	</form>
+
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<ul>
+			<li><button type="button" class="btn-blue" data-icon="save" onclick="market_add.savemarket()">保存</button></li>
+			<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+			
+		</ul>
+	</div>
+</div>
+<script>
+	var market_add = {
+		init: clz.CurrentDom_init({
+			current: 'Navtab',
+			form_name: 'view-form',
+			url: config.openBasePath + 'student/assignCoach',
+		}),
+		importmarketfile() {
+			BJUI.dialog({
+				id: 'dialog-upload-excel',
+				url: 'html/market/upload.html',
+				title: '上传文件',
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+
+				}
+			})
+		},
+		checkddate:function (){
+						if($.CurrentNavtab.find('#begindate').val()>$.CurrentNavtab.find('#enddate').val()){
+							BJUI.alertmsg('info', '结束日期必须大于开始日期！', {})
+							$.CurrentNavtab.find('#enddate').val($.CurrentNavtab.find('#begindate').val())							
+						}
+						console.log()
+					},
+		showstore(areaid) {
+
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/store/list?areaid=" + areaid,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					if(json.result && json.result.list) {
+						renderselect($.CurrentNavtab.find('#storeid'), json.result.list)
+
+					}
+				}
+			})
+		},
+		savemarket() {
+			if($.CurrentNavtab.find('#add-form').isValid())
+				BJUI.alertmsg('confirm', '确认提交申请吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/marketing/addmarket",
+							loadingmask: true,
+							data: $.CurrentNavtab.find("#add-form").serializeArray(),
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', '提交成功！', {})
+								BJUI.navtab('closeCurrentTab');
+							}
+						})
+					}
+				})
+
+		}
+	}
+</script>

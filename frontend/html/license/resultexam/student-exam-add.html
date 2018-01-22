@@ -1,0 +1,199 @@
+<div class="bjui-pageContent">
+    <form id="add-form">
+        <div class="bjui-row col-3">
+            <label class="row-label">考试科目：</label>
+            <div class="row-input required">
+                <input id="subjectid" type="hidden">
+                <select id="subject" name="subject" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="">请选择</option>
+                    <option value="1">科目一考试</option>
+                    <option value="2">科目二考试</option>
+                    <option value="3">科目三考试</option>
+                    <option value="4">科目四考试</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    var subjectObj =  $.CurrentDialog.find("#subject");
+    var subjectidObj = $.CurrentDialog.find("#subjectid"); //原科目
+    subjectObj.change(function(){
+        var data = clz.getDialogGridData("datagrid-list");
+        if (data.length > 0) {
+            BJUI.alertmsg('warn', '请清空列表数据后再更换预约科目！');
+            subjectObj.val(subjectidObj.val());
+            return false;
+        }
+        subjectidObj.val(subjectObj.val());
+    });
+    var examplace = [{"":"请选择"}];
+    BJUI.ajax('doajax', {
+        url: config.openBasePath + 'examarea/list',
+        type : 'GET',
+        async : false,
+        okCallback: function(json, options) {
+            var temp = json.result.list;
+            for(var i = 0 ; i < temp.length; i++){
+                var data = {};
+                data[temp[i].id] = temp[i].name;
+                examplace.push(data);
+            }
+        }
+    });
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del,save',
+        height: '85%',
+        paging : false,
+        showCheckboxcol: true,
+        showToolbar: true,
+        data : [],
+        inlineEditMult : true,
+        saveAll : true,
+        showLinenumber : false,
+        editUrl : config.openBasePath + 'resultexam/add',
+        columns: [
+            {name:'name',label:'姓名',width:'40',align:'center',rule:'required;length[~10]'},
+            {name:'idcard',label:'证件号码',width:'80',align:'center',attrs:{readonly:'readonly'},rule:'required'},
+            {name:'subject',label:'成绩科目',width:'40',align:'center',type:'select',items:[{'1':'科目一','2':'科目二','3':'科目三','4':'科目四'}],rule:'required'},
+            {name:'result',label:'结果',width:'40',align:'center',type:'select',items:[{'0':'合格','1':'不合格','2':'未到','3':'未考','4':'取消'}],rule:'required'},
+            {name:'examcount',label:'考试次数',width:'40',align:'center',type:'select',items:[{'1':'1','2':'2'}],rule:'required'},
+            {name:'examdate',label:'考试日期',width:'50',align:'center',attrs:{readonly:'readonly'}},
+            {name:'examplaceid',label:'考场',align:'center',width:'75',type:'select',items:examplace},
+            {name:'indexcat',label:'指标类别',width:'40',align:'center',type:'select',items:[{'0':'正常','1':'其他','2':'紧急','3':'额外'}],rule:'required'},
+            {name:'coachname',label:'教练',width:'40',align:'center',attrs:{readonly:'readonly'}},
+            {name:'coachid',hide:true},
+        ],
+        beforeEdit : function() {
+            if (subjectObj.val() == "") {
+                BJUI.alertmsg('warn', '请先选择预约科目！');
+                return false;
+            }
+            return true;
+        },
+        beforeSave : function() {
+            var data = clz.getDialogGridData("datagrid-list");
+            if (data.length == 0) {
+                BJUI.alertmsg('warn', '没有提交的数据！');
+                return false;
+            }
+            var ids = [];
+            for (var i = 0; i < data.length; i++) {
+                ids.push(data[i].idcard);
+            }
+            if (hasReapeat(ids)) {
+                BJUI.alertmsg('warn', '证件号码存在重复数据,请处理后再提交！');
+                return false;
+            }
+            return true;
+        },
+        afterSave : function () {
+            BJUI.dialog('closeCurrent');
+            license_resultexam_list.datagrid("refresh",true);
+        }
+    });
+
+    $(document).on("change","[name='name']",function(){
+        if ($.trim($(this).val()) == "") {
+            return;
+        }
+        var nameobj = $(this).parent().nextAll("td");
+        var idcard = nameobj.find("input[name='idcard']");
+        var subject = nameobj.find("select[name='subject']");
+        var coachname = nameobj.find("input[name='coachname']");
+        var coachid = nameobj.find("input[name='coachid']");
+        var examdate = nameobj.find("input[name='examdate']");
+        var examplace = nameobj.find("select[name='examplaceid']");
+        var data = clz.getDialogGridData("datagrid-list");
+        subject.val(subjectObj.val());
+        subject.attr("disabled",true);
+        subject.change();
+        var currentSubject;
+        if (subjectObj.val() == 1) {
+            currentSubject = ApplySubjectEnum.SUBJECT1_OK_RESULT;
+        } else if (subjectObj.val() == 2) {
+            currentSubject = ApplySubjectEnum.SUBJECT2_OK_RESULT;
+        } else if (subjectObj.val() == 3) {
+            currentSubject = ApplySubjectEnum.SUBJECT3_OK_RESULT;
+        } else if (subjectObj.val() == 4) {
+            currentSubject = ApplySubjectEnum.SUBJECT4_OK_RESULT;
+        }
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'student/list',
+            data : {name : $(this).val()},
+            type : 'GET',
+            okCallback: function(json, options) {
+                var students = json.result.list;
+                if (students.length == 0) {
+                    BJUI.alertmsg('info', '不存在对应的学员信息！');
+                    return false;
+                } else {
+                    if (students.length > 1) {
+                        var data = {};
+                        data.students = students;
+                        data.idcard = idcard;
+                        data.examdate = examdate;
+                        data.examplace = examplace;
+                        data.coachname = coachname;
+                        data.coachid = coachid;
+                        data.subject = currentSubject;
+                        clz.setWindowJson(data);
+                        BJUI.dialog({
+                            id:'dialog-multi-student',
+                            url:'html/license/resultexam/multi-student-list.html',
+                            title:'重名学员列表',
+                            width: 400,
+                            height: 300,
+                            mask: true,
+                            maxable : false,
+                            resizable: false
+                        });
+                    } else {
+                        if (students[0].status != 0) {
+                            var msg = clz.configRender({name:'studentstatus',val:students[0].status});
+                            BJUI.alertmsg('info', '该学员状态不正常<br>当前学员状态[' + msg + ']!');
+                            return false;
+                        }
+                        if (students[0].nextsubject != currentSubject) {
+                            var msg = clz.configRender({name:'subject',val:students[0].nextsubject});
+                            BJUI.alertmsg('info', '该学员不满足当前办证条件！<br>下一办证科目[' + msg + ']!');
+                            return false;
+                        }
+                        BJUI.ajax('doajax', {
+                            url: config.openBasePath + 'orderexam/get',
+                            type : 'GET',
+                            data : {
+                                idcard : students[0].idcard,
+                                subject : $.CurrentDialog.find("#subject").val(),
+                                result : 0
+                            },
+                            okCallback: function(json, options) {
+                                //科目二和科目三考试需要考场信息
+                                //科目四的预约信息为系统自动生成
+                                var data = json.result;
+                                if (data == null) {
+                                    idcard.val("");
+                                    BJUI.alertmsg('warn', '不存在该学员该科目报考预约成功记录！');
+                                    return;
+                                }
+                                idcard.val(students[0].idcard);
+                                idcard.change();
+                                examdate.val(clz.filter.time({date:data.examdate,type:'yyyy-MM-dd'}));
+                                examdate.change();
+                                examplace.val(data.examplaceid);
+                                examplace.attr("disabled",true);
+                                examplace.change();
+                                coachname.val(students[0].coachname);
+                                coachname.change();
+                                coachid.val(students[0].coachname);
+                                coachname.change();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    })
+</script>
+    

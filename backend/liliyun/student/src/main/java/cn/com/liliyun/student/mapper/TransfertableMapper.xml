@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.student.mapper.TransfertableMapper">
+    <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.Transfertable">
+        <id column="tableid" jdbcType="VARCHAR" property="tableid"/>
+        <result column="itemcount" jdbcType="INTEGER" property="itemcount"/>
+        <result column="localnum" jdbcType="INTEGER" property="localnum"/>
+        <result column="nolocalnum" jdbcType="INTEGER" property="nolocalnum"/>
+        <result column="transferid" jdbcType="INTEGER" property="transferid"/>
+        <result column="transfername" jdbcType="VARCHAR" property="transfername"/>
+        <result column="transfertime" jdbcType="TIMESTAMP" property="transfertime"/>
+        <result column="transferstoreid" jdbcType="INTEGER" property="transferstoreid"/>
+        <result column="transferareaid" jdbcType="INTEGER" property="transferareaid"/>
+        <result column="receiveid" jdbcType="INTEGER" property="receiveid"/>
+        <result column="receivename" jdbcType="VARCHAR" property="receivename"/>
+        <result column="receivetime" jdbcType="TIMESTAMP" property="receivetime"/>
+        <result column="receivestoreid" jdbcType="INTEGER" property="receivestoreid"/>
+        <result column="receiveareaid" jdbcType="INTEGER" property="receiveareaid"/>
+        <result column="correctnum" jdbcType="INTEGER" property="correctnum"/>
+        <result column="incorrectnum" jdbcType="INTEGER" property="incorrectnum"/>
+        <result column="returnnum" jdbcType="INTEGER" property="returnnum"/>
+        <result column="storeid" jdbcType="INTEGER" property="storeid"/>
+        <result column="areaid" jdbcType="INTEGER" property="areaid"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="ctime" jdbcType="TIMESTAMP" property="ctime"/>
+        <result column="mtime" jdbcType="TIMESTAMP" property="mtime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    tableid, itemcount, localnum, nolocalnum, transferid, transfername, transfertime, 
+    transferstoreid, transferareaid, receiveid, receivename, receivetime, receivestoreid, 
+    receiveareaid, correctnum, incorrectnum, returnnum, storeid, areaid, status, ctime, 
+    mtime
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="cn.com.liliyun.student.model.Transfertable"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_transfertable
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectList" parameterType="cn.com.liliyun.student.model.Transfertable" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_transfertable
+        <where>
+            <if test="tableid != null and tableid !=''">
+                tableid = #{tableid,jdbcType=INTEGER}
+            </if>
+            <if test="domain !=null">
+                <if test="domain.storeid !=null ">
+                    and storeid=#{domain.storeid}
+                </if>
+                <if test="domain.areaid !=null ">
+                    and areaid=#{domain.areaid}
+                </if>
+            </if>
+        </where>
+        order by ctime desc
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.student.model.Transfertable">
+    delete from t_transfertable
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="cn.com.liliyun.student.model.Transfertable">
+    insert into t_transfertable (tableid, itemcount, localnum, 
+      nolocalnum, transferid, transfername, 
+      transfertime, transferstoreid, transferareaid, 
+      receiveid, receivename, receivetime, 
+      receivestoreid, receiveareaid, correctnum, 
+      incorrectnum, returnnum, storeid, 
+      areaid, status, ctime, 
+      mtime)
+    values (#{tableid,jdbcType=VARCHAR}, #{itemcount,jdbcType=INTEGER}, #{localnum,jdbcType=INTEGER}, 
+      #{nolocalnum,jdbcType=INTEGER}, #{transferid,jdbcType=INTEGER}, #{transfername,jdbcType=VARCHAR}, 
+      #{transfertime,jdbcType=TIMESTAMP}, #{transferstoreid,jdbcType=INTEGER}, #{transferareaid,jdbcType=INTEGER}, 
+      #{receiveid,jdbcType=INTEGER}, #{receivename,jdbcType=VARCHAR}, #{receivetime,jdbcType=TIMESTAMP}, 
+      #{receivestoreid,jdbcType=INTEGER}, #{receiveareaid,jdbcType=INTEGER}, #{correctnum,jdbcType=INTEGER}, 
+      #{incorrectnum,jdbcType=INTEGER}, #{returnnum,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{areaid,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{mtime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.liliyun.student.model.Transfertable">
+        insert into t_transfertable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                tableid,
+            </if>
+            <if test="itemcount != null">
+                itemcount,
+            </if>
+            <if test="localnum != null">
+                localnum,
+            </if>
+            <if test="nolocalnum != null">
+                nolocalnum,
+            </if>
+            <if test="transferid != null">
+                transferid,
+            </if>
+            <if test="transfername != null">
+                transfername,
+            </if>
+            <if test="transfertime != null">
+                transfertime,
+            </if>
+            <if test="transferstoreid != null">
+                transferstoreid,
+            </if>
+            <if test="transferareaid != null">
+                transferareaid,
+            </if>
+            <if test="receiveid != null">
+                receiveid,
+            </if>
+            <if test="receivename != null">
+                receivename,
+            </if>
+            <if test="receivetime != null">
+                receivetime,
+            </if>
+            <if test="receivestoreid != null">
+                receivestoreid,
+            </if>
+            <if test="receiveareaid != null">
+                receiveareaid,
+            </if>
+            <if test="correctnum != null">
+                correctnum,
+            </if>
+            <if test="incorrectnum != null">
+                incorrectnum,
+            </if>
+            <if test="returnnum != null">
+                returnnum,
+            </if>
+            <if test="storeid != null">
+                storeid,
+            </if>
+            <if test="areaid != null">
+                areaid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="ctime != null">
+                ctime,
+            </if>
+            <if test="mtime != null">
+                mtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                #{tableid,jdbcType=VARCHAR},
+            </if>
+            <if test="itemcount != null">
+                #{itemcount,jdbcType=INTEGER},
+            </if>
+            <if test="localnum != null">
+                #{localnum,jdbcType=INTEGER},
+            </if>
+            <if test="nolocalnum != null">
+                #{nolocalnum,jdbcType=INTEGER},
+            </if>
+            <if test="transferid != null">
+                #{transferid,jdbcType=INTEGER},
+            </if>
+            <if test="transfername != null">
+                #{transfername,jdbcType=VARCHAR},
+            </if>
+            <if test="transfertime != null">
+                #{transfertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="transferstoreid != null">
+                #{transferstoreid,jdbcType=INTEGER},
+            </if>
+            <if test="transferareaid != null">
+                #{transferareaid,jdbcType=INTEGER},
+            </if>
+            <if test="receiveid != null">
+                #{receiveid,jdbcType=INTEGER},
+            </if>
+            <if test="receivename != null">
+                #{receivename,jdbcType=VARCHAR},
+            </if>
+            <if test="receivetime != null">
+                #{receivetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="receivestoreid != null">
+                #{receivestoreid,jdbcType=INTEGER},
+            </if>
+            <if test="receiveareaid != null">
+                #{receiveareaid,jdbcType=INTEGER},
+            </if>
+            <if test="correctnum != null">
+                #{correctnum,jdbcType=INTEGER},
+            </if>
+            <if test="incorrectnum != null">
+                #{incorrectnum,jdbcType=INTEGER},
+            </if>
+            <if test="returnnum != null">
+                #{returnnum,jdbcType=INTEGER},
+            </if>
+            <if test="storeid != null">
+                #{storeid,jdbcType=INTEGER},
+            </if>
+            <if test="areaid != null">
+                #{areaid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="ctime != null">
+                #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mtime != null">
+                #{mtime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.student.model.Transfertable">
+        update t_transfertable
+        <set>
+            <if test="itemcount != null">
+                itemcount = #{itemcount,jdbcType=INTEGER},
+            </if>
+            <if test="localnum != null">
+                localnum = #{localnum,jdbcType=INTEGER},
+            </if>
+            <if test="nolocalnum != null">
+                nolocalnum = #{nolocalnum,jdbcType=INTEGER},
+            </if>
+            <if test="transferid != null">
+                transferid = #{transferid,jdbcType=INTEGER},
+            </if>
+            <if test="transfername != null">
+                transfername = #{transfername,jdbcType=VARCHAR},
+            </if>
+            <if test="transfertime != null">
+                transfertime = #{transfertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="transferstoreid != null">
+                transferstoreid = #{transferstoreid,jdbcType=INTEGER},
+            </if>
+            <if test="transferareaid != null">
+                transferareaid = #{transferareaid,jdbcType=INTEGER},
+            </if>
+            <if test="receiveid != null">
+                receiveid = #{receiveid,jdbcType=INTEGER},
+            </if>
+            <if test="receivename != null">
+                receivename = #{receivename,jdbcType=VARCHAR},
+            </if>
+            <if test="receivetime != null">
+                receivetime = #{receivetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="receivestoreid != null">
+                receivestoreid = #{receivestoreid,jdbcType=INTEGER},
+            </if>
+            <if test="receiveareaid != null">
+                receiveareaid = #{receiveareaid,jdbcType=INTEGER},
+            </if>
+            <if test="correctnum != null">
+                correctnum = #{correctnum,jdbcType=INTEGER},
+            </if>
+            <if test="incorrectnum != null">
+                incorrectnum = #{incorrectnum,jdbcType=INTEGER},
+            </if>
+            <if test="returnnum != null">
+                returnnum = #{returnnum,jdbcType=INTEGER},
+            </if>
+            <if test="storeid != null">
+                storeid = #{storeid,jdbcType=INTEGER},
+            </if>
+            <if test="areaid != null">
+                areaid = #{areaid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="ctime != null">
+                ctime = #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mtime != null">
+                mtime = #{mtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.student.model.Transfertable">
+    update t_transfertable
+    set itemcount = #{itemcount,jdbcType=INTEGER},
+      localnum = #{localnum,jdbcType=INTEGER},
+      nolocalnum = #{nolocalnum,jdbcType=INTEGER},
+      transferid = #{transferid,jdbcType=INTEGER},
+      transfername = #{transfername,jdbcType=VARCHAR},
+      transfertime = #{transfertime,jdbcType=TIMESTAMP},
+      transferstoreid = #{transferstoreid,jdbcType=INTEGER},
+      transferareaid = #{transferareaid,jdbcType=INTEGER},
+      receiveid = #{receiveid,jdbcType=INTEGER},
+      receivename = #{receivename,jdbcType=VARCHAR},
+      receivetime = #{receivetime,jdbcType=TIMESTAMP},
+      receivestoreid = #{receivestoreid,jdbcType=INTEGER},
+      receiveareaid = #{receiveareaid,jdbcType=INTEGER},
+      correctnum = #{correctnum,jdbcType=INTEGER},
+      incorrectnum = #{incorrectnum,jdbcType=INTEGER},
+      returnnum = #{returnnum,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      areaid = #{areaid,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+
+    <update id="updateStoreReturnCount" parameterType="cn.com.liliyun.student.model.Transfertable">
+   UPDATE t_transfertable
+		SET 
+		correctnum = (SELECT count(1) FROM t_transfertable_item WHERE tableid = #{tableid,jdbcType=VARCHAR} AND STATUS = 0 ),
+		returnnum = (SELECT count(1) FROM t_transfertable_item WHERE tableid = #{tableid,jdbcType=VARCHAR} AND STATUS = 1),
+		status = 1 
+	WHERE tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+
+    <update id="updateAreaReturnCount" parameterType="cn.com.liliyun.student.model.Transfertable">
+    update t_transfertable
+    set 
+      correctnum = (SELECT count(1) FROM t_transfertable_item WHERE areatableid = #{tableid,jdbcType=VARCHAR} AND STATUS = 0 ),
+	  returnnum = (SELECT count(1) FROM t_transfertable_item WHERE areatableid = #{tableid,jdbcType=VARCHAR} AND STATUS = 1),
+      status = 3
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+</mapper>

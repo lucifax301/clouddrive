@@ -1,0 +1,219 @@
+
+	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>编辑渠道</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">一级渠道名称:</label>
+					<div class="row-input required">
+						<input type="text" name="channel" data-rule="required" maxlength="25" placeholder="请输入一级渠道名称">
+					</div>
+				</div>
+				
+				<div class="bjui-row col-4">
+				<label class="row-label">推荐属性:</label>
+				<div class="row-input">
+					<input type="radio" name="flag" value="coachflag" data-toggle="icheck" data-label="教练推荐">
+					<input type="radio" name="flag" value="staffflag" data-toggle="icheck" data-label="员工推荐">
+				</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="id" id="channelid" />
+	</form>
+<table id="datagrid-list" class="table table-bordered"></table>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="channel_edit.updateclasstype()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+		
+	</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	var channel_edit = {
+				data: [
+				],
+				list() {
+					$.CurrentNavtab.find('#datagrid-list').datagrid({
+						gridTitle: '二级渠道',
+						toolbarItem: 'add,edit',
+						paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+						height: '85%',
+						showCheckboxcol: true,
+						showToolbar: true,
+						data: channel_edit.data,
+						//dataUrl: config.openBasePath + 'class/list?classtypeid='+ $.CurrentNavtab.find('#classtypeid').val(),
+						columns: [
+							{ name: 'channel', label: '二级渠道名称', align: 'center' },
+							{ name: 'status', label: '状态', align: 'center',render: function(value) { return value==0 ? '启用':'禁用' }  },
+							{ name: 'op', label: '操作', align: 'center', render: channel_edit.classtypeOperation }
+						],
+						editMode: { dialog: { width: '700', height: '500', title: '二级渠道', mask: true ,
+							onClose:function(){
+								var pushdata = clz.getWindowJson()
+								if(pushdata && pushdata!=''){
+									console.log(channel_edit.editname)
+									channel_edit.removesame(channel_edit.editname)
+			    					channel_edit.removesame(pushdata.channel)
+									console.log(channel_edit.data)
+									channel_edit.data.push(pushdata)
+									console.log(channel_edit.data)
+									$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+										data:1
+									})//刷新
+									$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+										data:channel_edit.data
+									})//刷新
+								}
+							}
+						} },
+						beforeEdit: function() {
+							//window.class_type_object = class_type_list.list.data('selectedDatas') == null ? null : class_type_list.list.data('selectedDatas')[0];
+							channel_edit.editname = '';
+							return true;
+						},
+						add_url: 'html/market/channel-second-add.html',
+						edit_url: 'html/market/channel-second-edit.html',
+						delPK: 'id',
+						
+						paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					})
+				},
+				updateclasstype() {
+					if($.CurrentNavtab.find('#edit-form').isValid())
+					BJUI.alertmsg('confirm', '确认修改渠道吗？', {
+						okCall: function() {
+							var sdata=clz.parseForm($.CurrentNavtab.find("#edit-form"));
+							//var sdata=$.CurrentNavtab.find('#add-form').serializeArray()
+							if($.CurrentNavtab.find('input[name="flag"]:checked').val()){
+								sdata[$.CurrentNavtab.find('input[name="flag"]:checked').val()]=1
+							}
+							
+							console.log(JSON.stringify(channel_edit.data))
+							sdata.channels=JSON.stringify(channel_edit.data);
+							BJUI.ajax('doajax', {
+								url: config.openBasePath + 'saleschannel/update',
+								loadingmask: true,
+								data: sdata,
+								okCallback: function(json, options) {
+									BJUI.alertmsg('ok', '修改渠道成功！', {})
+									//$.CurrentNavtab.find("#classtypeid").val()
+									//BJUI.navtab('refresh')
+									//BJUI.dialog('closeCurrent')
+									BJUI.navtab('closeCurrentTab');
+								}
+							});
+						}
+					});
+				},
+				classtypeOperation(value,data){
+			        var html;
+			        if (data.status == 0) {
+			            html = "<button type='button' class='btn-red' onclick='channel_edit.disable("+JSON.stringify(data)+")'>停用</button>"
+			        } else {
+			            html = "<button type='button' class='btn-green' onclick='channel_edit.enable("+JSON.stringify(data)+")'>启用</button>"
+			        }
+			        html+='<button type="button" class="btn-red" onclick="channel_edit.remove(\''+data.channel+'\')">删除</button>'
+			        return html
+			    },
+			    remove(channel){
+			    	BJUI.alertmsg('confirm', '确认删除二级渠道吗？', {
+				okCall: function() {
+					setTimeout(function(){
+			    	channel_edit.removesame(channel)
+			    	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+						data:1
+					})//刷新
+					$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+						data:channel_edit.data
+					})//刷新
+					},500)
+					return 
+					}
+			})
+			   },
+			   removesame(channel){
+			   		$.each(channel_edit.data, function(i,m) {
+			    		if(this.channel == channel){
+			    			channel_edit.data[i] = null
+			    			channel_edit.data.splice(i,1)
+			    			return 
+			    		}
+			    	});
+			   },
+			   disable(data){
+			   	$.each(channel_edit.data, function(i,m) {
+			    		if(this.channel == data.channel){
+			    			channel_edit.data[i].status = 1
+			    			return 
+			    		}
+			    	});
+			   	console.log(channel_edit.data)
+			   	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+						data:channel_edit.data
+					})
+			   },
+			   enable(data){
+			   	$.each(channel_edit.data, function(i,m) {
+			    		if(this.channel == data.channel){
+			    			channel_edit.data[i].status = 0
+			    			return 
+			    		}
+			    	});
+			   	console.log(channel_edit.data)
+			   	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+						data:channel_edit.data
+					})
+			   }
+			}
+
+	clz.CurrentDom_init({
+		current:'Navtab',
+		url : config.openBasePath + 'coachSetting/updateTeachType',
+		form_name : 'edit-form',
+		data : window.channel_object,
+		before:function(data){
+			if(data.coachflag==1){
+				data.flag='coachflag'
+			}else if(data.staffflag==1){
+				data.flag='staffflag'
+			}
+			return data;
+		},
+		callback:function(data){
+			console.log(data);
+			
+			loadchannelinfo();
+			
+			channel_edit.list();
+		}
+	})
+	
+	function loadchannelinfo(){
+	BJUI.ajax('doajax', {
+		url: config.openBasePath + 'saleschannel/list?parentid='+ $.CurrentNavtab.find('#channelid').val(),
+		loadingmask: true,
+		async: false,
+		okCallback: function(json, options) {
+			//console.log(json.result.list)
+			if(json.result && json.result.list) {
+				
+				channel_edit.data=json.result.list;
+				
+			}
+			
+		}
+	})
+	}
+
+
+	
+	
+	
+	
+</script>

@@ -1,0 +1,59 @@
+<div class="bjui-pageContent">
+        <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentDialog.find('#transfer-add-students')}">
+            <fieldset>
+                <legend style="font-weight:normal;">学员搜索：</legend>
+                <div class="bjui-row col-4">
+                    <label class="row-label">学员姓名：</label>
+                    <div class="row-input">
+                        <input type="text" name="name">
+                    </div>
+                    <label class="row-label">证件号码：</label>
+                    <div class="row-input">
+                        <input type="text" name="idcard">
+                    </div>
+                    <label class="row-label">手机号码：</label>
+                    <div class="row-input">
+                        <input type="text" name="phone">
+                    </div>
+                    <label class="row-label"></label>
+                    <div class="row-input">
+                        <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+                        <button type="reset" class="btn-blue" data-icon="times">重置</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <table id="transfer-add-students" class="table table-bordered"></table>
+    <div class="c-bottom-button mt7">
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="add_students()">确定</button></li>
+    </div>
+</div>
+
+        <script type="text/javascript">
+            var maxable = $.CurrentDialog.find('#transfer-add-students').datagrid({
+                gridTitle : null,
+                height: '75%',
+                showEditbtnscol:false,
+                paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+                dataUrl:config.openBasePath + 'transferStudent/students',
+                columns: [
+                    {name:'name',label:'学员姓名',align:'center'},
+                    {name:'storeid',label:'门店',align:'center',render: formatStoreCell},
+                    {name:'idcard',label:'证件号码',align:'center'},
+                    {name:'phone',label:'学员手机',align:'center'}
+                ],
+                editMode:false
+            });
+
+            function add_students() {
+                var data = $.CurrentDialog.find('#transfer-add-students').data('selectedDatas');
+                if (data  == null || data.length == 0) {
+                    BJUI.alertmsg('error', '没有选中任何学员！', {
+                    });
+                    return;
+                }
+                clz.setWindowJson(data);
+                BJUI.dialog('closeCurrent')
+            }
+        </script>

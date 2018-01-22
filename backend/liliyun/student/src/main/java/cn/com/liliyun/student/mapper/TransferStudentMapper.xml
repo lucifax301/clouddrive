@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.student.mapper.TransferStudentMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.TransferStudent" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="studentId" property="studentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="studentNum" property="studentnum" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="fromAreaId" property="fromareaid" jdbcType="INTEGER" />
+    <result column="fromStoreId" property="fromstoreid" jdbcType="INTEGER" />
+    <result column="fromStoreNum" property="fromstorenum" jdbcType="VARCHAR" />
+    <result column="targetAreaId" property="targetareaid" jdbcType="INTEGER" />
+    <result column="targetStoreId" property="targetstoreid" jdbcType="INTEGER" />
+    <result column="targetStoreNum" property="targetstorenum" jdbcType="VARCHAR" />
+    <result column="isOutArea" property="isoutarea" jdbcType="TINYINT" />
+    <result column="fileTransferType" property="filetransfertype" jdbcType="TINYINT" />
+    <result column="transferNo" property="transferno" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="reviewId" property="reviewid" jdbcType="INTEGER" />
+    <result column="reviewname" property="reviewname" jdbcType="VARCHAR" />
+    <result column="reviewTime" property="reviewtime" jdbcType="TIMESTAMP" />
+    <result column="reviewRemark" property="reviewremark" jdbcType="VARCHAR" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, studentId, name, studentNum, idcard, fromAreaId, fromStoreId, fromStoreNum, targetAreaId, 
+    targetStoreId, targetStoreNum, isOutArea, fileTransferType, transferNo, state, reason, 
+    cuid, cname, ctime, mtime, reviewId, reviewname, reviewTime, reviewRemark, businessid, 
+    transactionid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.student.model.TransferStudent" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_transfer_student
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.student.model.TransferStudent" >
+    delete from t_transfer_student
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.student.model.TransferStudent" >
+    insert into t_transfer_student (id, studentId, name, 
+      studentNum, idcard, fromAreaId, 
+      fromStoreId, fromStoreNum, targetAreaId, 
+      targetStoreId, targetStoreNum, isOutArea, 
+      fileTransferType, transferNo, state, 
+      reason, cuid, cname, 
+      ctime, mtime, reviewId, 
+      reviewname, reviewTime, reviewRemark, 
+      businessid, transactionid)
+    values (#{id,jdbcType=INTEGER}, #{studentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{studentnum,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{fromareaid,jdbcType=INTEGER}, 
+      #{fromstoreid,jdbcType=INTEGER}, #{fromstorenum,jdbcType=VARCHAR}, #{targetareaid,jdbcType=INTEGER}, 
+      #{targetstoreid,jdbcType=INTEGER}, #{targetstorenum,jdbcType=VARCHAR}, #{isoutarea,jdbcType=TINYINT}, 
+      #{filetransfertype,jdbcType=TINYINT}, #{transferno,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{reason,jdbcType=VARCHAR}, #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP}, #{reviewid,jdbcType=INTEGER}, 
+      #{reviewname,jdbcType=VARCHAR}, #{reviewtime,jdbcType=TIMESTAMP}, #{reviewremark,jdbcType=VARCHAR}, 
+      #{businessid,jdbcType=VARCHAR}, #{transactionid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.student.model.TransferStudent" >
+    insert into t_transfer_student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="studentid != null" >
+        studentId,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="studentnum != null" >
+        studentNum,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="fromareaid != null" >
+        fromAreaId,
+      </if>
+      <if test="fromstoreid != null" >
+        fromStoreId,
+      </if>
+      <if test="fromstorenum != null" >
+        fromStoreNum,
+      </if>
+      <if test="targetareaid != null" >
+        targetAreaId,
+      </if>
+      <if test="targetstoreid != null" >
+        targetStoreId,
+      </if>
+      <if test="targetstorenum != null" >
+        targetStoreNum,
+      </if>
+      <if test="isoutarea != null" >
+        isOutArea,
+      </if>
+      <if test="filetransfertype != null" >
+        fileTransferType,
+      </if>
+      <if test="transferno != null" >
+        transferNo,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="reviewid != null" >
+        reviewId,
+      </if>
+      <if test="reviewname != null" >
+        reviewname,
+      </if>
+      <if test="reviewtime != null" >
+        reviewTime,
+      </if>
+      <if test="reviewremark != null" >
+        reviewRemark,
+      </if>
+      <if test="businessid != null" >
+        businessid,
+      </if>
+      <if test="transactionid != null" >
+        transactionid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="studentid != null" >
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="studentnum != null" >
+        #{studentnum,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="fromareaid != null" >
+        #{fromareaid,jdbcType=INTEGER},
+      </if>
+      <if test="fromstoreid != null" >
+        #{fromstoreid,jdbcType=INTEGER},
+      </if>
+      <if test="fromstorenum != null" >
+        #{fromstorenum,jdbcType=VARCHAR},
+      </if>
+      <if test="targetareaid != null" >
+        #{targetareaid,jdbcType=INTEGER},
+      </if>
+      <if test="targetstoreid != null" >
+        #{targetstoreid,jdbcType=INTEGER},
+      </if>
+      <if test="targetstorenum != null" >
+        #{targetstorenum,jdbcType=VARCHAR},
+      </if>
+      <if test="isoutarea != null" >
+        #{isoutarea,jdbcType=TINYINT},
+      </if>
+      <if test="filetransfertype != null" >
+        #{filetransfertype,jdbcType=TINYINT},
+      </if>
+      <if test="transferno != null" >
+        #{transferno,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewid != null" >
+        #{reviewid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewname != null" >
+        #{reviewname,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null" >
+        #{reviewtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewremark != null" >
+        #{reviewremark,jdbcType=VARCHAR},
+      </if>
+      <if test="businessid != null" >
+        #{businessid,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        #{transactionid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.student.model.TransferStudent" >
+    update t_transfer_student
+    <set >
+      <if test="studentid != null" >
+        studentId = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="studentnum != null" >
+        studentNum = #{studentnum,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="fromareaid != null" >
+        fromAreaId = #{fromareaid,jdbcType=INTEGER},
+      </if>
+      <if test="fromstoreid != null" >
+        fromStoreId = #{fromstoreid,jdbcType=INTEGER},
+      </if>
+      <if test="fromstorenum != null" >
+        fromStoreNum = #{fromstorenum,jdbcType=VARCHAR},
+      </if>
+      <if test="targetareaid != null" >
+        targetAreaId = #{targetareaid,jdbcType=INTEGER},
+      </if>
+      <if test="targetstoreid != null" >
+        targetStoreId = #{targetstoreid,jdbcType=INTEGER},
+      </if>
+      <if test="targetstorenum != null" >
+        targetStoreNum = #{targetstorenum,jdbcType=VARCHAR},
+      </if>
+      <if test="isoutarea != null" >
+        isOutArea = #{isoutarea,jdbcType=TINYINT},
+      </if>
+      <if test="filetransfertype != null" >
+        fileTransferType = #{filetransfertype,jdbcType=TINYINT},
+      </if>
+      <if test="transferno != null" >
+        transferNo = #{transferno,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewid != null" >
+        reviewId = #{reviewid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewname != null" >
+        reviewname = #{reviewname,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null" >
+        reviewTime = #{reviewtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewremark != null" >
+        reviewRemark = #{reviewremark,jdbcType=VARCHAR},
+      </if>
+      <if test="businessid != null" >
+        businessid = #{businessid,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        transactionid = #{transactionid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.student.model.TransferStudent" >
+    update t_transfer_student
+    set studentId = #{studentid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      studentNum = #{studentnum,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      fromAreaId = #{fromareaid,jdbcType=INTEGER},
+      fromStoreId = #{fromstoreid,jdbcType=INTEGER},
+      fromStoreNum = #{fromstorenum,jdbcType=VARCHAR},
+      targetAreaId = #{targetareaid,jdbcType=INTEGER},
+      targetStoreId = #{targetstoreid,jdbcType=INTEGER},
+      targetStoreNum = #{targetstorenum,jdbcType=VARCHAR},
+      isOutArea = #{isoutarea,jdbcType=TINYINT},
+      fileTransferType = #{filetransfertype,jdbcType=TINYINT},
+      transferNo = #{transferno,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      reason = #{reason,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      reviewId = #{reviewid,jdbcType=INTEGER},
+      reviewname = #{reviewname,jdbcType=VARCHAR},
+      reviewTime = #{reviewtime,jdbcType=TIMESTAMP},
+      reviewRemark = #{reviewremark,jdbcType=VARCHAR},
+      businessid = #{businessid,jdbcType=VARCHAR},
+      transactionid = #{transactionid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByModel" resultMap="BaseResultMap" parameterType="cn.com.liliyun.student.model.TransferStudent">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_transfer_student
+    where state != 0
+      <if test="studentid != null" >
+        and studentId = #{studentid,jdbcType=INTEGER}
+      </if>
+      <if test="name != null and name != ''" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="studentnum != null and studentnum != ''" >
+        and studentNum = #{studentnum,jdbcType=VARCHAR}
+      </if>
+      <if test="idcard != null and idcard != ''" >
+        and idcard = #{idcard,jdbcType=VARCHAR}
+      </if>
+      <if test="fromareaid != null" >
+        and fromAreaId = #{fromareaid,jdbcType=INTEGER}
+      </if>
+      <if test="fromstoreid != null" >
+        and fromStoreId = #{fromstoreid,jdbcType=INTEGER}
+      </if>
+      <if test="fromstorenum != null and fromstorenum != ''" >
+        and fromStoreNum = #{fromstorenum,jdbcType=VARCHAR}
+      </if>
+      <if test="targetareaid != null" >
+        and targetAreaId = #{targetareaid,jdbcType=INTEGER}
+      </if>
+      <if test="targetstoreid != null" >
+        and targetStoreId = #{targetstoreid,jdbcType=INTEGER}
+      </if>
+      <if test="targetstorenum != null and targetstorenum != ''" >
+        and targetStoreNum = #{targetstorenum,jdbcType=VARCHAR}
+      </if>
+      <if test="isoutarea != null" >
+        and isOutArea = #{isoutarea,jdbcType=TINYINT}
+      </if>
+      <if test="filetransfertype != null" >
+        and fileTransferType = #{filetransfertype,jdbcType=TINYINT}
+      </if>
+      <if test="transferno != null and transferno != ''" >
+        and transferNo = #{transferno,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null" >
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="reason != null" >
+        and reason = #{reason,jdbcType=VARCHAR}
+      </if>
+      <if test="cuid != null" >
+        and cuid = #{cuid,jdbcType=INTEGER}
+      </if>
+      <if test="cname != null" >
+        and cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        and ctime = #{ctime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mtime != null" >
+        and mtime = #{mtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="reviewid != null" >
+        and reviewId = #{reviewid,jdbcType=INTEGER}
+      </if>
+      <if test="reviewname != null" >
+        and reviewname = #{reviewname,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null" >
+        and reviewTime = #{reviewtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="reviewremark != null" >
+        and reviewRemark = #{reviewremark,jdbcType=VARCHAR}
+      </if>
+      <if test="transactionid != null" >
+        and transactionid = #{transactionid,jdbcType=VARCHAR}
+      </if>
+	order by id desc
+  </select>
+  <select id="selectTransferList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.student.model.TransferStudent">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_transfer_student
+    where state != 0
+      <if test="studentid != null" >
+        and studentId = #{studentid,jdbcType=INTEGER}
+      </if>
+      <if test="name != null and name != ''" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="studentnum != null and studentnum != ''" >
+        and studentNum = #{studentnum,jdbcType=VARCHAR}
+      </if>
+      <if test="idcard != null and idcard != ''" >
+        and idcard = #{idcard,jdbcType=VARCHAR}
+      </if>
+      <if test="isoutarea != null" >
+        and isOutArea = #{isoutarea,jdbcType=TINYINT}
+      </if>
+      <if test="filetransfertype != null" >
+        and fileTransferType = #{filetransfertype,jdbcType=TINYINT}
+      </if>
+      <if test="transferno != null and transferno != ''" >
+        and transferNo = #{transferno,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null" >
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="reason != null" >
+        and reason = #{reason,jdbcType=VARCHAR}
+      </if>
+      <if test="cuid != null" >
+        and cuid = #{cuid,jdbcType=INTEGER}
+      </if>
+      <if test="cname != null" >
+        and cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        and ctime = #{ctime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mtime != null" >
+        and mtime = #{mtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="reviewid != null" >
+        and reviewId = #{reviewid,jdbcType=INTEGER}
+      </if>
+      <if test="reviewname != null" >
+        and reviewname = #{reviewname,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null" >
+        and reviewTime = #{reviewtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="reviewremark != null" >
+        and reviewRemark = #{reviewremark,jdbcType=VARCHAR}
+      </if>
+      <if test="transactionid != null" >
+        and transactionid = #{transactionid,jdbcType=VARCHAR}
+      </if>
+      <if test="fromareaid != null or fromstoreid != null or targetareaid != null or targetstoreid != null">
+	      and ( 1 = 0 
+	      <trim prefix="or (" suffix=")" prefixOverrides="and" >
+		      <if test="fromareaid != null" >
+		        fromAreaId = #{fromareaid,jdbcType=INTEGER}
+		      </if>
+		      <if test="fromstoreid != null" >
+		        and fromStoreId = #{fromstoreid,jdbcType=INTEGER}
+		      </if>
+		  </trim>
+		  <trim prefix="or (" suffix=")" prefixOverrides="and" >
+		      <if test="targetareaid != null" >
+		        targetAreaId = #{targetareaid,jdbcType=INTEGER}
+		      </if>
+		      <if test="targetstoreid != null" >
+		        and targetStoreId = #{targetstoreid,jdbcType=INTEGER}
+		      </if>
+		  </trim>
+      		)
+      </if>
+      <if test="isChosen != null and isChosen == 1">
+      	and (
+      		<trim prefix="" suffix="" prefixOverrides="and" >
+		      <if test="fromareaid != null" >
+		        fromAreaId = #{fromareaid,jdbcType=INTEGER}
+		      </if>
+		      <if test="fromstoreid != null" >
+		        and fromStoreId = #{fromstoreid,jdbcType=INTEGER}
+		      </if>
+		  	</trim>
+      	)
+      </if>
+	order by id desc
+  </select>
+</mapper>

@@ -1,0 +1,78 @@
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del,save',
+        height: '95%',
+        paging : false,
+        showCheckboxcol: true,
+        showToolbar: true,
+        data : [],
+        inlineEditMult : true,
+        saveAll : true,
+        showLinenumber : false,
+        editUrl : config.openBasePath + 'transfertable/tablereturn',
+        columns: [
+            {name:'name',label:'姓名',align:'center',width:'15%' },
+            {name:'idcard',label:'证件号码',align:'center',attrs:{readonly:'readonly'},rule:'required',width:'25%' },
+            {name:'rtnreason',label:'退表原因',align:'center',width:'45%' },
+            {name:'id',hide:true},
+            {name:'studentid',align:'center',hide:true}
+        ],
+        afterSave : function () {
+            BJUI.dialog('closeCurrent');
+            license_transfertable_list.datagrid("refresh",true);
+        }
+    });
+
+    $(document).on("change","[name='name']",function(){
+        if ($.trim($(this).val()) == "") {
+            return;
+        }
+        var nameobj = $(this).parent().nextAll("td");
+        var idcard = nameobj.find("input[name='idcard']");
+        var itemid = nameobj.find("input[name='id']");
+        var studentid = nameobj.find("input[name='studentid']");
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'transfertable/itemlist',
+            data : {
+                name : $(this).val(),
+                status : 0
+            },
+            type : 'GET',
+            okCallback: function(json, options) {
+                var items = json.result.list;
+                if (items.length == 0) {
+                    idcard.val("未知学员");
+                } else {
+                    if (items.length > 1) {
+                        var data = {};
+                        data.students = items;
+                        data.idcardObj = idcard;
+                        data.itemidObj = itemid;
+                        clz.setWindowJson(data);
+                        BJUI.dialog({
+                            id:'dialog-multi-student',
+                            url:'html/license/transfertable/multi-student-list.html',
+                            title:'重名学员列表',
+                            width: 400,
+                            height: 300,
+                            mask: true,
+                            maxable : false,
+                            resizable: false
+                        });
+                    } else {
+                        idcard.val(items[0].idcard);
+                        idcard.change();
+                        itemid.val(items[0].id);
+                        itemid.change();
+                        studentid.val(items[0].studentid);
+                        studentid.change();
+                    }
+                }
+            }
+        });
+    })
+</script>
+    

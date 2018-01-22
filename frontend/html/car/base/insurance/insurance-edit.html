@@ -1,0 +1,218 @@
+<div class="bjui-pageContent">
+    <div class="">
+       <form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+			<input type="hidden" name="id">
+			<div style="background-color:#eee; padding:1px;"></div>
+			<div class="bjui-row col-3">
+						<label class="row-label">保险种类</label>
+            <div class="row-input fill-3 required">    
+            	<div class="c-output-checkbox  col-4">   
+                <li><input type="checkbox" name="type" data-toggle="icheck" id="ti1" value="1" data-label="车船费"></li>
+                <li><input type="checkbox" name="type" data-toggle="icheck" id="ti2" value="2" data-label="交强险"></li>
+                <li><input type="checkbox" name="type" data-toggle="icheck" id="ti3" value="3" data-label="商业险"></li>
+               </div>
+            </div>          
+            <label class="row-label">保险性质</label>
+            <div class="row-input fill-3 required">  
+                <select name="nature" id="nature" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="1">长训教学</option>
+                    <option value="2">场内教学</option>
+                    <option value="3">场外教学</option>
+                </select>
+            </div>
+             <label class="row-label">赔付额度</label>
+            <div class="row-input fill-3 required">
+            	  <div class="c-output-checkbox  col-4">            			
+            		<li><input type="checkbox" name="paid"  data-toggle="icheck" id="i1" value="1" data-label="玻璃险"></li>
+               		<li><input type="checkbox" name="paid"  data-toggle="icheck" id="i2" value="2" data-label="车损"></li>
+               		<li><input type="checkbox" name="paid"  data-toggle="icheck" id="i3" value="5" data-label="盗抢险"></li>
+                </div>
+                <div class="c-output-checkbox  col-4">
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i4" value="6" data-label="第三者10万"></li>
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i5" value="7" data-label="第三者30万"></li>
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i6" value="8" data-label="第三者50万"></li>
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i7" value="9" data-label="第三者100万"></li>
+                </div>
+               <div class="c-output-checkbox  col-4">
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i8" value="3" data-label="乘客4座*10万"></li>
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i9" value="4" data-label="乘客4座*20万"></li>
+               </div>
+               <div class="c-output-checkbox  col-4">
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i10" value="10" data-label="司机2万"></li>
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i11" value="11" data-label="司机5万"></li>
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i12" value="12" data-label="司机10万"></li>
+	                <li><input type="checkbox" name="paid"  data-toggle="icheck" id="i13" value="13" data-label="司机20万"></li>
+              </div>
+            </div>
+     </div>
+     <div class="bjui-row col-3">  
+            <label class="row-label">商业投保时间</label>
+            <div class="row-input required">
+                <input type="text" name="busrisksDate" id="busrisksDate" data-toggle="datepicker" data-rule="required;pattern(yyyy-MM-dd)">
+            </div>  
+             <label class="row-label">商业险保单号</label>
+            <div class="row-input required">
+                <input type="text" name="busrisksNo" id="busrisksNo" data-rule="required" maxlength="30">
+            </div>
+             <label class="row-label">商业险毛费金额(元)</label>
+            <div class="row-input required">
+                <input type="text" name="busrisksFee" id="busrisksFee" data-rule="required;length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">商业险返还率(%)</label>
+            <div class="row-input required">
+                <input type="text" name="busrisksRates" id="busrisksRates" data-rule="required" maxlength="2">
+            </div>
+             <label class="row-label">商业返还金额(元)</label>
+            <div class="row-input">
+                <input type="text" name="busrisksRfee" id="busrisksRfee" data-rule="length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">商业险实付保费(元)</label>
+            <div class="row-input">
+                <input type="text" name="busrisksPay" id="busrisksPay" data-rule="length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">商业险开始时间</label>
+            <div class="row-input required">
+                <input type="text" name="busrisksStime" id="busrisksStime" data-toggle="datepicker" data-rule="required;pattern(yyyy-MM-dd)">
+            </div>
+             <label class="row-label">商业险结束时间</label>
+            <div class="row-input required">
+                <input type="text" name="busrisksEtime" id="busrisksEtime" data-toggle="datepicker" data-rule="required;pattern(yyyy-MM-dd)">
+            </div>
+             <label class="row-label">交强险投保时间</label>
+            <div class="row-input required">
+                <input type="text" name="saliDate" id="saliDate" data-toggle="datepicker" data-rule="required;pattern(yyyy-MM-dd)">
+            </div>
+             <label class="row-label">交强险保单号</label>
+            <div class="row-input">
+                <input type="text" name="saliNo" id="saliNo" data-rule="" maxlength="30">
+            </div>
+             <label class="row-label">交强险毛费金额(元)</label>
+            <div class="row-input required">
+                <input type="text" name="saliFee" id="saliFee" data-rule="required;length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">交强险返还率(%)</label>
+            <div class="row-input required">
+                <input type="text" name="saliRates" id="saliRates" data-rule="required" maxlength="2">
+            </div>
+             <label class="row-label">交强险返还金额(元)</label>
+            <div class="row-input">
+                <input type="text" name="saliRfee" id="saliRfee" data-rule="length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">交强险实付保费(元)</label>
+            <div class="row-input">
+                <input type="text" name="saliPay" id="saliPay" data-rule="length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">交强险开始时间</label>
+            <div class="row-input">
+                <input type="text" name="saliStime" id="saliStime" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+            </div>
+             <label class="row-label">交强险结束时间</label>
+            <div class="row-input">
+                <input type="text" name="saliEtime" id="saliEtime" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+            </div>
+             <label class="row-label">车船税金额(元)</label>
+            <div class="row-input required">
+                <input type="text" name="taxFee" id="taxFee" data-rule="required;length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">实付保险合计(元)</label>
+            <div class="row-input">
+                <input type="text" name="insurePay" id="insurePay" data-rule="length[1~8];digits" maxlength="8">
+            </div>
+             <label class="row-label">保险公司</label>
+            <div class="row-input required">
+                <select name="insureCompanyid" id="insureCompanyid" data-toggle="selectpicker" data-width="100%" data-rule="required"  data-dataurl="/httpaccess/insurancecorp/validList" data-optiontype="id,name">
+                    <!--<option value="1">鼎和保险公司</option>
+                    <option value="2">平安保险公司</option>
+                    <option value="3">人保保险公司</option>
+                    <option value="4">永城保险公司</option>-->
+                </select>
+                <input type="hidden" name="insureCompany" id="insureCompany"/>
+            </div>
+            <label class="row-label">经办人</label>
+            <div class="row-input required">
+                <input type="text" name="cname" id="cname" data-rule="required" maxlength="10">
+            </div>   
+             <label class="row-label">报账日期</label>
+            <div class="row-input">
+                <input type="text" name="accountDate" id="accountDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+            </div>        
+            <label class="row-label">备注</label>
+            <div class="row-input fill-2 ">
+                <input type="text" name="remark" id="remark" data-rule="" maxlength="100">
+            </div>
+       </div>
+     </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="submit" class="btn-default" data-icon="save">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current:'Dialog',
+		url : config.openBasePath + 'car/updateCarInsurance',
+		form_name : 'edit-form',
+		table_name : 'insurance-datagrid',
+		timetype:[
+      {
+        name:'busrisksDate',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'busrisksStime',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'busrisksEtime',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'saliDate',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'saliStime',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'saliEtime',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'accountDate',
+        type:'yyyy-MM-dd'
+      }
+    ],
+    callback:function(data){    	
+	    	var paid = data.paid.split(',');
+	    	//console.log(paid)
+	    	$.CurrentDialog.find('[name="paid"]').each(function(){
+	    		var val = $(this).val();
+	    		var checkbox = $(this);
+	    		$.each(paid,function(i,m){
+	    			if(m==val){    				
+	    				checkbox.attr('checked','checked');
+	    			}
+	    		})
+	    	})
+	    	
+	    	var typeval = data.type.split(',');    	
+	    	console.log(typeval)
+	    	$.CurrentDialog.find('[name="type"]').each(function(){
+	    		var val = $(this).val();
+	    		var checkbox = $(this);
+	    		$.each(typeval,function(i,m){
+	    			if(m==val){    				
+	    				checkbox.attr('checked','checked');
+	    			}
+	    		})
+	    	})
+	    	$.CurrentDialog.find('[name="insureCompanyid"]').change(function(){
+	    		$.CurrentDialog.find('[name="insureCompany"]').val($(this).find('option:selected').text())
+	    	})
+    }
+	})	
+</script>

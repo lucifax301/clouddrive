@@ -1,0 +1,400 @@
+<div class="bjui-pageContent" id="parent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>新增营销活动</h5>
+			</div>
+			<div class="widget-content nopadding">
+		<div class="bjui-row col-4">
+
+			<label class="row-label">活动名称:</label>
+			<div class="row-input required">
+				<input type="text" name="activityname" id="activityname" data-width="100%" data-rule="required" placeholder="请输入活动名称">
+			</div>
+			<br>
+			<label class="row-label">活动时间:</label>
+			<div class="row-input fill-2 required">
+				<div class="w-45 fl">
+					<input type="text" id="begindate" name="begindate" readonly="readonly" data-width="100%"  data-toggle="datepicker" data-rule="required" placeholder="点击选择开始日期" onchange="onchangeBegindate(this)"> 
+				</div>
+				<span class="w-10 block fl text-center">-</span>
+				<div class="w-45 fl">
+					<input type="text" id="enddate" name="enddate" readonly="readonly" data-width="100%" onchange="market_sales_add.checkddate(this)" data-toggle="datepicker" data-rule="required" placeholder="点击选择结束日期">
+				</div>
+			</div>
+			<br>
+			<label class="row-label">活动开关:</label>
+			<div class="row-input">
+				<input type="radio" name="actstatus" value="0" data-toggle="icheck" data-label="启动" checked>
+				<input type="radio" name="actstatus" value="1" data-toggle="icheck" data-label="关闭">
+			</div>
+			<br>
+			<label class="row-label">活动班别优惠:</label>
+			<div class="row-input fill-2 required">
+				<input type="radio" name="timeType" value="0" data-toggle="icheck" data-label="活动期间统一优惠方案" checked>
+				<input type="radio" name="timeType" value="1" data-toggle="icheck" data-label="活动期间分时段设置优惠方案">
+			</div>
+			<br>
+			
+			<div class='timeInterval' style="display: none;">
+				<label class="row-label"></label>
+		
+				<div class="row-input fill-2 ">
+					<div class="w-15 fl">
+						活动子时段1：
+					</div>
+					<div class="w-30 fl" disabled="disabled" >
+						<input type="text" id="timeOneBegindate" name="timeOneBegindate" readonly="readonly" data-width="100%"   data-rule="lessThan[timeOneEnddate,'下一时间点']"> 
+					</div>
+					<span class="w-5 block fl text-center">-</span>
+					<div class="w-30 fl">
+						<input type="text" id="timeOneEnddate" name="timeOneEnddate" readonly="readonly" data-width="100%" data-toggle="datepicker" placeholder="点击选择结束日期" data-rule="lessThan[enddate,'活动结束时间'];greaterThan[timeOneBegindate,'上一时间点']">
+					</div>
+				</div></br>
+				<label class="row-label"></label>
+		
+				<div class="row-input fill-2 ">
+					<div class="w-15 fl">
+						活动子时段2：
+					</div>
+					<div class="w-30 fl">
+						<input type="text" id="timeTwoBegindate" name="timeTwoBegindate" readonly="readonly" data-width="100%"  data-toggle="datepicker"  placeholder="点击选择开始日期" data-rule="lessThan[timeTwoEnddate,'下一时间点'];greaterThan[timeOneEnddate,'上一时间点']"> 
+					</div>	
+					<span class="w-5 block fl text-center">-</span>
+					<div class="w-30 fl">
+						<input type="text" id="timeTwoEnddate" name="timeTwoEnddate" readonly="readonly" data-width="100%"  data-toggle="datepicker"  placeholder="点击选择结束日期" data-rule="lessThan[enddate,'活动结束时间'];greaterThan[timeTwoBegindate,'上一时间点']">
+					</div>
+				</div><br>
+				<div class="row-label"><input type="checkbox" name="useTimeThreeFlag" value="0" onclick="onClickHander(this)"></div>
+				<div class="row-input fill-2 ">
+		
+					<div class="w-15 fl">
+						活动子时段3：
+					</div>
+					<div class="w-30 fl">
+						<input type="text" id="timeThreeBegindate" name="timeThreeBegindate" readonly="readonly" data-width="100%"  data-toggle="datepicker"  placeholder="点击选择开始日期" data-rule="lessThan[timeThreeEnddate,'下一时间点'];greaterThan[timeTwoEnddate,'上一时间点']"> 
+					</div>
+					<span class="w-5 block fl text-center">-</span>
+					<div class="w-30 fl">
+						<input type="text" id="timeThreeEnddate" name="timeThreeEnddate" readonly="readonly" data-width="100%" " data-toggle="datepicker"  placeholder="点击选择结束日期" data-rule="lessThan[enddate,'活动结束时间'];greaterThan[timeThreeBegindate,'上一时间点']">
+					</div>
+				</div>	
+			</div>
+			
+		</div>
+		</div></div>
+	</form>
+	<div>温馨提示：没有输入优惠额即此班别没有优惠金额。</div>
+	<!--<form class="datagrid-edit-form" data-toggle="validate" id="add-form"></form>-->
+	<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">	
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="market_sales_add.save()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+	</ul>
+	</div>
+</div>
+
+<script>
+	var market_sales_add = {
+			class: [],
+					init() {
+						$.CurrentNavtab.find('#datagrid-list').datagrid({
+						//paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+						paging:false,
+						gridTitle: '活动班别',
+						height: '70%',
+						showCheckboxcol: false,
+						showToolbar: false,
+						dataUrl: config.openBasePath + 'sales/listAllClassType',
+						columns: [
+							{ name: 'classtype', label: '班型', align: 'center' },
+							{ name: 'name', label: '班别', align: 'center' },
+							{ name: 'c1amount', label: 'C1原价', align: 'center',render: function(value,data) {
+									return data.c1flag!=1?'未开车型':value
+								} },
+							{
+								name: 'classname',
+								label: 'C1优惠额',
+								align: 'center',
+								render: function(value,data) {
+									return data.c1flag!=1?'<input type="text" name="c1price" disabled="disabled">':'<input type="hidden" value="'+data.c1amount+'"/><input type="text" name="c1price" placeholder="0" data-rule="required;digits">'
+								}
+							},
+							{ name: 'c2amount', label: 'C2原价', align: 'center',render: function(value,data) {
+									return data.c2flag!=1?'未开车型':value
+								}},
+							{
+								name: 'classname',
+								label: 'C2优惠额',
+								align: 'center',
+								render: function(value,data) {
+									return data.c2flag!=1?'<input type="text" name="c2price" disabled="disabled">':'<input type="hidden" value="'+data.c2amount+'"/><input type="text" name="c2price" placeholder="0" data-rule="required;digits">'
+								}
+							},
+							],
+							editMode: { navtab: { id: 'add_customerrecord', title: '新增客户服务记录', onClose: function() { record_list.datagrid('refresh', true); } } },
+							add_url: "html/customer/servicerecord/service-add.html",
+							initcallback(){
+								$.CurrentNavtab.find('#datagrid-list').find("input").each(function(){
+					
+									//ie
+									$(this).bind("propertychange", function() { 
+										 console.log($(this).val())
+									}); 
+									//chrome
+									$(this).bind("change", function() { 
+									 console.log($(this).val())
+									}); 
+									$(this).bind("keyup", function() { 
+									 	$(this).val($(this).val().replace(/\D/g,''));
+									 	if($(this).val()!=''){
+										 	if(parseInt($(this).val())>=parseInt($(this).prev("input").val())){
+										 		$(this).val($(this).val().substring(0,$(this).val().length-1))
+										 	}
+									 	}
+									});
+									
+								})
+							}
+							});
+
+							$('textarea').bind('input propertychange', function() {
+							    $('.msg').html($(this).val().length + ' characters');
+							});			
+					},
+					timeinit() {
+						$.CurrentNavtab.find('#datagrid-list').datagrid({
+						//paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+						paging:false,
+						gridTitle: '活动班别',
+						height: '70%',
+						showCheckboxcol: false,
+						showToolbar: false,
+						dataUrl: config.openBasePath + 'sales/listAllClassType',
+						columns: [
+//							{ name: 'classtype', label: '班型', align: 'center' },
+							{ name: 'name', label: '班别', align: 'center' },
+							{
+								label: 'C1',
+								align: 'center',
+								columns: [	
+										{ name: 'c1amount', label: 'C1原价', align: 'center',render: function(value,data) {
+											return data.c1flag!=1?'未开车型':value
+											} 
+										},	
+										{
+											name: 'classname',
+											label: 'C1时段1优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c1flag!=1?'<input type="text" name="c1price" disabled="disabled">':'<input type="hidden" value="'+data.c1amount+'"/><input type="text" name="c1timeOnePrice" placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C1时段2优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c1flag!=1?'<input type="text" name="c1price" disabled="disabled">':'<input type="hidden" value="'+data.c1amount+'"/><input type="text" name="c1timeTwoPrice" placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C1时段3优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c1flag!=1?'<input type="text" name="c1price" disabled="disabled">':'<input type="hidden" value="'+data.c1amount+'"/><input type="text" name="c1timeThreePrice" class="timeInterval3" readonly="readonly" placeholder="0" data-rule="required;digits">'
+											}
+										},
+								]
+							},
+
+							{
+								label: 'C2',
+								align: 'center',
+								columns: [	
+										{ name: 'c2amount', label: 'C2原价', align: 'center',render: function(value,data) {
+												return data.c2flag!=1?'未开车型':value
+											}},
+										{
+											name: 'classname',
+											label: 'C2时段1优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c2flag!=1?'<input type="text" name="c2price" disabled="disabled">':'<input type="hidden" value="'+data.c2amount+'"/><input type="text" name="c2timeOnePrice" placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C2时段2优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c2flag!=1?'<input type="text" name="c2price" disabled="disabled">':'<input type="hidden" value="'+data.c2amount+'"/><input type="text" name="c2timeTwoPrice" placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C2时段3优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c2flag!=1?'<input type="text" name="c2price" disabled="disabled">':'<input type="hidden" value="'+data.c2amount+'"/><input type="text"  class="timeInterval3"     readonly="readonly"  name="c2timeThreePrice" placeholder="0" data-rule="required;digits">'
+											}
+										},
+								]
+							},
+							],
+							editMode: { navtab: { id: 'add_customerrecord', title: '新增客户服务记录', onClose: function() { record_list.datagrid('refresh', true); } } },
+							add_url: "html/customer/servicerecord/service-add.html",
+							initcallback(){
+								$.CurrentNavtab.find('#datagrid-list').find("input").each(function(){
+					
+									//ie
+									$(this).bind("propertychange", function() { 
+										 console.log($(this).val())
+									}); 
+									//chrome
+									$(this).bind("change", function() { 
+									 console.log($(this).val())
+									}); 
+									$(this).bind("keyup", function() { 
+									 	$(this).val($(this).val().replace(/\D/g,''));
+									 	if($(this).val()!=''){
+										 	if(parseInt($(this).val())>=parseInt($(this).prev("input").val())){
+										 		$(this).val($(this).val().substring(0,$(this).val().length-1))
+										 	}
+									 	}
+									});
+									
+								})
+							}
+							});
+
+							$('textarea').bind('input propertychange', function() {
+							    $('.msg').html($(this).val().length + ' characters');
+							});			
+					},
+					savepauseapply() {
+						BJUI.alertmsg('confirm', '确认提交申请吗？', {
+							displayPosition: 'middlecenter',
+							okCall: function() {
+								BJUI.ajax('doajax', {
+									url: config.openBasePath + "/sales/add",
+									loadingmask: true,
+									data: $("#view-form").serializeArray(),
+									okCallback: function(json, options) {
+										//console.log(json.result.list)
+										BJUI.alertmsg('ok', '提交成功！', {})
+										BJUI.navtab('closeCurrentTab');
+									}
+								})
+							}
+						})
+
+					},
+					checkddate:function (e){
+						if($.CurrentNavtab.find('#begindate').val()>$.CurrentNavtab.find('#enddate').val()){
+							BJUI.alertmsg('info', '结束日期必须大于开始日期！', {})
+							$.CurrentNavtab.find('#enddate').val($.CurrentNavtab.find('#begindate').val())	
+						}
+						$.CurrentNavtab.find("#timeOneEnddate").val($(e).val());
+						console.log()
+					},
+					save() {
+						if($.CurrentNavtab.find('#add-form').isValid())
+						BJUI.alertmsg('confirm', '确认提交申请吗？', {
+							displayPosition: 'middlecenter',
+							okCall: function() {
+								var fromdata = clz.parseForm($.CurrentNavtab.find('#add-form'));
+								console.log(fromdata)
+								var tabledata = $.CurrentNavtab.find('#datagrid-list').data('allData');
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c1price"]'), function(i) {
+									tabledata[i].c1price = $(this).val()
+								})
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c2price"]'), function(i) {
+									tabledata[i].c2price = $(this).val()
+								})			
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c1timeOnePrice"]'), function(i) {
+									tabledata[i].c1timeOnePrice = $(this).val()
+								})	
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c1timeTwoPrice"]'), function(i) {
+									tabledata[i].c1timeTwoPrice = $(this).val()
+								})
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c1timeThreePrice"]'), function(i) {
+									tabledata[i].c1timeThreePrice = $(this).val()
+								})	
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c2timeOnePrice"]'), function(i) {
+									tabledata[i].c2timeOnePrice = $(this).val()
+								})	
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c2timeTwoPrice"]'), function(i) {
+									tabledata[i].c2timeTwoPrice = $(this).val()
+								})
+								$.each($.CurrentNavtab.find('#datagrid-list input[name="c2timeThreePrice"]'), function(i) {
+									tabledata[i].c2timeThreePrice = $(this).val()
+								})
+								fromdata.classinfos = JSON.stringify(tabledata);
+								console.log(fromdata)
+								BJUI.ajax('doajax', {
+									url: config.openBasePath + "/sales/add",
+									loadingmask: true,
+									data: fromdata,
+									okCallback: function(json, options) {
+										//console.log(json.result.list)
+										BJUI.alertmsg('ok', '提交成功！', {})
+										BJUI.navtab('closeCurrentTab');
+									}
+								})
+							}
+						})
+					}
+				}
+				clz.CurrentDom_init({
+					current: 'Navtab',
+					form_name: 'view-form',
+					url: config.openBasePath + 'student/assignCoach',
+				})
+
+				market_sales_add.init();
+
+				$.CurrentNavtab.find('input[name="timeType"]').on("ifChanged", function() {
+					BJUI.alertmsg('confirm', '是否切换活动班别优惠？切换后原数据不再保存', {
+						okCall: function() {
+							selectedvalue = $("input[name='timeType']:checked").val();
+					    	if(selectedvalue=='1'){
+					    		$(".timeInterval").show();
+						    	$.CurrentNavtab.find('#parent').children(".bjui-datagrid").remove();
+								$.CurrentNavtab.find('#parent').append('<table id="datagrid-list" class="table table-bordered"></table>');
+								market_sales_add.timeinit();
+					    	}else if(selectedvalue=='0'){
+					    		$(".timeInterval").hide();
+					    		$.CurrentNavtab.find('#parent').children(".bjui-datagrid").remove();
+								$.CurrentNavtab.find('#parent').append('<table id="datagrid-list" class="table table-bordered"></table>');
+								market_sales_add.init();
+					    	}
+						}
+					})	
+			    });	
+			    
+		        function onClickHander(obj){
+		            if(obj.checked){
+		            	obj.value=1
+		                $(".timeInterval3").each(function(){
+		                	$(this).removeAttr("readonly");
+		                });
+		            }else{
+		            	obj.value=0;
+		               	$(".timeInterval3").each(function(){
+		                	$(this).attr("readonly","readonly");
+		                });	      
+		            }	      
+		        }
+		        
+		        function onchangeBegindate(e){
+		        	$("#timeOneBegindate").val($(e).val());
+		        }
+			
+</script>

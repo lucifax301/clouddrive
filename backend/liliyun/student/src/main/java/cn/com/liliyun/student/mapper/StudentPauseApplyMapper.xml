@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.student.mapper.StudentPauseApplyMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.StudentPauseApply" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="applyuserid" property="applyuserid" jdbcType="INTEGER" />
+    <result column="pauseid" property="pauseid" jdbcType="INTEGER" />
+    <result column="studentid" property="studentid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="audituserid" property="audituserid" jdbcType="INTEGER" />
+    <result column="begindate" property="begindate" jdbcType="TIMESTAMP" />
+    <result column="enddate" property="enddate" jdbcType="TIMESTAMP" />
+    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="studentname" property="studentname" jdbcType="VARCHAR" />
+    <result column="applyexam" property="applyexam" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    a.id,a.businessid,a.transactionid,a.studentid,a.type,a.status,a.applyuserid,a.pauseid,a.audituserid,a.begindate,a.enddate,a.createdate,a.reason,a.remark,b.areaid,b.storeid,b.idcard,b.phone,b.name as studentname,b.applyexam
+  </sql>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.student.model.StudentPauseApply" >
+    insert into t_student_pauseresume_apply (businessid,transactionid,studentid,type,applyuserid,pauseid,begindate,enddate,createdate,reason,remark)
+    values (#{businessid},#{transactionid},#{studentid},#{type},#{applyuserid},#{pauseid},#{begindate},#{enddate},now(),#{reason},#{remark})
+  </insert>
+  
+  <select id="count" parameterType="cn.com.liliyun.student.model.StudentPauseApplyParam" resultType="java.lang.Integer" >
+    select count(*) from t_student_pauseresume_apply
+    where 1=1 
+  </select>
+  
+  <select id="list" parameterType="cn.com.liliyun.student.model.StudentPauseApplyParam" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from t_student_pauseresume_apply a join t_student b on a.studentid=b.id
+    <where>
+    	<if test="type!=null">
+    		and a.type=#{type}
+    	</if>
+    	<if test="storeid!=null">
+    		and b.storeid=#{storeid}
+    	</if>
+    	<if test="status!=null">
+    		and a.status=#{status}
+    	</if>
+    	<if test="name!=null">
+    		and name like concat(#{name},'%')
+    	</if>
+    	<if test="stime!=null">
+    		and createdate>=#{stime}
+    	</if>
+    	<if test="etime!=null">
+    		<![CDATA[ and createdate<#{etime}]]> 
+    	</if>
+    </where> 
+    order by id desc
+  </select>
+  
+  <select id="get" parameterType="cn.com.liliyun.student.model.StudentPauseApply" resultType="cn.com.liliyun.student.model.StudentPauseApply" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from t_student_pauseresume_apply a join t_student b on a.studentid=b.id
+    where a.id=#{id}
+    
+  </select>
+  
+  <select id="getByTransaction" parameterType="cn.com.liliyun.student.model.StudentPauseApply" resultType="cn.com.liliyun.student.model.StudentPauseApply" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from t_student_pauseresume_apply a join t_student b on a.studentid=b.id
+    where a.transactionid=#{transactionid}
+    
+  </select>
+  
+  <select id="getByStudentId" parameterType="cn.com.liliyun.student.model.StudentPauseApply" resultType="cn.com.liliyun.student.model.StudentPauseApply" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from t_student_pauseresume_apply a join t_student b on a.studentid=b.id
+    where a.studentid=#{studentid} and a.status=1 order by a.createdate desc limit 1
+    
+  </select>
+  
+  <update id="update" parameterType="cn.com.liliyun.student.model.StudentPauseApply" >
+    update t_student_pauseresume_apply
+    set reason=#{reason},remark=#{remark},begindate=#{begindate},enddate=#{enddate} where id=#{id}
+  </update>
+  
+  <update id="updateStatus" parameterType="cn.com.liliyun.student.model.StudentPauseApply" >
+    update t_student_pauseresume_apply
+    set status=#{status},
+    <if test="audituserid != null">
+        audituserid=#{audituserid} 
+    </if>
+    where id=#{id}
+  </update>
+  
+  <delete id="delete" parameterType="cn.com.liliyun.student.model.StudentPauseApply">
+  	delete from t_student_pauseresume_apply where id = #{id} 
+  </delete>
+  
+  <select id="getApplyByStudentid" resultType="cn.com.liliyun.student.model.StudentPauseApply" parameterType="cn.com.liliyun.student.model.StudentPauseApply" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_student_pauseresume_apply a join t_student b on a.studentid=b.id
+    where a.studentid = #{studentid} and status=0
+  </select>
+</mapper>

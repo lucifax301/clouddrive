@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+    <dubbo:reference id="carService" interface="cn.com.liliyun.car.service.ICarService" check="false" />
+    <dubbo:reference id="carManage" interface="cn.com.liliyun.car.manager.ICarManager" check="false"/>
+    <dubbo:reference id="carBizService" interface="cn.com.liliyun.car.service.CarBizService" check="false" />
+</beans>

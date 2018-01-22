@@ -1,0 +1,210 @@
+<div class="bjui-pageContent">
+
+	
+	<div class="c-tabs-box h-100">
+		<div class="c-tabs-header">
+			<li class="active workli" data-tabs='id1'>我的待办</li>
+			<li class="workli" data-tabs='id2'>我的已办</li>
+			<li class="workli" data-tabs='id3'>我创建的</li>
+		</div>
+		
+		<div class="workinfo h-100" id="id1" >
+			<table id="wait-list" class="table table-bordered"></table>
+
+		</div>
+
+		<div class="workinfo h-100" id="id2" style="display:none">
+			<table id="finish-list" class="table table-bordered"></table>
+
+		</div>
+
+		<div class="workinfo h-100" id="id3" style="display:none">
+			<table id="my-list" class="table table-bordered"></table>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+	clz.CurrentDom_init({
+		current: 'Navtab',
+		
+		form_name: 'edit-form',
+		
+		callback: function(data) {
+			showwait();
+			
+		}
+	})
+	
+
+
+	$.CurrentNavtab.find(".workli").each(
+		function() {
+			$(this).bind("click", function() {
+				//alert($(this).attr("data-tabs"))
+				var idvalue = $(this).attr("data-tabs");
+				$.CurrentNavtab.find(".workinfo").each(
+					function() {
+						$(this).css("display", "none")
+					}
+				)
+				$.CurrentNavtab.find("#" + idvalue).css("display", "");
+				if(idvalue == 'id1') {
+					showwait();
+				}
+				if(idvalue == 'id2') {
+					showfinish();
+				}
+				if(idvalue == 'id3') {
+					showmy();
+				}
+			})
+		}
+	);
+	
+
+	function showwait() {
+
+		waitgrid =
+			$.CurrentNavtab.find('#wait-list').datagrid({
+				toolbarItem: 'none',
+				paging: {
+					pageSize: 15,
+					selectPageSize: '15,50,100,500'
+				},
+				showNoDataTip:'目前没有待办事项',
+				height: '85%',
+				showCheckboxcol: false,
+				showToolbar: false,
+				dataUrl: config.openBasePath + 'flow/list?status=0',
+				columns: [
+
+					{
+						name: 'description',
+						label: '业务事项',
+						align: 'center'
+					}, {
+						name: 'createdate',
+						label: '日期',
+						align: 'center'
+					}, {
+						name: 'businessid',
+						label: '详细信息',
+						align: 'left',
+						render: function(value,data){
+							return "<a href='javascript:' onclick='viewflow(" + JSON.stringify(data) + ")' >" + '查看' + "</a>"
+						}
+					}
+
+				],
+
+			});
+
+	}
+
+	function showfinish() {
+
+		finishgrid =
+			$.CurrentNavtab.find('#finish-list').datagrid({
+				toolbarItem: 'none',
+				paging: {
+					pageSize: 15,
+					selectPageSize: '15,50,100,500'
+				},
+				height: '85%',
+				showNoDataTip:'目前没有已办事项',
+				showCheckboxcol: false,
+				showToolbar: false,
+				dataUrl: config.openBasePath + 'flow/list?status=1',
+				columns: [
+
+					{
+						name: 'description',
+						label: '业务事项',
+						align: 'center'
+					}, {
+						name: 'createdate',
+						label: '日期',
+						align: 'center'
+					}, {
+						name: 'businessid',
+						label: '详细信息',
+						align: 'left',
+						render: function(value,data){
+							return "<a href='javascript:' onclick='viewflow(" + JSON.stringify(data) + ")' >" + '查看' + "</a>"
+						}
+					}
+
+				],
+
+			});
+
+	}
+
+	function showmy() {
+
+		mygrid =
+			$.CurrentNavtab.find('#my-list').datagrid({
+				toolbarItem: 'none',
+				paging: {
+					pageSize: 15,
+					selectPageSize: '15,50,100,500'
+				},
+				height: '90%',
+				showCheckboxcol: false,
+				showToolbar: false,
+				showNoDataTip:'目前尚未创建事项',
+				dataUrl: config.openBasePath + 'flow/listmy',
+				columns: [
+
+					{
+						name: 'description',
+						label: '业务事项',
+						align: 'center'
+					}, {
+						name: 'createdate',
+						label: '日期',
+						align: 'center'
+					},{
+						name: 'status',
+						label: '状态',
+						align: 'center',
+						render:function(value){
+							if(value==0) return "处理中";
+							if(value==1) return "审批";
+							if(value==2) return "拒绝";
+							if(value==3) return "取消";
+						}
+					}, {
+						name: 'businessid',
+						label: '详细信息',
+						align: 'left',
+						render: function(value,data){
+							return "<a href='javascript:' class='btn-blue btn' onclick='viewflow(" + JSON.stringify(data) + ")' >" + '查看' + "</a>"
+						}
+					}
+
+				],
+
+			});
+
+	}
+	
+	function viewflow(data){
+		var curtab=clz.getNavtab_privilege();
+		BJUI.navtab({
+				id: 'flow-view-' + data.id,
+				width: 900,
+				height: 800,
+				url: data.template,
+				title: data.description,
+				more: JSON.stringify(data),
+				onClose: function() {
+					
+					BJUI.navtab('switchTab', curtab)
+				}
+
+			})
+	}
+</script>

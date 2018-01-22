@@ -1,0 +1,66 @@
+<section id="thispage" privilege = "070304"></section>
+<div class="bjui-pageHeader" >
+    <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+        <div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>用户搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">登录手机号：</label>
+					<div class="row-input">
+						<input type="text" name="username" class="form-control">
+					</div>
+					<label class="row-label">用户名称：</label>
+					<div class="row-input">
+						<input type="text" name="realname" class="form-control">
+					</div>
+					<label class="row-label">用户状态：</label>
+					<div class="row-input">
+						<select name="status" data-toggle="selectpicker" >
+							<option value="">全部</option>
+							<option value="0">正常</option>
+							<option value="1">停用</option>
+						</select>
+					</div>
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search" style="margin-left:10px;">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times" style="margin-left:10px;">重置</button>
+					</div>
+				</div>
+			</div>
+		</div>
+    </form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+		var system_dic_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+	        gridTitle : '系统字典管理列表',
+	        toolbarItem: "add,'|',edit,'|',save,'|',cancel,'|',del",
+	        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+	        height: '85%',
+	        showCheckboxcol: true,
+	        showToolbar: true,
+	        dataUrl: config.openBasePath + 'system/listalldic',
+	        columns: [
+	            {name:'id',label:'字典ID',align:'center',rule:'number'},
+	            {name:'name',label:'字典值',align:'center'},
+	            {name:'type',label:' 字典类型',align:'center'},
+	            {name:'isvalid',label:'字典状态',align:'center',type: 'select',items:"[{'0':'启用'},{'1':'停用'}]"},
+	            {name:'remark',label:'备注',align:'center'}
+	        ],
+	        keys : {
+	        	ctime : 'ctime'
+	        },
+	        editUrl : config.openBasePath + 'system/editdic',
+	        delUrl : config.openBasePath + 'system/deldic',
+			delPK : 'dicid',
+			afterSave:function(){
+				system_dic_list.datagrid('refresh',true);
+			},
+			afterDelete:function(){
+				system_dic_list.datagrid('refresh',true);
+			},
+	    })
+</script>

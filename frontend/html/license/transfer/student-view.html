@@ -1,0 +1,152 @@
+<div class="bjui-pageContent">
+    <form id="view-form">
+        <div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>转出学员</h5>
+			</div>
+			<div class="widget-content nopadding">
+	            <div class="bjui-row col-4">
+	            	<label class="row-label red">状态：</label>
+	                <div class="row-input">
+	                	<input type="text" id="state" readonly class="clear-style red">
+                	</div>
+	            	</br>
+	            	<label class="row-label">姓名：</label>
+	                <div class="row-input">
+	                	<input type="text" id="name" readonly class="clear-style">
+                	</div>
+                	<!--<label class="row-label">学员编号：</label>
+	                <div class="row-input">
+	                	<input type="text" id="stunum" readonly class="clear-style">
+                	</div>-->
+                	<label class="row-label">证件号：</label>
+	                <div class="row-input">
+	                	<input type="text" id="idcard" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">手机号：</label>
+	                <div class="row-input">
+	                	<input type="text" id="phone" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">学车状态：</label>
+	                <div class="row-input">
+	                	<input type="text" id="apply" readonly class="clear-style">
+                	</div>
+                	</br>
+		            <label class="row-label">资料转移方式：</label>
+	            	<div class="row-input">
+			            <select name="filetransfertype" data-toggle="selectpicker" data-width="100%" disabled>
+			                <option value="1">快递</option>
+			                <option value="2">人工移交</option>
+			            </select>
+		            </div>
+		            <d id="express">
+		                <label class="row-label">快递单号：</label>
+		                <div class="row-input">
+		                	<input type="text" name="transferno" readonly class="clear-style">
+	                	</div>
+		            </d>
+		            </br>
+                	<label class="row-label">申请人：</label>
+	                <div class="row-input">
+	                	<input type="text" id="cname" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">申请时间：</label>
+	                <div class="row-input">
+	                	<input type="text" id="ctime" readonly class="clear-style">
+                	</div>
+	            </div>
+            </div>
+        </div>
+        
+        <div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>转入门店</h5>
+			</div>
+			<div class="widget-content nopadding">
+	            <div class="bjui-row col-4">
+	            	<label class="row-label">转入门店：</label>
+	                <div class="row-input">
+	                	<input type="text" id="storename" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">目标门店代码：</label>
+	                <div class="row-input">
+	                	<input type="text" id="storenum" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">门店电话：</label>
+	                <div class="row-input">
+	                	<input type="text" id="tel" readonly class="clear-style">
+                	</div>
+                	</br>
+		            <label class="row-label">转店原因：</label>
+		            <div class="row-input fill-2">
+		            	<textarea rows="4" name="reason" readonly class="clear-style"></textarea>
+	            	</div>
+	            </div>
+            </div>
+        </div>
+
+		<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>审核信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+	            <div class="bjui-row col-4">
+	            	<label class="row-label">审核人：</label>
+	                <div class="row-input">
+	                	<input type="text" id="reviewname" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">审核时间：</label>
+	                <div class="row-input">
+	                	<input type="text" id="reviewtime" readonly class="clear-style">
+                	</div>
+                	</br>
+		            <label class="row-label">审核意见：</label>
+		            <div class="row-input fill-2">
+		            	<textarea rows="4" name="reviewremark" readonly class="clear-style"></textarea>
+	            	</div>
+	            </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    BJUI.ajax('doajax',{
+        url: config.openBasePath + 'transferStudent?id=' + clz.getNavtab_more().id,
+        type:'GET',
+        loadingmask: true,
+        okCallback: function(json, options) {
+            var data = json.result;
+        	$.CurrentNavtab.find('#name').val(data.student.name);
+            $.CurrentNavtab.find('#stunum').val(data.student.stunum);
+            $.CurrentNavtab.find('#idcard').val(data.student.idcard);
+            $.CurrentNavtab.find('#phone').val(data.student.phone);
+            $.CurrentNavtab.find('#apply').val(studentStatus(data.student.applyexam, data.student.applystatus));
+            
+            $.CurrentNavtab.find('#storename').val(data.store.name);
+            $.CurrentNavtab.find('#storenum').val(data.store.storenum);
+            $.CurrentNavtab.find('#tel').val(data.store.tel);
+
+            $.CurrentNavtab.find('#state').val(clz.filter.transferState(data.transfer.state));
+            $.CurrentNavtab.find('textarea[name="reason"]').val(data.transfer.reason);
+            $.CurrentNavtab.find('input[name="transferno"]').val(data.transfer.transferno);
+            $.CurrentNavtab.find('*[name="filetransfertype"]').selectpicker('val', data.transfer.filetransfertype);
+
+            if (data.transfer.filetransfertype=='2') {
+                $.CurrentNavtab.find('#express').html('');
+            	$.CurrentNavtab.trigger(BJUI.eventType.initUI);//重新渲染BJUI
+            }
+
+            $.CurrentNavtab.find('#cname').val(data.transfer.cname);
+            $.CurrentNavtab.find('#ctime').val(clz.filter.time({date:data.transfer.ctime, type:"yyyy-MM-dd hh:mm"}));
+
+            $.CurrentNavtab.find('#reviewname').val(data.transfer.reviewname);
+            $.CurrentNavtab.find('#reviewtime').val(data.transfer.reviewtime==null?'':clz.filter.time({date:data.transfer.reviewtime, type:"yyyy-MM-dd hh:mm"}));
+            $.CurrentNavtab.find('textarea[name="reviewremark"]').val(data.transfer.reviewremark);
+        }
+    });
+
+</script>

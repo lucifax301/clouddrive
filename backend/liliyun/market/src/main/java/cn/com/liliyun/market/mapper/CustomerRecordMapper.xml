@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.market.mapper.CustomerRecordMapper">
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.market.model.CustomerRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="studentid" property="studentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="classid" property="classid" jdbcType="INTEGER" />
+    <result column="classname" property="classname" jdbcType="VARCHAR" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="handlestate" property="handlestate" jdbcType="TINYINT" />
+    <result column="handledeptype" property="handledeptype" jdbcType="TINYINT" />
+    <result column="handledepid" property="handledepid" jdbcType="INTEGER" />
+    <result column="handlerid" property="handlerid" jdbcType="INTEGER" />
+    <result column="handlername" property="handlername" jdbcType="VARCHAR" />
+    <result column="handlemethod" property="handlemethod" jdbcType="TINYINT" />
+    <result column="servicesource" property="servicesource" jdbcType="TINYINT" />
+    <result column="servicemode" property="servicemode" jdbcType="TINYINT" />
+    <result column="servicetype" property="servicetype" jdbcType="INTEGER" />
+    <result column="servicesubtype" property="servicesubtype" jdbcType="INTEGER" />
+    <result column="servicecontent" property="servicecontent" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="TINYINT" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, studentid, name, idcard, phone, classid, classname, areaid, storeid, handlestate, 
+    handledeptype, handledepid, handlerid, handlername, handlemethod, servicesource, 
+    servicemode, servicetype, servicesubtype, servicecontent, result, cuid, cname, ctime, 
+    mtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.Map" >
+    delete from t_customer_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.market.model.CustomerRecord" >
+    insert into t_customer_record (id, studentid, name, 
+      idcard, phone, classid, 
+      classname, areaid, storeid, 
+      handlestate, handledeptype, handledepid, 
+      handlerid, handlername, handlemethod, 
+      servicesource, servicemode, servicetype, 
+      servicesubtype, servicecontent, result, 
+      cuid, cname)
+    values (#{id,jdbcType=INTEGER}, #{studentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{classid,jdbcType=INTEGER}, 
+      #{classname,jdbcType=VARCHAR}, #{areaid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{handlestate,jdbcType=TINYINT}, #{handledeptype,jdbcType=TINYINT}, #{handledepid,jdbcType=INTEGER}, 
+      #{handlerid,jdbcType=INTEGER}, #{handlername,jdbcType=VARCHAR}, #{handlemethod,jdbcType=TINYINT}, 
+      #{servicesource,jdbcType=TINYINT}, #{servicemode,jdbcType=TINYINT}, #{servicetype,jdbcType=TINYINT}, 
+      #{servicesubtype,jdbcType=TINYINT}, #{servicecontent,jdbcType=VARCHAR}, #{result,jdbcType=TINYINT}, 
+      #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.market.model.CustomerRecord" >
+    insert into t_customer_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="studentid != null" >
+        studentid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="classid != null" >
+        classid,
+      </if>
+      <if test="classname != null" >
+        classname,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="handlestate != null" >
+        handlestate,
+      </if>
+      <if test="handledeptype != null" >
+        handledeptype,
+      </if>
+      <if test="handledepid != null" >
+        handledepid,
+      </if>
+      <if test="handlerid != null" >
+        handlerid,
+      </if>
+      <if test="handlername != null" >
+        handlername,
+      </if>
+      <if test="handlemethod != null" >
+        handlemethod,
+      </if>
+      <if test="servicesource != null" >
+        servicesource,
+      </if>
+      <if test="servicemode != null" >
+        servicemode,
+      </if>
+      <if test="servicetype != null" >
+        servicetype,
+      </if>
+      <if test="servicesubtype != null" >
+        servicesubtype,
+      </if>
+      <if test="servicecontent != null" >
+        servicecontent,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="studentid != null" >
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="classid != null" >
+        #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="classname != null" >
+        #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="handlestate != null" >
+        #{handlestate,jdbcType=TINYINT},
+      </if>
+      <if test="handledeptype != null" >
+        #{handledeptype,jdbcType=TINYINT},
+      </if>
+      <if test="handledepid != null" >
+        #{handledepid,jdbcType=INTEGER},
+      </if>
+      <if test="handlerid != null" >
+        #{handlerid,jdbcType=INTEGER},
+      </if>
+      <if test="handlername != null" >
+        #{handlername,jdbcType=VARCHAR},
+      </if>
+      <if test="handlemethod != null" >
+        #{handlemethod,jdbcType=TINYINT},
+      </if>
+      <if test="servicesource != null" >
+        #{servicesource,jdbcType=TINYINT},
+      </if>
+      <if test="servicemode != null" >
+        #{servicemode,jdbcType=TINYINT},
+      </if>
+      <if test="servicetype != null" >
+        #{servicetype,jdbcType=INTEGER},
+      </if>
+      <if test="servicesubtype != null" >
+        #{servicesubtype,jdbcType=INTEGER},
+      </if>
+      <if test="servicecontent != null" >
+        #{servicecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=TINYINT},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.market.model.CustomerRecord" >
+    update t_customer_record
+    <set >
+      <if test="studentid != null" >
+        studentid = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="classid != null" >
+        classid = #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="classname != null" >
+        classname = #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="handlestate != null" >
+        handlestate = #{handlestate,jdbcType=TINYINT},
+      </if>
+      <if test="handledeptype != null" >
+        handledeptype = #{handledeptype,jdbcType=TINYINT},
+      </if>
+      <if test="handledepid != null" >
+        handledepid = #{handledepid,jdbcType=INTEGER},
+      </if>
+      <if test="handlerid != null" >
+        handlerid = #{handlerid,jdbcType=INTEGER},
+      </if>
+      <if test="handlername != null" >
+        handlername = #{handlername,jdbcType=VARCHAR},
+      </if>
+      <if test="handlemethod != null" >
+        handlemethod = #{handlemethod,jdbcType=TINYINT},
+      </if>
+      <if test="servicesource != null" >
+        servicesource = #{servicesource,jdbcType=TINYINT},
+      </if>
+      <if test="servicemode != null" >
+        servicemode = #{servicemode,jdbcType=TINYINT},
+      </if>
+      <if test="servicetype != null" >
+        servicetype = #{servicetype,jdbcType=INTEGER},
+      </if>
+      <if test="servicesubtype != null" >
+        servicesubtype = #{servicesubtype,jdbcType=INTEGER},
+      </if>
+      <if test="servicecontent != null" >
+        servicecontent = #{servicecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=TINYINT},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.market.model.CustomerRecord" >
+    update t_customer_record
+    set studentid = #{studentid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      classid = #{classid,jdbcType=INTEGER},
+      classname = #{classname,jdbcType=VARCHAR},
+      areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      handlestate = #{handlestate,jdbcType=TINYINT},
+      handledeptype = #{handledeptype,jdbcType=TINYINT},
+      handledepid = #{handledepid,jdbcType=INTEGER},
+      handlerid = #{handlerid,jdbcType=INTEGER},
+      handlername = #{handlername,jdbcType=VARCHAR},
+      handlemethod = #{handlemethod,jdbcType=TINYINT},
+      servicesource = #{servicesource,jdbcType=TINYINT},
+      servicemode = #{servicemode,jdbcType=TINYINT},
+      servicetype = #{servicetype,jdbcType=INTEGER},
+      servicesubtype = #{servicesubtype,jdbcType=INTEGER},
+      servicecontent = #{servicecontent,jdbcType=VARCHAR},
+      result = #{result,jdbcType=TINYINT},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectlist" parameterType="cn.com.liliyun.market.model.CustomerRecord" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer_record
+    <where>
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="id != null">
+    		and id = #{id,jdbcType=INTEGER}
+    	</if>
+    	<if test="servicetype != null">
+    		and servicetype = #{servicetype,jdbcType=INTEGER}
+    	</if>
+    	<if test="servicesubtype != null">
+    		and servicesubtype = #{servicesubtype,jdbcType=INTEGER}
+    	</if>
+    	<if test="servicesource != null">
+    		and servicesource = #{servicesource,jdbcType=TINYINT}
+    	</if>
+    	<if test="servicemode != null">
+    		and servicemode = #{servicemode,jdbcType=TINYINT}
+    	</if>
+    	<if test="handlestate != null">
+    		and handlestate = #{handlestate,jdbcType=TINYINT}
+    	</if>
+    	<if test="ctimetop != null">
+    		and #{ctimetop,jdbcType=TIMESTAMP} > ctime
+    	</if>
+    	<if test="ctimelow != null">
+    		and ctime >= #{ctimelow,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="name != null and name != ''">
+    		and name like concat('%',#{name,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="idcard != null and idcard != ''">
+    		and idcard = #{idcard,jdbcType=VARCHAR}
+    	</if>
+    	<if test="phone != null and phone != ''">
+    		and phone = #{phone,jdbcType=VARCHAR}
+    	</if>
+    	<if test="studentid != null">
+    		and studentid = #{studentid,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  <update id="handleRecordBatch" parameterType="java.util.Map">
+  	update t_customer_record set handlestate = 1 
+  	where id in 
+  		<foreach collection="list" item="item" open="(" separator="," close=")">
+  			#{item}
+  		</foreach>
+  	and handlestate = 0
+  </update>
+</mapper>

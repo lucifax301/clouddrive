@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<context:annotation-config />
+	   
+	<context:component-scan base-package="cn.com.liliyun,org.jeecgframework.poi.excel.view">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/> 
+
+    <mvc:annotation-driven>    
+    <!-- 处理responseBody 里面日期类型 -->    
+        <mvc:message-converters>    
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">    
+                <property name="objectMapper">    
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">    
+                        <property name="dateFormat">    
+                            <bean class="java.text.SimpleDateFormat">    
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />    
+                            </bean>    
+                        </property>    
+                    </bean>    
+                </property>    
+            </bean>   
+	        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	            <constructor-arg value="UTF-8"/>
+	        </bean>
+        </mvc:message-converters>    
+    </mvc:annotation-driven>    
+   
+	
+	<!-- Bean解析器,级别高于默认解析器,寻找bean对象进行二次处理 -->
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0">
+	</bean>
+	<!-- Excel 处理 根据用户输入进行对象处理 -->
+	<bean id="jeecgExcelView" class="org.jeecgframework.poi.excel.view.JeecgSingleExcelView" />
+	<bean id="jeecgTemplateExcelView" class="org.jeecgframework.poi.excel.view.JeecgTemplateExcelView" />
+	<bean id="jeecgTemplateWordView" class="org.jeecgframework.poi.excel.view.JeecgTemplateWordView" />
+	<bean id="jeecgMapExcelView" class="org.jeecgframework.poi.excel.view.JeecgMapExcelView" />
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="5000000" />
+        <property name="maxInMemorySize" value="4096" />
+        <property name="defaultEncoding" value="UTF-8" />
+	</bean> 
+	
+	<!-- 用户登录验证拦截器-->
+ 	<mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />   
+
+            <mvc:exclude-mapping path="/open/**" />
+            <bean class="cn.com.liliyun.httpaccess.interceptor.PrivilageInterceptor" />       
+            
+        </mvc:interceptor>
+       
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />   
+
+            <mvc:exclude-mapping path="/open/**" />
+            <bean class="cn.com.liliyun.httpaccess.interceptor.BusinessInterceptor" />     
+            
+        </mvc:interceptor>
+  
+    </mvc:interceptors> 
+</beans>

@@ -1,0 +1,167 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>审批节点配置</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					
+					<div class="bjui-row col-4">
+						<label class="row-label">审批流名称:</label>
+						<div class="row-input required">
+							<input type="text" name="name" maxlength="16" data-rule="required">
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">审批业务:</label>
+						<div class="row-input required">
+								<select name="businessid" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/business/list" data-optiontype="businessid,name">
+									<option value="0">请选择</option>
+								</select>
+							</div>
+					</div>
+
+					<div class="y-comment mt20 mb20">
+						<div class="c-button-blue w200" onclick="ystep.addnode()"><i class="fa fa-plus"></i>增加节点</div>
+						<div class="ystep-container ystep-lg ystep-blue y-comment">
+							<ul class="ystep-container-steps mt20 mb20">
+								<li class="ystep-step-done" data-container="body" data-toggle="popover" data-placement="top" data-title="" data-content="申请发起" data-trigger="hover" data-original-title="" title=""><div class="hr"></div><span>申请发起</span></li>
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</form>
+
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="ystep.savetemplate()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+	</ul>
+	</div>
+</div>
+<script>
+//	clz.CurrentDom_init({
+//		current: 'Navtab',
+//		form_name: 'view-form',
+//		url: config.openBasePath + 'student/assignCoach',
+//		
+//	})
+
+	var ystep = {
+		firstnode:'<li class="ystep-step-done" data-container="body" data-toggle="popover" data-placement="top" data-title="" data-content="申请发起" data-trigger="hover" data-original-title="" title=""><div class="hr"></div><span>申请发起</span></li>',
+		initlist(json){
+			var html ='';
+			this.data = json.data;
+			if(json.dom){
+				this.dom = json.dom;
+			}
+			$.each(this.data, function(i,m) {
+				html += '<li class="ystep-step-done"  onclick="ystep.clickrole('+i+')"><div class="hr"></div><span>'+(m.name?m.name:'未选角色')+'</span><div class="remove" onclick="ystep.remove(event,'+i+')"></div></li>'
+			});
+			this.dom.html(this.firstnode+html)
+		},
+		clickrole(item){
+			BJUI.dialog({
+				id: 'test_dialog3',
+				url: 'html/setting/flow-template-check.html',
+				height:600,
+				width:700,
+				title: '选择角色',
+				onClose: function() {
+					var data = clz.getWindowJson();
+					console.log(data)
+					
+					for(var i=0;i<ystep.data.length;i++){
+						if(ystep.data[i].id==data.id){
+							BJUI.alertmsg('info', '此角色已经配置了', {})
+							return
+						}
+					}
+					
+					if(data.sstype==1){
+						ystep.data[item].id = data.id;
+			    		ystep.data[item].name = data.rolename;
+					}else{
+						ystep.data[item].id = data.id;
+			    		ystep.data[item].name = data.realname;
+					}
+					
+					ystep.data[item].sstype = data.sstype;
+			    	ystep.refresh()
+				}
+			})
+		},
+		refresh(){
+			this.initlist({data:this.data})
+		},
+		remove(e,item){
+			this.data.splice(item,1);
+			ystep.refresh()
+        	e.cancelBubble = true;
+		},
+		addnode(){
+			this.data.push({})
+			ystep.refresh()
+		},
+		savetemplate(){
+			if($.CurrentNavtab.find('#add-form').isValid()){
+			var sdata=clz.parseForm($.CurrentNavtab.find("#add-form"));
+			
+			if(ystep.data.length==0){
+				BJUI.alertmsg('warn', '至少配置一个审批节点！', {})
+				return;
+			}
+			
+			console.log(JSON.stringify(ystep.data))
+			for(var i=0;i<ystep.data.length;i++){
+				if(!ystep.data[i].id){
+					BJUI.alertmsg('warn', '节点必须配置角色！', {})
+					return;
+				}
+			}
+			
+			var rule="";
+			for(var i=0;i<ystep.data.length;i++){
+				//rule=rule+ystep.data[i].id+":"+ystep.data[i].sstype
+				rule=rule+ystep.data[i].id;
+				if(i<ystep.data.length-1){
+					rule=rule+",";
+				}
+			}
+			
+			sdata.rule=rule;
+			BJUI.alertmsg('confirm', '确认新增审批模版吗？', {
+				okCall: function() {
+					
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'flowtemplate/add',
+						loadingmask: true,
+						data: sdata,
+						okCallback: function(json, options) {
+							BJUI.alertmsg('ok', '新增审批模版成功！', {})
+							
+							BJUI.navtab('closeCurrentTab');
+						}
+					});
+					}
+			})
+				}
+		}
+	}
+	
+	ystep.initlist({
+		dom:$.CurrentNavtab.find('.ystep-container-steps'),
+		data:[
+		]
+	})
+</script>

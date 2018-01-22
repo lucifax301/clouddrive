@@ -1,0 +1,113 @@
+<section id="thispage" privilege = "040201"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>缴费提醒搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">类型：</label>
+					<div class="row-input">
+						<select name="type" data-toggle="selectpicker" data-width="100%">
+							<option value="">全部</option>
+							<option value="0">年审</option>
+							<option value="1">保险</option>
+							<option value="2">车船税</option>
+							<option value="3">强制报废</option>
+						</select>
+					</div>
+					<label class="row-label">所属片区：</label>
+					<div class="row-input">
+						<select name="areaid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/area/list" data-optiontype="id,name">
+						</select>
+					</div>
+					<label class="row-label">状态：</label>
+					<div class="row-input">
+						<select name="status" data-toggle="selectpicker" data-width="100%">
+							<option value="">全部</option>
+							<option value="0">未购买</option>
+							<option value="1">已过期</option>
+							<option value="3">正常</option>
+						</select>
+					</div>
+					
+				</div>
+					<div class="text-center">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var car_cost_remind = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '缴费提醒信息列表',
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showToolbar: false,
+		dataUrl: config.openBasePath + 'carbiz/listremind',
+		columns: [{
+			name: 'type',
+			label: '类型',
+			align: 'center',
+			render:formatRemindType
+		}, {
+			name: 'areaid',
+			label: '片区',
+			align: 'center',
+			render: formatAreaCell
+		}, {
+			name: 'carno',
+			label: '车牌号',
+			align: 'center',
+		}, {
+			name: 'endtime',
+			label: '到期时间',
+			align: 'center',
+			render: function(value) {
+				return clz.filter.time({
+					date: value,
+					type: 'yyyy-MM-dd'
+				})
+			}
+		}, {
+			name: 'status',
+			label: '状态',
+			align: 'center',
+			render : function(value,data) {
+				var now = clz.filter.time({
+					date: new Date(),
+					type: 'yyyy-MM-dd'
+				})
+				if (data.endtime == null) {
+					return  '未购买';
+				} else if (data.endtime < now) {
+					return  '已过期';
+				} else if (data.endtime > now) {
+					return '正常';
+				}
+			}
+		}]
+	});
+
+	function formatRemindType(value) {
+		switch(value) {
+			case 0:
+				return "年审";
+			case 1:
+				return "保险";
+			case 2:
+				return "车船税";
+			case 3:
+				return "强制报废";
+		}
+	}
+	
+</script>

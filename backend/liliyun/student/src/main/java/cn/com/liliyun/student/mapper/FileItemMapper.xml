@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.student.mapper.FileItemMapper">
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.FileItem">
+    <id column="tableid" jdbcType="CHAR" property="tableid" />
+    <result column="studentid" jdbcType="INTEGER" property="studentid" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="filenum" jdbcType="VARCHAR" property="filenum" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="storeid" jdbcType="INTEGER" property="storeid" />
+    <result column="areaid" jdbcType="INTEGER" property="areaid" />
+    <result column="cuid" jdbcType="INTEGER" property="cuid" />
+    <result column="cname" jdbcType="VARCHAR" property="cname" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tableid, studentid, idcard, name, filenum, type, storeid, areaid, cuid, cname, ctime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="cn.com.liliyun.student.model.FileItem" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_file_item
+    where tableid = #{tableid,jdbcType=CHAR}
+  </select>
+  <select id="selectList" parameterType="cn.com.liliyun.student.model.FileItem" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_file_item
+    <where>
+      	<if test="tableid != null" >
+       		tableid = #{tableid,jdbcType=CHAR}
+     	</if>
+     	<if test="type != null" >
+       		type = #{type,jdbcType=INTEGER}
+     	</if>
+     </where>
+  </select>
+  
+  <select id="selectMaxFilenum" parameterType="cn.com.liliyun.student.model.FileItem" resultType="java.lang.String">
+    select 
+  		max(filenum) from t_file_item
+    <where>
+     	<if test="type != null" >
+       		type = #{type,jdbcType=INTEGER}
+     	</if>
+     </where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.student.model.FileItem">
+    delete from t_file_item
+    where tableid = #{tableid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.student.model.FileItem">
+    insert into t_file_item (tableid, studentid, idcard, 
+      filenum, type, storeid, 
+      areaid, cuid, cname, 
+      ctime)
+    values (#{tableid,jdbcType=CHAR}, #{studentid,jdbcType=INTEGER}, #{idcard,jdbcType=VARCHAR}, 
+      #{filenum,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{areaid,jdbcType=INTEGER}, #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, 
+      #{ctime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List" >
+  	insert into t_file_item (tableid, studentid, name, idcard, filenum, type, storeid,  areaid, cuid, cname,  ctime)
+  		values
+	    <foreach collection="list" item="item" index="index" separator=",">
+           (
+            #{item.tableid,jdbcType=CHAR}, #{item.studentid,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, #{item.idcard,jdbcType=VARCHAR},
+      		#{item.filenum,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, #{item.storeid,jdbcType=INTEGER}, 
+      		#{item.areaid,jdbcType=INTEGER}, #{item.cuid,jdbcType=INTEGER}, #{item.cname,jdbcType=VARCHAR}, 
+      		#{item.ctime,jdbcType=TIMESTAMP}
+      	   )
+       	</foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.student.model.FileItem">
+    insert into t_file_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tableid != null">
+        tableid,
+      </if>
+      <if test="studentid != null">
+        studentid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="idcard != null">
+        idcard,
+      </if>
+      <if test="filenum != null">
+        filenum,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="storeid != null">
+        storeid,
+      </if>
+      <if test="areaid != null">
+        areaid,
+      </if>
+      <if test="cuid != null">
+        cuid,
+      </if>
+      <if test="cname != null">
+        cname,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tableid != null">
+        #{tableid,jdbcType=CHAR},
+      </if>
+      <if test="studentid != null">
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="filenum != null">
+        #{filenum,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null">
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null">
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="cuid != null">
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null">
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.student.model.FileItem">
+    update t_file_item
+    <set>
+      <if test="studentid != null">
+        studentid = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="filenum != null">
+        filenum = #{filenum,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null">
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null">
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="cuid != null">
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null">
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where tableid = #{tableid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.student.model.FileItem">
+    update t_file_item
+    set studentid = #{studentid,jdbcType=INTEGER},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      filenum = #{filenum,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      areaid = #{areaid,jdbcType=INTEGER},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP}
+    where tableid = #{tableid,jdbcType=CHAR}
+  </update>
+</mapper>

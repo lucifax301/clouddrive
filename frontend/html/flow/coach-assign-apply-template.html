@@ -1,0 +1,242 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<input type="hidden" name="studentid" id="studentid" data-rule="required">
+		<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>学员信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">学员姓名:</label>
+					<div class="row-input">
+						<input type="text" name="name" type="text" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">学车状态:</label>
+					<div class="row-input">
+						<input type="text" name="applyexam" class="clear-style red" readOnly>
+					</div>
+					<br>
+					<label class="row-label">学员编号:</label>
+					<div class="row-input">
+						<input type="text" name="stunum" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">证件号码:</label>
+					<div class="row-input">
+						<input type="text" name="idcard" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">联系电话:</label>
+					<div class="row-input">
+						<input type="text" name="phone" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">流水号:</label>
+					<div class="row-input">
+						<input type="text" name="flownum" class="clear-style" readOnly>
+					</div>
+					<br>
+					<label class="row-label">报名班级:</label>
+					<div class="row-input">
+						<input type="text" name="class" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">片区:</label>
+					<div class="row-input">
+						<input type="text" name="area" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">门店:</label>
+					<div class="row-input">
+						<input type="text" name="store" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">绑定教练状态:</label>
+					<div class="row-input">
+						<input type="text" name="isvalid" class="clear-style" readOnly>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教练信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<div class="row-input"><input type="hidden" name="coachid" id="coachid" data-rule="required"></div>
+					<br>
+					<label class="row-label">教练姓名:</label>
+					<div class="row-input">
+						<input type="text" name="coachname" id="coachname" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">教练编号:</label>
+					<div class="row-input">
+						<input type="text" name="coachnum" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">性别:</label>
+					<div class="row-input">
+						<input type="text" name="coachsex" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">手机号:</label>
+					<div class="row-input">
+						<input type="text" name="coachmobile" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">所属片区:</label>
+					<div class="row-input">
+						<input type="text" name="coacharea" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">所带班别:</label>
+					<div class="row-input">
+						<input type="text" name="coachclasses" class="clear-style" readOnly>
+					</div>
+					<label class="row-label">负荷:</label>
+					<div class="row-input">
+						<input type="text" name="coachload" class="clear-style" readOnly>
+					</div>
+					<br>
+					<label class="row-label" id="reason-title">变更理由:</label>
+					<div class="row-input fill-3" id="reason-content">
+						<textarea type="text" name="reason" class="clear-style" readonly maxlength="250"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>审核信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="col-3">
+					<table class='table table-bordered' id="flowinfo">
+						<tr>
+							<td>申请人</td>
+							<td id="applyuser"></td>
+							<td>片区</td>
+							<td id="area"></td>
+							<td>申请时间</td>
+							<td id="applydate"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+        </div>
+	</form>
+
+</div>
+<div class="bjui-pageFooter" id="footer">
+    <div class="c-bottom-button" id="footer-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="flow_student_coach_assign.reviewcoach(2)">同意</button></li>
+		<li><button type="button" class="btn-red" data-icon="close" onclick="flow_student_coach_assign.reviewcoach(3)">拒绝</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+	var flowdata = clz.getNavtab_more();
+	var flow_student_coach_assign = {
+		init: function() {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + '/student/studentCoachFlow?transactionid=' + flowdata.transactionid,
+				type: 'GET',
+				loadingmask: true,
+				async: false,
+				okCallback: function(json, options) {
+					var data = json.result;
+					clz.CurrentDom_init({
+						current:'Navtab',
+						form_name: 'view-form',
+						data: data,
+						before: function(data) {
+							data.applyexam = studentStatus(data.applyexam);
+							data.class = formatClassCell(data.classid);
+							data.area = formatAreaCell(data.areaid);
+							data.store = formatStoreCell(data.storeid);
+							data.coacharea = formatStoreCell(data.coachareaid);
+							if (data.state == 0 || data.state == 2)
+								data.isvalid = '已绑定';
+							else 
+								data.isvalid = '未绑定';
+							if (data.coachsex != null)
+								data.coachsex = data.coachsex == 1?'男' : '女';
+							if (data.coacharea != null)
+								data.coacharea = formatAreaCell(data.coachareaid);
+						}
+					});
+					if (data.state != 1) {
+						$.CurrentNavtab.find("#coach-button").remove();
+						$.CurrentNavtab.find("#footer").css("display","none");
+					}
+					flow_student_coach_assign.loadflowinfo();
+				}
+			})
+		},
+		reviewcoach: function(state) {
+			var msg;
+			if (state == 2)
+				msg = '确认同意变更？'
+			else 
+				msg = '确认拒绝变更？';
+	        BJUI.alertmsg('confirm', msg, {
+	            okCall: function() {
+	                $('#view-form').isValid(function(valid){
+	                    if (valid) {
+	                        var data = clz.parseForm($.CurrentNavtab.find('#view-form'));
+	                        var senddata = {
+	                        	"studentid":data.studentid,
+	                        	"state":state,
+	                        	"isreview":1
+	                        };
+	                        BJUI.ajax('doajax', {
+	                            url: config.openBasePath + 'student/assignCoach',
+	                            loadingmask: true,
+	                            data :  senddata,
+	                            okCallback: function(json, options) {
+	                                console.log('返回内容：\n'+ JSON.stringify(json));
+	                                BJUI.navtab('refresh');
+	                            }
+	                        });
+	                    }
+	                });
+	            }
+	        });
+	    },
+		loadflowinfo: function() {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "flow/listflowstep?flowid="+flowdata.id,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					if(json.result&&json.result.list){
+						var sdata=json.result.list;
+						var text="";
+						for(var i=0;i<sdata.length;i++){
+							var status="";
+							
+							if(sdata[i].status==0){
+								status="未处理"
+							}else if(sdata[i].status==1){
+								status="审核通过"
+							}else if(sdata[i].status==2){
+								status="审核不通过"
+							}
+							text=text+"<tr><td>审核人</td><td>"+sdata[i].user +  "</td><td>处理结果</td><td>"+status+"</td><td>处理时间</td><td>" +(sdata[i].status==0?"":sdata[i].updatedate) + "</td></tr>"
+						}
+					}
+					
+					$.CurrentNavtab.find("#flowinfo").append($(text));
+					$.CurrentNavtab.find("#flowinfo").trigger(BJUI.eventType.initUI)
+					//flowinfo
+				}
+			})
+			
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "user/list?id="+flowdata.fuserid,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					var datauser = json.result.list[0];
+					$.CurrentNavtab.find("#applyuser").html(datauser.realname);
+					$.CurrentNavtab.find("#area").html(formatAreaCell(datauser.areaid));
+					$.CurrentNavtab.find("#applydate").html(flowdata.createdate);
+				}
+			})
+		}
+	}
+	flow_student_coach_assign.init();
+</script>

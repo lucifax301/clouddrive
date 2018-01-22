@@ -1,0 +1,142 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<input type="hidden" id="applyid" name="id"/>
+		
+        <div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>暂停学车申请</h5>
+			</div>
+			<div class="widget-content nopadding">
+            <div class="bjui-row col-4">
+            <label class="row-label">申请类型:</label>
+			<div class="row-input">
+				<input type="text" value="暂停学车" class="clear-style"/>
+			</div>
+            </div>
+
+			<div class="bjui-row col-4">
+			<label class="row-label">学员姓名:</label>
+			<div class="row-input">
+			<input type="text" name="studentname" id="stuname" data-width="100%" readonly="readonly">
+			<input type="hidden" name="studentid" id="studentid"/>
+			</div>
+			</div>
+
+			<div class="bjui-row col-4">
+			<label class="row-label">学车状态:</label>
+			<div class="row-input">
+			<input type="text" readonly="readonly" id="applyexamstr" data-width="100%" >
+			<input type="hidden" readonly="readonly" name="applyexam" id="applyexam" >
+			</div>
+			<label class="row-label">身份证号:</label>
+			<div class="row-input">
+			<input type="text" readonly="readonly" name="idcard" id="idcard" data-width="100%" >
+			</div>
+			</div>
+
+			<div class="bjui-row col-4">
+			<label class="row-label">手机号码:</label>
+			<div class="row-input">
+			<input type="text" readonly="readonly" name="phone" id="mobile" data-width="100%" >
+			</div>
+			</div>
+
+
+			<div class="bjui-row col-4">
+			<label class="row-label">暂停周期:</label>
+            <div class="row-input">
+                <input type="text" readonly="readonly" data-width="100%" data-pattern="yyyy-MM-dd" name="begindate"  
+                >
+            </div>
+			<label class="row-label">到:</label>
+            <div class="row-input">
+                <input type="text" readonly="readonly" data-width="100%" data-pattern="yyyy-MM-dd" name="enddate"  
+                >
+            </div>
+			</div>
+			<br/>
+			<div class="bjui-row col-4">
+            <label class="row-label">暂停原因:</label>
+            <div class="row-input fill-2">
+                <textarea type="text" rows="2" name="reason" maxlength="60" placeholder="请输入原因"></textarea>
+            </div>
+			</div>
+
+			<div class="bjui-row col-4">
+            <label class="row-label">备注:</label>
+            <div class="row-input fill-2">
+							<textarea type="text" rows="2" name="remark" maxlength="300" placeholder="请输入备注"></textarea>
+						</div>
+            </div>
+        </div>
+		<input type="hidden" name="type" value="1"/>
+		</div></div>
+    </form>
+     
+</div>
+
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="savemodpauseapply()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+    </ul>
+</div>
+
+<script>
+    
+
+	$.CurrentDialog.find("#applyid").val(clz.getWindowJson());
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "student/learnpause/get",
+                    loadingmask: true,
+					async:false,
+					data:{id:$.CurrentDialog.find("#applyid").val()},
+                    okCallback: function(json, options) {
+                        console.log(json)
+						clz.CurrentDom_init({
+							current:'Dialog',
+							timetype:[
+								{
+									name:'begindate',
+									type:'yyyy-MM-dd'
+								},
+								{
+									name:'enddate',
+									type:'yyyy-MM-dd'
+								}
+							],
+							form_name : 'view-form',
+							data:json.result
+						});
+						$.CurrentDialog.find("#applyexamstr").val(studentStatus(json.result.applyexam,json.result.applystatus))	
+						if(json.result.status!=0){
+							$("#auditdiv").css("display","none")
+						}
+
+                    }
+                })
+
+	
+	function savemodpauseapply(){
+		BJUI.alertmsg('confirm', '确认修改申请吗！', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/student/learnpause/update",
+                    loadingmask: true,
+					data: $("#view-form").serializeArray(),
+                    okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						//grid.datagrid('refresh',true);
+						BJUI.dialog('closeCurrent')
+                    }
+                })
+            }
+        })
+		
+	}
+	
+	
+</script>
+    

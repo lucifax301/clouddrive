@@ -1,0 +1,70 @@
+<section id="thispage" privilege = "060305"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>信息搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+			    <label class="row-label">起始时间：</label>
+	            <div class="row-input">
+	                <input type="text" name="stime" data-toggle="datepicker" placeholder="开票起始时间"> 
+	            </div>
+	            <label class="row-label">结束时间：</label>
+	            <div class="row-input">
+	                <input type="text" name="etime" data-toggle="datepicker" placeholder="开票结束时间">
+	            </div>
+				<label class="row-label"></label>
+				<div class="row-input">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var finance_query_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '片区主营业务收入列表',
+		toolbarItem: '',
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		fieldSortable: false,
+		showToolbar: false,
+		dataUrl: config.openBasePath + 'financeReceipt/listIncome',
+		columns: [{
+			name: 'batchnum',
+			label: '批次号',
+			align: 'center',
+			render:function(value, data){
+				var postdata = {
+					batchnum : data.batchnum,
+					isconfirm : 1
+				};
+                return "<a href='html/finance/income/income-detail.html' data-toggle='navtab' data-options='{id:\"finance-income-detail-table"
+                +data.batchnum+"\" , title:\"收入详情\"}' data-more='" + JSON.stringify(postdata) + "'>" + value + "</a>"
+            }
+		},{
+			name: 'count',
+			label: '结转次数',
+			align: 'center'
+		},{
+			name: 'receiptmoney',
+        label: '总金额',
+        align: 'center',
+        render : function(val) {
+            return clz.filter.returnFloat(val);
+        }
+    },{
+        label: '开票日期',
+        name : 'receiptdate',
+        align: 'center',
+        render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+    }]
+	});
+</script>

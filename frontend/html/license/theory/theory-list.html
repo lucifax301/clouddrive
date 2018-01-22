@@ -1,0 +1,260 @@
+<section id="thispage" privilege = "020302"></section>
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#theory-datagrid')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>理论课搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">所属区域：</label>
+					<div class="row-input">
+						<select name="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+					</select>
+					</div>
+					<label class="row-label">上课时间：</label>
+					<div class="row-input fill-2">
+						<div class="w-40 fl">
+							<input name="starttime" type="text" data-toggle="datepicker" placeholder="起始日期">
+						</div>
+						<span class="fl text-center pl10 pr10">-</span>
+						<div class="w-40 fl">
+							<input name="endtime" type="text" data-toggle="datepicker" placeholder="结束日期">
+						</div>
+					</div>
+					<label class="row-label">课程状态：</label>
+					<div class="row-input">
+						<select name="state" data-toggle="selectpicker" data-width="100%">
+							<option value="">全部</option>
+							<option value="0">取消</option>
+							<option value="1">未安排学员</option>
+							<option value="2">待审核</option>
+							<option value="3">审核通过</option>
+							<option value="4">已开课</option>
+							<option value="5">已完成</option>
+							<option value="9">审核拒绝</option>
+						</select>
+					</div>
+
+				</div>
+					<div class="text-center">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="theory-datagrid" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	console.log(window.config.userinfo)
+    var license_theory_list = $.CurrentNavtab.find('#theory-datagrid').datagrid({
+        gridTitle : '理论课管理列表',
+        toolbarCustom: "<button type='button' data-privilege='020302_datagrid-list_14' class='btn-red' data-icon='times' onclick='handleState(0, 0)'>取消课程</button>",
+        toolbarItem: 'add, | ,refresh',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '75%',
+        showCheckboxcol: false,
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'student/theoryLessonList',
+        columns: [
+            {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+            {name:'ctime',label:'创建时间',align:'center'},
+            {name:'starttime',label:'上课日期',align:'center',render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}},
+            {name:'starttime',label:'上课时间',align:'center',render:function(value,data){
+                var html = clz.filter.time({date:data.starttime,type:'hh:mm'}) + '-'+ clz.filter.time({date:data.endtime,type:'hh:mm'})
+                return html
+            }},
+            {name:'lessonname',label:'课程名称',align:'center'},
+            {name:'place',label:'上课地点',align:'center'},
+            {name:'idcard',label:'携带证件',align:'center'},
+            {name:'arrangenum',label:'已安排人数',align:'center'},
+            {name:'state',label:'课程状态',align:'center',render:function (value) {return clz.filter.theoryState(value)}},
+            {name:'theorynum',label:'课程ID',align:'center'},
+            {name:'op',label:'操作',width:150,align:'center',render:userOperation}
+        ],
+        editMode: {navtab:{id:'theory-add',title:'新增理论课程'}},
+        add_url:'html/license/theory/theory-add.html',
+        afterSave:function(){
+            license_theory_list.datagrid('refresh',true);
+        }
+    });
+
+    function userOperation(value,data) {
+        var html;
+        var morejson = {
+            id:data.theoryid
+        };
+        morejson = JSON.stringify(morejson);
+        if (data.state == 0) {
+            html = ''
+        } else if (data.state == 1 || data.state == 9 || data.state == 5){
+            html = "<button onclick='navtabLookup("+ data.theoryid+ "," + morejson +")' type='button' class='btn-green'>查看</button>"
+        } else if (data.state == 2) {
+            html = "<button onclick='navtabLookup("+ data.theoryid+ "," + morejson +")' type='button' class='btn-green'>查看</button>" +
+                "<button data-privilege='020302_datagrid-list_11' onclick='navtabReview("+ data.theoryid+ "," + morejson +")' type='button' class='btn-blue vhide'>审核</button>"
+        } else if (data.state == 3) {
+            html = "<button onclick='navtabLookup("+ data.theoryid+ "," + morejson +")' type='button' class='btn-green'>查看</button>" +
+                "<button type='button' data-privilege='020302_datagrid-list_12' class='btn-blue vhide' onclick='handleState("+data.theoryid+", 4)'>确认课程</button>" +
+                "<button type='button' data-privilege='020302_datagrid-list_13' class='btn-red vhide' onclick='handleState("+data.theoryid+", 1)'>重置</button>"
+        } else if (data.state == 4) {
+            html = "<button onclick='navtabLookup("+ data.theoryid+ "," + morejson +")' type='button' class='btn-green'>查看</button>";
+            if (!data.theorynum) 
+            	html += "<button data-privilege='020302_datagrid-list_18' onclick='addTheorynum("+ data.theoryid + ")' type='button' class='btn-blue vhide'>添加课程ID</button>";
+//              "<button type='button' data-privilege='020302_datagrid-list_12' class='btn-blue' onclick='handleState("+data.theoryid+", 0)'>取消课程</button>" +
+//              "<button type='button' data-privilege='020302_datagrid-list_13' class='btn-red' onclick='handleState("+data.theoryid+", 1)'>重置</button>"
+        }
+        return html;
+    }
+
+    function handleState(id,state) {
+        var type = state;
+        if (state == 1)
+            type = 0;
+        else if (state == 0) {
+        	var data = $.CurrentNavtab.find('#theory-datagrid').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行编辑操作！', {});
+				return;
+			}
+			id = data[0].theoryid;
+        }
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'student/theoryLessonText',
+            type: 'GET',
+            data: 'theoryid=' + id + '&type=' + type,
+            okCallback: function(json, options) {
+                var text = json.msg;
+                switch (state){
+                    case 0:
+//                      BJUI.alertmsg("confirm","<div style='text-align: center;font-size: 20px;'>您是否确认要取消该课程并短信通知学员？</div><br>短信内容预览:<hr style='height:1px;border:none;border-top:1px solid #555555;' />" + text,{
+//                          okCall: function() {
+//                              BJUI.ajax('doajax', {
+//                                  url: config.openBasePath + 'student/update/theoryLesson',
+//                                  type: 'POST',
+//                                  loadingmask: true,
+//                                  data: 'theoryid=' + id + '&state=0',
+//                                  okCallback: function(json, options) {
+//                                      $.CurrentNavtab.find('#theory-datagrid').datagrid('reload',true);
+//                                  }
+//                              })
+//                          },
+//                          title:"取消课程",
+//                          displayPosition:'middlecenter',
+//                          boxwidth:600,
+//                          boxheight:200
+//                      });
+						BJUI.ajax('doajax', {
+                            url: config.openBasePath + 'student/update/theoryLesson',
+                            type: 'POST',
+                            loadingmask: true,
+                            data: 'theoryid=' + id + '&state=0',
+                            okCallback: function(json, options) {
+                                $.CurrentNavtab.find('#theory-datagrid').datagrid('reload',true);
+                            }
+                        })
+                        break;
+                    case 1:
+//                      BJUI.alertmsg("confirm","<div style='text-align: center;font-size: 20px;'>您是否确认要重置该课程？</div><br>短信内容预览:<br>(重置后若移除已发送开课通知的学员，学员将收到以下短信)<hr style='height:1px;border:none;border-top:1px solid #555555;' />" + text,{
+//                          okCall: function() {
+//                              BJUI.ajax('doajax', {
+//                                  url: config.openBasePath + 'student/update/theoryLesson',
+//                                  type: 'POST',
+//                                  loadingmask: true,
+//                                  data: 'theoryid=' + id + '&state=1',
+//                                  okCallback: function (json, options) {
+//                                      $.CurrentNavtab.find('#theory-datagrid').datagrid('reload',true);
+//                                  }
+//                              })
+//                          },
+//                          title:"重置课程",
+//                          displayPosition:'middlecenter',
+//                          boxwidth:600,
+//                          boxheight:200
+//                      });
+                        BJUI.ajax('doajax', {
+                            url: config.openBasePath + 'student/update/theoryLesson',
+                            type: 'POST',
+                            loadingmask: true,
+                            data: 'theoryid=' + id + '&state=1',
+                            okCallback: function (json, options) {
+                                $.CurrentNavtab.find('#theory-datagrid').datagrid('reload',true);
+                            }
+                        })
+                        break;
+                    case 4:
+                        console.log(text);
+                        BJUI.alertmsg("confirm","<div style='text-align: center;font-size: 20px;'>您是否确认要提交该课程并短信通知学员？</div><br>短信内容预览:<hr style='height:1px;border:none;border-top:1px solid #555555;' />" + text,{
+                            okCall: function() {
+                                BJUI.ajax('doajax', {
+                                    url: config.openBasePath + 'student/update/theoryLesson',
+                                    type: 'POST',
+                                    loadingmask: true,
+                                    data: 'theoryid=' + id + '&state=4',
+                                    okCallback: function(json, options) {
+                                        $.CurrentNavtab.find('#theory-datagrid').datagrid('reload',true);
+                                    }
+                                })
+                            },
+                            title:"确认课程",
+                            displayPosition:'middlecenter',
+                            boxwidth:600,
+                            boxheight:200
+                        });
+                        break;
+                    default:
+                        BJUI.alertmsg("error","错误！");
+                        break;
+                }
+            }
+        });
+    }
+
+    function navtabLookup(id, morejson){
+        BJUI.navtab({
+            id:'theory-lookup-' + id,
+            url:'html/license/theory/theory-view.html',
+            title:'查看理论课',
+            onClose:function(){
+                license_theory_list.datagrid('refresh',true);
+            },
+            more:morejson
+        })
+    }
+
+    function navtabReview(id, morejson){
+        BJUI.navtab({
+            id:'theory-review-' + id,
+            url:'html/license/theory/theory-review.html',
+            title:'审核理论课',
+            onClose:function(){
+                license_theory_list.datagrid('refresh',true);
+            },
+            more:morejson
+        })
+    }
+    
+    function addTheorynum(id){
+    	var table = $.CurrentNavtab.find('#theory-datagrid');
+        BJUI.alertmsg('prompt', '请输入课程ID：', {
+        	title: "添加课程ID",
+        	promptname:'theory_theorynum',
+		    okCall() {
+		    	var theorynum = $("*[name='theory_theorynum']").val();
+		    	BJUI.ajax('doajax', {
+				    url: config.openBasePath + 'student/update/theoryLesson',
+				    type: "POST",
+				    data: {"theoryid":id, "theorynum": theorynum, "state": -1},
+				    loadingmask: true,
+				    okCallback() {
+				    	table.datagrid('reload',true);
+				    }
+				})
+		    }
+		})
+    }
+</script>

@@ -1,0 +1,129 @@
+<form id="theory-form">
+	<input type="hidden" name="theoryid" />
+</form>
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+	$.CurrentDialog.find('input[name="theoryid"]').val(clz.getWindowJson());
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del,save',
+        toolbarCustom: "<button type='button' class='btn-blue' data-icon='check' onclick='theory_result_allpass()'>全部已到</button>",
+        height: '95%',
+        width: '30%',
+        paging: false,
+        showCheckboxcol: true,
+        showToolbar: true,
+        data: [],
+        inlineEditMult: true,
+        saveAll: true,
+        showLinenumber: false,
+        editUrl: config.openBasePath + 'student/importTheoryResult',
+        columns: [
+            {name: 'name', label: '姓名', align: 'center'},
+            {name: 'studentid', label: '', align: 'center', hide: true},
+            {name: 'theoryid', label: '', align: 'center', hide: true},
+            {name: 'idcard', label: '身份证号', align: 'center', attrs: {readonly: 'readonly'}},
+            {name: 'theoryresult',label: '成绩', align: 'center', type:'select', items:[{"2":"未到"}, {"3":"取消"}]},
+            {name: 'remark', label: '备注', align: 'center'}
+        ],
+        beforeSave : function() {
+            var data = clz.getDialogGridData("datagrid-list");
+            if (data.length == 0) {
+                BJUI.alertmsg('warn', '没有提交的数据！');
+                return false;
+            }
+            var ids = [];
+            for (var i = 0; i < data.length; i++) {
+            	if (!data[i].studentid || !data[i].theoryid || !data[i].theoryresult) {
+            		console.log(data[i])
+            		BJUI.alertmsg('warn', '存在空数据！');
+            		return false;
+            	}
+                ids.push(data[i].idcard);
+            }
+            if (hasReapeat(ids)) {
+                BJUI.alertmsg('warn', '证件号码存在重复数据,请处理后再提交！');
+                return false;
+            }
+            return true;
+        },
+        afterSave : function () {
+            BJUI.dialog('closeCurrent');
+        }
+    });
+
+    $(document).on("change","[name='name']",function(){
+        if ($.trim($(this).val()) == "") {
+            return;
+        }
+        var nameobj = $(this).parent().nextAll("td");
+        var idcard = nameobj.find("input[name='idcard']");
+        var studentid = nameobj.find("input[name='studentid']");
+        var inputtheory = nameobj.find("input[name='theoryid']");
+        var theoryid = $.CurrentDialog.find('input[name="theoryid"]').val();
+        var name = $(this).val();
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'student/getTheoryResultStudents',
+            data : {name : name, theoryid : theoryid},
+            type : 'GET',
+            okCallback: function(json, options) {
+                var students = json.result;
+                if (students.length == 0) {
+                    idcard.val("未知学员");
+                    studentid.val("");
+                } else {    
+                	if (students.length > 1) {
+        		        BJUI.findgrid({
+						    dialogOptions: {
+						    	title:'选择学员',
+						    	width: '700',
+					    		height: '400'
+						    },
+						    empty: '',
+						    gridOptions: {
+						    	showToolbar : false,
+						    	paging: {pageSize:10, selectPageSize:'20,50,100'},
+						        local: 'remote',
+						        height: '95%',
+						        dataUrl: config.openBasePath + 'student/getTheoryResultStudents',
+						        postData: {name : name, theoryid : theoryid},
+						        columns: [
+						            {name:'name',label:'姓名',align:'center'},
+						            {name:'idcard',label:'身份证号',align:'center'},
+						            {name:'applydate',label:'报名日期',align:'center', render: function(value) {return value.substring(0,10)}}
+						        ]
+						    },
+						    onSelect: function(data) {
+						    	studentid.val(data.id);
+						    	idcard.val(data.idcard);
+						    	BJUI.dialog('closeCurrent');
+						    }
+						});
+                	} else {
+                		studentid.val(students[0].id);
+				    	idcard.val(students[0].idcard);
+                	}
+                	inputtheory.val(theoryid);
+                }
+                studentid.change();
+                idcard.change();
+                inputtheory.change();
+            }
+        });
+    })
+    
+    function theory_result_allpass() {
+    	var jsondata = '[{"name":"","studentid":"0","theoryid":"' + $.CurrentDialog.find('input[name="theoryid"]').val() 
+    						+ '","idcard":"","theoryresult":"1","remark":"","addFlag":true}]'
+    	BJUI.ajax('doajax', {
+            url: config.openBasePath + 'student/importTheoryResult',
+            data: {json: jsondata},
+            type : 'POST',
+            okCallback: function(json, options) {
+            	BJUI.dialog('closeCurrent');
+            }
+		})
+    }
+</script>
+    

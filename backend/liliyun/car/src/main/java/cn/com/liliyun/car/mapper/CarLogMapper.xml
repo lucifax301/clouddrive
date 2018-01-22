@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarLogMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="carno" property="carno" jdbcType="VARCHAR" />
+    <result column="carid" property="carid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="prename" property="prename" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="packing_place" property="parkingPlace" jdbcType="VARCHAR" />
+    <result column="cur_areaid" property="curAreaid" jdbcType="VARCHAR" />
+    <result column="lead_date" property="leadDate" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="change_or_not" property="changeOrNot" jdbcType="INTEGER" />
+    <result column="change_carNo" property="changeCarNo" jdbcType="VARCHAR" /> 
+    <result column="change_area_id" property="changeAreaId" jdbcType="INTEGER" />   
+    <result column="change_name" property="changeName" jdbcType="VARCHAR" />
+    <result column="cur_change_area_id" property="curChangeAreaId" jdbcType="INTEGER" /> 
+    <result column="cur_change_name" property="curChangeName" jdbcType="VARCHAR" />      
+    <result column="change_packing_place" property="changePackingPlace" jdbcType="VARCHAR" />
+    <result column="change_lead_date" property="changeLeadDate" jdbcType="VARCHAR" />
+    <result column="change_property" property="changeProperty" jdbcType="INTEGER" /> 
+    <result column="change_remark" property="changeRemark" jdbcType="VARCHAR" />       
+    <result column="cur_audit_id" property="curAuditId" jdbcType="INTEGER" /> 
+    <result column="submit_id" property="submitId" jdbcType="INTEGER" />    
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />    
+    <result column="transaction_id" property="transactionId" jdbcType="VARCHAR" />         
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, carid, carno, areaid, status, name, prename,packing_place,cur_areaid,lead_date,remark,reason,change_or_not,change_carNo,change_area_id,change_name,cur_change_area_id,cur_change_name,change_lead_date,change_property,
+    change_remark, cur_audit_id , type, ctime, cuid, cname,submit_id,audit_status,transaction_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarLog" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarLog" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_log
+    <where>
+      <if test="carid != null" >
+        	and carid = #{carid,jdbcType=INTEGER}
+      </if>
+      <if test="carno != null and carno !=''" >
+        	and carno = #{carno,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null and status !=''" >
+        	and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="type != null and type !=''" >
+        	and type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="areaid != null and areaid !=''" >
+        	and areaid = #{areaid,jdbcType=INTEGER}
+      </if>
+      <if test="cstartTime != null and cstartTime !=''">
+			and ctime >= #{cstartTime}
+ 	  </if>
+	  <if test="cendTime != null and cendTime !=''">
+			<![CDATA[and ctime <= #{cendTime}]]> 
+	   </if>
+    </where>
+     order by ctime desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarLog" >
+    delete from t_car_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarLog" >
+    insert into t_car_log (id, carno, areaid, 
+      status, name, prename, 
+      type, ctime, cuid, 
+      cname)
+    values (#{id,jdbcType=INTEGER}, #{carno,jdbcType=VARCHAR}, #{areaid,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{prename,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{cuid,jdbcType=INTEGER}, 
+      #{cname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarLog">
+    insert into t_car_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carid != null" >
+        carid,
+      </if>
+      <if test="carno != null" >
+        carno,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="prename != null" >
+        prename,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="parkingPlace != null" >
+        packing_place,
+      </if>      
+      <if test="curAreaid != null" >
+        cur_areaid,
+      </if>      
+      <if test="leadDate != null" >
+        lead_date,
+      </if>      
+      <if test="remark != null" >
+        remark,
+      </if>      
+       <if test="reason != null" >
+        reason,
+      </if>
+      <if test="changeOrNot != null" >
+        change_or_not,
+      </if>
+      <if test="changeOrNot==1">
+	      <if test="changeCarNo != null" >
+	        change_carNo,
+	      </if>      
+	      <if test="changeAreaId != null" >
+	        change_area_id,
+	      </if>      
+	      <if test="changeName != null" >
+	        change_name,
+	      </if>      
+	      <if test="curChangeAreaId != null" >
+	        cur_change_area_id,
+	      </if>      
+	      <if test="curChangeName != null" >
+	        cur_change_name,
+	      </if>      
+	      <if test="changeLeadDate != null" >
+	        change_lead_date,
+	      </if>
+	      <if test="changeProperty != null" >
+	        change_property,
+	      </if>      
+	      <if test="changeRemark != null" >
+	        change_remark,
+	      </if>     
+	      <if test="changePackingPlace != null" >
+	        change_packing_place,
+	      </if>    
+      </if>
+      <if test="curAuditId != null" >
+	    cur_audit_id,
+	   </if> 
+      <if test="submitId != null" >
+        submit_id,
+      </if> 
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>   
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+       <if test="cname != null" >
+        cname,
+      </if>   
+      <if test="transactionId != null" >
+        transaction_id
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="prename != null" >
+        #{prename,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="parkingPlace != null" >
+        #{parkingPlace,jdbcType=VARCHAR},
+      </if>      
+      <if test="curAreaid != null" >
+        #{curAreaid,jdbcType=INTEGER},
+      </if>      
+      <if test="leadDate != null" >
+        #{leadDate,jdbcType=DATE},
+      </if>      
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>      
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="changeOrNot != null" >
+       #{changeOrNot,jdbcType=INTEGER},
+      </if>
+      <if test="changeOrNot==1" >
+           <if test="changeCarNo != null" >
+	       #{changeCarNo,jdbcType=VARCHAR},
+	      </if>
+		  <if test="changeAreaId != null" >
+	       #{changeAreaId,jdbcType=INTEGER},
+	      </if>      
+	      <if test="changeName != null" >
+	       #{changeName,jdbcType=VARCHAR},
+	      </if>      
+	      <if test="curChangeAreaId != null" >
+	       #{curChangeAreaId,jdbcType=INTEGER},
+	      </if>      
+	      <if test="curChangeName != null" >
+	       #{curChangeName,jdbcType=VARCHAR},
+	      </if>      
+	      <if test="changeLeadDate != null" >
+	       #{changeLeadDate,jdbcType=DATE},
+	      </if>
+	      <if test="changeProperty != null" >
+	       #{changeProperty,jdbcType=INTEGER},
+	      </if>      
+	      <if test="changeRemark != null" >
+	       #{changeRemark,jdbcType=VARCHAR},
+	      </if>
+	      <if test="changePackingPlace != null" >
+	       #{changePackingPlace,jdbcType=INTEGER},
+	      </if>         
+      </if>  
+      <if test="curAuditId != null" >
+	       #{curAuditId,jdbcType=INTEGER},
+	  </if> 
+      <if test="submitId != null" >
+       #{submitId,jdbcType=INTEGER},
+      </if>  
+      <if test="auditStatus != null" >
+       #{auditStatus,jdbcType=INTEGER},
+      </if>          
+      <if test="ctime != null" >
+       #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+       #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+       #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionId != null" >
+       #{transactionId,jdbcType=VARCHAR}
+      </if>      
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarLog" >
+    update t_car_log
+    <set >
+      <if test="carno != null" >
+        carno = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="prename != null" >
+        prename = #{prename,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+       audit_status=#{auditStatus,jdbcType=INTEGER},
+      </if>  
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarLog" >
+    update t_car_log
+    set carno = #{carno,jdbcType=VARCHAR},
+      areaid = #{areaid,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      prename = #{prename,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

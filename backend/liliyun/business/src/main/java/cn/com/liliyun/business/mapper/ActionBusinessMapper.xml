@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.business.mapper.ActionBusinessMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.business.model.ActionBusiness" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="actionid" property="actionid" jdbcType="VARCHAR" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, businessid, actionid 
+    
+    
+  </sql>
+  
+  <select id="get" resultMap="BaseResultMap" parameterType="cn.com.liliyun.business.model.ActionBusiness" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_action_business
+    where id = #{id}
+  </select>
+  
+  <select id="getByAction" resultMap="BaseResultMap" parameterType="cn.com.liliyun.business.model.ActionBusiness" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_action_business
+    where actionid = #{actionid}
+  </select>
+  
+  <select id="list" resultMap="BaseResultMap" parameterType="cn.com.liliyun.business.model.ActionBusiness" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_action_business
+    
+  </select>
+  
+  <delete id="delete" parameterType="cn.com.liliyun.business.model.ActionBusiness">
+  	delete from t_action_business where id=#{id}
+  </delete>
+  
+  <insert id="add" parameterType="cn.com.liliyun.business.model.ActionBusiness" >
+    insert into t_action_business (businessid, actionid)
+    values ( #{businessid}, #{actionid})
+  </insert>
+  
+  <update id="update" parameterType="cn.com.liliyun.business.model.ActionBusiness">
+  	update t_action_business set businessid=#{businessid},actionid=#{actionid} where id=#{id}
+  </update>	
+  	
+</mapper>

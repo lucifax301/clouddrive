@@ -1,0 +1,132 @@
+<div class="bjui-pageContent">
+
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			<div class="bjui-row col-2">
+					<label class="row-label">车牌号：</label>
+					<div class="row-input required ">
+						<input name="preParkingPlaceId" type="hidden" id="preParkingPlaceId" onchange="carNoChange(this);">
+						<input type="text" name="carNo" readonly="true"  data-toggle="findgrid" data-options="{
+	                    include: 'carNo : carNo,preParkingPlaceId:parkingId',
+	                    dialogOptions: {
+	                        title:'查找车牌号',
+	                        maxable : false
+	                    },
+	                    empty : false,
+	                    gridOptions: {
+	                        tableWidth:'80%',
+	                        filterThead : true,
+	                        dataUrl: config.openBasePath + 'car/getCarList',
+	                        columns: [
+	                            {name:'carNo', label:'车牌号码', width : '25%', align:'center'},
+	                            {name:'areaId', label:'所属片区', width : '30%', align:'center',render: formatAreaCell},
+	                            {name:'coachName', label:'所有人', width : '30%', align:'center'}
+	                        ]
+	                    },
+	                }" placeholder="点放大镜按钮查找" data-rule="required">
+					</div>
+				   <label class="row-label">原停车点：</label>
+				  	<div class="row-input ">
+						<input type="text" name="preParkingPlace" id="preParkingPlace" readonly="readonly" >
+					</div>
+					<label class="row-label">原停车费：</label>
+					<div class="row-input">
+						<input type="text" name="preCost" id="preCost" readonly="readonly" placeholder="单位(元)" >
+					</div>
+					<label class="row-label">变更后停车点：</label>
+					<!--<div class="row-input ">
+						<input type="hidden" name="parkingPlaceId" id="parkingPlaceId" >
+						<input type="text" name="parkingPlace" readonly="true" data-toggle="findgrid" data-options="{
+	                    include: 'parkingPlaceId : id ,parkingPlace:packingPlace,cost:cost',
+	                    dialogOptions: {
+	                        title:'查找停车地点',
+	                        maxable : false
+	                    },
+	                    empty : false,
+	                    gridOptions: {
+	                        tableWidth:'80%',
+	                        filterThead : true,
+	                        dataUrl: config.openBasePath + 'car/queryParkingList',
+	                        columns: [
+	                            {name:'id', label:'ID', width : '25%', align:'center'},
+	                            {name:'packingPlace', label:'停车地点', width : '30%', align:'center'}
+	                        ]
+	                    },
+	                }" placeholder="点放大镜按钮查找"  data-rule="required">
+					</div>	-->
+					<div class="row-input ">
+						<input type="hidden" name="parkingPlace" id="parkingPlace" >
+						<select name="parkingPlaceId" id="parkingPlaceId"  data-rule="required" data-toggle="selectpicker" onchange="onchangeParkingPlace(this);" data-width="100%" data-dataurl="/httpaccess/car/queryParkingList" data-optiontype="id,packingPlace">
+						</select>	
+					</div>
+					<label class="row-label">变更后停车费：</label>
+					<div class="row-input">
+						<input type="text" name="cost" id="cost" readonly="readonly" placeholder="单位(元)">
+					</div>								
+					<label class="row-label">变更原因：</label>
+						<div class="row-input">
+							<input type="text" name="reason" >
+						</div>
+					</div>			
+				</div>
+			</div>
+		</form>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="submit" class="btn-blue" data-icon="button" onclick="addCarParkingApplyLog();">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+		
+	function addCarParkingApplyLog(){
+		if($.CurrentDialog.find('#add-form').isValid()){
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'car/addCarParkingApplyLog',
+                loadingmask: true,
+                data:$.CurrentDialog.find('#add-form').serializeArray(),
+			    validate: true,
+                callback: function(json) {
+                    BJUI.dialog('closeCurrent');
+                }
+            });
+        };
+	}
+	
+	function carNoChange(e){
+	  var id=$(e).val();
+ 	  if(id){
+	 	  BJUI.ajax('doajax', {
+		        url: config.openBasePath + 'car/queryParking',
+		        loadingmask: true,
+		        data: {id:id},
+		        callback: function(json) {
+		          	console.log(json.result);
+		          	if(json.result){
+		          		$("#preCost").val(json.result.cost);
+		          		$("#preParkingPlace").val(json.result.packingPlace);
+		          	}
+		        }
+		   });
+ 	  }
+	}
+	
+	function onchangeParkingPlace(e){
+	  var id=$(e).val();
+	  if(id){
+	 	  BJUI.ajax('doajax', {
+		        url: config.openBasePath + 'car/queryParking',
+		        loadingmask: true,
+		        data: {id:id},
+		        callback: function(json) {
+		          	console.log(json.result);
+		          	if(json.result){
+		          		$("#cost").val(json.result.cost);
+		          		$("#parkingPlace").val(json.result.packingPlace);
+		          	}
+		        }
+		   });
+ 	  }
+	}
+
+</script>

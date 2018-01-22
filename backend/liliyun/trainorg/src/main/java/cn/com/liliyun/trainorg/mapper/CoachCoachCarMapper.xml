@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.trainorg.mapper.CoachCoachCarMapper">
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.CoachCoachCar">
+    <result column="coachid" jdbcType="INTEGER" property="coachid" />
+    <result column="carid" jdbcType="INTEGER" property="carid" />
+    <result column="isvalid" jdbcType="TINYINT" property="isvalid" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="mtime" jdbcType="TIMESTAMP" property="mtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    coachid, carid, isvalid, ctime, mtime
+  </sql>
+  
+  <select id="selectOne" parameterType="cn.com.liliyun.trainorg.model.CoachCoachCar" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_coachcar where 1 = 1
+      <if test="carid != null">
+        and carid = #{carid,jdbcType=INTEGER}
+      </if> 
+      <if test="coachid != null">
+        and coachid = #{coachid,jdbcType=INTEGER}
+      </if> 
+      <if test="isvalid != null">
+        and isvalid = #{isvalid,jdbcType=TINYINT}
+      </if>  
+      	limit 1
+  </select>
+  
+  <select id="selectList" parameterType="cn.com.liliyun.trainorg.model.CoachCoachCar" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_coachcar where 1 = 1
+      <if test="carid != null">
+        and carid = #{carid,jdbcType=INTEGER}
+      </if> 
+      <if test="coachid != null">
+        and coachid = #{coachid,jdbcType=INTEGER}
+      </if> 
+      <if test="isvalid != null">
+        and isvalid = #{isvalid,jdbcType=TINYINT}
+      </if>  
+  </select>
+  
+  <select id="selectCoachByCarid" parameterType="cn.com.liliyun.trainorg.model.CoachCoachCar" resultType="cn.com.liliyun.coach.model.Coach">
+    select t.coachid, t.name, t.sex, t.employstatus, t.mobile, t.idcard
+    from t_coach_coachcar tc , t_coach t
+    where tc.coachid = t.coachid and tc.isvalid = 1
+      <if test="carid != null">
+        and tc.carid = #{carid,jdbcType=INTEGER}
+      </if> 
+      order by tc.mtime desc
+  </select>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.CoachCoachCar">
+    insert into t_coach_coachcar (coachid, carid, isvalid, 
+      ctime, mtime)
+    values (#{coachid,jdbcType=INTEGER}, #{carid,jdbcType=INTEGER}, #{isvalid,jdbcType=TINYINT}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP})
+  </insert>
+ 
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.CoachCoachCar">
+    insert into t_coach_coachcar
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="coachid != null">
+        coachid,
+      </if>
+      <if test="carid != null">
+        carid,
+      </if>
+      <if test="isvalid != null">
+        isvalid,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+      <if test="mtime != null">
+        mtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="coachid != null">
+        #{coachid,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null">
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="isvalid != null">
+        #{isvalid,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null">
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateSelective" parameterType="cn.com.liliyun.trainorg.model.CoachCoachCar">
+    update t_coach_coachcar
+    <set>
+      <if test="isvalid != null">
+        isvalid = #{isvalid,jdbcType=TINYINT},
+      </if>
+    </set> 
+    where coachid = #{coachid,jdbcType=INTEGER} and carid = #{carid,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteSelective" parameterType="cn.com.liliyun.trainorg.model.CoachCoachCar">
+    delete from  t_coach_coachcar
+    where coachid = #{coachid,jdbcType=INTEGER} and carid = #{carid,jdbcType=INTEGER}
+  </delete>
+</mapper>

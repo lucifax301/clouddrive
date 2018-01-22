@@ -1,0 +1,349 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<input type="hidden" id="applyid" name="id" />
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>暂停学车申请</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3 vhide" id="auditdiv" style="display: none;" data-privilege='030302_datagrid-list_12'>
+					<div class="row-input fill-2">
+						<button type="button" class="btn-blue" data-icon="" onclick="pauseaudit(1)">审核通过</button>
+						<button type="button" class="btn-blue" data-icon="" onclick="pauseaudit(2)">审核不通过</button>
+
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">申请类型:</label>
+					<div class="row-input">
+						<input type="text" value="暂停学车" class="clear-style" />
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">学员姓名:</label>
+					<div class="row-input">
+						<input type="text" name="studentname" id="stuname" data-width="100%" readonly="readonly">
+						<input type="hidden" name="studentid" id="studentid" />
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">学车状态:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="applyexam" id="applyexam" data-width="100%">
+					</div>
+					<label class="row-label">身份证号:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="idcard" id="idcard" data-width="100%">
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">手机号码:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="phone" id="mobile" data-width="100%">
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">暂停周期:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="begindate" data-width="100%">
+					</div>
+					<label class="row-label">到:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="enddate" data-width="100%">
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">暂停原因:</label>
+					<div class="row-input fill-2">
+						<textarea type="text" rows="2" name="reason" maxlength="60" readonly="readonly"></textarea>
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">备注:</label>
+					<div class="row-input fill-2">
+						<textarea type="text" rows="2" name="remark" maxlength="300" readonly="readonly"></textarea>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		
+		<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>审核信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="col-3">
+							<table class='table table-bordered' id="flowinfo">
+								<tr>
+									<td>申请人</td>
+									<td id="applyuser"></td>
+									<td>片区</td>
+									<td id="area"></td>
+									<td>申请时间</td>
+									<td id="applydate"></td>
+								</tr>
+							</table>
+						</div>
+
+						<div class="bjui-row col-3">
+							<div id="actiondiv" style="display:none" class="btn-group">
+								<button type="button" class="btn-blue btn" id="auditbtn" style="display: none;" data-icon="" onclick="coach_mod_apply_template.audit(1)">审核通过</button>
+								<button type="button" class="btn-blue btn" id="unauditbtn" style="display: none;" data-icon="" onclick="coach_mod_apply_template.audit(2)">审核不通过</button>
+								<button type="button" class="btn-blue btn" id="cancelbtn" style="display: none;" data-icon="" onclick="coach_mod_apply_template.audit(3)">撤回</button>
+							</div>
+						</div>
+					</div>
+				</div>
+</form>
+
+</div>
+
+<script>
+	
+	var flowdata = clz.getNavtab_more();
+	
+	var stu_pause_apply_template = {
+
+		loadapplyinfo: function(flowdata) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + '/student/learnpause/getByTran?transactionid=' + flowdata.transactionid,
+				loadingmask: true,
+				async: false,
+				okCallback: function(json, options) {
+					console.log(json)
+					
+					clz.CurrentDom_init({
+						current: 'Navtab',
+						timetype: [{
+							name: "begindate",
+							type: "yyyy-MM-dd"
+						}, {
+							name: "enddate",
+							type: "yyyy-MM-dd"
+						}],
+						form_name: 'view-form',
+						data: json.result
+					});
+					
+					$.CurrentNavtab.find("#applyexam").val(formatSubject(json.result.applyexam))
+					if(json.result.status == 0) {
+						if(json.result.modapplystat == 1 || json.result.modapplystat == 2) {
+		
+							if(json.result.modapplystat == 1) { //可以审核
+								$.CurrentNavtab.find("#auditdiv").css("display", "")
+							} else if(json.result.modapplystat == 2) { //可以取消
+		
+							}
+		
+						}
+					}
+					
+					var data = json.result;
+					
+					$.CurrentNavtab.find("#applyid").val(data.id);
+					$.CurrentNavtab.find("#applyuser").html(data.applyuser);
+					$.CurrentNavtab.find("#area").html(formatAreaCell(data.areaid));
+					$.CurrentNavtab.find("#applydate").html(data.createdate);
+					if(data.status == 0) $.CurrentNavtab.find("#auditstatus").html("审核状态: 未审核");
+					if(data.status == 1) $.CurrentNavtab.find("#auditstatus").html("审核状态: 审核通过");
+					if(data.status == 2) $.CurrentNavtab.find("#auditstatus").html("审核状态: 审核拒绝");
+					if(data.status == 3) $.CurrentNavtab.find("#auditstatus").html("审核状态: 已撤回");
+					
+					stu_pause_apply_template.loadflowinfo();
+				}
+			});
+		},
+
+		
+		loadflowinfo: function() {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/flow/listflowstep?flowid="+flowdata.id,
+				loadingmask: true,
+				async: true,
+				
+				okCallback: function(json, options) {
+					console.log(json);
+					if(json.result&&json.result.list){
+						var sdata=json.result.list;
+						var text="";
+						for(var i=0;i<sdata.length;i++){
+							var status="";
+							
+							if(sdata[i].status==0){
+								status="未处理"
+							}else if(sdata[i].status==1){
+								status="审核通过"
+							}else if(sdata[i].status==2){
+								status="审核不通过"
+							}
+							text=text+"<tr><td>审核人</td><td>"+sdata[i].user +  "</td><td>处理结果</td><td>"+status+"</td><td>处理时间</td><td>" +(sdata[i].status==0?"":sdata[i].updatedate) + "</td></tr>"
+						}
+					}
+					
+					$.CurrentNavtab.find("#flowinfo").append($(text));
+					$.CurrentNavtab.find("#flowinfo").trigger(BJUI.eventType.initUI)
+					//flowinfo
+				}
+			})
+			
+		},
+
+
+		audit: function(state) {
+			if(state == 1)
+				BJUI.alertmsg('confirm', '确认审核通过？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						coach_mod_apply_template.doaudit(1)
+					}
+				})
+			if(state == 2)
+				BJUI.alertmsg('confirm', '确认审核不通过？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						coach_mod_apply_template.doaudit(2)
+					}
+				})
+			if(state == 3)
+				BJUI.alertmsg('confirm', '确认撤回申请吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						coach_mod_apply_template.doaudit(3)
+					}
+				})	
+		},
+
+		doaudit: function(state) {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/coach/auditModApply",
+				loadingmask: true,
+				data: {
+					applyid: $.CurrentNavtab.find("#applyid").val(),
+					state: state
+				},
+				okCallback: function(json, options) {
+					BJUI.alertmsg('ok', '提交成功！', {})
+					//BJUI.navtab('closeCurrentTab')
+					$.CurrentNavtab.find("#actiondiv").css("display", "none")
+					BJUI.navtab('refresh');
+				}
+			})
+		},
+		disabledom: function() {
+			$.CurrentNavtab.find("input[type=text]").each(
+				function() {
+
+					$(this).attr("readonly", "readonly")
+
+				}
+			)
+			$.CurrentNavtab.find("select").each(
+				function() {
+
+					$(this).attr("disabled", "true")
+
+				}
+			)
+		}
+	}
+	
+	stu_pause_apply_template.loadapplyinfo(flowdata)
+	
+//	BJUI.ajax('doajax', {
+//		url: config.openBasePath + "student/learnpause/get",
+//		loadingmask: true,
+//		async: false,
+//		data: {
+//			id: $.CurrentDialog.find("#applyid").val()
+//		},
+//		okCallback: function(json, options) {
+//			console.log(json)
+//			clz.CurrentDom_init({
+//				current: 'Dialog',
+//				timetype: [{
+//					name: "begindate",
+//					type: "yyyy-MM-dd"
+//				}, {
+//					name: "enddate",
+//					type: "yyyy-MM-dd"
+//				}],
+//				form_name: 'view-form',
+//				data: json.result
+//			});
+//			$.CurrentDialog.find("#applyexam").val(formatSubject(json.result.applyexam))
+//			if(json.result.status == 0) { //申请是待审核状态
+//				if(json.result.modapplystat == 1 || json.result.modapplystat == 2) {
+//
+//					if(json.result.modapplystat == 1) { //可以审核
+//						$("#auditdiv").css("display", "")
+//					} else if(json.result.modapplystat == 2) { //可以取消
+//
+//					}
+//
+//				}
+//
+//			}
+//
+//		}
+//	})
+
+	function pauseaudit(state) {
+		if(state == 1)
+			BJUI.alertmsg('confirm', '确认审核通过？', {
+				displayPosition: 'middlecenter',
+				okCall: function() {
+					dopauseaudit(1)
+				}
+			})
+		if(state == 2)
+			BJUI.alertmsg('confirm', '确认审核不通过？', {
+				displayPosition: 'middlecenter',
+				okCall: function() {
+					dopauseaudit(2)
+				}
+			})
+	}
+
+	function dopauseaudit(state) {
+
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/student/learnpause/audit",
+			loadingmask: true,
+			data: {
+				"id": $.CurrentNavtab.find("#applyid").val(),
+				status: state,
+				type: 1
+			},
+			okCallback: function(json, options) {
+				//console.log(json.result.list)
+				BJUI.alertmsg('ok', '提交成功！', {})
+				$.CurrentNavtab.find("#auditdiv").css("display", "")
+				$.CurrentNavtab.find("#auditdiv").remove()
+				BJUI.navtab('refresh');
+			}
+		})
+	}
+
+	function formatSubject(value) {
+		switch(value) {
+			case 0:
+				return "科目一";
+			case 1:
+				return "科目二";
+			case 2:
+				return "科目三";
+			case 3:
+				return "科目四";
+		}
+	}
+</script>

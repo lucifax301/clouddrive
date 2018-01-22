@@ -1,0 +1,123 @@
+<section id="thispage" privilege = "040507"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>年审记录搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+		            <div class="row-input">
+		                <select name="areaid" data-toggle="selectpicker" data-width="100%" 
+		                    data-dataurl="/httpaccess/area/list" data-optiontype = "id,name">
+		                </select>
+		            </div>
+		            <label class="row-label">科目：</label>
+					<div class="row-input">
+						<select name="teachSubject" data-toggle="selectpicker" data-width="100%">
+							<option value="0">科目二</option>
+							<option value="1">科目三</option>
+							<option value="2">长训</option>
+							<option value="3">全程</option>
+						</select>
+		           </div>
+		            <label class="row-label">油品：</label>
+		            <div class="row-input">
+		                <select name="fuel" data-toggle="selectpicker" data-width="100%">
+		                    <option value="" selected>全部</option>
+		                    <option value="0">0#</option>
+		                    <option value="1">90#</option>
+		                    <option value="2">92#</option>
+		                    <option value="3">93#</option>
+		                    <option value="4">95#</option>
+		                    <option value="5">97#</option>
+		                    <option value="6">98#</option>
+		                    <option value="7">电</option>
+		                </select>
+		            </div>
+		            <label class="row-label">时间：</label>
+		            <div class="row-input">
+		               	<input type="text" name="stime" data-toggle="datepicker" placeholder="起始时间"> 
+		            </div>
+		            <label class="row-label">时间：</label>
+		            <div class="row-input">
+		                <input type="text" name="etime" data-toggle="datepicker" placeholder="截止时间"> 
+		            </div>
+				 	<label class="row-label">车牌号码：</label>
+		            <div class="row-input">
+		                <input type="text" name="carNo" value="">
+		            </div>
+		            
+		      	</div>
+		            <div class="text-center">
+		                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		       		</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var car_oil_oilrecord_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '年审记录列表',
+       // toolbarItem: 'add,|,edit,|,del,|,refresh,|,import',
+        toolbarItem: '',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+//      showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + '/car/getCarAnnualList',
+        columns: [		           
+        	{name:'areaid',label:'片区',align:'center',render: formatAreaCell},
+            {name:'teachsubject',label:'带教科目',align:'center',render:function(value){
+					switch(value){
+						case 0:
+							return "科目二";
+						case 1:
+							return "科目三";
+						case 2:
+							return "长训";
+						case 3:
+							return "全程";
+					}					
+            }},
+            {name:'carNo',label:'车牌号',align:'center'},
+            {name:'coachName',label:'使用人',align:'center'},
+            {name:'cost',label:'油费',align:'center'},
+            {name:'annualCost',label:'年审费',align:'center'},
+            {name:'insurePay',label:'保险费',align:'center'},
+            {name:'count',label:'毕业人数',align:'center'},
+            {name:'avgCost',label:'人均支出',align:'center'},
+        ],
+        editMode: {dialog:{width:'800',height:'420',title:'加油记录',mask:true}},       
+        add_url :  'html/car/oil/oilrecord/oil-add.html',
+        edit_url: 'html/car/oil/oilrecord/oil-edit.html',
+        delUrl : config.openBasePath + '/car/deleteCarOilwear',
+		delPK : 'id',
+		afterSave:function(){
+			BJUI.dialog('closeCurrent');
+			car_oil_oilrecord_list.datagrid('refresh',true);
+		},
+		afterEdit:function(){
+			BJUI.dialog('closeCurrent');
+			car_oil_oilrecord_list.datagrid('refresh',true);
+		},
+		afterDelete:function(){
+			car_oil_oilrecord_list.datagrid('refresh',true);
+		},
+		importOption: {
+			type: "navtab",
+			options: {
+				id: 'importOil',
+				url: 'html/car/oil/oilrecord/upload.html',
+				title: '上传文件',
+				width: 400,
+				height: 250,
+				mask: true
+			}
+		},
+  });	
+</script>

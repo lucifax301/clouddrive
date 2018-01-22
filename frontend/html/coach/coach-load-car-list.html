@@ -1,0 +1,104 @@
+<table id="car-datagrid" class="table table-bordered" data-tabprivilege="car-datagrid"></table>
+<script type="text/javascript">
+var pdata=clz.getWindowJson();
+	console.log(pdata)
+		var areaid=pdata.areaid;
+		var teachtypeid=pdata.teachtypeid;
+		var cartype=pdata.cartype;
+		if(!areaid)areaid="";
+		if(!teachtypeid)teachtypeid=""
+		if(!cartype||cartype=='null')cartype=""
+var manager_coach_car_list = {
+	list: $.CurrentDialog.find('#car-datagrid').datagrid({
+		gridTitle: '车辆列表',
+		toolbarItem: 'none',
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '85%',
+		showCheckboxcol: false,
+		showToolbar: false,
+		dataUrl: config.openBasePath + '/coach/statcarlist?areaid='+areaid+"&teachtypeid="+teachtypeid+"&teachcartype="+cartype,
+		columns: [{
+			name: 'carNo',
+			label: '车牌号',
+			align: 'center'
+			
+		},{
+			name: 'brandId',
+			label: '品牌',
+			align: 'center',
+			render:function(value){
+				if(value==1) {
+					return "捷达";
+				}else if(value==2) {
+					return "神行者";
+				}else if(value==3) {
+					return "迈腾";
+				}
+			}
+		}, {
+			name: 'areaId',
+			label: '片区',
+			align: 'center',
+			render: formatAreaCell
+		}, {
+			name: 'coachName',
+			label: '使用人',
+			align: 'center',
+		},{
+			name: 'property',
+			label: '使用性质',
+			align: 'center',
+			render:function(value){
+				switch(value){
+					case 0:
+						return "专职教练车";
+					case 1:
+						return "强化教练车";
+					case 2:
+						return "测试车";
+					case 3:
+						return "组长车";
+					default:
+						return "";
+				}	
+			}
+		}, {
+			name: 'carType',
+			label: '培训车型',
+			align: 'center'
+		}, {
+			name: 'status',
+			label: '使用状态',
+			align: 'center',
+			render: function(value) {
+				var text = '';
+				if (value == '0') text = '在用';
+				if (value == '1') text = '停放';
+				if (value == '2') text = '待出售';
+				if (value == '3') text = '待报废';
+				if (value == '4') text = '已出售';
+				if (value == '5') text = '已报废';
+				if (value == '6') text = '捐赠';
+				if (value == '7') text = '被盗';
+				return text
+			}		
+		}, {
+			name: 'carOwner',
+			label: '所有权',
+			align: 'center'
+		},
+		{
+			name: 'carYear',
+			label: '车龄',
+			align: 'center'
+		},
+
+		]
+		
+		
+	})
+	}
+</script>

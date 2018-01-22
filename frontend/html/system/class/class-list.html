@@ -1,0 +1,193 @@
+<section id="thispage" privilege = "070102"></section>
+<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+    <div class="widget-box">         
+            <div class="widget-title">
+            	<span class="icon"> <i class="fa fa-th"></i> </span>
+            	<h5>班别搜索</h5>
+            </div>   
+            <div class="widget-content nopadding">
+          <div class="bjui-row col-4">
+            <label class="row-label">班别名称：</label>
+            <div class="row-input">
+                <input type="text" name="name" placeholder="请输入班别名称">
+            </div>
+            <label class="row-label">状态：</label>
+            <div class="row-input">
+                <select name="status" data-toggle="selectpicker" data-width="100%">
+                    <option value="">全部</option>
+                    <option value="0">启用</option>
+                    <option value="1">停用</option>
+                </select>
+            </div>
+            <label class="row-label"></label>
+            <div class="row-input">
+                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+            </div>
+        </div>
+        </div>
+        </div>
+</form>
+
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	
+    var system_class_list = {
+        list:$.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '班别管理列表',
+        toolbarItem: 'none',
+        toolbarCustom: "<button data-privilege='070102_datagrid-list_01' class='btn btn-blue' data-icon='plus' onclick='system_class_list.addClass()'>添加</button>",
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'class/list',
+        columns: [
+            {name:'name',label:'班别名称',align:'center'},
+            {name:'c1amount',label:'C1价格',align:'center',render:function(value,data){
+            	if(!data.c1flag) {
+            		return "不支持"
+            	}else{
+            		return value;
+            	}
+            }},
+            {name:'c2amount',label:'C2价格',align:'center',render:function(value,data){
+            	if(!data.c2flag) {
+            		return "不支持"
+            	}else{
+            		return value;
+            	}
+            }},
+            {name:'type',label:'学车形式',align:'center',render:type_text},
+            {name:'highflag',label:'高端班属性',align:'center',render: function(value) { return value==1 ? '是':'否' } },
+            {name:'localflag',label:'外地班属性',align:'center',render: function(value) { return value==1 ? '是':'否' }},
+            {name:'classtypeid',label:'所属班型',align:'center',render:function(value){
+            	return clz.configRender({name:'classtypelist',val:value,key:'id',dataname:'type'})
+            }},
+            {name:'mtime',label:'修改时间',align:'center'},
+            {name:'op',label:'操作',align:'center',render:classOperation}
+        ],
+        editMode: {dialog:{width:'450',height:'400',title:'班别信息',mask:true}},
+        add_url : "html/system/class/class-add.html",
+        edit_url : "html/system/class/class-edit.html",
+        delUrl : config.openBasePath + 'class/delete',
+        delPK : 'id',
+        afterSave:function(){
+            system_class_list.datagrid('refresh',true);
+        },
+        afterDelete:function(){
+            system_class_list.datagrid('refresh',true);
+        },
+    }),
+    
+    addClass:function(){
+    	BJUI.dialog({
+					id: 'class-type-add-class',
+					width: 700,
+					height: 500,
+					url: 'html/system/class/class-type-class-add.html',
+					title: '新增班别',
+					onClose: function() {
+						system_class_list.list.datagrid('refresh',true);
+						console.log("test")
+						clz.getdictionary({name:'classlist',refresh:true})
+					}
+
+				})
+    },
+    
+    editClass:function(classinfo){
+    	clz.setWindowJson(classinfo)
+    	BJUI.dialog({
+			id: 'class-type-add-class',
+			width: 700,
+			height: 500,
+			url: 'html/system/class/class-type-class-edit.html',
+			title: '编辑班别',
+			//more: JSON.stringify(classinfo),
+			onClose: function() {
+				system_class_list.list.datagrid('refresh',true);
+				clz.getdictionary({name:'classlist',refresh:true})
+			}
+
+		})
+    },
+	viewClass:function(classinfo){
+    	clz.setWindowJson(classinfo)
+    	BJUI.dialog({
+			id: 'class-type-view-class',
+			width: 700,
+			height: 500,
+			url: 'html/system/class/class-type-class-view.html',
+			title: '查看班别',
+			//more: JSON.stringify(classinfo),
+			onClose: function() {
+				//system_class_list.list.datagrid('refresh',true);
+			}
+
+		})
+    },
+    delClass:function(id){
+    	BJUI.alertmsg('confirm', '确认删除该班别？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/class/delete",
+                    data : {ids : id},
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        system_class_list.list.datagrid('refresh',true);
+                    }
+                })
+            }
+        })
+    },
+
+    handleClass:function (id,status) {
+        var title = status == 0 ? "停用" : "启用";
+        BJUI.alertmsg('confirm', '确认' + title +'该班别？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/class/status",
+                    data : {id : id ,status : status},
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        system_class_list.list.datagrid('refresh',true);
+                        clz.getdictionary({name:'classlist',refresh:true})
+                    }
+                })
+            }
+        })
+    }
+    
+    }
+    
+    function classOperation (value,data) {
+        var html="<button type='button' class='btn-blue' onclick='system_class_list.viewClass("+JSON.stringify(data)+")'>查看</button>"+
+        "<button type='button' data-privilege='070102_datagrid-list_02' class='btn-blue vhide' onclick='system_class_list.editClass("+JSON.stringify(data)+")'>编辑</button>";
+        if (data.status == 0) {
+            html =html+ '<button type="button" data-privilege="070102_datagrid-list_09" class="btn-red vhide" onclick="system_class_list.handleClass('+data.id+','+data.status+')">停用</button>'
+        } else {
+            html =html+ '<button type="button" data-privilege="070102_datagrid-list_09" class="btn-green vhide" onclick="system_class_list.handleClass('+data.id+','+data.status+')">启用</button>'
+        }
+        html=html+'<button type="button" data-privilege="070102_datagrid-list_03" class="btn-red vhide" onclick="system_class_list.delClass('+data.id+')">删除</button>';
+        return html
+    }
+    
+    function type_text(value) { 
+        switch (value) {
+            case 0 :
+            return "服务全包";
+            case 1 :
+            return "计时收费";
+        }
+    }
+
+    function status_text(value) {
+        switch (value) {
+            case 0 :
+            return "停用";
+            case 1 :
+            return "启用";
+        }
+    }
+</script>

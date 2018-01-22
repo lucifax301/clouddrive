@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	
+	<bean id="dataMQListener" class="cn.com.liliyun.common.util.MQListener"></bean>
+	
+	<bean id="dataProducer" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" init-method="start" >
+		<property name="namesrvAddr" value="${mq.namesrvAddr}"></property>
+		<property name="instanceName" value="${mq.instanceName}"></property>
+		<property name="producerGroup" value="${mq.mqGroup}"></property>
+	</bean>
+	
+	<bean id="dataComsumer" class="com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer" init-method="start" >
+		<property name="messageListener" ref="dataMQListener"></property>
+		<property name="namesrvAddr" value="${mq.namesrvAddr}"></property>
+		<property name="instanceName" value="${mq.instanceName}"></property>
+		<property name="consumerGroup" value="${mq.mqGroup}"></property>
+	</bean>
+	
+</beans>

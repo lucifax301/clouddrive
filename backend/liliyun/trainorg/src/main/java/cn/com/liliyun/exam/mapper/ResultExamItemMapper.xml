@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.exam.mapper.ResultExamItemMapper">
+    <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.ResultExamItem">
+        <id column="tableid" property="tableid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="studentid" property="studentid" jdbcType="INTEGER"/>
+        <result column="schoolname" property="schoolname" jdbcType="VARCHAR"/>
+        <result column="traintype" property="traintype" jdbcType="CHAR"/>
+        <result column="idcard" property="idcard" jdbcType="VARCHAR"/>
+        <result column="flownum" property="flownum" jdbcType="VARCHAR"/>
+        <result column="indexcat" property="indexcat" jdbcType="INTEGER"/>
+        <result column="result" property="result" jdbcType="INTEGER"/>
+        <result column="subject" property="subject" jdbcType="INTEGER"/>
+        <result column="examdate" property="examdate" jdbcType="TIMESTAMP"/>
+        <result column="examcount" property="examcount" jdbcType="INTEGER"/>
+        <result column="examtime" property="examtime" jdbcType="CHAR"/>
+        <result column="examplaceid" property="examplaceid" jdbcType="INTEGER"/>
+        <result column="storeid" property="storeid" jdbcType="INTEGER"/>
+        <result column="areaid" property="areaid" jdbcType="INTEGER"/>
+        <result column="cname" property="cname" jdbcType="VARCHAR"/>
+        <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+        <result column="cuid" property="cuid" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    tableid, name, studentid, schoolname, traintype, idcard, flownum, indexcat, result, 
+    subject, examdate, examcount, examtime, examplaceid, storeid, areaid, cname, ctime, 
+    cuid
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+        select
+        <include refid="Base_Column_List"/>
+        from t_resultexam_item
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+        select
+        <include refid="Base_Column_List"/>
+        from t_resultexam_item
+        <where>
+            <if test="tableid != null and tableid != ''">
+                tableid = #{tableid,jdbcType=VARCHAR}
+            </if>
+            <if test="idcard != null and idcard != ''">
+                idcard = #{idcard,jdbcType=VARCHAR}
+            </if>
+            <if test="studentid != null">
+                studentid = #{studentid,jdbcType=INTEGER}
+            </if>
+            <if test="subject != null">
+                subject = #{subject,jdbcType=INTEGER}
+            </if>
+            <if test="result != null">
+                result = #{result,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by ctime desc
+    </select>
+
+    <select id="selectCoachStuList" resultMap="BaseResultMap"
+            parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+    select
+    a.tableid, a.name, a.studentid, a.schoolname, a.traintype, a.idcard, a.flownum, a.indexcat, a.result,
+    a.subject, a.examdate, a.examcount, a.examtime, a.examplaceid, a.cname, a.ctime
+    
+    from t_resultexam_item a join t_coach_student b on a.studentid=b.studentid where coachid = #{coachid}
+   
+        order by a.ctime desc
+  </select>
+
+    <resultMap id="CountResultMap" type="cn.com.liliyun.trainorg.model.TrainExamItemVo">
+        <id column="tableid" property="tableId" jdbcType="VARCHAR"/>
+        <result column="schoolname" property="schoolname" jdbcType="VARCHAR"/>
+        <result column="traintype" property="traintype" jdbcType="CHAR"/>
+        <result column="indexcat" property="indexcat" jdbcType="INTEGER"/>
+        <result column="result" property="result" jdbcType="INTEGER"/>
+        <result column="subject" property="subject" jdbcType="INTEGER"/>
+        <result column="upsubject" property="upsubject" jdbcType="INTEGER"/>
+        <result column="subjectName" property="subjectName" jdbcType="VARCHAR"/>
+        <result column="examdate" property="examdate" jdbcType="TIMESTAMP"/>
+        <result column="upDay" property="upDay" jdbcType="TIMESTAMP"/>
+        <result column="waitDay" property="waitDay" jdbcType="TIMESTAMP"/>
+        <result column="examcount" property="examcount" jdbcType="INTEGER"/>
+        <result column="examtime" property="examtime" jdbcType="CHAR"/>
+        <result column="examplaceid" property="examplaceid" jdbcType="VARCHAR"/>
+        <result column="storeid" property="storeId" jdbcType="INTEGER"/>
+        <result column="storeName" property="storeName" jdbcType="VARCHAR"/>
+        <result column="areaid" property="areaId" jdbcType="INTEGER"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="coachid" property="coachId" jdbcType="INTEGER"/>
+        <result column="coachName" property="coachName" jdbcType="VARCHAR"/>
+        <result column="headcoachid" property="headCoachId" jdbcType="INTEGER"/>
+        <result column="headCoachName" property="headCoachName" jdbcType="VARCHAR"/>
+        <result column="degree" property="degree" jdbcType="INTEGER"/>
+        <result column="percentage" property="percentage" jdbcType="DOUBLE"/>
+        <result column="nnt" property="nnt" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="countTable" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.TrainExamItemVo">
+        select
+        t.tableid,
+        t.examdate,
+        t.examtime,
+        t.areaid,
+        t.ctime,
+        (select NAME from t_area where id=t.areaid) as areaName,
+        t.storeid,
+        (select name from t_store where id=t.areaid) as storeName,
+        cs.coachid,
+        (select c.`name` from t_coach c where c.coachid=cs.coachid ) AS coachName,
+        t.subject,
+        t.indexcat,
+        count(t.examcount) examcount,
+        t.examplaceid,
+        count(t.studentid) as nnt,
+        count(t.examcount)/count(t.studentid) as percentage
+        from
+        t_resultexam_item t
+        LEFT JOIN t_coach_student cs on cs.studentid=t.studentid and cs.isvalid=1
+        LEFT JOIN t_student s on t.studentid=s.id
+        where 1=1
+        <trim suffixOverrides=",">
+            <if test="storeId != null and storeId != ''">
+                and t.storeid = #{storeId}
+            </if>
+            <if test="traintype != null and traintype != ''">
+                and t.traintype = #{traintype}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject = #{subject}
+            </if>
+            <if test="result != null and result != ''">
+                and t.result = #{result}
+            </if>
+            <if test="examplaceid != null and examplaceid != ''">
+                and t.examplaceid = #{examplaceid}
+            </if>
+            <if test="examcount != null and examcount != ''">
+                and t.examcount = #{examcount}
+            </if>
+            <if test="indexcat != null and indexcat != ''">
+                and t.indexcat = #{indexcat}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and date(examdate) between #{startTime} and #{endTime}
+            </if>
+            <if test="coachId != null and coachId != ''">
+                and cs.coachid = #{coachId}
+            </if>
+            <if test="classId != null and classId != ''">
+                and s.classid = #{classId}
+            </if>
+
+            <if test="groupId == '1'">
+                group by t.areaid
+            </if>
+            <if test="groupId == '2'">
+                group by t.storeid
+            </if>
+            <if test="groupId == '3'">
+                group by coachid
+            </if>
+            <if test="groupId == '4'">
+                group by t.examplaceid
+            </if>
+            <if test="groupId == '5'">
+                group by t.indexcat
+            </if>
+            <if test="groupId == '6'">
+                group by t.examcount
+            </if>
+        </trim>
+    </select>
+
+    <select id="countTableCase" resultMap="CountResultMap"
+            parameterType="cn.com.liliyun.trainorg.model.TrainExamItemVo">
+        select
+        t.tableid,
+        t.examdate,
+        t.examtime,
+        t.areaid,
+        t.ctime,
+        (select NAME from t_area where id=t.areaid) as areaName,
+        t.storeid,
+        (select name from t_store where id=t.areaid) as storeName,
+        cs.coachid,
+        (select c.`name` from t_coach c where c.coachid=cs.coachid ) AS coachName,
+        t.subject,
+        t.indexcat,
+        t.examplaceid,
+        count(t.studentid) as nnt
+        from
+        t_resultexam_item t
+        LEFT JOIN t_coach_student cs on cs.studentid=t.studentid and cs.isvalid=1
+        LEFT JOIN t_student s on t.studentid=s.id
+        LEFT JOIN t_coach c on c.coachid=cs.coachid
+        where 1=1
+        <trim suffixOverrides=",">
+            <if test="storeId != null and storeId != ''">
+                and t.storeid = #{storeId}
+            </if>
+            <if test="areaId != null and areaId != ''">
+                and t.areaid = #{areaId}
+            </if>
+            <if test="traintype != null and traintype != ''">
+                and t.traintype = #{traintype}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject = #{subject}
+            </if>
+            <if test="examplaceid != null and examplaceid != ''">
+                and t.examplaceid = #{examplaceid}
+            </if>
+            <if test="indexcat != null and indexcat != ''">
+                and t.indexcat = #{indexcat}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and date(examdate) between #{startTime} and #{endTime}
+            </if>
+            <if test="coachId != null and coachId != ''">
+                and cs.coachid = #{coachId}
+            </if>
+            <if test="classId != null and classId != ''">
+                and s.classid = #{classId}
+            </if>
+            <if test="classId != null and classId != ''">
+                and s.classid = #{classId}
+            </if>
+
+            <if test="groupId == '1'">
+                group by t.areaid
+            </if>
+            <if test="groupId == '2'">
+                group by t.storeid
+            </if>
+            <if test="groupId == '3'">
+                group by coachid
+            </if>
+            <if test="groupId == '4'">
+                group by t.examdate
+            </if>
+            <if test="groupId == '5'">
+                group by c.headcoachid
+            </if>
+        </trim>
+    </select>
+
+    <select id="countWaitCase" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.TrainExamItemVo">
+        select
+        t.areaid,
+        (select NAME from t_area where id=t.areaid) as areaName,
+        t.storeid,
+        (select name from t_store where id=t.areaid) as storeName,
+        c.headcoachid,
+        (select cc.name from t_coach cc where cc.coachid=c.headcoachid) as headCoachName,
+        cs.coachid,
+        (select c.`name` from t_coach c where c.coachid=cs.coachid ) AS coachName,
+        t.subject,
+        t.examplaceid,
+        t.traintype,
+        s.classid,
+        (select ci.`name` from t_classinfo ci where ci.id=s.classid) as className,
+        t.subject-1 as upsubject,
+        t.examdate,
+        count(t.studentid) as nnt,
+        datediff(NOW(),examdate) as waitDay
+        from
+        t_resultexam_item t LEFT JOIN t_coach_student cs on t.studentid=cs.studentid
+        LEFT JOIN t_student s on t.studentid=s.id
+        LEFT JOIN t_coach c on c.coachid=cs.coachid
+        where 1=1
+        <trim suffixOverrides=",">
+            <if test="storeId != null and storeId != ''">
+                and t.storeid = #{storeId}
+            </if>
+            <if test="traintype != null and traintype != ''">
+                and t.traintype = #{traintype}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject = #{subject}
+            </if>
+            <if test="examplaceid != null and examplaceid != ''">
+                and t.examplaceid = #{examplaceid}
+            </if>
+            <if test="indexcat != null and indexcat != ''">
+                and t.indexcat = #{indexcat}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and date(examdate) between #{startTime} and #{endTime}
+            </if>
+            <if test="coachId != null and coachId != ''">
+                and cs.coachid = #{coachId}
+            </if>
+            <if test="classId != null and classId != ''">
+                and s.classid = #{classId}
+            </if>
+            <if test="classId != null and classId != ''">
+                and s.classid = #{classId}
+            </if>
+
+            <if test="groupId == '1'">
+                group by t.areaid
+            </if>
+            <if test="groupId == '2'">
+                group by t.storeid
+            </if>
+            <if test="groupId == '3'">
+                group by coachid
+            </if>
+            <if test="groupId == '4'">
+                group by t.examdate
+            </if>
+            <if test="groupId == '5'">
+                group by c.headcoachid
+            </if>
+        </trim>
+    </select>
+
+    <resultMap id="DetailResultMap" type="cn.com.liliyun.trainorg.model.TrainExamItemDetailVo">
+        <id column="tableid" property="tableId" jdbcType="VARCHAR"/>
+        <result column="schoolname" property="schoolname" jdbcType="VARCHAR"/>
+        <result column="traintype" property="traintype" jdbcType="CHAR"/>
+        <result column="indexcat" property="indexcat" jdbcType="INTEGER"/>
+        <result column="upResult" property="upResult" jdbcType="INTEGER"/>
+        <result column="result" property="result" jdbcType="INTEGER"/>
+        <result column="subject" property="subject" jdbcType="INTEGER"/>
+        <result column="upsubject" property="upsubject" jdbcType="INTEGER"/>
+        <result column="subjectName" property="subject" jdbcType="VARCHAR"/>
+        <result column="examdate" property="examdate" jdbcType="TIMESTAMP"/>
+        <result column="upDay" property="upDay" jdbcType="TIMESTAMP"/>
+        <result column="waitDay" property="waitDay" jdbcType="TIMESTAMP"/>
+        <result column="examcount" property="examcount" jdbcType="INTEGER"/>
+        <result column="examtime" property="examtime" jdbcType="CHAR"/>
+        <result column="examplaceid" property="examplaceid" jdbcType="VARCHAR"/>
+        <result column="storeid" property="storeId" jdbcType="INTEGER"/>
+        <result column="storeName" property="storeName" jdbcType="VARCHAR"/>
+        <result column="areaid" property="areaId" jdbcType="INTEGER"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="coachid" property="coachId" jdbcType="INTEGER"/>
+        <result column="coachName" property="coachName" jdbcType="VARCHAR"/>
+        <result column="headcoachid" property="headCoachId" jdbcType="INTEGER"/>
+        <result column="headCoachName" property="headCoachName" jdbcType="VARCHAR"/>
+        <result column="nnt" property="nnt" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="idcard" property="idcard" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getWaitCaseDetail" resultMap="DetailResultMap"
+            parameterType="cn.com.liliyun.trainorg.model.TrainExamItemDetailVo">
+        select
+        t.tableid,
+        t.areaid,
+        (select NAME from t_area where id=t.areaid) as areaName,
+        t.storeid,
+        (select name from t_store where id=t.areaid) as storeName,
+        t.result,
+        (SELECT result FROM `t_resultexam_item` where studentid=t.studentid order by examdate desc limit 1,1) as
+        upResult,
+        c.headcoachid,
+        (select cc.name from t_coach cc where cc.coachid=c.headcoachid) as headCoachName,
+        cs.coachid,
+        (select c.`name` from t_coach c where c.coachid=cs.coachid ) AS coachName,
+        t.subject,
+        t.examplaceid,
+        t.traintype,
+        s.classid,
+        (select ci.`name` from t_classinfo ci where ci.id=s.classid) as className,
+        t.subject-1 as upsubject,
+        t.examdate,
+        (SELECT examdate FROM `t_resultexam_item` where studentid=t.studentid order by examdate desc limit 1,1) as upDay,
+        t.name,
+        t.idcard,
+        datediff(NOW(),examdate) as waitDay
+        from
+        t_resultexam_item t LEFT JOIN t_coach_student cs on t.studentid=cs.studentid
+        LEFT JOIN t_student s on t.studentid=s.id
+        LEFT JOIN t_coach c on c.coachid=cs.coachid
+        where 1=1
+        <trim suffixOverrides=",">
+            <if test="subject != null and subject != ''">
+                and t.subject = #{subject}
+            </if>
+            <if test="coachId != null and coachId != ''">
+                and cs.coachid = #{coachId}
+            </if>
+        </trim>
+    </select>
+
+    <resultMap id="YearResultMap" type="cn.com.liliyun.trainorg.model.TrainExamItemYearVo">
+        <id column="month" property="month" jdbcType="VARCHAR"/>
+        <id column="year" property="year" jdbcType="VARCHAR"/>
+        <result column="indexcat" property="indexcat" jdbcType="INTEGER"/>
+        <result column="subject" property="subject" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getWaitCaseYear" resultMap="YearResultMap"
+            parameterType="cn.com.liliyun.trainorg.model.TrainExamItemYearVo">
+  		select
+			DATE_FORMAT(examdate,'%m') months,			
+			`subject`,
+			count(studentid) as studentNum,
+			indexcat
+			from
+				t_resultexam_item
+				where DATE_FORMAT(examdate,'%Y') = #{year}
+				GROUP BY months,subject,indexcat 
+				ORDER BY months asc
+  </select>
+
+    <select id="countArea" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+  		 SELECT t.areaid,
+			(select name from t_area where id =t.areaid) as areaName,
+			t.subject, t.examcount, SUM(t.examcount) as degree, count(t.studentid) as nnt,
+			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
+			FROM `t_resultexam_item` t GROUP BY t.areaid,t.subject,t.examcount
+  </select>
+
+    <select id="countAreaCase" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+  		 SELECT t.areaid,
+			(select name from t_area where id =t.areaid) as areaName,
+			t.subject, t.indexcat, t.examplaceid, count(t.studentid) as nnt
+			FROM `t_resultexam_item` t GROUP BY t.areaid,t.subject,t.examcount
+  </select>
+
+    <select id="countStore" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+  		 SELECT t.storeid,
+			(select name from t_store where id =t.areaid) as storeName,
+			t.subject, t.examcount, SUM(t.examcount) as degree, count(t.studentid) as nnt,
+			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
+			FROM `t_resultexam_item` t GROUP BY t.storeid,t.subject,t.examcount
+  </select>
+
+    <select id="countStoreCase" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+ 		SELECT t.areaid,
+			(select name from t_area where id =t.areaid) as areaName,
+			t.storeid,
+			(select name from t_store where id =t.areaid) as storeName,
+			t.subject, t.indexcat, t.examplaceid, count(t.studentid) as nnt
+			FROM `t_resultexam_item` t GROUP BY t.areaid,t.storeid,t.subject,t.examcount
+  </select>
+
+    <select id="countCoach" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+  		SELECT  (select c.coachid from t_coach_student c where c.studentid =t.studentid) as coachid,
+			t.subject, t.examcount, SUM(t.examcount) as degree, count(t.studentid) as nnt,
+			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
+			FROM `t_resultexam_item` t GROUP BY name,t.subject,t.examcount
+  </select>
+
+    <select id="countexamplaceid" resultMap="CountResultMap"
+            parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+  			SELECT  t.examplaceid,
+			t.subject, t.examcount, SUM(t.examcount) as degree, count(t.studentid) as nnt,
+			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
+			FROM `t_resultexam_item` t GROUP BY t.examplaceid,t.subject,t.examcount
+  </select>
+
+    <select id="countIndexcat" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+  		SELECT  t.indexcat,
+			t.subject, t.examcount, SUM(t.examcount) as degree, count(t.studentid) as nnt,
+			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
+			FROM `t_resultexam_item` t GROUP BY t.indexcat,t.subject,t.examcount
+  </select>
+
+    <select id="countExamcount" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+  			SELECT  t.examcount,
+			t.subject, t.examcount, SUM(t.examcount) as degree, count(t.studentid) as nnt,
+			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
+			FROM `t_resultexam_item` t GROUP BY t.examcount,t.subject,t.examcount
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+    delete from t_resultexam_item
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+    insert into t_resultexam_item (tableid, name, studentid,
+      schoolname, traintype, idcard, 
+      flownum, indexcat, result, 
+      subject, examdate, examcount, 
+      examtime, examplaceid, storeid, 
+      areaid, cname, ctime, 
+      cuid)
+    values (#{tableid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{studentid,jdbcType=INTEGER}, 
+      #{schoolname,jdbcType=VARCHAR}, #{traintype,jdbcType=CHAR}, #{idcard,jdbcType=VARCHAR}, 
+      #{flownum,jdbcType=VARCHAR}, #{indexcat,jdbcType=INTEGER}, #{result,jdbcType=INTEGER}, 
+      #{subject,jdbcType=INTEGER}, #{examdate,jdbcType=TIMESTAMP}, #{examcount,jdbcType=INTEGER}, 
+      #{examtime,jdbcType=CHAR}, #{examplaceid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{areaid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{cuid,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into t_resultexam_item (tableid, name, studentid,
+        schoolname, traintype, idcard,
+        flownum, indexcat, result,
+        subject, examdate, examcount,
+        examtime, examplaceid, storeid,
+        areaid, cname, ctime,
+        cuid) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.tableid,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.studentid,jdbcType=INTEGER},
+            #{item.schoolname,jdbcType=VARCHAR}, #{item.traintype,jdbcType=CHAR}, #{item.idcard,jdbcType=VARCHAR},
+            #{item.flownum,jdbcType=VARCHAR}, #{item.indexcat,jdbcType=INTEGER}, #{item.result,jdbcType=INTEGER},
+            #{item.subject,jdbcType=INTEGER}, #{item.examdate,jdbcType=TIMESTAMP}, #{item.examcount,jdbcType=INTEGER},
+            #{item.examtime,jdbcType=CHAR}, #{item.examplaceid,jdbcType=VARCHAR}, #{item.storeid,jdbcType=INTEGER},
+            #{item.areaid,jdbcType=INTEGER}, #{item.cname,jdbcType=VARCHAR}, #{item.ctime,jdbcType=TIMESTAMP},
+            #{item.cuid,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+        insert into t_resultexam_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                tableid,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="studentid != null">
+                studentid,
+            </if>
+            <if test="schoolname != null">
+                schoolname,
+            </if>
+            <if test="traintype != null">
+                traintype,
+            </if>
+            <if test="idcard != null">
+                idcard,
+            </if>
+            <if test="flownum != null">
+                flownum,
+            </if>
+            <if test="indexcat != null">
+                indexcat,
+            </if>
+            <if test="result != null">
+                result,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="examdate != null">
+                examdate,
+            </if>
+            <if test="examcount != null">
+                examcount,
+            </if>
+            <if test="examtime != null">
+                examtime,
+            </if>
+            <if test="examplaceid != null">
+                examplaceid,
+            </if>
+            <if test="storeid != null">
+                storeid,
+            </if>
+            <if test="areaid != null">
+                areaid,
+            </if>
+            <if test="cname != null">
+                cname,
+            </if>
+            <if test="ctime != null">
+                ctime,
+            </if>
+            <if test="cuid != null">
+                cuid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                #{tableid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="studentid != null">
+                #{studentid,jdbcType=INTEGER},
+            </if>
+            <if test="schoolname != null">
+                #{schoolname,jdbcType=VARCHAR},
+            </if>
+            <if test="traintype != null">
+                #{traintype,jdbcType=CHAR},
+            </if>
+            <if test="idcard != null">
+                #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="flownum != null">
+                #{flownum,jdbcType=VARCHAR},
+            </if>
+            <if test="indexcat != null">
+                #{indexcat,jdbcType=INTEGER},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=INTEGER},
+            </if>
+            <if test="subject != null">
+                #{subject,jdbcType=INTEGER},
+            </if>
+            <if test="examdate != null">
+                #{examdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="examcount != null">
+                #{examcount,jdbcType=INTEGER},
+            </if>
+            <if test="examtime != null">
+                #{examtime,jdbcType=CHAR},
+            </if>
+            <if test="examplaceid != null">
+                #{examplaceid,jdbcType=INTEGER},
+            </if>
+            <if test="storeid != null">
+                #{storeid,jdbcType=INTEGER},
+            </if>
+            <if test="areaid != null">
+                #{areaid,jdbcType=INTEGER},
+            </if>
+            <if test="cname != null">
+                #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="ctime != null">
+                #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cuid != null">
+                #{cuid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+        update t_resultexam_item
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="studentid != null">
+                studentid = #{studentid,jdbcType=INTEGER},
+            </if>
+            <if test="schoolname != null">
+                schoolname = #{schoolname,jdbcType=VARCHAR},
+            </if>
+            <if test="traintype != null">
+                traintype = #{traintype,jdbcType=CHAR},
+            </if>
+            <if test="idcard != null">
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="flownum != null">
+                flownum = #{flownum,jdbcType=VARCHAR},
+            </if>
+            <if test="indexcat != null">
+                indexcat = #{indexcat,jdbcType=INTEGER},
+            </if>
+            <if test="result != null">
+                result = #{result,jdbcType=INTEGER},
+            </if>
+            <if test="subject != null">
+                subject = #{subject,jdbcType=INTEGER},
+            </if>
+            <if test="examdate != null">
+                examdate = #{examdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="examcount != null">
+                examcount = #{examcount,jdbcType=INTEGER},
+            </if>
+            <if test="examtime != null">
+                examtime = #{examtime,jdbcType=CHAR},
+            </if>
+            <if test="examplaceid != null">
+                examplaceid = #{examplaceid,jdbcType=INTEGER},
+            </if>
+            <if test="storeid != null">
+                storeid = #{storeid,jdbcType=INTEGER},
+            </if>
+            <if test="areaid != null">
+                areaid = #{areaid,jdbcType=INTEGER},
+            </if>
+            <if test="cname != null">
+                cname = #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="ctime != null">
+                ctime = #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cuid != null">
+                cuid = #{cuid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
+    update t_resultexam_item
+    set name = #{name,jdbcType=VARCHAR},
+      studentid = #{studentid,jdbcType=INTEGER},
+      schoolname = #{schoolname,jdbcType=VARCHAR},
+      traintype = #{traintype,jdbcType=CHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      flownum = #{flownum,jdbcType=VARCHAR},
+      indexcat = #{indexcat,jdbcType=INTEGER},
+      result = #{result,jdbcType=INTEGER},
+      subject = #{subject,jdbcType=INTEGER},
+      examdate = #{examdate,jdbcType=TIMESTAMP},
+      examcount = #{examcount,jdbcType=INTEGER},
+      examtime = #{examtime,jdbcType=CHAR},
+      examplaceid = #{examplaceid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      areaid = #{areaid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER}
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+</mapper>

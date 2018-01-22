@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.CoachStatMapper" >
+  <resultMap id="AreaResultMap" type="cn.com.liliyun.coach.model.stat.AreaStatRecord" >
+    
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="teachtypeid" property="teachtypeid" jdbcType="INTEGER" />
+    <result column="studentcount" property="studentcount" jdbcType="INTEGER" />
+    <result column="teachcartype" property="teachcartype" jdbcType="VARCHAR" />
+    <result column="coachcount" property="coachcount" jdbcType="INTEGER" />
+    <result column="carcount" property="carcount" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  <resultMap id="CoachResultMap" type="cn.com.liliyun.coach.model.stat.CoachStatRecord" >
+    
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="mainstoreid" property="storeid" jdbcType="INTEGER" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="coachname" property="coachname" jdbcType="VARCHAR" />
+    <result column="applyexam" property="applyexam" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    
+    
+  </resultMap>
+  
+  <resultMap id="HeadCoachResultMap" type="cn.com.liliyun.coach.model.stat.HeadCoachStatRecord" >
+    
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="headcoachid" property="headcoachid" jdbcType="INTEGER" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="coachname" property="coachname" jdbcType="VARCHAR" />
+    <result column="applyexam" property="applyexam" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    
+    
+  </resultMap>
+  
+  <select id="statByArea" resultMap="AreaResultMap" parameterType="cn.com.liliyun.coach.model.stat.AreaStatParam">
+    select areaid,teachcartype, teachtypeid,sum(curstudentload) as studentcount,count(coachid) as coachcount,count(carno) as carcount 
+    from t_coach where 1=1
+    
+	<if test="teachcartype != null and teachcartype!=''">
+		and teachcartype = #{teachcartype}
+	</if>
+	<if test="areaid != null ">
+		and areaid = #{areaid}
+	</if>
+	<if test="teachtypeid != null ">
+		and teachtypeid = #{teachtypeid}
+	</if>
+    group by areaid,teachcartype,teachtypeid
+    
+  </select>
+
+  <select id="statByTeachType" resultMap="AreaResultMap" parameterType="cn.com.liliyun.coach.model.stat.AreaStatParam">
+    select teachtypeid,teachcartype, areaid,sum(curstudentload) as studentcount,count(coachid) as coachcount,count(carno) as carcount 
+    from t_coach where 1=1
+    <if test="teachcartype != null and teachcartype!=''">
+		and teachcartype = #{teachcartype}
+	</if>
+	<if test="areaid != null ">
+		and areaid = #{areaid}
+	</if>
+	<if test="teachtypeid != null ">
+		and teachtypeid = #{teachtypeid}
+	</if>
+    group by teachtypeid,teachcartype,areaid
+    
+  </select>
+
+  <select id="statByCoach" resultMap="CoachResultMap" parameterType="cn.com.liliyun.coach.model.stat.CoachStatParam">
+    select a.areaid,a.mainstoreid, a.coachid,a.name as coachname, c.applyexam,count(c.id) as count 
+    from t_coach a join t_coach_student b on a.coachid=b.coachid 
+    join t_student c on b.studentid=c.id  where 1=1
+    
+	<if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+	<if test="storeid != null ">
+		and a.storeid = #{storeid}
+	</if>
+	group by a.areaid,a.mainstoreid, a.coachid,c.applyexam
+  </select>
+  
+  <select id="statByHeadCoach" resultMap="HeadCoachResultMap" parameterType="cn.com.liliyun.coach.model.stat.HeadCoachStatParam">
+    select a.areaid,a.headcoachid , a.coachid,a.name as coachname,c.applyexam,count(c.id) as count 
+    from t_coach a join t_coach_student b on a.coachid=b.coachid 
+    join t_student c on b.studentid=c.id where 1=1
+    <if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+	<if test="headcoachid != null ">
+		and a.headcoachid = #{headcoachid}
+	</if>
+    group by a.areaid,a.headcoachid, a.coachid,c.applyexam
+    
+  </select>
+</mapper>

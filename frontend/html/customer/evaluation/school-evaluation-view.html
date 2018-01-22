@@ -1,0 +1,146 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>驾校评价</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+
+					<div class="bjui-row col-4">
+						<label class="row-label">提交人:</label>
+						<div class="row-input">
+							<input type="text" id="cuid" class="clear-style" />
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">学员姓名:</label>
+						<div class="row-input">
+							<input type="text" name="studentname" id="stuname" readonly="readonly" data-rule="required" data-width="100%" >
+							<input type="hidden" name="studentid" id="studentid" />
+						</div>
+						
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">手机号码:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" name="studentphone" id="studentphone" data-width="100%">
+						</div>
+						<label class="row-label">身份证号:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="idcard" data-width="100%">
+						</div>
+						<label class="row-label">班别:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" name="classid" id="classid" data-width="100%">
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">片区:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" name="areaid" id="areaid" data-width="100%">
+						</div>
+						<label class="row-label">门店:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" name="storeid" id="storeid" data-width="100%">
+						</div>
+						<label class="row-label">学车状态:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" name="applyexam" id="applyexam" data-width="100%">
+						</div>
+					</div>
+
+					
+
+					<div class="bjui-row col-4">
+						<label class="row-label">评价星级:</label>
+						<div class="row-input required">
+							<select name="overall" id="overall" class="select_disabled"  data-toggle="selectpicker" data-width="100%" size="15" data-rule="required">
+								<option value="">全部</option>
+								<option value="1">一星</option>
+								<option value="2">二星</option>
+								<option value="3">三星</option>
+								<option value="4">四星</option>
+								<option value="5">五星</option>
+							</select>
+						</div>
+						<label class="row-label">评价科目:</label>
+						<div class="row-input required">
+							<select name="part" id="part" class="select_disabled"  data-toggle="selectpicker" size="15" data-width="100%" class="w-100" data-rule="required">
+								<option value="">全部</option>
+								<option value="1">科目一</option>
+								<option value="2">科目二</option>
+								<option value="3">科目三</option>
+								<option value="4">科目四</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">评价内容:</label>
+						<div class="row-input fill-2">
+							<textarea type="text" rows="2" readonly="readonly" name="srvmanner" maxlength="200" placeholder="请输入评价内容"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="evalobject" id="evalobject" />
+		<input type="hidden" name="stunum" id="stunum" />
+	</form>
+
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<ul>
+			<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+
+		</ul>
+	</div>
+</div>
+<script>
+	
+	var einfo = clz.getNavtab_more();
+	console.log(einfo)
+	clz.CurrentDom_init({
+		current: 'Navtab',
+		form_name: 'view-form',
+		table_name: 'datagrid-list',
+		data: einfo,
+		callback: function(data) {
+			console.log(data.previous_tab);
+			
+			$.CurrentNavtab.find('#cuid').val(einfo.cuser);
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/student/get",
+				loadingmask: false,
+				type:"GET",
+				data: {
+					id: data.studentid
+				},
+				okCallback: function(json, options) {
+					$.CurrentNavtab.find('*[name=\'studentid\']').val(json.result.id);
+					$.CurrentNavtab.find('*[name=\'stuname\']').val(json.result.name);
+					$.CurrentNavtab.find('#studentmobile').val(json.result.phone);
+					$.CurrentNavtab.find('#idcard').val(json.result.idcard);
+					$.CurrentNavtab.find('#classid').val(clz.configRender({name:'classlist',val:json.result.classid,key:'id'}));
+					$.CurrentNavtab.find('#areaid').val(clz.configRender({name:'arealist',val:json.result.areaid,key:'id'}));
+					$.CurrentNavtab.find('#storeid').val(clz.configRender({name:'storelist',val:json.result.storeid,key:'id'}));
+					$.CurrentNavtab.find('#stunum').val(json.result.stunum);
+					
+					$.CurrentNavtab.find("#applyexam").val(studentStatus(data.applyexam,data.applystatus))
+				}
+			})
+			
+			
+			
+		}
+	})
+	
+
+	
+</script>

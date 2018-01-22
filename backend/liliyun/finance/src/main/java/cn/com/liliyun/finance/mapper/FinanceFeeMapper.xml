@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.finance.mapper.FinanceFeeMapper">
+    <resultMap id="BaseResultMap" type="cn.com.liliyun.finance.model.FinanceFee">
+        <id column="tableid" property="tableid" jdbcType="VARCHAR"/>
+        <result column="subject1" property="subject1" jdbcType="INTEGER"/>
+        <result column="subject2" property="subject2" jdbcType="INTEGER"/>
+        <result column="applyexam" property="applyexam" jdbcType="INTEGER"/>
+        <result column="total" property="total" jdbcType="INTEGER"/>
+        <result column="money" property="money" jdbcType="INTEGER"/>
+        <result column="totalmoney" property="totalmoney" jdbcType="INTEGER"/>
+        <result column="paymoney" property="paymoney" jdbcType="INTEGER"/>
+        <result column="paytotal" property="paytotal" jdbcType="INTEGER"/>
+        <result column="areaid" property="areaid" jdbcType="INTEGER"/>
+        <result column="storeid" property="storeid" jdbcType="INTEGER"/>
+        <result column="cuid" property="cuid" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+        <result column="cname" property="cname" jdbcType="VARCHAR"/>
+        <result column="muid" property="muid" jdbcType="INTEGER"/>
+        <result column="mtime" property="mtime" jdbcType="TIMESTAMP"/>
+        <result column="mname" property="mname" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    tableid, subject1, subject2, applyexam, total, money, totalmoney, paymoney, paytotal, areaid, 
+    storeid, cuid, ctime, cname, muid, mtime, mname
+  </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceFee">
+        select
+        <include refid="Base_Column_List"/>
+        from t_finance_fee
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceFee">
+        select
+        <include refid="Base_Column_List"/>
+        from t_finance_fee
+        <where>
+            <if test="subject2 != null">
+                and subject2 = #{subject2,jdbcType=VARCHAR}
+            </if>
+            <if test="storeid != null">
+                and storeid = #{storeid,jdbcType=VARCHAR}
+            </if>
+            <if test="tableid != null and tableid !=''">
+                and tableid = #{tableid,jdbcType=VARCHAR}
+            </if>
+            <if test="stime != null and stime !=''">
+                and ctime >= #{stime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="etime != null and etime !=''">
+                and date_add(#{etime,jdbcType=TIMESTAMP},interval 1 day) > ctime
+            </if>
+        </where>
+        order by ctime desc
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceFee">
+    delete from t_finance_fee
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="cn.com.liliyun.finance.model.FinanceFee">
+    insert into t_finance_fee (tableid, subject1, subject1, applyexam, 
+      total, money, totalmoney, 
+      paymoney, paytotal, areaid, 
+      storeid, cuid, ctime, 
+      cname, muid, mtime, 
+      mname)
+    values (#{tableid,jdbcType=VARCHAR}, #{subject1,jdbcType=INTEGER},#{subject2,jdbcType=INTEGER}, #{applyexam,jdbcType=INTEGER}, 
+      #{total,jdbcType=INTEGER}, #{money,jdbcType=INTEGER}, #{totalmoney,jdbcType=INTEGER}, 
+      #{paymoney,jdbcType=INTEGER}, #{paytotal,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, 
+      #{storeid,jdbcType=INTEGER}, #{cuid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{cname,jdbcType=VARCHAR}, #{muid,jdbcType=INTEGER}, #{mtime,jdbcType=TIMESTAMP}, 
+      #{mname,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.liliyun.finance.model.FinanceFee">
+        insert into t_finance_fee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                tableid,
+            </if>
+            <if test="subject1 != null">
+                subject1,
+            </if>
+            <if test="subject2 != null">
+                subject2,
+            </if>
+            <if test="applyexam != null">
+                applyexam,
+            </if>
+            <if test="total != null">
+                total,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="totalmoney != null">
+                totalmoney,
+            </if>
+            <if test="paymoney != null">
+                paymoney,
+            </if>
+            <if test="paytotal != null">
+                paytotal,
+            </if>
+            <if test="areaid != null">
+                areaid,
+            </if>
+            <if test="storeid != null">
+                storeid,
+            </if>
+            <if test="cuid != null">
+                cuid,
+            </if>
+            <if test="ctime != null">
+                ctime,
+            </if>
+            <if test="cname != null">
+                cname,
+            </if>
+            <if test="muid != null">
+                muid,
+            </if>
+            <if test="mtime != null">
+                mtime,
+            </if>
+            <if test="mname != null">
+                mname,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                #{tableid,jdbcType=VARCHAR},
+            </if>
+            <if test="subject1 != null">
+                #{subject1,jdbcType=INTEGER},
+            </if>
+            <if test="subject2 != null">
+                #{subject2,jdbcType=INTEGER},
+            </if>
+            <if test="applyexam != null">
+                #{applyexam,jdbcType=INTEGER},
+            </if>
+            <if test="total != null">
+                #{total,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=INTEGER},
+            </if>
+            <if test="totalmoney != null">
+                #{totalmoney,jdbcType=INTEGER},
+            </if>
+            <if test="paymoney != null">
+                #{paymoney,jdbcType=INTEGER},
+            </if>
+            <if test="paytotal != null">
+                #{paytotal,jdbcType=INTEGER},
+            </if>
+            <if test="areaid != null">
+                #{areaid,jdbcType=INTEGER},
+            </if>
+            <if test="storeid != null">
+                #{storeid,jdbcType=INTEGER},
+            </if>
+            <if test="cuid != null">
+                #{cuid,jdbcType=INTEGER},
+            </if>
+            <if test="ctime != null">
+                #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cname != null">
+                #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="muid != null">
+                #{muid,jdbcType=INTEGER},
+            </if>
+            <if test="mtime != null">
+                #{mtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mname != null">
+                #{mname,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.finance.model.FinanceFee">
+        update t_finance_fee
+        <set>
+            <if test="subject1 != null">
+                subject1 = #{subject1,jdbcType=INTEGER},
+            </if>
+            <if test="subject2 != null">
+                subject2 = #{subject2,jdbcType=INTEGER},
+            </if>
+            <if test="applyexam != null">
+                applyexam = #{applyexam,jdbcType=INTEGER},
+            </if>
+            <if test="total != null">
+                total = #{total,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=INTEGER},
+            </if>
+            <if test="totalmoney != null">
+                totalmoney = #{totalmoney,jdbcType=INTEGER},
+            </if>
+            <if test="paymoney != null">
+                paymoney = #{paymoney,jdbcType=INTEGER},
+            </if>
+            <if test="paytotal != null">
+                paytotal = #{paytotal,jdbcType=INTEGER},
+            </if>
+            <if test="areaid != null">
+                areaid = #{areaid,jdbcType=INTEGER},
+            </if>
+            <if test="storeid != null">
+                storeid = #{storeid,jdbcType=INTEGER},
+            </if>
+            <if test="cuid != null">
+                cuid = #{cuid,jdbcType=INTEGER},
+            </if>
+            <if test="ctime != null">
+                ctime = #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cname != null">
+                cname = #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="muid != null">
+                muid = #{muid,jdbcType=INTEGER},
+            </if>
+            <if test="mtime != null">
+                mtime = #{mtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mname != null">
+                mname = #{mname,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceFee">
+    update t_finance_fee
+    set subject1 = #{subject1,jdbcType=INTEGER},
+      subject2 = #{subject2,jdbcType=INTEGER},
+      applyexam = #{applyexam,jdbcType=INTEGER},
+      total = #{total,jdbcType=INTEGER},
+      money = #{money,jdbcType=INTEGER},
+      totalmoney = #{totalmoney,jdbcType=INTEGER},
+      paymoney = #{paymoney,jdbcType=INTEGER},
+      paytotal = #{paytotal,jdbcType=INTEGER},
+      areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      cuid = #{cuid,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cname = #{cname,jdbcType=VARCHAR},
+      muid = #{muid,jdbcType=INTEGER},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      mname = #{mname,jdbcType=VARCHAR}
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+</mapper>

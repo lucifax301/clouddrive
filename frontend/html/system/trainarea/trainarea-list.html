@@ -1,0 +1,63 @@
+<section id="thispage" privilege = "070301"></section>
+<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>训练场搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+
+				<label class="row-label">训练场名称：</label>
+				<div class="row-input">
+					<input type="text" name="name">
+				</div>
+				<label class="row-label"></label>
+				<div class="row-input fill-2">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+    var system_trainarea_list = 
+        $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '训练场管理列表',
+        toolbarItem: 'add,|,edit,|,del',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'trainarea/list',
+        columns: [
+            {name:'name',label:'训练场名称',align:'center'},
+            {name:'address',label:'训练场地址',align:'center'},
+            {name:'area',label:'占地面积(㎡)',align:'center'},
+            {name:'vehicletype',label:'培训车型',align:'center'},
+            {name:'totalvehnum',label:'可容纳车辆数',align:'center'},
+            {name:'curvehnum',label:'已投放车辆数',align:'center'},
+            {name:'ctime',label:'创建时间',align:'center'},
+            {name:'mtime',label:'修改时间',align:'center'}
+        ],
+        editMode: {dialog:{width:'1000',height:'500',title:'训练场信息',mask:true,
+        onClose: function() {
+					
+						system_trainarea_list.datagrid('refresh', true);
+					
+					}
+        }},
+        add_url : "html/system/trainarea/trainarea-add.html",
+        edit_url : "html/system/trainarea/trainarea-edit.html",
+        delUrl : config.openBasePath + 'trainarea/delete',
+		delPK : 'id',
+		afterSave:function(){
+			system_trainarea_list.datagrid('refresh',true);
+		},
+		afterDelete:function(){
+			system_trainarea_list.datagrid('refresh',true);
+		}
+    });
+</script>

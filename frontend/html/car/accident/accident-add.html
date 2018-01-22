@@ -1,0 +1,315 @@
+<div class="bjui-pageContent">
+	<div class="widget-box ">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-tag"></i> </span>
+			<h5>新增事故理赔记录</h5>
+		</div>
+		<div class="widget-content nopadding">
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			<div class="bjui-row col-3">
+				<label class="row-label">车牌号：</label>
+					<input type="hidden" name="carid" id="carid">
+					<input type="hidden" name="brandid" id="brandid">
+					<input type="hidden" name="areaid" id="areaid">
+				<div class="row-input required ">
+				<!--	<input type="hidden" name="carid" id="carid">
+					<input type="hidden" name="brandid" id="brandid">
+					<input type="hidden" name="areaid" id="areaid">
+					<input type="text" name="carno" readonly="true" data-toggle="findgrid" data-options="{
+                    include: 'carno : carNo ,carid : carId,areaid:areaId',
+                    dialogOptions: {
+                        title:'查找车牌号',
+                        maxable : false
+                    },
+                    empty : false,
+                    gridOptions: {
+                        tableWidth:'80%',
+                        filterThead : true,
+                        dataUrl: config.openBasePath + 'car/getCarList',
+                        columns: [
+                            {name:'carNo', label:'车牌号码', width : '25%', align:'center'},
+                            {name:'areaId', label:'所属片区', width : '30%', align:'center',type:'select',items: car_accident_add.area_menu_type},
+                            {name:'coachName', label:'所属教练', width : '30%', align:'center'}
+                        ]
+                    },
+                }" placeholder="点放大镜按钮查找" data-rule="required">-->
+                	<input type="text" name="carno" id="carno" readonly="true" data-rule="required">
+				</div>
+				<br/>
+				<label class="row-label">事故编号：</label>
+				<div class="row-input required">
+					<input type="text" name="accidentnum" data-rule="required">
+				</div>
+				<label class="row-label">事故类型：</label>
+				<div class="row-input required">
+					<select name="accidenttype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+						<option value="">请选择</option>
+						<option value="1">违章</option>
+						<option value="2">机械事故</option>
+						<option value="3">交通事故</option>
+						<option value="4">人伤事故</option>
+						<option value="5">财产损失事故</option>
+					</select>
+				</div>
+				<br/>
+				<label class="row-label">事故日期：</label>
+				<div class="row-input required">
+					<input name="accidentdate" type="text" data-toggle="datepicker" data-rule="required;date" readonly="readonly">
+				</div>
+				<label class="row-label">使用人：</label>
+				<div class="row-input required">
+					<input type="text" name="caruser" data-rule="required">
+				</div>
+				<div>
+					<label class="row-label">事故责任：</label>
+					<div class="row-input required">
+						<select name="liabletype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+						<option value="">请选择</option>
+						<option value="1">主责</option>
+						<option value="2">同责</option>
+						<option value="3">次责</option>
+						<option value="4">无责</option>
+					</select>
+					</div>
+					<label class="row-label">责任人：</label>
+					<div class="row-input required">
+						<input type="hidden" name="personliableid">
+						<input type="text" readonly name="personliable" data-rule="required;length[1~60]" data-toggle="findgrid" data-options="{
+						    empty: '',
+						    dialogOptions: {
+						    	title:'选择责任人',
+						    	width:1000,
+						    	height:610
+						    },
+						    gridOptions: {
+						    	showToolbar : false,
+						        local: 'remote',
+						        filterThead: true,
+						        dataUrl: config.openBasePath + '/coach/list',
+						        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+						        columns: [
+						        	{name:'areaid',label:'片区',align:'center',render:formatAreaCell,type:'select',items: car_accident_add.area_menu_type},
+						            {name:'name',label:'姓名',align:'center'},
+						            {name:'idcard',label:'证件号码',align:'center'},
+						            {name:'mobile',label:'手机号',align:'center'},
+						        ]
+						    },
+					        onSelect: function(data) {
+					        	$.CurrentNavtab.find('*[name=\'personliableid\']').val(data.coachid);
+					        	$.CurrentNavtab.find('*[name=\'personliable\']').val(data.name);
+					        	BJUI.dialog('closeCurrent');
+					        }
+						}">
+					</div>
+				</div>
+				<div>
+					<label class="row-label">第三方责任人：</label>
+					<div class="row-input">
+						<input type="text" name="thirdpersonliable">
+					</div>
+				</div>
+				<label class="row-label">事故地点：</label>
+				<div class="row-input required fill-2">
+					<input type="text" name="accidentaddr" data-rule="required">
+				</div>
+				<div>
+					<label class="row-label">医疗费用：</label>
+					<div class="row-input">
+						<input type="text" name="medicalcost" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">实修费用：</label>
+					<div class="row-input">
+						<input type="text" name="repaircost" data-rule="number"><i>元</i>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">其它费用：</label>
+					<div class="row-input">
+						<input type="text" name="othercost" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">财务借单金额：</label>
+					<div class="row-input">
+						<input type="text" name="financecost" data-rule="number"><i>元</i>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">总金额：</label>
+					<div class="row-input">
+						<input type="text" name="totalcost" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">保险其它费用总额：</label>
+					<div class="row-input">
+						<input type="text" name="insuranceothercost" data-rule="number"><i>元</i>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">三者车损费：</label>
+					<div class="row-input">
+						<input type="text" name="thirdcarcost" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">标的车保险定损价：</label>
+					<div class="row-input">
+						<input type="text" name="insuranceassesscost" data-rule="number"><i>元</i>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">车维修保险定损价：</label>
+					<div class="row-input">
+						<input type="text" name="repairinsuranceassesscost" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">保险总金额：</label>
+					<div class="row-input">
+						<input type="text" name="insurancetotalcost" data-rule="number"><i>元</i>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">递交保险公司总额：</label>
+					<div class="row-input">
+						<input type="text" name="submitinsurancetotalcost" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">递交索赔资料日期：</label>
+					<div class="row-input">
+						<input type="text" name="submitclaiminfodate" readonly="readonly" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+				<div>
+					<label class="row-label">保险索赔到账金额：</label>
+					<div class="row-input">
+						<input type="text" name="claimtotal" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">保险索赔到账日期：</label>
+					<div class="row-input">
+						<input type="text" name="claimdate" readonly="readonly" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+				<div>
+					<label class="row-label">第三者赔款：</label>
+					<div class="row-input">
+						<input type="text" name="thirdindemnity" data-rule="number"><i>元</i>
+					</div>
+					<label class="row-label">个人扣款：</label>
+					<div class="row-input">
+						<input type="text" name="personalindemnity" data-rule="number"><i>元</i>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">退回财务票据金额：</label>
+					<div class="row-input">
+						<input type="text" name="returnfinancecost" data-rule="number"><i>元</i>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">处理状态：</label>
+					<div class="row-input">
+						<select name="handlestate" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择</option>
+							<option value="0">未处理</option>
+							<option value="1">已处理</option>
+						</select>
+					</div>
+					<label class="row-label">处理日期：</label>
+					<div class="row-input">
+						<input type="text" name="handledate" readonly="readonly" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+				<label class="row-label">备注：</label>
+				<div class="row-input fill-2">
+					<textarea type="text" name="reamrk"></textarea>
+				</div>
+				<br />
+				<label class="row-label">上传图片</label>
+				<input type="hidden" name="images">
+				<div class="row-input fill-2">
+					<input type="file" data-name="" data-toggle="webuploader" data-options="
+					            {
+					                pick: {label: '点击选择图片'},
+					                server: config.openBasePath + 'uploadImg',
+					                fileNumLimit: 6,
+					                formData: {},
+					                required: false,
+					                uploaded: '',
+					                basePath: '',
+					                accept: {
+					                    title: '上传图片',
+					                    extensions: 'jpg,png',
+					                    mimeTypes: '.jpg,.png'
+					                },
+					                type: 'img',
+					                uploadSuccess: function(data) {
+										car_accident_add.images[data.result.id] = data.result.pic;
+										car_accident_add.setimages();
+										console.log(car_accident_edit.images)
+					                },
+					                fileDequeued: function(file) {
+					                	car_accident_add.images[file.id] = '';
+					                	car_accident_add.setimages();
+					                }
+					            }">
+				</div>
+			</div>
+		</form>
+		</div>
+	</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="addAccident();">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+	
+	var data = clz.getNavtab_more();
+	console.log(data)
+	if(data){
+		$.CurrentNavtab.find('#carno').val(data.carNo);
+		$.CurrentNavtab.find('#carid').val(data.carId);
+		$.CurrentNavtab.find('#areaid').val(data.areaId);
+		$.CurrentNavtab.find('#brandid').val(data.brandId);
+	}
+	var car_accident_add = {
+		images : {},
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				url: config.openBasePath + 'car/addCarAccident',
+				form_name: 'add-form'
+			})
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'area/listInJson?userType=1',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        car_accident_add.area = json.result;
+			    }
+			})
+		},
+		area_menu_type: function(){
+			return car_accident_add.area;
+		},
+		setimages : function() {
+			var map = car_accident_add.images;
+			var imagesVal = '';
+        	$.each(map,function(i,m){
+				if (m != ''){
+			    	imagesVal = imagesVal + ',' + m;
+			    }
+			})
+			$.CurrentNavtab.find('*[name=\'images\']').val(imagesVal.substr(1));
+		},				
+	}
+	car_accident_add.init();
+	function addAccident(){
+					if($.CurrentNavtab.find('#add-form').isValid()){
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'car/addCarAccident',
+                    loadingmask: true,
+                    //form: $.CurrentNavtab.find('#edit-form'),
+                    data:$.CurrentNavtab.find('#add-form').serializeArray(),
+				    validate: true,
+                    callback: function(json) {
+                        BJUI.navtab('closeCurrentTab');
+                    }
+                });
+	        };
+	}
+</script>

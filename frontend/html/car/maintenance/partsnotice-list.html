@@ -1,0 +1,68 @@
+<section id="thispage" privilege = "040202"></section>
+<div class="bjui-pageHeader">
+	<form id='search-form'>
+		<input type="hidden" name="partstype"/>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var maintenance_partsnotice_list = {
+		init: function() {
+			var parts_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					toolbarItem: '',
+					toolbarCustom: maintenance_partsnotice_list.toolbarCustom(),
+					gridTitle: '配件更换提醒',
+					height: '100%',
+					showCheckboxcol: false,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'carbiz/getPartsNoticeList',
+					columns: [
+						{ name: 'partstype', label: '类型', align: 'center', render: maintenance_partsnotice_list.formattPartsType},
+						{ name: 'areaid', label: '片区', align: 'center', render: formatAreaCell},
+						{ name: 'carno', label: '车牌号', align: 'center'},
+						{ name: 'handletime', label: '上次更换日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'usetime', label: '使用时长（月）', align: 'center' },
+						{ name: 'drivemileage', label: '行驶里程（公里）', align: 'center' }
+					],
+					editMode: { dialog: { id: 'maintenance_car_add', title: '新增更换配件记录', height : 400, mask:true, onClose: function() { parts_list.datagrid('refresh', true); } } },
+					add_url: "html/car/maintenance/parts-add.html",
+				});
+		},
+		toolbarCustom: function() {
+			return "<button type='button' class='btn btn-blue' data-icon='' onclick='maintenance_partsnotice_list.viewrecord()'>全部</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='maintenance_partsnotice_list.viewrecord(1)'>轮胎</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='maintenance_partsnotice_list.viewrecord(5)'>电池</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='maintenance_partsnotice_list.viewrecord(2)'>机油</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='maintenance_partsnotice_list.viewrecord(3)'>时规带</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='maintenance_partsnotice_list.viewrecord(4)'>二保</button> " +
+				"<button data-privilege='040202_datagrid-list_11' type='button' class='btn btn-blue ml5' data-icon='sign-out' onclick='maintenance_partsnotice_list.exportdata()'>导出</button> ";
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'carbiz/getPartsNoticeExport',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		viewrecord: function(value) {
+			$.CurrentNavtab.find('input[name=\'partstype\']').val(value),
+			BJUI.ajax('ajaxsearch', {
+			    form: $.CurrentNavtab.find('#search-form'),
+			    loadingmask: true,
+			    searchDatagrid: $.CurrentNavtab.find('#datagrid-list')
+			})
+		},
+		formattPartsType: function(value) {
+			switch(value) {
+				case 1: return '轮胎';
+				case 2: return '机油';
+				case 3: return '时规带';
+				case 4: return '二保';
+				case 5: return '电池';
+				default: return '';
+			}
+		}
+	}
+	maintenance_partsnotice_list.init();
+</script>

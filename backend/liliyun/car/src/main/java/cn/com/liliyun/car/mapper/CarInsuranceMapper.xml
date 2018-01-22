@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarInsuranceMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarInsurance" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="car_id" property="carId" jdbcType="INTEGER" />
+    <result column="car_no" property="carNo" jdbcType="VARCHAR" />
+    <result column="car_owner" property="carOwner" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="nature" property="nature" jdbcType="TINYINT" />
+    <result column="paid" property="paid" jdbcType="VARCHAR" />
+    <result column="paid_name" property="paidName" jdbcType="VARCHAR" />
+    <result column="busrisks_date" property="busrisksDate" jdbcType="TIMESTAMP" />
+    <result column="busrisks_no" property="busrisksNo" jdbcType="VARCHAR" />
+    <result column="busrisks_fee" property="busrisksFee" jdbcType="INTEGER" />
+    <result column="busrisks_rates" property="busrisksRates" jdbcType="INTEGER" />
+    <result column="busrisks_rfee" property="busrisksRfee" jdbcType="INTEGER" />
+    <result column="busrisks_pay" property="busrisksPay" jdbcType="INTEGER" />
+    <result column="busrisks_stime" property="busrisksStime" jdbcType="TIMESTAMP" />
+    <result column="busrisks_etime" property="busrisksEtime" jdbcType="TIMESTAMP" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="BIGINT" />
+    <result column="sali_date" property="saliDate" jdbcType="TIMESTAMP" />
+    <result column="sali_no" property="saliNo" jdbcType="VARCHAR" />
+    <result column="sali_fee" property="saliFee" jdbcType="INTEGER" />
+    <result column="sali_rates" property="saliRates" jdbcType="INTEGER" />
+    <result column="sali_rfee" property="saliRfee" jdbcType="INTEGER" />
+    <result column="sali_pay" property="saliPay" jdbcType="INTEGER" />
+    <result column="sali_stime" property="saliStime" jdbcType="TIMESTAMP" />
+    <result column="sali_etime" property="saliEtime" jdbcType="TIMESTAMP" />
+    <result column="tax_fee" property="taxFee" jdbcType="INTEGER" />
+    <result column="insure_companyId" property="insureCompanyid" jdbcType="TINYINT" />
+    <result column="insure_company" property="insureCompany" jdbcType="VARCHAR" />
+    <result column="insure_pay" property="insurePay" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="account_date" property="accountDate" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, car_id, car_no, car_owner, type, nature, paid, paid_name, busrisks_date, busrisks_no, 
+    busrisks_fee, busrisks_rates, busrisks_rfee, busrisks_pay, busrisks_stime, busrisks_etime, 
+    cname, cuid, sali_date, sali_no, sali_fee, sali_rates, sali_rfee, sali_pay, sali_stime, 
+    sali_etime, tax_fee, insure_companyId, insure_company, insure_pay, remark, account_date, 
+    is_del
+  </sql>
+  
+  <select id="queryCarInsuranceList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarInsurance" >
+    select 
+    	<include refid="Base_Column_List" />
+    from t_car_insurance
+    where is_del=0
+    	<trim suffixOverrides=",">
+			<if test="carId != null ">
+				and car_id= #{carId}
+			</if>
+			<if test="carNo != null and carNo != ''">
+				and car_no= #{carNo}
+			</if>
+			<if test="insureCompanyid != null and insureCompanyid != ''">
+				and insure_companyId= #{insureCompanyid}
+			</if>		
+			<if test="nature != null and nature != ''">
+				and nature= #{nature}
+			</if>
+			<if test="type != null and type != ''">
+				and type= #{type}
+			</if>
+			<if test="busriskStartDate != null and busriskStartDate != ''">
+				<![CDATA[ and busrisks_date >= #{busriskStartDate} ]]>
+			</if>
+			<if test="busriskEndDate != null and busriskEndDate != ''">
+				<![CDATA[ and busrisks_date <= #{busriskEndDate} ]]>
+			</if>
+			<if test="saliStartDate != null and saliStartDate != ''">
+				<![CDATA[ and sali_date >= #{saliStartDate} ]]>
+			</if>
+			<if test="busriskEndDate != null and saliStartDate != ''">
+				<![CDATA[ and sali_date <= #{sailEndDate} ]]>
+			</if>
+			<if test="accountStartDate != null and accountStartDate != ''">
+				<![CDATA[ and account_date >= #{accountStartDate} ]]>
+			</if>
+			<if test="accountEndDate != null and accountEndDate != ''">
+				<![CDATA[ and sali_date <= #{accountEndDate} ]]>
+			</if>			
+		</trim>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_insurance
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteCarInsuranceList" parameterType="cn.com.liliyun.car.model.CarInsurance" >
+    delete from t_car_insurance
+    where id  in (${ids})
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_car_insurance
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarInsurance" >
+    insert into t_car_insurance (id, car_id, car_owner, 
+      type, nature, paid, 
+      paid_name, busrisks_date, busrisks_no, 
+      busrisks_fee, busrisks_rates, busrisks_rfee, 
+      busrisks_pay, busrisks_stime, busrisks_etime, 
+      cname, cuid, sali_date, 
+      sali_no, sali_fee, sali_rates, 
+      sali_rfee, sali_pay, sali_stime, 
+      sali_etime, tax_fee, insure_companyId, 
+      insure_company, insure_pay, remark, 
+      account_date, is_del)
+    values (#{id,jdbcType=INTEGER}, #{carId,jdbcType=INTEGER}, #{carOwner,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{nature,jdbcType=TINYINT}, #{paid,jdbcType=VARCHAR}, 
+      #{paidName,jdbcType=VARCHAR}, #{busrisksDate,jdbcType=TIMESTAMP}, #{busrisksNo,jdbcType=VARCHAR}, 
+      #{busrisksFee,jdbcType=INTEGER}, #{busrisksRates,jdbcType=INTEGER}, #{busrisksRfee,jdbcType=INTEGER}, 
+      #{busrisksPay,jdbcType=INTEGER}, #{busrisksStime,jdbcType=TIMESTAMP}, #{busrisksEtime,jdbcType=TIMESTAMP}, 
+      #{cname,jdbcType=VARCHAR}, #{cuid,jdbcType=BIGINT}, #{saliDate,jdbcType=TIMESTAMP}, 
+      #{saliNo,jdbcType=VARCHAR}, #{saliFee,jdbcType=INTEGER}, #{saliRates,jdbcType=INTEGER}, 
+      #{saliRfee,jdbcType=INTEGER}, #{saliPay,jdbcType=INTEGER}, #{saliStime,jdbcType=TIMESTAMP}, 
+      #{saliEtime,jdbcType=TIMESTAMP}, #{taxFee,jdbcType=INTEGER}, #{insureCompanyid,jdbcType=TINYINT}, 
+      #{insureCompany,jdbcType=VARCHAR}, #{insurePay,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{accountDate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=TINYINT})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarInsurance" >
+    insert into t_car_insurance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carId != null" >
+        car_id,
+      </if>
+      <if test="carNo != null" >
+        car_no,
+      </if>
+      <if test="carOwner != null" >
+        car_owner,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="nature != null" >
+        nature,
+      </if>
+      <if test="paid != null" >
+        paid,
+      </if>
+      <if test="paidName != null" >
+        paid_name,
+      </if>
+      <if test="busrisksDate != null" >
+        busrisks_date,
+      </if>
+      <if test="busrisksNo != null" >
+        busrisks_no,
+      </if>
+      <if test="busrisksFee != null" >
+        busrisks_fee,
+      </if>
+      <if test="busrisksRates != null" >
+        busrisks_rates,
+      </if>
+      <if test="busrisksRfee != null" >
+        busrisks_rfee,
+      </if>
+      <if test="busrisksPay != null" >
+        busrisks_pay,
+      </if>
+      <if test="busrisksStime != null" >
+        busrisks_stime,
+      </if>
+      <if test="busrisksEtime != null" >
+        busrisks_etime,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="saliDate != null" >
+        sali_date,
+      </if>
+      <if test="saliNo != null" >
+        sali_no,
+      </if>
+      <if test="saliFee != null" >
+        sali_fee,
+      </if>
+      <if test="saliRates != null" >
+        sali_rates,
+      </if>
+      <if test="saliRfee != null" >
+        sali_rfee,
+      </if>
+      <if test="saliPay != null" >
+        sali_pay,
+      </if>
+      <if test="saliStime != null" >
+        sali_stime,
+      </if>
+      <if test="saliEtime != null" >
+        sali_etime,
+      </if>
+      <if test="taxFee != null" >
+        tax_fee,
+      </if>
+      <if test="insureCompanyid != null" >
+        insure_companyId,
+      </if>
+      <if test="insureCompany != null" >
+        insure_company,
+      </if>
+      <if test="insurePay != null" >
+        insure_pay,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="accountDate != null" >
+        account_date,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null" >
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="carNo != null" >
+        #{carNo,jdbcType=VARCHAR},
+      </if>
+      <if test="carOwner != null" >
+        #{carOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null" >
+        #{nature,jdbcType=TINYINT},
+      </if>
+      <if test="paid != null" >
+        #{paid,jdbcType=VARCHAR},
+      </if>
+      <if test="paidName != null" >
+        #{paidName,jdbcType=VARCHAR},
+      </if>
+      <if test="busrisksDate != null" >
+        #{busrisksDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="busrisksNo != null" >
+        #{busrisksNo,jdbcType=VARCHAR},
+      </if>
+      <if test="busrisksFee != null" >
+        #{busrisksFee,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksRates != null" >
+        #{busrisksRates,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksRfee != null" >
+        #{busrisksRfee,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksPay != null" >
+        #{busrisksPay,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksStime != null" >
+        #{busrisksStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="busrisksEtime != null" >
+        #{busrisksEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="saliDate != null" >
+        #{saliDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saliNo != null" >
+        #{saliNo,jdbcType=VARCHAR},
+      </if>
+      <if test="saliFee != null" >
+        #{saliFee,jdbcType=INTEGER},
+      </if>
+      <if test="saliRates != null" >
+        #{saliRates,jdbcType=INTEGER},
+      </if>
+      <if test="saliRfee != null" >
+        #{saliRfee,jdbcType=INTEGER},
+      </if>
+      <if test="saliPay != null" >
+        #{saliPay,jdbcType=INTEGER},
+      </if>
+      <if test="saliStime != null" >
+        #{saliStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saliEtime != null" >
+        #{saliEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxFee != null" >
+        #{taxFee,jdbcType=INTEGER},
+      </if>
+      <if test="insureCompanyid != null" >
+        #{insureCompanyid,jdbcType=TINYINT},
+      </if>
+      <if test="insureCompany != null" >
+        #{insureCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="insurePay != null" >
+        #{insurePay,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="accountDate != null" >
+        #{accountDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateCarInsuranceList" parameterType="cn.com.liliyun.car.model.CarInsurance" >
+    update t_car_insurance
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="carOwner != null" >
+        car_owner = #{carOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null" >
+        nature = #{nature,jdbcType=TINYINT},
+      </if>
+      <if test="paid != null" >
+        paid = #{paid,jdbcType=VARCHAR},
+      </if>
+      <if test="paidName != null" >
+        paid_name = #{paidName,jdbcType=VARCHAR},
+      </if>
+      <if test="busrisksDate != null" >
+        busrisks_date = #{busrisksDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="busrisksNo != null" >
+        busrisks_no = #{busrisksNo,jdbcType=VARCHAR},
+      </if>
+      <if test="busrisksFee != null" >
+        busrisks_fee = #{busrisksFee,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksRates != null" >
+        busrisks_rates = #{busrisksRates,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksRfee != null" >
+        busrisks_rfee = #{busrisksRfee,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksPay != null" >
+        busrisks_pay = #{busrisksPay,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksStime != null" >
+        busrisks_stime = #{busrisksStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="busrisksEtime != null" >
+        busrisks_etime = #{busrisksEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="saliDate != null" >
+        sali_date = #{saliDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saliNo != null" >
+        sali_no = #{saliNo,jdbcType=VARCHAR},
+      </if>
+      <if test="saliFee != null" >
+        sali_fee = #{saliFee,jdbcType=INTEGER},
+      </if>
+      <if test="saliRates != null" >
+        sali_rates = #{saliRates,jdbcType=INTEGER},
+      </if>
+      <if test="saliRfee != null" >
+        sali_rfee = #{saliRfee,jdbcType=INTEGER},
+      </if>
+      <if test="saliPay != null" >
+        sali_pay = #{saliPay,jdbcType=INTEGER},
+      </if>
+      <if test="saliStime != null" >
+        sali_stime = #{saliStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saliEtime != null" >
+        sali_etime = #{saliEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxFee != null" >
+        tax_fee = #{taxFee,jdbcType=INTEGER},
+      </if>
+      <if test="insureCompanyid != null" >
+        insure_companyId = #{insureCompanyid,jdbcType=TINYINT},
+      </if>
+      <if test="insureCompany != null" >
+        insure_company = #{insureCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="insurePay != null" >
+        insure_pay = #{insurePay,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="accountDate != null" >
+        account_date = #{accountDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id in (${ids})
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarInsurance" >
+    update t_car_insurance
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="carNo != null" >
+        car_no = #{carNo,jdbcType=VARCHAR},
+      </if>
+      <if test="carOwner != null" >
+        car_owner = #{carOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null" >
+        nature = #{nature,jdbcType=TINYINT},
+      </if>
+      <if test="paid != null" >
+        paid = #{paid,jdbcType=VARCHAR},
+      </if>
+      <if test="paidName != null" >
+        paid_name = #{paidName,jdbcType=VARCHAR},
+      </if>
+      <if test="busrisksDate != null" >
+        busrisks_date = #{busrisksDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="busrisksNo != null" >
+        busrisks_no = #{busrisksNo,jdbcType=VARCHAR},
+      </if>
+      <if test="busrisksFee != null" >
+        busrisks_fee = #{busrisksFee,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksRates != null" >
+        busrisks_rates = #{busrisksRates,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksRfee != null" >
+        busrisks_rfee = #{busrisksRfee,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksPay != null" >
+        busrisks_pay = #{busrisksPay,jdbcType=INTEGER},
+      </if>
+      <if test="busrisksStime != null" >
+        busrisks_stime = #{busrisksStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="busrisksEtime != null" >
+        busrisks_etime = #{busrisksEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="saliDate != null" >
+        sali_date = #{saliDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saliNo != null" >
+        sali_no = #{saliNo,jdbcType=VARCHAR},
+      </if>
+      <if test="saliFee != null" >
+        sali_fee = #{saliFee,jdbcType=INTEGER},
+      </if>
+      <if test="saliRates != null" >
+        sali_rates = #{saliRates,jdbcType=INTEGER},
+      </if>
+      <if test="saliRfee != null" >
+        sali_rfee = #{saliRfee,jdbcType=INTEGER},
+      </if>
+      <if test="saliPay != null" >
+        sali_pay = #{saliPay,jdbcType=INTEGER},
+      </if>
+      <if test="saliStime != null" >
+        sali_stime = #{saliStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saliEtime != null" >
+        sali_etime = #{saliEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxFee != null" >
+        tax_fee = #{taxFee,jdbcType=INTEGER},
+      </if>
+      <if test="insureCompanyid != null" >
+        insure_companyId = #{insureCompanyid,jdbcType=TINYINT},
+      </if>
+      <if test="insureCompany != null" >
+        insure_company = #{insureCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="insurePay != null" >
+        insure_pay = #{insurePay,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="accountDate != null" >
+        account_date = #{accountDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarInsurance" >
+    update t_car_insurance
+    set car_id = #{carId,jdbcType=INTEGER},
+      car_owner = #{carOwner,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      nature = #{nature,jdbcType=TINYINT},
+      paid = #{paid,jdbcType=VARCHAR},
+      paid_name = #{paidName,jdbcType=VARCHAR},
+      busrisks_date = #{busrisksDate,jdbcType=TIMESTAMP},
+      busrisks_no = #{busrisksNo,jdbcType=VARCHAR},
+      busrisks_fee = #{busrisksFee,jdbcType=INTEGER},
+      busrisks_rates = #{busrisksRates,jdbcType=INTEGER},
+      busrisks_rfee = #{busrisksRfee,jdbcType=INTEGER},
+      busrisks_pay = #{busrisksPay,jdbcType=INTEGER},
+      busrisks_stime = #{busrisksStime,jdbcType=TIMESTAMP},
+      busrisks_etime = #{busrisksEtime,jdbcType=TIMESTAMP},
+      cname = #{cname,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=BIGINT},
+      sali_date = #{saliDate,jdbcType=TIMESTAMP},
+      sali_no = #{saliNo,jdbcType=VARCHAR},
+      sali_fee = #{saliFee,jdbcType=INTEGER},
+      sali_rates = #{saliRates,jdbcType=INTEGER},
+      sali_rfee = #{saliRfee,jdbcType=INTEGER},
+      sali_pay = #{saliPay,jdbcType=INTEGER},
+      sali_stime = #{saliStime,jdbcType=TIMESTAMP},
+      sali_etime = #{saliEtime,jdbcType=TIMESTAMP},
+      tax_fee = #{taxFee,jdbcType=INTEGER},
+      insure_companyId = #{insureCompanyid,jdbcType=TINYINT},
+      insure_company = #{insureCompany,jdbcType=VARCHAR},
+      insure_pay = #{insurePay,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      account_date = #{accountDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

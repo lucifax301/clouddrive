@@ -1,0 +1,128 @@
+<button type="button" class="btn btn-blue mt10 ml10" data-icon="print" onclick="finance_receipt_print.print(document.getElementById('print'))">打 印</button>
+<div id="print">
+	<div style="width: 756px;height: auto;min-height: 300px;position: relative;font-size: 12px;">
+		<style>
+			table {
+				width: 200px;
+				text-align: center;
+				border-color: #000;
+				border-collapse: collapse;
+				margin: 10px 0;
+			}
+			
+			.item {
+				margin-right: 60px;
+			}
+		</style>
+		<img src="../../../images/finance/shengang.jpg" style="width: auto;height: auto;" />
+		<div style="position: absolute;right: 30px;left: 30px;top: 45px;font-size: 22px;text-align: center;">业务受理回执单</div>
+		<div style="position: absolute;right: 30px;top: 20px;line-height: 16px;">
+			官网：http://www.zqsgjx.com<br> 地址：肇庆市端州二路东岸明园一楼<br> 商铺14卡深港驾校
+			<br> 电话：0758-6929999
+		</div>
+		<div style="position: absolute;top: 90px;left: 10px;right: 10px;">
+			<span style="float: left;margin-left: 5px;">受理单位：<span id="accept">肇庆市深港机动车驾驶培训有限公司方</span></span>
+			<span style="float: right;margin-right: 5px;" >单号：<span id="receiptnum"></span></span>
+			<div style="clear: both;"></div>
+			<div style="border-top:2px solid #000;border-bottom: 2px solid #000;margin:5px 0;padding: 5px 0;font-size: 14px;">
+				<div style="padding: 2px 10px;">
+					<div style="padding-left: 20px;">
+						兹于：<u style="margin-right: 20px;" id="receiptdate"></u> 收到学员：<u id="stuname"></u> （身份证号：<u id="stuidcard"></u>）以下费用：
+					</div>
+					<table border="1" cellspacing="0" style="width: 600px;">
+						<tr>
+							<td>项目</td>
+							<td>金额</td>
+							<td>实收金额</td>
+							<td width="40%">备注</td>
+						</tr>
+						<tbody>
+							<tr>
+								<td id="type"></td>
+								<td class="receiptmoney"></td>
+								<td class="receiptmoney"></td>
+								<td id="remark"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div>
+						班别：<span class="item" id="classinfo"></span> 车型：
+						<span class="item" id="traintype"></span> 发票类型：
+						<span class="item" id="invoicetype"></span> 发票名称：
+						<span class="item" id="invoicename"></span>
+					</div>
+					<div style="margin-top: 10px;">
+						本次费用支付方式：
+						<div style="clear: both;"></div>
+						<table border="1" cellspacing="0" style="width: 300px;float: left">
+							<tr>
+								<td>现金支付</td>
+								<td>银行刷卡</td>
+								<td>其他支付</td>
+							</tr>
+							<tbody>
+								<tr>
+									<td id="cashmoney">/</td>
+									<td id="posmoney">/</td>
+									<td>/</td>
+								</tr>
+							</tbody>
+						</table>
+						<span style="float: left;margin: 25px 0 0 20px;">Pos终端号：<span id="posnum"></span></span>
+						<div style="clear: both;"></div>
+					</div>
+				</div>
+
+			</div>
+			<div>
+				<table border="0" style="width: 100%;text-align: left;">
+					<tr>
+						<td>经手人(签名)：</td>
+						<td>客户确认(签名)：</td>
+						<td>门店名称：<u id="storeid"></u></td>
+					</tr>
+				</table>
+				<div style="clear: both;position: relative;">
+					<div style="position: absolute;top: 0;left: 0;">注：</div>
+					<div style="padding-left: 25px;">1、该票据值作为领取发票的依据，在领取发票时需出示该票据，同时为了您的权益，请妥协保管并及时领取发票（我司先统一开具发票后，再经报名点通知学员领取，请于收到通知后的1个月内领取发票；</div>
+					<div style="padding-left: 25px;">2、该票据不作为报销凭证及退款的凭据，若出现退款时，凭我司开具的发票办理退款手续。</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var finance_receipt_print = {
+		init(){
+			var data = clz.getWindowJson();
+			
+			$.CurrentDialog.find('#stuname').html(data.stuname)
+			$.CurrentDialog.find('#receiptdate').html(clz.filter.time({date:data.receiptdate,type:'yyyy-MM-dd'}))
+			$.CurrentDialog.find('#type').html(formatSubjectCell(data.type))
+			$.CurrentDialog.find('#receiptnum').html(data.receiptnum)
+			$.CurrentDialog.find('#classinfo').html(data.classinfo)
+			$.CurrentDialog.find('#stuidcard').html(data.stuidcard)
+			$.CurrentDialog.find('#invoicetype').html(data.invoicetype==1?'专票':'普票')
+			$.CurrentDialog.find('#invoicename').html(data.invoicename)
+			$.CurrentDialog.find('#storeid').html(formatStoreCell(data.storeid))
+			$.CurrentDialog.find('#posnum').html(data.posnum)
+			$.CurrentDialog.find('#cashmoney').html(data.cashmoney?clz.filter.returnFloat(data.cashmoney):'/')
+			$.CurrentDialog.find('#posmoney').html(data.posmoney?clz.filter.returnFloat(data.posmoney):'/')
+			$.CurrentDialog.find('.receiptmoney').html(clz.filter.returnFloat(data.receiptmoney))
+			$.CurrentDialog.find('#remark').html(data.remark)
+			//$.CurrentDialog.find('#').html(data.posnum)
+			$.CurrentDialog.find('#traintype').html(data.traintype)
+			console.log(data)
+		},
+		print(obj){
+			var newWindow = window.open("打印窗口", "_blank"); //打印窗口要换成页面的url
+			var docStr = obj.innerHTML;
+			console.log(docStr)
+			newWindow.document.write(docStr);
+			newWindow.document.close();
+			newWindow.print();
+			newWindow.close();
+		}
+	}
+	finance_receipt_print.init()
+</script>

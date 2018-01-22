@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarCostRemindMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarCostRemind" >
+    <result column="tax" property="tax" jdbcType="INTEGER" />
+    <result column="insurance" property="insurance" jdbcType="INTEGER" />
+    <result column="annualcheck" property="annualcheck" jdbcType="INTEGER" />
+    <result column="retire" property="retire" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMap" type="cn.com.liliyun.car.model.CarRemind" >
+    <result column="car_id" property="carid" jdbcType="INTEGER" />
+    <result column="car_no" property="carno" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaid" jdbcType="INTEGER" />
+    <result column="endtime" property="endtime" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarCostRemind" >
+    insert into t_car_cost_remind (tax, insurance, annualcheck, 
+      retire)
+    values (#{tax,jdbcType=INTEGER}, #{insurance,jdbcType=INTEGER}, #{annualcheck,jdbcType=INTEGER}, 
+      #{retire,jdbcType=INTEGER})
+  </insert>
+  <select id="selectCost" parameterType="cn.com.liliyun.car.model.CarCostRemind" resultMap="BaseResultMap">
+   	select tax, insurance, annualcheck, retire from t_car_cost_remind limit 1
+  </select>
+  
+  <select id="selectRemindList" parameterType="cn.com.liliyun.car.model.CarCostRemind" resultMap="ResultMap">
+   	select * from (	
+		select * from (
+		select 0 as type, a.car_id, a.car_no, a.area_id, max(b.annual_indate) as endtime from t_car a left join t_car_annual b on a.car_id = b.car_id group by a.car_id ) a where 
+		  ADDDATE(now(),#{annualcheck,jdbcType=INTEGER}) > a.endtime OR a.endtime IS NULL
+		UNION ALL
+		select * from (
+		select 1 as type, a.car_id, a.car_no, a.area_id, max(b.busrisks_etime) as endtime from t_car a left join t_car_insurance b on a.car_id = b.car_id group by a.car_id ) a where 
+		 ADDDATE(now(), #{insurance,jdbcType=INTEGER}) > a.endtime OR a.endtime IS NULL
+		UNION ALL
+		select * from (
+		select 2 as type, a.car_id, a.car_no, a.area_id, max(b.sali_etime) as endtime from t_car a left join t_car_insurance b on a.car_id = b.car_id group by a.car_id ) a where 
+		 ADDDATE(now(), #{tax,jdbcType=INTEGER}) > a.endtime OR a.endtime IS NULL
+		UNION ALL
+		select 3 as type, car_id, car_no, area_id, scrap_date as endtime from t_car a where 
+		  ADDDATE(now(),#{retire,jdbcType=INTEGER}) > a.scrap_date OR a.scrap_date IS NULL ) a 
+	  <where>
+	    <if test="areaid != null" >
+         and a.area_id = #{areaid,jdbcType=INTEGER}
+      	</if>
+      	<if test="type != null" >
+         and a.type = #{type,jdbcType=INTEGER}
+      	</if>
+
+      	<if test="status != null" >
+         <if test="status==0">
+         	and endtime is null
+         </if>
+         <if test="status==1">
+         <![CDATA[and endtime <now()]]> 
+         </if>
+         <if test="status==3">
+         <![CDATA[and endtime >now()]]>
+         </if>
+      	</if>
+
+	  </where>
+	order by a.endtime desc
+  </select>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarCostRemind" >
+    insert into t_car_cost_remind
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tax != null" >
+        tax,
+      </if>
+      <if test="insurance != null" >
+        insurance,
+      </if>
+      <if test="annualcheck != null" >
+        annualcheck,
+      </if>
+      <if test="retire != null" >
+        retire,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tax != null" >
+        #{tax,jdbcType=INTEGER},
+      </if>
+      <if test="insurance != null" >
+        #{insurance,jdbcType=INTEGER},
+      </if>
+      <if test="annualcheck != null" >
+        #{annualcheck,jdbcType=INTEGER},
+      </if>
+      <if test="retire != null" >
+        #{retire,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+    <update id="updateSelective" parameterType="cn.com.liliyun.car.model.CarCostRemind" >
+    update t_car_cost_remind
+    <set >
+      <if test="tax != null" >
+        tax = #{tax,jdbcType=INTEGER},
+      </if>
+      <if test="insurance != null" >
+        insurance = #{insurance,jdbcType=INTEGER},
+      </if>
+      <if test="annualcheck != null" >
+        annualcheck = #{annualcheck,jdbcType=INTEGER},
+      </if>
+      <if test="retire != null" >
+        retire = #{retire,jdbcType=INTEGER},
+      </if>
+    </set>
+  </update>
+</mapper>

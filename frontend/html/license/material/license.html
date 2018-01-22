@@ -1,0 +1,30 @@
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del,save',
+        height: '95%',
+        paging: false,
+        showCheckboxcol: true,
+        showToolbar: true,
+        data: [],
+        inlineEditMult: true,
+        saveAll: true,
+        showLinenumber: false,
+        editUrl: config.openBasePath + 'material/license',
+        afterSave: function () {
+            BJUI.dialog('closeCurrent');
+            license_material_list.datagrid('refresh', true);
+        },
+        columns: [
+            {name: 'name', label: '姓名', align: 'center'},
+            {name: 'idcard', label: '证件号码', align: 'center', attrs: {readonly: 'readonly'}}
+        ]
+    });
+
+    $(document).on("change", "[name='name']", function () {
+        clz.getStudentIdcard($(this),ApplySubjectEnum.GRADUATE_GRADUATE_LICENSE);
+    })
+</script>
+    

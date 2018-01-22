@@ -1,0 +1,452 @@
+<style type="text/css">
+    #allmap{height:400px;width:80%;margin-left: 10%;margin-top: 10px;margin-bottom: 20px;}
+</style>
+<div class="bjui-pageContent">
+    <div class="">
+        <form class="datagrid-edit-form" data-toggle="validate" method="POST" id="view-form">
+        	<div class="bjui-row col-4">
+                <label class="row-label">门店名称</label>
+                <div class="row-input">
+                    <input type="text" name="name" readonly class="clear-style" >
+                </div>
+                <label class="row-label">门店代码</label>
+                <div class="row-input">
+                    <input type="text" name="storenum" readonly class="clear-style">
+                </div>
+                <br />
+                <label class="row-label">客服专员</label>
+                <div class="row-input">
+                    <input type="text" name="customerservicenum" readonly class="clear-style" >
+                </div>
+                <label class="row-label">门店教练</label>
+                <div class="row-input" id="coachnum-list">
+                    <input type="text" name="coachnum" readonly class="clear-style">
+                </div>
+            </div>
+            <div class="widget-box ">
+	            <div class="widget-title">
+					<span class="icon"> <i class="fa fa-tag"></i> </span>
+					<h5>基本信息</h5>
+				</div>
+				<div class="widget-content nopadding">
+				    <div class="bjui-row col-4">
+				    	<label class="row-label">证照名称</label>
+		                <div class="row-input  fill-2">
+		                    <input type="text" name="licensename" data-rule=";length[1~60]" readonly>
+		                </div>
+		                <label class="row-label">所属片区</label>
+		                <div class="row-input ">
+		                    <select name="areaid" data-toggle="selectpicker" data-width="100%" data-rule="" data-datajson="arealist" data-optiontype = "id,name" disabled>
+		                        <option value="">请选择</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">固定电话</label>
+		                <div class="row-input ">
+		                    <input type="text" name="tel" readonly>
+		                </div>
+		                <label class="row-label">行政区域</label>
+		                <div class="row-input  fill-2">
+		                    <select name="province" data-toggle="selectpicker" data-nextselect="#form_city" data-refurl="/httpaccess/area/region?level={value}" data-width="32%" data-dataurl="/httpaccess/area/region?level=0" data-optiontype="value,label" disabled>
+					        </select>
+					        <select name="city" id="form_city" data-toggle="selectpicker" data-nextselect="#form_area" data-refurl="/httpaccess/area/region?level={value}" data-emptytxt="市" data-width="32%" disabled>
+					        	<option>市</option>
+					        </select>
+					        <select name="region" id="form_area" data-toggle="selectpicker" data-emptytxt="区/县" data-width="32%" data-rule="required" disabled>
+					        	<option>区/县</option>
+					        </select>
+		                </div>
+		                <br />
+		                <label class="row-label">门店地址</label>
+		                <div class="row-input fill-3 ">
+		                    <input type="text" name="address" readonly>
+		                </div>
+		                <label class="row-label">经度</label>
+		                <div class="row-input ">
+		                    <input type="text" name="lng" readonly>
+		                </div>
+		                <label class="row-label">纬度</label>
+		                <div class="row-input ">
+		                    <input type="text" name="lat" readonly>
+		                </div>
+		                <br />
+		                <label class="row-label">所属商圈</label>
+		                <div class="row-input">
+		                    <input type="text" name="tradingarea" readonly>
+		                </div>
+		                <label class="row-label">地标建筑名称</label>
+		                <div class="row-input">
+		                    <input type="text" name="landmark" readonly>
+		                </div>
+		                <br />
+		                <label class="row-label">公交/地铁点</label>
+		                <div class="row-input fill-2">
+		                    <input type="text" name="busstation" readonly>
+		                </div>
+		            </div>
+	            </div>
+            </div>
+
+			<div class="widget-box ">
+	            <div class="widget-title">
+					<span class="icon"> <i class="fa fa-tag"></i> </span>
+					<h5>门店性质</h5>
+				</div>
+				<div class="widget-content nopadding">
+		            <div class="bjui-row col-4">
+		            	<label class="row-label">门店性质</label>
+		                <div class="row-input ">
+		                    <select name="operatetype" data-toggle="selectpicker" data-width="100%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="0">直营</option>
+		                        <option value="1">加盟</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">营业状态</label>
+		                <div class="row-input ">
+		                    <select name="status" data-toggle="selectpicker" data-width="100%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="0">正常营业</option>
+		                        <option value="1">装修待营业</option>
+		                        <option value="2">停止营业</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">门店类型</label>
+		                <div class="row-input ">
+		                    <select name="type" data-toggle="selectpicker" data-width="100%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="1">单人店</option>
+		                        <option value="2">双人店</option>
+		                        <option value="3">总台</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">门店规模</label>
+		                <div class="row-input">
+		                    <select name="scale" data-toggle="selectpicker" data-width="100%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="1">旗舰店</option>
+		                        <option value="2">中型门店</option>
+		                        <option value="3">服务门店</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">开业日期</label>
+		                <div class="row-input ">
+		                    <input name="opendate" type="text" readonly>
+		                </div>
+		            </div>
+	            </div>
+            </div>
+            
+            <div class="widget-box ">
+	            <div class="widget-title">
+					<span class="icon"> <i class="fa fa-tag"></i> </span>
+					<h5>租赁信息</h5>
+				</div>
+				<div class="widget-content nopadding">
+		            <div class="bjui-row col-4">
+		                <label class="row-label">建筑面积(m²)</label>
+		                <div class="row-input ">
+		                    <input type="text" name="area" readonly>
+		                </div>
+		                <label class="row-label">使用面积(m²)</label>
+		                <div class="row-input">
+		                    <input type="text" name="usingarea" readonly>
+		                </div>
+		                <label class="row-label">租金(元/月)</label>
+		                <div class="row-input ">
+		                    <input type="text" name="rent" readonly>
+		                </div>
+		                <label class="row-label">租房押金(元)</label>
+		                <div class="row-input ">
+		                    <input type="text" name="deposit" readonly>
+		                </div>
+		                <label class="row-label">租金单价(元/月/m²)</label>
+		                <div class="row-input">
+		                    <input type="text" name="rentunitprice" class="clear-style" readonly>
+		                </div>
+		                <label class="row-label">是否分租</label>
+		                <div class="row-input">
+		                    <select name="issublet" data-toggle="selectpicker" data-width="100%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="1">是</option>
+		                        <option value="0">否</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">租房合同开始日期</label>
+		                <div class="row-input ">
+		                    <input name="starttime" type="text" readonly>
+		                </div>
+		                <lable class="row-label">租房合同结束日期</lable>
+		                <div class="row-input ">
+		                    <input name="endtime" type="text" readonly>
+		                </div>
+		                <label class="row-label">合同剩余年限</label>
+		                <div class="row-input">
+		                    <input name="leftrenttime" type="text" class="clear-style" readonly>
+		                </div>
+		                <label class="row-label">出租类型</label>
+		                <div class="row-input">
+		                    <select name="renttype" data-toggle="selectpicker" data-width="100%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="1">一手</option>
+		                        <option value="2">二手</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">交租期限</label>
+		                <div class="row-input">
+		                    <input type="text" name="rentpaylimit" readonly>
+		                </div>
+		            </div>
+	            </div>
+            </div>
+            
+            <!--后续版本优化流程再做图片展示-->
+            <!--<div class="widget-box ">
+	            <div class="widget-title">
+					<span class="icon"> <i class="fa fa-tag"></i> </span>
+					<h5>门店图片展示</h5>
+				</div>
+				<div class="widget-content nopadding">
+		            <input type="hidden" name="images">
+		            <div class="bjui-row col-3">
+            	
+        			</div>
+    			</div>
+			</div>-->
+            
+            <div class="widget-box ">
+	            <div class="widget-title">
+					<span class="icon"> <i class="fa fa-tag"></i> </span>
+					<h5>证照信息</h5>
+				</div>
+				<div class="widget-content nopadding">
+		            <div class="bjui-row col-4">
+		            	<label class="row-label">营业执照开始日期</label>
+		                <div class="row-input">
+		                    <input name="licensestart" type="text" readonly>
+		                </div>
+		                <lable class="row-label">营业执照结束日期</lable>
+		                <div class="row-input">
+		                    <input name="licenseend" type="text" readonly>
+		                </div>
+		                <label class="row-label">营业执照年限</label>
+		                <div class="row-input">
+		                    <input id="licensetime" type="hidden" class="clear-style" readonly>
+		                    <input name="licensetime" type="text" class="clear-style" readonly>
+		                </div>
+		                <label class="row-label">营业执照剩余年限</label>
+		                <div class="row-input">
+		                    <input name="leftlicensetime" type="text" class="clear-style" readonly>
+		                </div>
+		            </div>
+	            </div>
+            </div>
+            
+            <div class="widget-box ">
+	            <div class="widget-title">
+					<span class="icon"> <i class="fa fa-tag"></i> </span>
+					<h5>产权信息</h5>
+				</div>
+				<div class="widget-content nopadding">
+		            <div class="bjui-row col-4">
+		            	<label class="row-label">产权人</label>
+		                <div class="row-input">
+		                    <input type="text" name="owner" readonly>
+		                </div>
+		                <label class="row-label">产权性质</label>
+		                <div class="row-input">
+		                    <select name="ownertype" data-toggle="selectpicker" data-width="100%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="1">自有</option>
+		                        <option value="2">租赁</option>
+		                    </select>
+		                </div>
+		                <label class="row-label">房东名字</label>
+		                <div class="row-input">
+		                    <input type="text" name="landlord" readonly>
+		                </div>
+		                <label class="row-label">房东电话</label>
+		                <div class="row-input">
+		                    <input type="text" name="landlordphone" readonly>
+		                </div>
+		                <label class="row-label">房东地址</label>
+		                <div class="row-input fill-2">
+		                    <input type="text" name="landlordaddress" readonly>
+		                </div>
+		                <label class="row-label">租用楼总层</label>
+		                <div class="row-input">
+		                    <input type="text" name="totalfloor" readonly>
+		                </div>
+		                <label class="row-label">门店所处层</label>
+		                <div class="row-input">
+		                    <input type="text" name="curfloor" readonly>
+		                </div>
+		            </div>
+	            </div>
+            </div>
+            
+            <div class="widget-box ">
+	            <div class="widget-title">
+					<span class="icon"> <i class="fa fa-tag"></i> </span>
+					<h5>营业信息</h5>
+				</div>
+				<div class="widget-content nopadding">
+		            <div class="bjui-row col-4">
+		            	<label class="row-label">片区经理</label>
+		                <div class="row-input">
+		                    <input type="text" name="manager" readonly>
+		                </div>
+		                <label class="row-label">上班时间</label>
+		                <div class="row-input">
+		                    <select name="workstart" data-toggle="selectpicker" data-width="42%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="0">0点</option>
+		                        <option value="1">1点</option>
+		                        <option value="2">2点</option>
+		                        <option value="3">3点</option>
+		                        <option value="4">4点</option>
+		                        <option value="5">5点</option>
+		                        <option value="6">6点</option>
+		                        <option value="7">7点</option>
+		                        <option value="8">8点</option>
+		                        <option value="9">9点</option>
+		                        <option value="10">10点</option>
+		                        <option value="11">11点</option>
+		                        <option value="12">12点</option>
+		                        <option value="13">13点</option>
+		                        <option value="14">14点</option>
+		                        <option value="15">15点</option>
+		                        <option value="16">16点</option>
+		                        <option value="17">17点</option>
+		                        <option value="18">18点</option>
+		                        <option value="19">19点</option>
+		                        <option value="20">20点</option>
+		                        <option value="21">21点</option>
+		                        <option value="22">22点</option>
+		                        <option value="23">23点</option>
+		                    </select>
+		                    	到
+		                    <select name="workend" data-toggle="selectpicker" data-width="42%" disabled>
+		                    	<option value="">请选择</option>
+		                        <option value="0">0点</option>
+		                        <option value="1">1点</option>
+		                        <option value="2">2点</option>
+		                        <option value="3">3点</option>
+		                        <option value="4">4点</option>
+		                        <option value="5">5点</option>
+		                        <option value="6">6点</option>
+		                        <option value="7">7点</option>
+		                        <option value="8">8点</option>
+		                        <option value="9">9点</option>
+		                        <option value="10">10点</option>
+		                        <option value="11">11点</option>
+		                        <option value="12">12点</option>
+		                        <option value="13">13点</option>
+		                        <option value="14">14点</option>
+		                        <option value="15">15点</option>
+		                        <option value="16">16点</option>
+		                        <option value="17">17点</option>
+		                        <option value="18">18点</option>
+		                        <option value="19">19点</option>
+		                        <option value="20">20点</option>
+		                        <option value="21">21点</option>
+		                        <option value="22">22点</option>
+		                        <option value="23">23点</option>
+		                    </select>
+		                </div>
+		                <br/>
+		                <label class="row-label">监控设备(台)</label>
+		                <div class="row-input">
+		                    <input type="text" name="monitordevice" readonly>
+		                </div>
+		                <label class="row-label">顶楼广告(个)</label>
+		                <div class="row-input">
+		                    <input type="text" name="topad" readonly>
+		                </div>
+		                <label class="row-label">门面广告(个)</label>
+		                <div class="row-input">
+		                    <input type="text" name="frontad" readonly>
+		                </div>
+		                <label class="row-label">LED广告(个)</label>
+		                <div class="row-input">
+		                    <input type="text" name="ledad" readonly>
+		                </div>
+		                <label class="row-label">店面竖招牌(个)</label>
+		                <div class="row-input">
+		                    <input type="text" name="signboard" readonly>
+		                </div>
+		                <label class="row-label">地面灯箱广告</label>
+		                <div class="row-input">
+		                    <input type="text" name="boxad" readonly>
+		                </div>
+		        	</div>
+	        	</div>
+        	</div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="submit" class="btn-blue" data-icon="save">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+	var system_store_view = {
+		images : {},
+		init : function(){
+			var data = clz.getNavtab_more();
+			clz.CurrentDom_init({
+				current:'Navtab',
+				form_name: 'view-form',
+				data: data,
+				before: function(data) {
+					if(data.region) {
+						data.province = parseInt(data.region/10000);
+						data.city = parseInt(data.region/100);
+					}
+					if(data.opendate)
+						data.opendate = data.opendate.substring(0,10);
+					if(data.starttime)
+						data.starttime = data.starttime.substring(0,10);
+					if(data.endtime)
+						data.endtime = data.endtime.substring(0,10);
+					if(data.licensestart)
+						data.licensestart = data.licensestart.substring(0,10);
+					if(data.licenseend)
+						data.licenseend = data.licenseend.substring(0,10);
+					
+					if (data.starttime && data.endtime)
+						data.leftrenttime = system_store_view.getLefttime(data.starttime, data.endtime);
+					if (data.licenseend)
+						data.leftlicensetime = system_store_view.getLefttime("", data.licenseend);
+					if (data.licensestart && data.licenseend)
+						data.licensetime = system_store_view.getLefttime(data.licensestart, data.licenseend);
+						$.CurrentNavtab.find("#coachnum-list").html(
+							"<a href='html/system/store/store-coachlist.html' data-toggle='dialog' data-options='{id:\"store-view-coach-list"+data.id+"\" , title:\"门店教练员列表\", width:1000, height:800}' data-more='" + data.id + "'>" + data.coachnum + "</a>"
+						);
+					
+				}
+			});
+		},
+		getLefttime : function(start, end) {
+			if (start == "") {
+				date = new Date();
+				start = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+				console.log(date.toLocaleDateString().replaceAll("/","-"));
+			}
+			var reg = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
+			if (start.match(reg) != null && end.match(reg) != null) {
+				var starttime = new Date(start);
+				var endtime = new Date(end);
+				var year = endtime.getFullYear() - starttime.getFullYear();
+				var month = endtime.getMonth() - starttime.getMonth();
+				if (month < 0) {
+					year = year - 1;
+					month = 12 + month;
+				}
+				return year + "年" + month + "月";
+			}
+		}
+	}
+	system_store_view.init();
+</script>

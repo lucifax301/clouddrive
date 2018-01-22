@@ -1,0 +1,117 @@
+<section id="thispage" privilege = "040901"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>停车地点管理</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+					<select name="areaid" id="areaid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/area/list" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">申请时间：</label>
+	            <div class="row-input">
+	               	<input type="text" name="stime" data-toggle="datepicker" placeholder="申请起始时间"> 	
+	            </div>
+	            <label class="row-label"></label>
+	            <div class="row-input">
+	                <input type="text" name="etime" data-toggle="datepicker" placeholder="申请截止时间"> 
+	            </div>
+			</div>
+			<div class="text-center">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	
+	var car_log_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '停车地点审批列表',
+		toolbarItem: '',
+		toolbarCustom: " <button class='btn-blue' style='' data-privilege='040901_datagrid-list_11' onclick='applyCarParking()'>新增申请</button>  <button class='btn-blue' style='' data-privilege='040901_datagrid-list_12' onclick='cancelApplyParking()'>撤销申请</button>",
+		paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+		height: '80%',
+		showCheckboxcol: true,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'car/queryCarParkingApplyLogList',
+		columns: [
+			{ name: 'areaid', label: '片区', align: 'center',render: formatAreaCell},
+			{ name: 'carNo', label: '车牌号', align: 'center'},
+			{ name: 'coachName', label: '使用人', align: 'center'},
+			{ name: 'preParkingPlace', label: '变更前停放地点', align: 'center'},
+			{ name: 'preCost', label: '变更前费用', align: 'center'},
+			{ name: 'parkingPlace', label: '变更后停放地点', align: 'center'},
+			{ name: 'cost', label: '变更后费用', align: 'center'},	
+			{ name: 'applyDate', label: '申请日期', align: 'center' },
+			{ name: 'status', label: '办理状态', align: 'center',render:function(value){
+				switch(value) {
+					case 1:
+						return "申请中";
+					case 2:
+						return "已拒绝";
+					case 3:
+						return "已通过";
+					case 4:
+						return "已撤销";
+				}
+			}},
+			{ name: 'handleAreaid', label: '现处理片区', align: 'center',render: formatAreaCell},
+			{ name: 'handleName', label: '现处理人', align: 'center'},
+			{ name: 'cname', label: '申请人', align: 'center' },		
+		],
+
+	});
+	
+	function applyCarParking(){
+		var table = $.CurrentNavtab.find('#datagrid-list');
+		BJUI.dialog({
+			id: 'car-parking-log-add',
+			width: 840,
+			height: 230,
+			url: 'html/car/log/car-parking-log-add.html',
+			title: '停放地点变更管理',
+			onClose: function() {
+				table.datagrid('refresh', true);
+			},
+		})
+	}
+    
+   function  cancelApplyParking(){
+		var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+		var table = $.CurrentNavtab.find('#datagrid-list');
+		if (!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+			BJUI.alertmsg('warn', '请选择一条记录！', {});
+			return;
+		} 
+		if (data.length != 1) {
+			BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+			return;
+		} 
+		var status=data[0].status;
+		if(status!=1){
+			BJUI.alertmsg('error', '只能选择申请中的记录撤销！', {});
+			return;
+		}
+		 console.log(data[0]);
+	     BJUI.ajax('doajax', {
+	        url: config.openBasePath + 'car/cancelCarParkingApplyLog',
+	        loadingmask: true,
+	        data: {
+                    transactionid: data[0].transactionid,
+            },
+		    validate: true,
+	        callback: function(json) {
+	            table.datagrid('refresh', true);
+	        }
+	    });
+   }
+
+
+	
+</script>

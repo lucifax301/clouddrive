@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.student.mapper.CoachStudentMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.CoachStudent" >
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="studentid" property="studentid" jdbcType="INTEGER" />
+    <result column="isvalid" property="isvalid" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="reviewid" property="reviewid" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    coachid,studentid,isvalid,state,reason,cuid,reviewid,businessid,transactionid
+  </sql>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.student.model.CoachStudent" >
+    insert into t_coach_student (coachid,studentid,isvalid,state,reason,cuid,reviewid,businessid,transactionid)
+    values (#{coachid},#{studentid},#{isvalid},#{state},#{reason},#{cuid},#{reviewid},#{businessid},#{transactionid})
+  </insert>
+  
+  <select id="count" parameterType="cn.com.liliyun.student.model.CoachStudent" resultType="java.lang.Integer" >
+    select count(*) from t_coach_student
+    where 1=1 
+    <if test="studentid != null" >
+		and studentid=#{studentid}
+	</if>
+    <if test="coachid != null" >
+		and coachid=#{coachid}
+	</if>
+	<if test="isvalid != null" >
+		and isvalid=#{isvalid}
+	</if>
+	<if test="state != null">
+		and state=#{state}
+	</if>
+  </select>
+  
+  <select id="list" parameterType="cn.com.liliyun.student.model.CoachStudent" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from t_coach_student
+    where 1=1 
+	<if test="studentid != null" >
+		and studentid=#{studentid}
+	</if>
+    <if test="coachid != null" >
+		and coachid=#{coachid}
+	</if>
+	<if test="isvalid != null" >
+		and isvalid=#{isvalid}
+	</if>
+	<if test="state != null">
+		and state=#{state}
+	</if>
+	<if test="transactionid != null and transactionid != ''">
+		and transactionid=#{transactionid}
+	</if>
+  </select>
+  
+  <select id="get" parameterType="cn.com.liliyun.student.model.CoachStudent" resultType="cn.com.liliyun.student.model.CoachStudent" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from t_coach_student
+    where studentid=#{studentid}
+    
+  </select>
+  
+  <update id="update" parameterType="cn.com.liliyun.student.model.CoachStudent" >
+    update t_coach_student
+    set coachid=#{coachid} where studentid=#{studentid}
+  </update>
+  
+  <update id="updateSelective" parameterType="cn.com.liliyun.student.model.CoachStudent" >
+    update t_coach_student
+    <set>
+	    <if test="coachid != null">
+	    	coachid=#{coachid},
+	    </if>
+	    <if test="isvalid != null">
+	    	isvalid=#{isvalid},
+	    </if>
+	    <if test="state != null">
+	    	state=#{state},
+	    </if>
+	    <if test="reason != null and reason != ''">
+	    	reason=#{reason},
+	    </if>
+	    <if test="cuid != null">
+	    	cuid=#{cuid},
+	    </if>
+	    <if test="reviewid != null">
+	    	reviewid=#{reviewid},
+	    </if>
+	    <if test="businessid != null and businessid != ''">
+	    	businessid=#{businessid},
+	    </if>
+	    <if test="transactionid != null and transactionid != ''">
+	    	transactionid=#{transactionid},
+	    </if>
+    </set>
+    where studentid=#{studentid}
+  </update>
+  
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+  	<foreach item="item" collection="list" separator=";">
+  		insert into t_coach_student
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="item.coachid != null" >
+	        coachid,
+	      </if>
+	      <if test="item.studentid != null" >
+	        studentid,
+	      </if>
+	      <if test="item.isvalid != null" >
+	        isvalid,
+	      </if>
+	      <if test="item.state != null" >
+	        state,
+	      </if>
+	      <if test="item.reason != null and item.reason != ''">
+	      	reason,
+	      </if>
+	      <if test="item.cuid != null" >
+	        cuid,
+	      </if>
+	      <if test="item.reviewid != null" >
+	        reviewid,
+	      </if>
+	      <if test="item.businessid != null and item.businessid != ''">
+	      	businessid,
+	      </if>
+	      <if test="item.transactionid != null and item.transactionid != ''">
+	      	transactionid,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="item.coachid != null" >
+	        #{item.coachid},
+	      </if>
+	      <if test="item.studentid != null" >
+	        #{item.studentid},
+	      </if>
+	      <if test="item.isvalid != null" >
+	        #{item.isvalid},
+	      </if>
+	      <if test="item.state != null" >
+	        #{item.state},
+	      </if>
+	      <if test="item.reason != null and item.reason != ''">
+	      	#{item.reason},
+	      </if>
+	      <if test="item.cuid != null" >
+	        #{item.cuid},
+	      </if>
+	      <if test="item.reviewid != null" >
+	        #{item.reviewid},
+	      </if>
+	      <if test="item.businessid != null and item.businessid != ''">
+	      	#{item.businessid},
+	      </if>
+	      <if test="item.transactionid != null and item.transactionid != ''">
+	      	#{item.transactionid},
+	      </if>
+	    </trim>
+  	</foreach>
+  </insert>
+  
+  <delete id="delete" parameterType="cn.com.liliyun.student.model.CoachStudent">
+  	delete from t_coach_student where studentid = #{studentid} 
+  </delete>
+  
+  <select id="selectStudentCoach" parameterType="cn.com.liliyun.student.dto.StudentCoachDTO" resultType="cn.com.liliyun.student.dto.StudentCoachDTO">
+  	select t1.stunum, t1.name, t1.idcard, t1.phone, t1.applyexam, t1.applystatus, t1.classid, t1.areaid, t1.storeid, t1.flownum,
+  	t2.coachid, t1.id studentid, t2.isvalid, t2.state, t2.reason, t2.cuid, t2.reviewid, t3.coachnum, t3.name coachname, t3.mobile coachmobile,
+  	t3.sex coachsex, t3.areaid coachareaid, t3.curstudentload coachload
+  	from t_student as t1 
+  	left join t_coach_student as t2 on t1.id = t2.studentid
+  	left join t_coach as t3 on t2.coachid = t3.coachid
+  	where 1 = 1 <!-- ((t1.applyexam = 2 and t1.applystatus = 5) or t1.applyexam > 2) -->
+  	<if test="name != null and name != ''">
+  		and t1.name like concat('%',#{name},'%')
+  	</if>
+  	<if test="idcard != null and idcard != ''">
+  		and t1.idcard like concat('%',#{idcard},'%')
+  	</if>
+  	<if test="classid != null">
+  		and t1.classid = #{classid}
+  	</if>
+  	<if test="applyexam != null">
+  		and t1.applyexam = #{applyexam}
+  	</if>
+  	<if test="applystatus != null">
+  		and t1.applystatus = #{applystatus}
+  	</if>
+  	<if test="areaid != null">
+  		and t1.areaid = #{areaid}
+  	</if>
+  	<if test="storeid">
+  		and t1.storeid = #{storeid}
+  	</if>
+  	<if test="coachname != null and coachname != ''">
+  		and t3.name like concat('%',#{coachname},'%')
+  	</if>
+  	<if test="isvalid != null">
+  		and ifnull(t2.isvalid, 0) = #{isvalid}
+  	</if>
+  	<if test="state != null">
+  		and t2.state = #{state} 
+  	</if>
+  	<if test="domain !=null">
+	    	<if test="domain.storeid !=null ">
+	    		and t1.storeid=#{domain.storeid} 
+	    	</if>
+	    	<if test="domain.areaid !=null ">
+	    		and t1.areaid=#{domain.areaid}
+	    	</if>
+	    	
+	</if>
+  	<if test="transactionid != null and transactionid != ''">
+		and t2.transactionid=#{transactionid}
+	</if>
+  	order by t1.id
+  </select>
+  
+</mapper>

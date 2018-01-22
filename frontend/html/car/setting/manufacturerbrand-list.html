@@ -1,0 +1,90 @@
+<section id="thispage" privilege = "040807"></section>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+		var manufacturerbrand_list = {
+			list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+	        gridTitle : '厂家品牌列表',
+	        toolbarItem: 'add',
+	        paging: false,
+	        height: '85%',
+	        showToolbar: true,
+	        dataUrl: config.openBasePath+'/car/getAllManufacturerBrand',
+	        columns: [
+	            {name:'name',label:'名称',align:'center'},
+	            {name:'type',label:'类型',align:'center',render:function(value){return String(value)=='1'?'厂家':'品牌'}},
+	            {name:'count',label:'车辆数量',align:'center' , render:function(val,data){return '<a href="javascript:" onclick="manufacturerbrand_list.show('+data.type+','+data.id+')">'+val+'</a>'}},
+	            {name:'op',label:'操作',align:'center',render:carcolorOperation},
+	        ],
+	        editMode: {dialog:{width:'640',height:'200',title:'厂家/品牌信息',mask:true,
+	        onClose: function() {		
+						manufacturerbrand_list.list.datagrid('refresh', true);
+					}
+	        }},
+        	keys: {
+				children: 'children'
+			},
+			isTree: 'name',
+			treeOptions: {
+				key: 'id',
+				expandAll: true,
+			},
+	        add_url :  'html/car/setting/manufacturerbrand-add.html',
+	        edit_url: 'html/car/setting/manufacturerbrand-edit.html',
+	        delUrl : config.openBasePath + '/car/deleteManufacturerBrand',
+			delPK : 'id',
+			afterSave:function(){
+				manufacturerbrand_list.list.datagrid('refresh',true);
+			},
+			afterDelete:function(){
+				manufacturerbrand_list.list.datagrid('refresh',true);
+			},
+			delPK : 'id'
+	    }),
+		edit:function(data){
+			BJUI.dialog({
+					id: 'reg-office-edit',
+					width: 640,
+					height: 200,
+					url: 'html/car/setting/manufacturerbrand-edit.html',
+					title: '编辑厂家品牌',
+					onClose: function() {
+						manufacturerbrand_list.list.datagrid('refresh', true);
+					}
+
+				})
+		},
+	    delete:function(data){
+	    	BJUI.alertmsg('confirm', '确认删除吗！', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + "car/deleteManufacturerBrand?id=" + data.id,
+	                    loadingmask: true,
+	                    okCallback: function(json, options) {
+	                        manufacturerbrand_list.list.datagrid('refresh',true);
+	                    }
+	                })
+	            }
+	        })
+	    },
+		show(type,id){
+			clz.setWindowJson({
+				type:type,
+				id:id
+			})
+			BJUI.dialog({
+			    id:'car_manufacturerbrand_list'+id,
+			    url:'html/car/setting/car_manufacturerbrand_list.html',
+			    title:'车辆列表',
+			    width:'800',
+			    height:'500'
+			})
+		}
+	
+	}
+
+	function carcolorOperation(value,data) {
+        var html;
+        html="<button class='btn btn-blue' data-icon='edit' data-privilege='040807_datagrid-list_02' onclick='manufacturerbrand_list.edit("+JSON.stringify(data)+")'>编辑</button> <button class='btn btn-red' data-icon='times' data-privilege='040807_datagrid-list_03' onclick='manufacturerbrand_list.delete("+JSON.stringify(data)+")'>删除</button>";
+        return html
+    }
+</script>

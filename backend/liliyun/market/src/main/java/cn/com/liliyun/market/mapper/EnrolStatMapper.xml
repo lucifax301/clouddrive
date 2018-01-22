@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.market.mapper.EnrolStatMapper" >
+  <resultMap id="ClassResultMap" type="cn.com.liliyun.market.model.EnrolClassStatItem" >
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="classinfoid" property="classinfoid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  <resultMap id="ClassReturnResultMap" type="cn.com.liliyun.market.model.EnrolClassStatItem" >
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  <resultMap id="ChannelResultMap" type="cn.com.liliyun.market.model.EnrolChannelStatItem" >
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="channelid" property="channelid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  <resultMap id="ChannelReturnResultMap" type="cn.com.liliyun.market.model.EnrolChannelStatItem" >
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  <select id="statByClass" resultMap="ClassResultMap" parameterType="cn.com.liliyun.market.model.EnrolDetailParam">
+    select a.areaid, b.id as classinfoid,a.traintype, count(a.id) as count from t_student a left join  t_classinfo b on a.classid=b.id 
+    where 1=1
+    <if test="begindate != null ">
+		and a.applydate  > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and a.applydate  <= #{enddate}]]> 
+	</if>
+	
+	<if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+    group by a.areaid,a.traintype, b.id
+  </select>
+  
+  <select id="getClassReturnCount" resultMap="ClassReturnResultMap" parameterType="cn.com.liliyun.market.model.EnrolDetailParam">
+    select a.areaid, count(a.id) as count from t_student a left join  t_classinfo b on a.classid=b.id 
+    where a.applyexam=-1
+    <if test="begindate != null ">
+		and a.applydate  > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and a.applydate  <= #{enddate}]]> 
+	</if>
+	
+	<if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+    group by a.areaid
+  </select>
+  
+	
+  <select id="statByChannel" resultMap="ChannelResultMap" parameterType="cn.com.liliyun.market.model.EnrolDetailParam">
+    select a.areaid, b.id  as channelid,count(a.id) as count from t_student a left join t_sales_channel b on a.bussource=b.id 
+    where 1=1
+    <if test="begindate != null ">
+		and a.applydate  > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and a.applydate  <= #{enddate}]]> 
+	</if>
+	
+	<if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+    group by a.areaid,b.id
+  </select>
+  
+  <select id="getChannelReturnCount" resultMap="ChannelReturnResultMap" parameterType="cn.com.liliyun.market.model.EnrolDetailParam">
+    select a.areaid, count(a.id) as count from t_student a left join t_sales_channel b on a.bussource=b.id 
+    where a.applyexam=-1
+    <if test="begindate != null ">
+		and a.applydate  > #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and a.applydate  <= #{enddate}]]> 
+	</if>
+	
+	<if test="areaid != null ">
+		and a.areaid = #{areaid}
+	</if>
+    group by a.areaid
+  </select>	
+  
+</mapper>

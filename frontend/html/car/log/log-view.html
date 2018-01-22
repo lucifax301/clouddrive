@@ -1,0 +1,207 @@
+<div class="bjui-pageContent">
+	<div class="widget-box ">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-tag"></i> </span>
+			<h5>车辆调动申请详情</h5>
+		</div>
+		
+		<div class="widget-content nopadding">
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="view-form">
+			<div class="bjui-row col-3">
+				<div id="auditdiv" style="display:none">
+					<div class="row-input fill-2">
+						<button type="button" class="btn-blue btn vhide" data-privilege='050101_datagrid-list_11' data-icon="" onclick="log_view.audit(1)">审核通过</button>
+						<button type="button" class="btn-blue btn vhide" data-privilege='050101_datagrid-list_11' data-icon="" onclick="log_view.audit(2)">审核不通过</button>
+					</div>
+				</div>
+			</div>
+			<div class="bjui-row col-3">
+					<label class="row-label">车牌号：</label>
+					<div class="row-input required ">
+						<input type="hidden" name="areaid" >
+						<input type="text" name="carno" readonly="true" >
+					</div>
+					<label class="row-label">原片区：</label>
+					<div class="row-input required">
+						<select name="areaid" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+						</select>
+					</div>
+					<label class="row-label">原保管人：</label>
+					<div class="row-input required">
+						<input type="text" name="prename" data-rule="required" readonly="readonly">
+					</div>
+					<label class="row-label">保管人：</label>
+					<div class="row-input required ">
+						<input type="text" name="name" readonly="true" >
+					</div>
+					<label class="row-label">调入片区：</label>
+					<div class="row-input required">
+						<select name="curAreaid" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+						</select>
+					</div>
+					<label class="row-label">停车地点：</label>
+					<div class="row-input">
+						<input type="text" name="parkingPlace" data-rule="">
+					</div>
+					<label class="row-label">领用时间：</label>
+					<div class="row-input">
+						<input name="leadDate" type="text" data-toggle="datepicker" 	 readonly="readonly">    
+					</div>
+					<label class="row-label">使用性质：</label>
+					<div class="row-input">
+						<select name="property" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择</option>
+							<option value="0">专职教练车</option>
+							<option value="1">强化教练车</option>
+							<option value="2">测试车</option>
+							<option value="3">组长车</option>
+						</select>
+					</div>
+					<label class="row-label">备注：</label>
+					<div class="row-input">
+						<input type="text" name="remark" >
+					</div>
+					<label class="row-label">调动原因：</label>
+					<div class="row-input fill-2" >
+						<input type="text" name="reason" >
+					</div>
+					<br>
+					<label class="row-label">是否换车：</label>
+					<div class="row-input fill-2">
+						<input type="radio" name="changeOrNot" value="1" data-toggle="icheck" data-label="是"  disabled="disabled">
+						<input type="radio" name="changeOrNot" value="2" data-toggle="icheck" data-label="否" disabled="disabled" >
+					</div>
+					
+					<div class="introducetype_html">
+						<label class="row-label">车牌号：</label>
+						<div class="row-input required">
+							<input type="text" name="changeCarNo" data-rule="required" readonly="readonly">
+						</div>
+						<label class="row-label">原片区：</label>
+						<div class="row-input required">
+							<select name="changeAreaId" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+							</select>
+						</div>
+						<label class="row-label">原保管人：</label>
+						<div class="row-input required">
+							<input type="text" name="changeName" data-rule="required" readonly="readonly">
+						</div>
+						<label class="row-label">保管人：</label>
+						<div class="row-input required ">
+							<input type="text" name="curChangeName" readonly="true"  >
+						</div>
+						<label class="row-label">调入片区：</label>
+						<div class="row-input required">
+							<select name="curChangeAreaId" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+							</select>
+						</div>
+						<label class="row-label">停车地点：</label>
+						<div class="row-input required">
+							<input type="text" name="changePackingPlace" data-rule="required">
+						</div>
+						<label class="row-label">领用时间：</label>
+						<div class="row-input">
+							<input type="text" name="changeLeadDate" >
+						</div>
+						<label class="row-label">使用性质：</label>
+						<div class="row-input">
+							<select name="changeProperty" data-toggle="selectpicker" data-width="100%">
+								<option value="">请选择</option>
+								<option value="0">专职教练车</option>
+								<option value="1">强化教练车</option>
+								<option value="2">测试车</option>
+								<option value="3">组长车</option>
+							</select>
+						</div>
+						<label class="row-label">备注：</label>
+						<div class="row-input">
+							<input type="text" name="changeRemark" >
+						</div>
+					</div>
+	
+				</div>
+		</div>
+		</form>
+		</div>
+	</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="button" class="btn-close" data-icon="close" >关闭</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+		var data = clz.getNavtab_more();
+		console.log(data);
+		var log_view={
+			init:function(){
+				var value=data.changeOrNot;
+		    	if(value=='1'){
+		    		$(".introducetype_html").show();
+		    	}if(value='2'){
+		    		$(".introducetype_html").hide();
+		    	}
+	    		$.each($.CurrentNavtab.find('.introducetype_html input'),function(){
+					$(this).parent().trigger(BJUI.eventType.initUI)
+				})
+				clz.CurrentDom_init({
+					current: 'Navtab',
+					form_name: 'view-form',
+					data: data,
+					timetype: [{
+						name: 'leadDate',
+						type: 'yyyy-MM-dd'
+					}, {
+						name: 'changeLeadDate',
+						type: 'yyyy-MM-dd'
+					}]
+				});
+
+			},
+			loadinfo:function(){
+				BJUI.ajax('doajax', {
+					url: config.openBasePath + "carbiz/getLog",
+					loadingmask: true,
+					async: true,
+					data: {
+						id: data.id
+					},
+					okCallback: function(json, options) {
+						var data = json.result;
+						if(data.auditStatus == 1&&data.modapplystat == 1) { //申请是待审核状态
+							$("#auditdiv").css("display", "")
+						}
+					}
+				})
+			},
+			audit:function(value){
+				if(value==1){
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "carbiz/passAuditLog",
+						loadingmask: true,
+						async: true,
+						data: {
+							id: data.id
+						},
+						okCallback: function(json, options) {
+							 BJUI.navtab('closeCurrentTab');
+						}
+					})
+				}else if(value==2){
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "carbiz/refuseAuditLog",
+						loadingmask: true,
+						async: true,
+						data: {
+							id: data.id
+						},
+						okCallback: function(json, options) {
+							 BJUI.navtab('closeCurrentTab');
+						}
+					})
+				}		
+			}
+		}
+		log_view.init();
+		log_view.loadinfo();
+</script>

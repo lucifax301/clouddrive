@@ -1,0 +1,311 @@
+<section id="thispage" privilege = "070401"></section>
+<div class="bjui-pageHeader">
+	<form id="search-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>员工搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					
+					<label class="row-label">供职状态：</label>
+
+					<div class="row-input">
+						<select name="employstatus" id="employstatus" data-toggle="selectpicker" size="15" data-width="100%" class="w-100">
+							<option value="">全部</option>
+							<option value="0">在职</option>
+							<option value="1">离职</option>
+						</select>
+					</div>
+					
+					<label class="row-label">手机号码：</label>
+					<div class="row-input">
+						<input type="text" name="mobile" class="form-control" data-width="100%" placeholder="请输入手机号码查询">
+					</div>
+					<label class="row-label">姓名：</label>
+					<div class="row-input">
+						<input type="text" name="name" class="form-control" data-width="100%" placeholder="请输入姓名查询">
+					</div>
+					
+					
+				</div>
+				<div class="text-center">
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var staff_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '员工列表',
+			toolbarItem: 'add,export',
+			
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'staff/list?isdel=0',
+			columns: [{
+					name: 'name',
+					label: '姓名',
+					align: 'center',
+					render: function(value, data) {
+						data.previous_tab = clz.getNavtab_privilege();
+						return "<a href='javascript:' onclick='staff_list.view(" + JSON.stringify(data) + ")' >" + value + "</a>"
+					}
+				},
+				{
+					name: 'mobile',
+					label: '手机号码',
+					align: 'center'
+				}, {
+					name: 'sex',
+					label: '性别',
+					align: 'center',
+					render:function(value){
+						if(value==1){
+							return "男";
+						}else{
+							return "女"
+						}
+					}
+				}, {
+					name: 'job',
+					label: '职务',
+					align: 'center',
+					render:function(value){
+						if(value==1){
+							return "职能员工";
+						}else if(value==2){
+							return "教练员";
+						}else if(value==3){
+							return "片区主管";
+						}else if(value==5){
+							return "客服";
+						}else if(value==6){
+							return "顶班客服";
+						}
+					}
+				}, {
+					name: 'employstatus',
+					label: '供职状态',
+					align: 'center',
+					render: employstatus_status
+				}, {
+					name: 'hiredate',
+					label: '入职日期',
+					align: 'center'
+					 
+				},{
+					name: 'teachstate',
+					label: '操作',
+					align: 'center',
+					render: function(value,data){
+						var html="<button type='button' data-privilege='070401_datagrid-list_02' class='btn-blue vhide' onclick='staff_list.edit("+JSON.stringify(data)+")'>编辑</button>";
+        
+        				html=html+'<button type="button" data-privilege="070401_datagrid-list_03" class="btn-red vhide" onclick="staff_list.del('+data.id+')">删除</button>';
+        				return html
+					}
+				}
+
+			],
+			keys: {
+				ctime: 'ctime',
+				mtime: 'mtime'
+			},
+			
+			add_url: "html/system/staff/staff-add.html",
+
+			editMode: {
+				navtab: {
+					id: 'staff-navtab',
+					title: '新增员工',
+					onClose: function() {
+						
+						staff_list.list.datagrid('refresh', true);
+						BJUI.navtab('switchTab', staff_list.curtab);
+					}
+				}
+			},
+			
+			delPK: 'id',
+			beforeEdit: function() {
+				return true;
+			},
+			afterSave: function() {
+				//coach_list.list.datagrid('refresh', true);
+				BJUI.navtab('refresh')
+			},
+			afterDelete: function() {
+				//coach_list.list.datagrid('refresh', true);
+				BJUI.navtab('refresh')
+			},
+			exportOption: {
+				type: "file",
+				options: {
+					url: config.openBasePath + "staff/export",
+					data: $("#search-form").serializeArray()
+				}
+			}
+		}),
+		edit: function(staffinfo) {
+			console.log(staffinfo)
+			if(staffinfo.job==1)
+			BJUI.navtab({
+				id: 'staff-edit-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/staff/staff-common-edit.html',
+				title: '修改员工',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					staff_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})
+			else if(staffinfo.job==2)
+				BJUI.navtab({
+				id: 'staff-view-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/staff/staff-coach-edit.html',
+				title: '员工信息',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					staff_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})
+			else if(staffinfo.job==3)
+				BJUI.navtab({
+				id: 'staff-view-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/staff/staff-director-edit.html',
+				title: '员工信息',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					staff_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})
+			else if(staffinfo.job==5||staffinfo.job==6){
+				BJUI.navtab({
+				id: 'staff-view-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/staff/staff-cs-edit.html',
+				title: '员工信息',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					staff_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})
+			}
+		},
+		del: function(id){
+			BJUI.alertmsg('confirm', '确认删除此员工吗！', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/staff/del?id=" + id,
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        //BJUI.navtab('refresh')
+                        staff_list.list.datagrid('refresh', true);
+                    }
+                })
+            }
+        })
+		},
+
+		view: function(staffinfo) {
+			console.log(staffinfo)
+			if(staffinfo.job==1)
+				BJUI.navtab({
+					id: 'staff-view-table' + staffinfo.id,
+					width: 900,
+					height: 800,
+					url: 'html/system/staff/staff-common-view.html',
+					title: '员工信息',
+					more: JSON.stringify(staffinfo),
+					onClose: function() {
+						staff_list.list.datagrid('refresh', true);
+						BJUI.navtab('switchTab', staffinfo.previous_tab)
+					}
+	
+				})
+			
+			else if(staffinfo.job==2)
+				BJUI.navtab({
+				id: 'staff-view-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/staff/staff-coach-view.html',
+				title: '员工信息',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					staff_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})
+			else if(staffinfo.job==3)
+				BJUI.navtab({
+				id: 'staff-view-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/staff/staff-director-view.html',
+				title: '员工信息',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					staff_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})	
+			else if(staffinfo.job==5||staffinfo.job==6)
+				BJUI.navtab({
+				id: 'staff-view-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/staff/staff-cs-view.html',
+				title: '员工信息',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					staff_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})	
+		}
+	}
+
+	function employstatus_status(value) {
+		switch(value) {
+			case '0':
+				return "在职";
+			case '1':
+				return "离职";
+
+		}
+	}
+
+			
+	
+</script>

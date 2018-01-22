@@ -1,0 +1,78 @@
+<section id="thispage" privilege = "040504"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>里程记录信息搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+				 	<label class="row-label">车牌号码：</label>
+		            <div class="row-input">
+		                <input type="text" name="carno">
+		            </div>
+		            <label class="row-label">所属片区：</label>
+		            <div class="row-input">
+		                <select name="areaid" data-toggle="selectpicker" data-width="100%" data-height='30px;'
+		                    data-dataurl="/httpaccess/area/list" data-optiontype = "id,name">
+		                </select>
+		            </div>
+		            <label class="row-label">采集时间：</label>
+		            <div class="row-input">
+		               	<input type="text" name="fstime" data-toggle="datepicker" placeholder="采集起始时间"> 
+		            </div>
+		            <label class="row-label">采集时间：</label>
+		            <div class="row-input">
+		                <input type="text" name="fetime" data-toggle="datepicker" placeholder="采集截止时间"> 
+		            </div>
+		            <label class="row-label">录入时间：</label>
+		            <div class="row-input">
+		               	<input type="text" name="stime" data-toggle="datepicker" placeholder="录入起始时间"> 
+		            </div>
+		            <label class="row-label">录入时间：</label>
+		            <div class="row-input">
+		                <input type="text" name="etime" data-toggle="datepicker" placeholder="录入截止时间"> 
+		            </div>
+		           
+		      	</div>
+		      	 <div class="text-center">
+		                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		       		</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var car_mileage_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '里程信息列表',
+        //toolbarItem: 'add,|,edit,|,refresh,|,del',
+        toolbarItem: 'refresh,|,del',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + '/carbiz/listmileage',
+        columns: [		           
+        	{name:'carno',label:'车牌号码',align:'center'},
+        	{name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+            {name:'name',label:'使用人',align:'center'},
+            {name:'fetchtime',label:'采集时间',align:'center',render:function(value){return String(value)==''?'': clz.filter.time({date:value,type:'yyyy-MM-dd'})}},     
+            {name:'lastmile',label:'上月公里数',align:'center'},
+            {name:'thismile',label:'本月公里数',align:'center'},
+            {name:'actualmile',label:'实际公里数',align:'center'},
+            {name:'ctime',label:'录入日期',align:'center',render:function(value){return String(value)==''?'': clz.filter.time({date:value,type:'yyyy-MM-dd'})}},  
+            {name:'cname',label:'录入人',align:'center'} 
+        ],
+        editMode: {dialog:{width:'500',height:'450',title:'里程信息',mask:true}},       
+        add_url : 'html/car/mileage/mileage-add.html',
+        edit_url: 'html/car/mileage/mileage-edit.html',
+        delUrl : config.openBasePath + '/carbiz/deletemileage',
+		delPK :'id',
+        afterSave:function(){
+        	car_mileage_list.datagrid('refresh',true);
+		}
+  });	
+</script>

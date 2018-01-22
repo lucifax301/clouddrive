@@ -1,0 +1,148 @@
+<div class="bjui-pageContent">
+
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			<div class="bjui-row col-2">
+				   <label class="row-label">申请类型：</label>
+				   <div class="row-input">
+						<select name="applyType" data-toggle="selectpicker" data-width="100%" onchange="onApplyTypeChange(this)" id="applyType"  >
+							<option value="1">新增停车点</option>
+							<option value="2">变更停车点</option>
+							<option value="3">撤销停车点</option>
+						</select>
+				   </div>
+				   <label class="row-label add" >原片停车地点：</label>
+				   <div class="row-input add" >
+						<input type="hidden" name="preParckingPlaceId" >
+						<input type="text" name="preParckingPlace" readonly="true" data-toggle="findgrid" data-options="{
+	                    include: 'preParckingPlaceId : id ,preParckingPlace:packingPlace,curCount:carCount,curCost:cost',
+	                    dialogOptions: {
+	                        title:'查找停车地点',
+	                        maxable : false
+	                    },
+	                    empty : false,
+	                    gridOptions: {
+	                        tableWidth:'80%',
+	                        filterThead : true,
+	                        dataUrl: config.openBasePath + 'car/queryParkingList',
+	                        columns: [
+	                            {name:'id', label:'ID', width : '25%', align:'center'},
+	                            {name:'packingPlace', label:'停车地点', width : '30%', align:'center'}
+	                        ]
+	                    },
+	                }" placeholder="点放大镜按钮查找" >
+					</div>
+					<label class="row-label add">当前停放数量：</label>
+					<div class="row-input add">
+						<input type="text" name="curCount" readonly="readonly" >
+					</div>
+					<label class="row-label add">当前停放费用：</label>
+					<div class="row-input add">
+						<input type="text" name="curCost" readonly="readonly"  placeholder="单位(元)">
+					</div>
+					<label class="row-label">新停车地点：</label>
+					<div class="row-input">
+						<input type="text" name="newParkingPlace"  >
+					</div>
+					<label class="row-label">停车费：</label>
+					<div class="row-input">
+						<input type="text" name="newCost" placeholder="单位(元)">
+					</div>
+					<label class="row-label">保安：</label>
+					<div class="row-input">
+						<select name="existGuard" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择</option>
+							<option value="1">有</option>
+							<option value="2">无</option>
+						</select>  
+					</div>
+					<label class="row-label">停车模式：</label>
+					<div class="row-input">
+						<select name="packingType" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择</option>
+							<option value="1">夜间</option>
+							<option value="2">白天</option>
+						</select>
+					</div>
+					<label class="row-label">缴费模式：</label>
+					<div class="row-input">
+						<select name="payType" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择</option>
+							<option value="1">单次</option>
+							<option value="2">批量</option>
+						</select>
+					</div>
+					<label class="row-label">变更原因：</label>
+						<div class="row-input">
+							<input type="text" name="reason" >
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="submit" class="btn-blue" data-icon="button" onclick="addLog();">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+
+	var applyType=$("#applyType").val();
+	if(applyType==1){
+		hideAddInput();
+	}
+
+	var log_add = {
+		
+		images : {},
+		init: function() {
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'car/listInJson?userType=1',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        log_add.area = json.result;
+			    }
+			})	
+		},
+		area_menu_type: function(){
+			return log_add.area;
+		},
+	}
+	//log_add.init();
+	
+	
+	function addLog(){
+		if($.CurrentDialog.find('#add-form').isValid()){
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'car/addParkingLog',
+                loadingmask: true,
+                data:$.CurrentDialog.find('#add-form').serializeArray(),
+			    validate: true,
+                callback: function(json) {
+                    BJUI.dialog('closeCurrent');
+                }
+            });
+        };
+	}
+	
+	function onApplyTypeChange(e){
+		applyType=$(e).val();
+		if(applyType==1){
+			hideAddInput()
+		}else{
+			showAddInput();
+		}
+	}
+	
+	function hideAddInput(){
+		$(".row-label.add").hide();
+		$(".row-input.add").hide();
+	}
+	
+	function showAddInput(){
+		$(".row-label.add").show();
+		$(".row-input.add").show();
+	}
+	
+</script>

@@ -1,0 +1,106 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" id="add-form">
+    	<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>理论课信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+		        <div class="bjui-row col-4">
+		            <label class="row-label">课程名称:</label>
+		            <div class="row-input required">
+		                <input type="text" name="lessonname" data-rule="required">
+		            </div>
+		            <br>
+		            <label class="row-label">上课日期:</label>
+		            <div class="row-input fill-1 required">
+		                <input type="text" name="lessondate" data-toggle="datepicker" placeholder="开始时间" data-rule="required;pattern(yyyy-MM-dd)" data-pattern="yyyy-MM-dd">
+		            </div>
+		            <label class="row-label">上课时间</label>
+		            <div class="row-input fill-1 required">
+		            	<div class="w-45 fl">
+		                	<input type="text" name="lessonstart" data-toggle="datepicker" placeholder="结束时间" data-rule="required;pattern(HH:mm)" data-pattern="HH:mm">
+		                </div>
+		                <span class="fl text-center pl5 pr5">-</span>
+		                <div class="w-45 fl">
+		                	<input type="text" name="lessonend" data-toggle="datepicker" placeholder="结束时间" data-rule="required;pattern(HH:mm)" data-pattern="HH:mm">
+		                </div>
+		            </div>
+		            <br>
+		            <label class="row-label">携带证件:</label>
+		            <div class="row-input required">
+		                <input type="text" name="idcard" data-rule="required" value="身份证和照片回执">
+		            </div>
+		            <label class="row-label">上课地点:</label>
+		            <div class="row-input fill-2 required">
+		                <input type="text" name="place" data-rule="required,length[1~120]">
+		            </div>
+		        </div>
+	        </div>
+        </div>
+	</form>
+    <table id="theory-stores" class="table table-bordered"></table>
+    <div class="c-bottom-button mt30">
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="license_theory_add.save()">保存</button></li>
+    </div>
+</div>
+        
+<script type="text/javascript">
+	var license_theory_add = {
+		init: function() {
+			$.CurrentNavtab.find('#theory-stores').datagrid({
+		        gridTitle : '门店列表',
+		        paging: false,
+		        height: '60%',
+		        showCheckboxcol: false,
+		        showEditbtnscol:false,
+		        dataUrl: config.openBasePath + '/student/theoryStores',
+		        columns: [
+		            {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+		            {name:'name',label:'门店名称',align:'center'},
+		            {name:'storenum',label:'门店代码',align:'center'},
+		            {name:'tel',label:'门店电话',align:'center'},
+		            {name:'acceptedStu',label:'门店当前受理学员数',align:'center',render:function(value){return String(value)==''?'0':value}},
+		            {name:'theoryid',label:'上课人数',align:'center',render:function(value,data){return '<input type="tel" data-id="'+data.id+'" name="num" value="0" data-rule="required.number">'}}
+		        ],
+		        editMode:false
+		    });
+		},
+	    save: function () {
+	    	console.log($.CurrentNavtab.find('input[name="lessondate"]').val())
+	    	console.log($.CurrentNavtab.find('input[name="lessonstart"]').val())
+	    	console.log($.CurrentNavtab.find('input[name="lessonend"]').val())
+	    	if($.CurrentNavtab.find('#add-form').isValid()){
+		        BJUI.alertmsg('confirm', '确认添加理论课？', {
+		            okCall: function() {
+	                    var data = clz.parseForm($.CurrentNavtab.find('#add-form'));
+	                    var storedata = new Array();
+	                    $.CurrentNavtab.find('#theory-stores').find('td input').each(function(){
+	                        var thisinpt = {
+	                            storeId:$(this).data('id'),
+	                            num:$(this).val()
+	                        }
+	                        storedata.push(thisinpt)
+	                    })
+	                    data.stores = JSON.stringify(storedata);
+	                    data.starttime = $.CurrentNavtab.find('input[name="lessondate"]').val() + " " + $.CurrentNavtab.find('input[name="lessonstart"]').val();
+	                    data.endtime = $.CurrentNavtab.find('input[name="lessondate"]').val() + " " + $.CurrentNavtab.find('input[name="lessonend"]').val();
+	                    
+	                    BJUI.ajax('doajax', {
+	                        url: config.openBasePath + 'student/add/theoryLesson',
+	                        loadingmask: true,
+	                        data :  data,
+	                        okCallback: function(json, options) {
+	                            console.log('返回内容：\n'+ JSON.stringify(json));
+	                            license_theory_list.datagrid('refresh', true);
+	                            BJUI.navtab('closeCurrentTab');
+	                        }
+	                    });
+		            }
+		        });
+	        };
+	    }
+	}
+	license_theory_add.init();
+</script>

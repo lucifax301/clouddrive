@@ -1,0 +1,78 @@
+<section id="thispage" privilege = "040101_v"></section>
+<div class="c-tabs-box" style="height: 500px;">
+	<div class="c-tabs-header">
+		<li class="active" data-tabs='tab1'>选择角色</li>
+		<!--<li data-tabs='tab2' onclick="template_check.list2()">选择用户</li>-->
+	</div>
+	<div class="c-tabs-body active h-100" id="tab1">
+		<table id="template-check1" class="table table-bordered"></table>
+	</div>
+	<div class="c-tabs-body h-100" id="tab2">
+		<table id="template-check2" class="table table-bordered"></table>
+	</div>
+</div>
+<script type="text/javascript">
+	var template_check = {
+		list1:function(){
+			$.CurrentDialog.find('#template-check1').datagrid({
+				gridTitle: '选择角色',
+				showToolbar: false,
+				paging: { pageSize: 200, selectPageSize: '200,500' },
+				columns: [
+					{ name: 'rolename', label: '名称', align: 'center' },
+					{ name: 'rolename', label: '描述', align: 'center'}
+				],
+				fieldSortable: false,
+				columnShowhide: false,
+				showCheckboxcol: false,
+				columnMenu: false,
+				contextMenuH: false,
+				height: '95%',
+				addLocation: 'first',
+				toolbarItem: false,
+				dataUrl: config.openBasePath + 'privilege/listRole',
+				initcallback:function(){
+					$.CurrentDialog.find('#template-check1 tr').on('click',function(){
+						var num = $(this).index();
+						var data = $.CurrentDialog.find('#template-check1').data()
+						template_check.dialogclose(data.allData[num],1)
+					})
+				}
+			})
+		},
+		list2:function(){
+			$.CurrentDialog.find('#template-check2').datagrid({
+				gridTitle: '选择用户',
+				showToolbar: false,
+				paging: { pageSize: 200, selectPageSize: '200,500' },
+				columns: [
+					{ name: 'realname', label: '用户', align: 'center' },
+					{ name: 'mobile', label: '手机号码', align: 'center',width:100 }
+					
+				],
+				fieldSortable: false,
+				columnShowhide: false,
+				showCheckboxcol: true,
+				columnMenu: false,
+				contextMenuH: false,
+				height: '95%',
+				toolbarItem: false,
+				dataUrl: config.openBasePath + 'user/list',
+				initcallback:function(){
+					$.CurrentDialog.find('#template-check2 tr').on('click',function(){
+						var num = $(this).index();
+						var data = $.CurrentDialog.find('#template-check2').data()
+						template_check.dialogclose(data.allData[num],2)
+					})
+				}
+			})
+		},
+		dialogclose(data,type){
+			data.sstype = type
+			clz.setWindowJson(data);
+			BJUI.dialog('closeCurrent')
+		}
+	}
+	template_check.list1()
+	
+</script>

@@ -1,0 +1,244 @@
+<section id="thispage" privilege = "040101"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#car-datagrid')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>车辆信息搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区</label>
+					<div class="row-input">
+						<select name="areaId" data-toggle="selectpicker" data-width="100%" 
+		                    data-datajson="arealist_filter" data-optiontype = "id,name">
+		                </select>
+					</div>
+					<label class="row-label">状态</label>
+					<div class="row-input">
+						<select name="status" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择状态</option>
+							<option value="0">在用</option>
+							<option value="1">停放</option>
+							<option value="2">待出售</option>
+							<option value="3">待报废</option>
+							<option value="4">已出售</option>
+							<option value="5">已报废</option>
+							<option value="6">捐赠</option>
+							<option value="7">被盗</option>
+						</select>
+					</div>
+					<label class="row-label">品牌</label>
+					<div class="row-input">
+						<select name="brandId" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择品牌</option>
+							<option value="1">捷达</option>
+							<option value="2">神行者</option>
+							<option value="3">迈腾</option>
+						</select>
+					</div>
+					<label class="row-label">培训车型</label>
+					<div class="row-input">
+						<select name="carType" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择培训车型</option>
+							<option value="C1">C1</option>
+							<option value="C2">C2</option>
+						</select>
+					</div>
+					<label class="row-label">车牌号</label>
+					<div class="row-input">
+						<input type="text" name="carNo" class="form-control">
+					</div>
+					<label class="row-label">使用人</label>
+					<div class="row-input">
+						<input type="text" name="coachName" class="form-control">
+					</div>
+					
+					
+				</div>
+				<div class="text-center">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+	                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="car-datagrid" class="table table-bordered" data-tabprivilege="car-datagrid"></table>
+<script type="text/javascript">
+	var grid = $.CurrentNavtab.find('#car-datagrid').datagrid({
+		gridTitle: '车辆基础信息列表',
+		toolbarItem: 'add,|,edit,|,del,|,refresh,|,export,|,import',
+		toolbarCustom: "",
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '85%',
+		showCheckboxcol: true,
+		showToolbar: true,
+		dataUrl: config.openBasePath + '/car/getCarList',
+		columns: [{
+			name: 'carNo',
+			label: '车牌号',
+			align: 'center',
+			render: function(value, data) {
+				var morejson = {
+					car: data
+				}
+				return "<a href='html/car/base/car-show.html' data-toggle='navtab' data-options='{id:\"menu-table" + data.carId + "\", title:\"车辆基本信息\"}' data-more='" + JSON.stringify(morejson) + "'>" + value + "</a>"
+			}
+		},{
+			name: 'brandId',
+			label: '品牌',
+			align: 'center',
+			render:function(value){
+				if(value==1) {
+					return "捷达";
+				}else if(value==2) {
+					return "神行者";
+				}else if(value==3) {
+					return "迈腾";
+				}
+			}
+		}, {
+			name: 'areaId',
+			label: '片区',
+			align: 'center',
+			render: formatAreaCell
+		}, {
+			name: 'coachName',
+			label: '使用人',
+			align: 'center',
+		},{
+			name: 'property',
+			label: '使用性质',
+			align: 'center',
+			render:function(value){
+				switch(value){
+					case 0:
+						return "专职教练车";
+					case 1:
+						return "强化教练车";
+					case 2:
+						return "测试车";
+					case 3:
+						return "组长车";
+					default:
+						return "";
+				}	
+			}
+		}, {
+			name: 'carType',
+			label: '培训车型',
+			align: 'center'
+		}, {
+			name: 'status',
+			label: '使用状态',
+			align: 'center',
+			render: function(value) {
+				var text = '';
+				if (value == '0') text = '在用';
+				if (value == '1') text = '停放';
+				if (value == '2') text = '待出售';
+				if (value == '3') text = '待报废';
+				if (value == '4') text = '已出售';
+				if (value == '5') text = '已报废';
+				if (value == '6') text = '捐赠';
+				if (value == '7') text = '被盗';
+				return text
+			}		
+		}, {
+			name: 'carOwner',
+			label: '所有权',
+			align: 'center'
+		},
+		{
+			name: 'carYear',
+			label: '车龄',
+			align: 'center'
+		},
+//		{
+//			name: 'frameNum',
+//			label: '车架号',
+//			align: 'center'
+//		}, {
+//			name: 'engineNum',
+//			label: '发动机号',
+//			align: 'center'
+//		}, {
+//			name: 'motorCode',
+//			label: '登记证书编号',
+//			align: 'center'
+//		}, {
+//			name: 'assetNum',
+//			label: '资产编号',
+//			align: 'center'
+//		}, {
+//			name: 'carModel',
+//			label: '车辆型号',
+//			align: 'center'
+//		}, {
+//			name: 'buyFee',
+//			label: '金额',
+//			align: 'center'
+//		}, {
+//			name: 'buyDate',
+//			label: '购买日期',
+//			align: 'center',
+//			render: function(value) {
+//				return String(value) == '' ? '' : clz.filter.time({
+//					date: value,
+//					type: 'yyyy-MM-dd'
+//				})
+//			}
+//		}, {
+//			name: 'leaveDate',
+//			label: '生产日期',
+//			align: 'center',
+//			render: function(value) {
+//				return String(value) == '' ? '' : clz.filter.time({
+//					date: value,
+//					type: 'yyyy-MM-dd'
+//				})
+//			}
+//		}, 
+		],
+		editMode: {
+			dialog: {
+				width: '1200',
+				height: '750',
+				resizable:false,
+				title: '车辆基础信息',
+				mask: true
+			}
+		},
+		add_url: 'html/car/base/car-add.html',
+		edit_url: 'html/car/base/car-edit.html',
+		delUrl: config.openBasePath + '/car/deleteCar',
+		delPK: 'carId',
+		afterSave: function() {
+			grid.datagrid('refresh', true);
+		},
+		afterDelete: function() {
+			grid.datagrid('refresh', true);
+		},
+		importOption: {
+			type: "navtab",
+			options: {
+				id: 'importUser',
+				url: 'html/car/base/upload.html',
+				title: '上传文件',
+				width: 400,
+				height: 250,
+				mask: true
+			}
+		},
+		exportOption: {
+			type: "file",
+			options: {
+				url: config.openBasePath + '/car/exportCar'
+			}
+		},
+	});
+</script>

@@ -1,0 +1,166 @@
+<div class="bjui-pageContent">
+	<form id="edit-form">
+		<input type="hidden" name="tableid"/>
+		<div class="bjui-row col-3">
+			<label class="row-label">学车进度：</label>
+			<div class="row-input">
+				<select id="applyexam" name="applyexam" data-toggle="selectpicker" data-width="100%" disabled="true">
+					<option value="">请选择</option>
+					<option value="1">科目一</option>
+					<option value="2">科目二</option>
+					<option value="3">科目三</option>
+					<option value="4">科目四</option>
+				</select>
+			</div>
+			<label class="row-label">二级科目：</label>
+			<div class="row-input">
+				<select id="subject2" name="subject2" data-toggle="selectpicker" data-width="100%"
+	                    data-dataurl="/httpaccess/financeSubject/list?level=2" data-optiontype="id,subject" disabled="true">
+	            </select>
+			</div>
+		   	<label class="row-label">单人缴费额：</label>
+			<div class="row-input">
+				<input id="money" type="text" name="money" readonly="true">
+			</div>  
+		</div>
+	</form>
+	<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+	var data = clz.getWindowJson();
+	var tableid = data.tableid;
+	clz.CurrentDom_init({
+		current: 'Dialog',
+		form_name: 'edit-form',
+		data: data,
+        returnFloat: 'money'
+	});
+	
+    var license_fee_edit_list = $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del',
+        toolbarCustom: "<button class='btn-blue' data-icon='save' onclick='license_fee_edit.edit()' style='margin-left:-10px;'>保存</button>",
+        height: '80%',
+        paging : false,
+        showCheckboxcol: true,
+        showToolbar: true,
+		dataUrl: config.openBasePath + 'financefee/listitem',
+		postData : {tableid : data.tableid},
+        inlineEditMult : true,
+        saveAll : true,
+        showLinenumber : false,
+        columns: [
+        	{name:'name',label:'姓名',align:'center'},
+            {name:'idcard',label:'证件号码', align:'center',attrs:{readonly:'readonly'}},
+            {name:'billnum',label:'缴费单号', align:'center'},
+            {name:'status',label:'状态', align:'center',render:function(value){
+            	switch (value) {
+				case 0:
+					return "待缴费";
+				case 1:
+					return "已交费";
+			}
+            },edit:false,add:false},
+            {name:'ctime',label:'录入时间', align:'center',edit:false,add:false},
+            {name:'cname',label:'录入人', align:'center',edit:false,add:false}
+        ],
+        delUrl : config.openBasePath + 'financefee/delitem?tableid='+tableid,
+        delPK : 'itemid',
+        beforeDelete : function(data) {
+        	var data = checkSelectData(license_fee_edit_list);
+        	for (var i = 0; i < data.length; i++) {
+				if (data[i].status == 1) {
+	        		BJUI.alertmsg('warn', '已缴费的数据,不能删除！');
+					return false;
+        		}
+			}
+        	return true;
+        },
+        afterDelete : function() {
+        	license_fee_list.datagrid("refresh",true);
+        }
+    });
+    
+    var license_fee_edit = {
+		edit : function() {
+			if($.CurrentDialog.find('#add-form').isValid()) {
+                var originalData = $.CurrentDialog.find("#datagrid-list").data("allData");
+                var ids = [];
+                for (var i = 0; i < originalData.length - 1 ; i++) {
+                    ids.push(originalData[i].idcard);
+                }
+				var data = [];
+				$.each($.CurrentDialog.find("#datagrid-list").find('tbody tr'),function(i,m) {
+					var trjson = {};
+					$.each($(this).find('input[type="text"]'),function(i,m) {
+						var name = $(this).attr('name'),
+							val  = $(this).val();
+							trjson[name] = val;
+					})
+					if (!$.isEmptyObject(trjson)) {
+						data.push(trjson);
+					}
+				});
+				console.log(originalData);
+				console.log(data);
+				for (var i = 0; i < data.length; i++) {
+					ids.push(data[i].idcard);
+				}
+				console.log(ids);
+				if (hasReapeat(ids)) {
+					BJUI.alertmsg('warn', '证件号码存在重复数据,请处理后再提交！');
+					return false;
+				}		
+				BJUI.ajax('doajax', {
+	            	url: config.openBasePath + 'financefee/edit',
+		            data : {
+						tableid : tableid,
+		            	json : JSON.stringify(data)
+		            },
+		            type : 'POST',
+		            loadingmask: true,
+		            okCallback: function(json, options) {
+						BJUI.dialog('closeCurrent');
+						license_fee_list.datagrid("refresh",true);
+		            }
+        		});  
+	        }
+		}
+	}
+    
+    $(document).on("change","[name='name']",function(){
+        var idcard = $(this).parent().next("td").find("input");
+        var flownum = $(this).parent().next("td").next("td").find("input");
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'student/list',
+            data : {name : $(this).val()},
+            type : 'GET',
+            loadingmask: true,
+            okCallback: function(json, options) {
+            	var students = json.result.list;
+                if (students.length == 0) {
+                    idcard.val("未知学员");
+                } else {    
+                	if (students.length > 1) {
+                		var data = {};
+                		data.students = students;
+                		data.idcardObj = idcard;
+                		clz.setWindowJson(data);
+        		        BJUI.dialog({
+				            id:'dialog-multi-student',
+				            url:'html/common/student/multi-student-list.html',
+				            title:'重名学员列表',
+				            width: 400,
+				            height: 300,
+				            mask: true,
+				            maxable : false,
+				            resizable: false,
+				        });
+                	} else {
+                		idcard.val(students[0].idcard); 
+                		idcard.change()
+                	}      
+                }
+            }
+        });  
+    })
+</script>

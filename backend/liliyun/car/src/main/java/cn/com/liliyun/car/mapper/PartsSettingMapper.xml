@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.PartsSettingMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.PartsSetting" >
+    <id column="partstype" property="partstype" jdbcType="INTEGER" />
+    <result column="month" property="month" jdbcType="INTEGER" />
+    <result column="mileage" property="mileage" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    partstype, month, mileage
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.PartsSetting" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_parts_setting
+    where partstype = #{partstype,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.car.model.PartsSetting" >
+    delete from t_parts_setting
+    where partstype = #{partstype,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.PartsSetting" >
+    insert into t_parts_setting (partstype, month, mileage
+      )
+    values (#{partstype,jdbcType=INTEGER}, #{month,jdbcType=INTEGER}, #{mileage,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.PartsSetting" >
+    insert into t_parts_setting
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="partstype != null" >
+        partstype,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="mileage != null" >
+        mileage,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="partstype != null" >
+        #{partstype,jdbcType=INTEGER},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=INTEGER},
+      </if>
+      <if test="mileage != null" >
+        #{mileage,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.PartsSetting" >
+    update t_parts_setting
+    <set >
+      <if test="month != null" >
+        month = #{month,jdbcType=INTEGER},
+      </if>
+      <if test="mileage != null" >
+        mileage = #{mileage,jdbcType=INTEGER},
+      </if>
+    </set>
+    where partstype = #{partstype,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.PartsSetting" >
+    update t_parts_setting
+    set month = #{month,jdbcType=INTEGER},
+      mileage = #{mileage,jdbcType=INTEGER}
+    where partstype = #{partstype,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_parts_setting
+  </select>
+  <update id="updateByPrimaryKeySelectiveBatch" parameterType="java.util.List" >
+  	<foreach item="item" collection="list" separator=";">
+	    update t_parts_setting
+	    <set>
+	      <if test="item.month != null" >
+	        month = #{item.month,jdbcType=INTEGER},
+	      </if>
+	      <if test="item.mileage != null" >
+	        mileage = #{item.mileage,jdbcType=INTEGER},
+	      </if>
+	    </set>
+	    where partstype = #{item.partstype,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  
+  <insert id="batchInsertSelective" parameterType="java.util.List" >
+  	insert into t_parts_setting (partstype, month, mileage)
+    values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+				(#{item.partstype},#{item.month},#{item.mileage})
+	</foreach>
+  </insert>
+</mapper>

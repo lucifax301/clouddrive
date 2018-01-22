@@ -1,0 +1,222 @@
+<section id="thispage" privilege = "050206"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" id="search-form"
+    data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+    
+    	<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>片区招生指标搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+        
+          <div class="bjui-row col-4">
+            <label class="row-label">片区：</label>
+            <div class="row-input">
+                <select name="areaid" id="areaid" data-toggle="selectpicker" data-width="100%"
+                    data-datajson="arealist" data-optiontype = "id,name" >
+                </select>
+            </div>
+            
+            <label class="row-label">开始时间：</label>
+            <div class="row-input">
+                <select name="beginyear" id="beginyear" data-width="48%"  data-toggle="selectpicker">
+                    
+                </select>
+                <select name="beginmonth" id="beginmonth" data-width="48%" data-toggle="selectpicker">
+                	<option value="">请选择</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
+			
+            <label class="row-label">结束时间：</label>
+            <div class="row-input">
+                <select name="endyear" id="endyear" data-width="48%" data-toggle="selectpicker" >
+                    
+                </select>
+                <select name="endmonth" id="endmonth" data-width="48%" data-toggle="selectpicker">
+                	<option value="">请选择</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select> 
+            </div>
+            
+            
+            
+        </div>
+        <div class="text-center">
+            <div class="btn-group">
+                <button type="submit" class="btn-blue" data-icon="search">查询</button>
+                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+                <button type="button" class="btn-blue" onclick="exportenrolindex()" data-icon="times">导出</button>
+            </div>
+            </div>
+        </div></div>
+    
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var nowdate=new Date();
+	var nowyear=nowdate.getFullYear();
+	$.CurrentNavtab.find('#beginyear').append("<option value=''>请选择</option>");
+	$.CurrentNavtab.find('#endyear').append("<option value=''>请选择</option>");
+	for(var i=0;i<10;i++){
+		$.CurrentNavtab.find('#beginyear').append("<option value='"+nowyear+"'>" +nowyear+"</option>");
+		$.CurrentNavtab.find('#endyear').append("<option value='"+nowyear+"'>" +nowyear+"</option>");
+		nowyear++;
+	}
+
+    function stringToDate(fDate){  
+    	var tempStrs = fDate.split(" ");
+	    var fullDate = tempStrs[0].split("-");  
+	    console.log(fullDate) 
+	    return new Date(fullDate[0], fullDate[1]-1, fullDate[2],0,0,0);  
+  	} 
+  	
+  	function getperiod(date1,date2){
+  		var df=(date2.getTime()-date1.getTime())/3600/1000/24;
+  		return df+1;
+  	}
+  	
+  	function simpleDate(fDate){
+  		var tempStrs = fDate.split(" ");
+	    var fullDate = tempStrs[0].split("-");
+	    return fullDate[0]+"-"+(fullDate[1])+"-"+ fullDate[2]
+  	}
+  	
+  	function exportenrolindex(){
+  		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "enrolindex/listarea/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#search-form').serializeArray(),
+			
+		})
+  	}
+
+    var enrol_index_list = {
+    	curtab:clz.getNavtab_privilege(),
+	list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '',
+		toolbarCustom : "<button class='btn-blue' id='modifyBtn' style='' data-privilege='050206_datagrid-list_01' onclick='enrol_index_list.add()'>新增</button>",
+        toolbarItem: 'none',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '85%',
+        showCheckboxcol: false,
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'enrolindex/listarea',
+        columns: [
+            {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+            {name:'storeid',label:'时间',align:'center',render:function(value, data){
+            	return data.year+"年"+data.month+"月";
+           	}},
+			
+			{name:'enrolindex',label:'招生指标',align:'center'},
+			{name:'highrate',label:'高端班比例',align:'center',render:function(value){
+				return value+"%";
+			}},
+			            
+            {name:'createdate',label:'操作',align:'center',render:function(value, data){
+					var edit="";
+					edit="<a onclick='enrol_index_list.edit("+JSON.stringify(data)+")' class='btn-blue btn vhide' data-privilege='050206_datagrid-list_02' data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "编辑" + "</a>"+"&nbsp;&nbsp;<a href='###' data-privilege='050206_datagrid-list_03' class='btn-blue btn vhide' onclick='enrol_index_list.delete("+data.id+")'>删除</a>";
+					
+            		return "<a onclick='enrol_index_list.view("+JSON.stringify(data)+")' class='btn-blue btn' data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "查看" + "</a>"+"&nbsp;&nbsp;"+edit;
+
+            	}
+			
+			}
+            
+        ],
+        
+    }),
+	
+	
+	add:function (stat){
+		BJUI.navtab({
+			id:'market-add',
+			url:'html/market/enrol-area-index-add.html',
+			title:'新增片区招生指标',
+			onClose:function(){
+				enrol_index_list.list.datagrid('refresh',true);
+				BJUI.navtab('switchTab',enrol_index_list.curtab);
+			}
+		})
+	},
+	    
+	view:function (info){
+		
+		BJUI.navtab({
+			id:'market-view',
+			width:640,
+			height:640,
+			url:'html/market/enrol-area-index-view.html',
+			title:'查看片区招生指标',
+			more:JSON.stringify(info),
+			onClose:function(){
+				enrol_index_list.list.datagrid('refresh',true);
+				BJUI.navtab('switchTab',enrol_index_list.curtab);
+				
+			}
+
+		})
+	},
+	
+	delete:function (applyid){
+		BJUI.alertmsg('confirm', '确认删除吗？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/enrolindex/delarea?id="+applyid,
+                    loadingmask: true,
+					okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						//coach_mod_apply_list.list.datagrid('refresh',true);
+						BJUI.alertmsg('ok', '提交成功！', {})
+						BJUI.navtab('refresh')
+                    }
+                })
+            }
+        });
+		
+	},
+
+    edit:function (info){
+		//clz.setWindowJson(id);
+		BJUI.navtab({
+			id:'market-edit',
+			width:800,
+			height:800,
+			url:'html/market/enrol-area-index-edit.html',
+			title:'编辑片区招生指标',
+			more:JSON.stringify(info),
+			onClose:function(){
+				enrol_index_list.list.datagrid('refresh',true);
+				BJUI.navtab('switchTab',enrol_index_list.curtab);
+			}
+
+		})
+	}
+	
+	
+	}
+
+	
+</script>

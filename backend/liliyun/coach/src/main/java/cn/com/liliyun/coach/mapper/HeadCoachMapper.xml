@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.HeadCoachMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.HeadCoach" >
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="overcoach" property="overcoach" jdbcType="INTEGER" />
+    <result column="overcoachcar" property="overcoachcar" jdbcType="INTEGER" />
+    <result column="muserid" property="muserid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="muser" property="muser" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+   a.coachid, a.overcoach, a.overcoachcar,a.muserid,b.name,a.mtime,b.areaid,a.muserid
+  </sql>
+  
+  
+  <select id="listHeadCoach" resultMap="BaseResultMap"  parameterType="cn.com.liliyun.coach.model.Coach">
+    select 
+    <include refid="Base_Column_List" />
+    from t_headcoach a join t_coach b on a.coachid=b.coachid 
+    <where>
+    	<if test="areaid!=null">
+    		b.areaid=#{areaid}
+    	</if>
+    	<if test="domain !=null">
+	    	<if test="domain.storeid !=null ">
+	    		and b.coachid in (select coachid from t_coach_store where storeid=#{domain.storeid}) 
+	    	</if>
+	    	<if test="domain.areaid !=null ">
+	    		and b.areaid=#{domain.areaid}
+	    	</if>
+	    	<if test="domain.areaid ==null and areaid!=null">
+	    		and b.areaid=#{areaid}
+	    	</if>
+		</if>
+    </where>
+  </select>
+
+	<select id="statHeadCoach" resultMap="BaseResultMap" >
+    select 
+    headcoachid as coachid,count(coachid) as overcoach,count(carno) as overcoachcar from t_coach where headcoachid is not null and headcoachid>0 group by headcoachid
+    
+    
+  </select>
+  
+  <insert id="addHeadCoach" parameterType="cn.com.liliyun.coach.model.HeadCoach" >
+    insert into t_headcoach (coachid, overcoach, overcoachcar)
+    values (#{coachid}, #{overcoach}, #{overcoachcar})
+  </insert>
+  
+  <delete id="delHeadCoach" parameterType="cn.com.liliyun.coach.model.HeadCoach" >
+    delete from t_headcoach where coachid=#{coachid}
+  </delete>
+  
+  <update id="updateHeadCoach" parameterType="cn.com.liliyun.coach.model.HeadCoach" >
+    update t_headcoach set overcoach=#{overcoach}, overcoachcar=#{overcoachcar}
+    where coachid=#{coachid}
+  </update>
+  
+  <update id="updateHeadCoachData" parameterType="cn.com.liliyun.coach.model.HeadCoach" >
+    update t_headcoach set overcoach=overcoach+#{overcoach}, overcoachcar=overcoachcar+#{overcoachcar},
+    muserid=#{muserid}
+    where coachid=#{coachid}
+  </update>
+</mapper>

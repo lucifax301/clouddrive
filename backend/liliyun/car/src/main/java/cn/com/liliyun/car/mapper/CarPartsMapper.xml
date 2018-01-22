@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarPartsMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarParts" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="carid" property="carid" jdbcType="INTEGER" />
+    <result column="carno" property="carno" jdbcType="VARCHAR" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="partstype" property="partstype" jdbcType="INTEGER" />
+    <result column="handletime" property="handletime" jdbcType="TIMESTAMP" />
+    <result column="mileage" property="mileage" jdbcType="INTEGER" />
+    <result column="iscurrent" property="iscurrent" jdbcType="TINYINT" />
+    <result column="islatest" property="islatest" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, carid, carno, areaid, storeid, partstype, handletime, mileage, iscurrent, islatest, 
+    remark, ctime, cname, cuid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_parts
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_car_parts
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarParts" >
+    insert into t_car_parts (id, carid, carno, 
+      areaid, storeid, partstype, 
+      handletime, mileage, iscurrent, 
+      islatest, remark, ctime, 
+      cname, cuid)
+    values (#{id,jdbcType=INTEGER}, #{carid,jdbcType=INTEGER}, #{carno,jdbcType=VARCHAR}, 
+      #{areaid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, #{partstype,jdbcType=INTEGER}, 
+      #{handletime,jdbcType=TIMESTAMP}, #{mileage,jdbcType=INTEGER}, #{iscurrent,jdbcType=TINYINT}, 
+      #{islatest,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{cname,jdbcType=VARCHAR}, #{cuid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarParts" >
+    insert into t_car_parts
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carid != null" >
+        carid,
+      </if>
+      <if test="carno != null" >
+        carno,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="partstype != null" >
+        partstype,
+      </if>
+      <if test="handletime != null" >
+        handletime,
+      </if>
+      <if test="mileage != null" >
+        mileage,
+      </if>
+      <if test="iscurrent != null" >
+        iscurrent,
+      </if>
+      <if test="islatest != null" >
+        islatest,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="partstype != null" >
+        #{partstype,jdbcType=INTEGER},
+      </if>
+      <if test="handletime != null" >
+        #{handletime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mileage != null" >
+        #{mileage,jdbcType=INTEGER},
+      </if>
+      <if test="iscurrent != null" >
+        #{iscurrent,jdbcType=TINYINT},
+      </if>
+      <if test="islatest != null" >
+        #{islatest,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarParts" >
+    update t_car_parts
+    <set >
+      <if test="carid != null" >
+        carid = #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        carno = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="partstype != null" >
+        partstype = #{partstype,jdbcType=INTEGER},
+      </if>
+      <if test="handletime != null" >
+        handletime = #{handletime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mileage != null" >
+        mileage = #{mileage,jdbcType=INTEGER},
+      </if>
+      <if test="iscurrent != null" >
+        iscurrent = #{iscurrent,jdbcType=TINYINT},
+      </if>
+      <if test="islatest != null" >
+        islatest = #{islatest,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarParts" >
+    update t_car_parts
+    set carid = #{carid,jdbcType=INTEGER},
+      carno = #{carno,jdbcType=VARCHAR},
+      areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      partstype = #{partstype,jdbcType=INTEGER},
+      handletime = #{handletime,jdbcType=TIMESTAMP},
+      mileage = #{mileage,jdbcType=INTEGER},
+      iscurrent = #{iscurrent,jdbcType=TINYINT},
+      islatest = #{islatest,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cname = #{cname,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarParts" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_parts
+    <where>
+    	<if test="carid != null">
+    		and carid = #{carid,jdbcType=INTEGER}
+    	</if>
+    	<if test="carno != null and carno != ''">
+    		and carno = #{carno,jdbcType=VARCHAR}
+    	</if>
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="partstype != null">
+    		and partstype = #{partstype,jdbcType=INTEGER}
+    	</if>
+    	<if test="handletimetop != null">
+    		and #{handletimetop,jdbcType=TIMESTAMP} > handletime
+    	</if>
+    	<if test="handletimelow != null">
+    		and handletime >= #{handletimelow,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="iscurrent != null">
+    		and iscurrent = #{iscurrent,jdbcType=INTEGER}
+    	</if>
+    	<if test="islatest != null">
+    		and islatest = #{islatest,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  <update id="updateByCarOrTypeSelective" parameterType="cn.com.liliyun.car.model.CarParts" >
+    update t_car_parts
+    <set >
+      <if test="carid != null" >
+        carid = #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        carno = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="partstype != null" >
+        partstype = #{partstype,jdbcType=INTEGER},
+      </if>
+      <if test="handletime != null" >
+        handletime = #{handletime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mileage != null" >
+        mileage = #{mileage,jdbcType=INTEGER},
+      </if>
+      <if test="iscurrent != null" >
+        iscurrent = #{iscurrent,jdbcType=TINYINT},
+      </if>
+      <if test="islatest != null" >
+        islatest = #{islatest,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where carid = #{carid,jdbcType=INTEGER}
+    <if test="partstype != null">
+    	and partstype = #{partstype,jdbcType=INTEGER}
+    </if>
+    </update>
+    <select id="selectPartsNotice" resultType="cn.com.liliyun.car.model.CarPartsNotice" parameterType="java.util.List" >
+    select 
+    <include refid="Base_Column_List" />
+    , thismile
+    from t_car_parts as t1 
+    left join (select carid carid2, max(thismile) thismile from t_car_mileage group by carid) as t2
+    on t1.carid = t2.carid2
+    <where>
+    	t1.islatest = 1 and (
+    	<foreach item="item" collection="list" open="(" separator=") or (" close=")">
+			 partstype = #{item.partstype,jdbcType=INTEGER}
+			 <trim prefixOverrides = "or " prefix="and (" suffix=")">
+			 	<if test="item.monthdate != null">
+				 	#{item.monthdate,jdbcType=TIMESTAMP} > handletime 
+				 </if>
+				 <if test="item.mileage != null">
+				 	or thismile > mileage + #{item.mileage,jdbcType=INTEGER}
+				 </if>
+			 </trim>
+    	</foreach>
+    	)
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,203 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="view-form">
+    	<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>理论课信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+		        <div class="bjui-row col-4">
+		        	<input name="theoryid" type="hidden"/>
+		            <label class="row-label">课程名称:</label>
+		            <div class="row-input fill-2">
+		                <input type="text" name="lessonname" type="text" class="clear-style" readOnly >
+		            </div>
+		            <label class="row-label">课程状态:</label>
+		            <div class="row-input">
+		                <input type="text" name="stateName" class="clear-style red" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">上课日期:</label>
+		            <div class="row-input">
+		                <input type="text" name="starttime" class="clear-style" readOnly>
+		            </div>
+		            <label class="row-label">上课时间:</label>
+		            <div class="row-input">
+		                <input type="text" name="lessontime" class="clear-style" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">携带证件:</label>
+		            <div class="row-input">
+		                <input type="text" name="idcard" class="clear-style" readOnly>
+		            </div>
+		            <label class="row-label">上课地点:</label>
+		            <div class="row-input fill-2">
+		                <input type="text" name="place" class="clear-style" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">上课名额:</label>
+		            <div class="row-input">
+		                <input type="text" name="recomnum" class="clear-style" readOnly>
+		            </div>
+		        </div>
+	        </div>
+        </div>
+        
+        <div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>审核信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="col-3">
+					<table class='table table-bordered' id="flowinfo">
+						<tr>
+							<td>申请人</td>
+							<td id="applyuser"></td>
+							<td>片区</td>
+							<td id="area"></td>
+							<td>申请时间</td>
+							<td id="applydate"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+        </div>
+    </form>
+
+    <table id="theory-students" class="table table-bordered"></table>
+    <div class="bjui-pageFooter" id="footer">
+    	<div class="c-bottom-button" id="footer-button">
+	        <li><button type="button" class="btn-red" data-icon="close" onclick="flow_licence_theory_review.theoryReview('9')">拒绝</button></li>
+	        <li><button type="button" class="btn-blue" data-icon="save" onclick="flow_licence_theory_review.theoryReview('3')">同意</button></li>
+	    </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var flowdata = clz.getNavtab_more();
+	var flow_licence_theory_review = {
+		init: function() {
+			BJUI.ajax('doajax', {
+		        url: config.openBasePath + 'student/theoryLesson?transactionid=' + flowdata.transactionid + '&isReview=1',
+		        type: 'GET',
+		        loadingmask: true,
+		        okCallback: function(json, options) {
+		            console.log('返回内容：\n'+ JSON.stringify(json));
+		            json.result.theory.stateName = clz.filter.theoryState(json.result.theory.state);
+		            json.result.theory.lessontime = clz.filter.time({date:json.result.theory.starttime,type:'hh:mm'}) + '-' + clz.filter.time({date:json.result.theory.endtime,type:'hh:mm'})
+		            clz.CurrentDom_init({
+						current:'Navtab',
+		                form_name : 'view-form',
+		                data : json.result.theory,
+		                timetype:[
+		                    {
+		                        name:'starttime',
+		                        type:'yyyy-MM-dd'
+		                    }
+		                ]
+		            });
+		            var grid =$.CurrentNavtab.find('#theory-students').datagrid({
+		                gridTitle : '门店列表',
+		                paging: false,
+		                height: '55%',
+		                showToolbar:false,
+		                toolbarItem:'',
+		                showCheckboxcol: false,
+		                showEditbtnscol:false,
+		                data: json.result.list,
+		                columns: [
+		                    {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+		                    {name:'storeid',label:'门店名称',align:'center',render:formatStoreCell},
+		                    {name:'storenum',label:'门店代码',align:'center'},
+		                    {name:'tel',label:'门店电话',align:'center'},
+		                    {name:'acceptedStu',label:'门店当前受理学员数',align:'center'},
+		                    {name:'recomnum',label:'上课名额',align:'center'},
+		                    {name:'arrangenum',label:'已安排人数',align:'center',render:flow_licence_theory_review.storeDetail}
+		                ],
+		                editMode:false
+		            });
+		            if (json.result.theory.state != 2) 
+		            	$.CurrentNavtab.find("#footer").css("display","none");
+		            flow_licence_theory_review.loadflowinfo();
+		        }
+		    });
+		},
+		storeDetail: function (num, data) {
+	        var morejson = {
+	            id:data.theoryid,
+	            storeid:data.storeid
+	        };
+	        return '<a href="#" onclick="flow_licence_theory_review.navtabLookupReview('+morejson.id+','+morejson.storeid + ')" type="button">'+ num +'</a>';
+	    },
+	    navtabLookupReview: function (id,sroreid){
+	        var morejson = {
+	            id:id,
+	            sroreid:sroreid
+	        };
+	        var table=$.CurrentNavtab.find('#theory-students');
+	        BJUI.navtab({
+	            id:'menu-table-' + morejson.id + '-' + morejson.storeid,
+	            url:'html/license/theory/theory-view.html',
+	            title:'查看理论课',
+	            onClose:function(){
+	               table.datagrid('refresh');
+	            },
+	            more:morejson
+	        })
+	    },
+	    theoryReview: function (state) {
+	    	var id = $.CurrentNavtab.find("input[name='theoryid']").val();
+	    	console.log(id)
+	        BJUI.ajax('doajax', {
+	            url: config.openBasePath + 'student/update/theoryLesson',
+	            type: 'POST',
+	            loadingmask: true,
+	            data: 'theoryid=' + id + '&state=' + state,
+	            okCallback: function(json, options) {
+	                BJUI.navtab('refresh');
+	            }
+	        })
+	    },
+	    loadflowinfo: function() {
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "flow/listflowstep?flowid="+flowdata.id,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					if(json.result&&json.result.list){
+						var sdata=json.result.list;
+						var text="";
+						for(var i=0;i<sdata.length;i++){
+							var status="";
+							
+							if(sdata[i].status==0){
+								status="未处理"
+							}else if(sdata[i].status==1){
+								status="审核通过"
+							}else if(sdata[i].status==2){
+								status="审核不通过"
+							}
+							text=text+"<tr><td>审核人</td><td>"+sdata[i].user +  "</td><td>处理结果</td><td>"+status+"</td><td>处理时间</td><td>" +(sdata[i].status==0?"":sdata[i].updatedate) + "</td></tr>"
+						}
+					}
+					
+					$.CurrentNavtab.find("#flowinfo").append($(text));
+					$.CurrentNavtab.find("#flowinfo").trigger(BJUI.eventType.initUI)
+					//flowinfo
+				}
+			})
+			
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "user/list?id="+flowdata.fuserid,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					var datauser = json.result.list[0];
+					$.CurrentNavtab.find("#applyuser").html(datauser.realname);
+					$.CurrentNavtab.find("#area").html(formatAreaCell(datauser.areaid));
+					$.CurrentNavtab.find("#applydate").html(flowdata.createdate);
+				}
+			})
+		}
+	}
+    flow_licence_theory_review.init();
+</script>

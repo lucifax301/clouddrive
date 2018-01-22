@@ -1,0 +1,344 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="edit-form">
+<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>查看营销活动</h5>
+			</div>
+			<div class="widget-content nopadding">
+		<div class="bjui-row col-4">
+
+			<label class="row-label">活动名称:</label>
+			<div class="row-input">
+				<input type="text" name="activityname" id="activityname" data-width="100%" readonly="readonly">
+			</div>
+			<br>
+			<label class="row-label">活动时间:</label>
+			<div class="row-input fill-2">
+				<div class="w-40 fl">
+					<input type="text" name="begindate" data-width="100%" readonly="readonly">
+				</div>
+				<span class="pl10 pr10 fl">-</span>
+				<div class="w-40 fl">
+					<input type="text" name="enddate" data-width="100%"  readonly="readonly">
+				</div>
+			</div>
+			<br>
+			<label class="row-label">活动开关:</label>
+			<div class="row-input">
+				<input type="radio" name="actstatus" disabled="disabled" value="0" data-toggle="icheck" data-label="启动">
+				<input type="radio" name="actstatus" disabled="disabled" value="1" data-toggle="icheck" data-label="关闭">
+			</div>
+			<br>
+			<label class="row-label">活动班别优惠:</label>
+			<div class="row-input fill-2 required">
+				<input type="radio" name="timeType" value="0" data-toggle="icheck" disabled="disabled" data-label="活动期间统一优惠方案" checked>
+				<input type="radio" name="timeType" value="1" data-toggle="icheck" disabled="disabled" data-label="活动期间分时段设置优惠方案">
+			</div>
+			<br>
+			
+			
+			<div class='timeInterval' style="display: none;">
+				<label class="row-label"></label>
+		
+				<div class="row-input fill-2 ">
+					<div class="w-15 fl">
+						活动子时段1：
+					</div>
+					<div class="w-30 fl">
+						<input type="text" id="timeOneBegindate" name="timeOneBegindate" readonly="readonly" data-width="100%"  data-toggle="datepicker" placeholder="点击选择开始日期" readonly="readonly"> 
+					</div>
+					<span class="w-5 block fl text-center">-</span>
+					<div class="w-30 fl">
+						<input type="text" id="timeOneEnddate" name="timeOneEnddate" readonly="readonly" data-width="100%" data-toggle="datepicker" placeholder="点击选择结束日期" readonly="readonly">
+					</div>
+				</div></br>
+				<label class="row-label"></label>
+		
+				<div class="row-input fill-2 ">
+					<div class="w-15 fl">
+						活动子时段2：
+					</div>
+					<div class="w-30 fl">
+						<input type="text" id="timeTwoBegindate" name="timeTwoBegindate" readonly="readonly" data-width="100%"  data-toggle="datepicker"  placeholder="点击选择开始日期" readonly="readonly"> 
+					</div>
+					<span class="w-5 block fl text-center">-</span>
+					<div class="w-30 fl">
+						<input type="text" id="timeTwoEnddate" name="timeTwoEnddate" readonly="readonly" data-width="100%"  data-toggle="datepicker"  placeholder="点击选择结束日期" readonly="readonly">
+					</div>
+				</div><br>
+				<div class="row-label"><input type="checkbox" name="useTimeThreeFlag" value="1" ></div>
+				<div class="row-input fill-2 ">
+					<div class="w-15 fl">
+						活动子时段3：
+					</div>
+					<div class="w-30 fl">
+						<input type="text" id="timeThreeBegindate" name="timeThreeBegindate" readonly="readonly" data-width="100%"  data-toggle="datepicker"  placeholder="点击选择开始日期" readonly="readonly"> 
+					</div>
+					<span class="w-5 block fl text-center">-</span>
+					<div class="w-30 fl">
+						<input type="text" id="timeThreeEnddate" name="timeThreeEnddate" readonly="readonly" data-width="100%" " data-toggle="datepicker"  placeholder="点击选择结束日期">
+					</div>
+				</div>	
+			</div>
+
+		</div>
+</div></div>
+	</form>
+
+	<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<ul>
+			<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+
+		</ul>
+	</div>
+</div>
+
+<script>
+	var salesinfo = clz.getNavtab_more();
+	console.log(salesinfo)
+	var timeType=salesinfo.timeType;
+	var useTimeThreeFlag=salesinfo.useTimeThreeFlag;
+	if(timeType&&timeType==1){
+		$.CurrentNavtab.find('.timeInterval').show();
+	}
+	if(useTimeThreeFlag&&useTimeThreeFlag==1){
+		$.CurrentNavtab.find('#useTimeThreeFlag').attr("checked","checked");
+	}
+	var sales_view = {
+
+		init() {
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				form_name: 'edit-form',
+				data: salesinfo,
+				url: config.openBasePath + 'student/assignCoach',
+				timetype: [{
+					name: 'begindate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'enddate',
+					type: 'yyyy-MM-dd'
+				}],
+				callback: function(data) {
+					var that = sales_view;
+					$.CurrentNavtab.find('#datagrid-list').datagrid({
+						
+						paging:false,
+						gridTitle: '活动班别',
+						height: '70%',
+						showCheckboxcol: false,
+						showToolbar: false,
+						dataUrl: config.openBasePath + 'sales/listEditAllClassType?id='+salesinfo.id,
+						columns: [{
+							name: 'classtype',
+							label: '班型',
+							align: 'center'
+						}, {
+							name: 'name',
+							label: '班别',
+							align: 'center'
+						}, {
+							name: 'c1amount',
+							label: 'C1原价',
+							align: 'center',
+							render: function(value, data) {
+								return data.c1flag != 1 ? '未开车型' : value
+							}
+						}, {
+							name: 'classname',
+							label: 'C1优惠额',
+							align: 'center',
+							render: function(value, data) {
+								return data.c1flag != 1 ? '<input type="text" name="c1price" disabled="disabled">' : '<input type="text" name="c1price" readonly="readonly" value="'+data.c1price+'" >'
+							}
+						}, {
+							name: 'c2amount',
+							label: 'C2原价',
+							align: 'center',
+							render: function(value, data) {
+								return data.c2flag != 1 ? '未开车型' : value
+							}
+						}, {
+							name: 'classname',
+							label: 'C2优惠额',
+							align: 'center',
+							render: function(value, data) {
+								return data.c2flag != 1 ? '<input type="text" name="c2price" disabled="disabled">' : '<input type="text" name="c2price" readonly="readonly" value="'+data.c2price+'" >'
+							}
+						}, ]
+					});
+
+					$.CurrentNavtab.find("input[type=text]").each(
+						function() {
+							$(this).attr("readonly", "readonly")
+						}
+					)
+					$.CurrentNavtab.find("select").each(
+						function() {
+							$(this).attr("disabled", "true")
+						}
+					);
+				}
+			})
+
+		},
+				timeinit() {
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				form_name: 'edit-form',
+				data: salesinfo,
+				url: config.openBasePath + 'student/assignCoach',
+				timetype: [{
+					name: 'begindate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'enddate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'timeOneBegindate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'timeOneEnddate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'timeTwoBegindate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'timeTwoEnddate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'timeThreeBegindate',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'timeThreeEnddate',
+					type: 'yyyy-MM-dd'
+				}],
+				callback: function(data) {
+					var that = sales_view;
+					$.CurrentNavtab.find('#datagrid-list').datagrid({
+//						paging: {
+//							pageSize: 15,
+//							selectPageSize: '15,50,100,500'
+//						},
+						paging:false,
+						gridTitle: '活动班别',
+						height: '70%',
+						showCheckboxcol: false,
+						showToolbar: false,
+						dataUrl: config.openBasePath + 'sales/listEditAllClassType?id='+salesinfo.id,
+						columns: [
+//							{ name: 'classtype', label: '班型', align: 'center' },
+							{ name: 'name', label: '班别', align: 'center' },
+							{
+								label: 'C1',
+								align: 'center',
+								columns: [	
+										{ name: 'c1amount', label: 'C1原价', align: 'center',render: function(value,data) {
+											return data.c1flag!=1?'未开车型':value
+											} 
+										},	
+										{
+											name: 'classname',
+											label: 'C1时段1优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c1flag!=1?'<input type="text" name="c1price" disabled="disabled">':'<input type="hidden" value="'+data.c1amount+'"/><input type="text" readonly="readonly"  name="c1timeOnePrice" value="'+data.c1timeOnePrice+'" placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C1时段2优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c1flag!=1?'<input type="text" name="c1price" disabled="disabled">':'<input type="hidden" value="'+data.c1amount+'"/><input type="text" readonly="readonly"  name="c1timeTwoPrice" value="'+data.c1timeTwoPrice+'" placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C1时段3优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c1flag!=1?'<input type="text" name="c1price" disabled="disabled">':'<input type="hidden" value="'+data.c1amount+'"/><input type="text" readonly="readonly"  name="c1timeThreePrice"  value="'+data.c1timeThreePrice+'" class="timeInterval3" readonly="readonly" placeholder="0" data-rule="required;digits">'
+											}
+										},
+								]
+							},
+
+							{
+								label: 'C2',
+								align: 'center',
+								columns: [	
+										{ name: 'c2amount', label: 'C2原价', align: 'center',render: function(value,data) {
+												return data.c2flag!=1?'未开车型':value
+											}},
+										{
+											name: 'classname',
+											label: 'C2时段1优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c2flag!=1?'<input type="text" name="c2price" disabled="disabled">':'<input type="hidden" value="'+data.c2amount+'"/><input type="text" readonly="readonly"  name="c2timeOnePrice" value="'+data.c2timeOnePrice+'" placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C2时段2优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c2flag!=1?'<input type="text" name="c2price" disabled="disabled">':'<input type="hidden" value="'+data.c2amount+'"/><input type="text" readonly="readonly"  name="c2timeTwoPrice" value="'+data.c2timeTwoPrice+'"  placeholder="0" data-rule="required;digits">'
+											}
+										},
+										{
+											name: 'classname',
+											label: 'C2时段3优惠额',
+											align: 'center',
+											render: function(value,data) {
+												return data.c2flag!=1?'<input type="text" name="c2price" disabled="disabled">':'<input type="hidden" value="'+data.c2amount+'"/><input type="text" readonly="readonly"  class="timeInterval3"  value="'+data.c2timeThreePrice+'"     readonly="readonly"  name="c2timeThreePrice" placeholder="0" data-rule="required;digits">'
+											}
+										},
+								]
+							},
+						],
+						initcallback(){
+								$.CurrentNavtab.find('#datagrid-list').find("input").each(function(){
+					
+									//ie
+									$(this).bind("propertychange", function() { 
+										 console.log($(this).val())
+									}); 
+									//chrome
+									$(this).bind("change", function() { 
+									 console.log($(this).val())
+									}); 
+									$(this).bind("keyup", function() { 
+									 	$(this).val($(this).val().replace(/\D/g,''));
+									 	if($(this).val()!=''){
+										 	if(parseInt($(this).val())>=parseInt($(this).prev("input").val())){
+										 		$(this).val($(this).val().substring(0,$(this).val().length-1))
+										 	}
+									 	}
+									});
+									
+								})
+							}
+					});
+
+					
+				}
+			})
+				
+		},
+
+	}
+
+	if(timeType&&timeType==1){
+		sales_view.timeinit()
+	}else{
+		sales_view.init()
+	}
+	
+	
+</script>

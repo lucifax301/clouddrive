@@ -1,0 +1,19 @@
+<div class="row-input">
+    <input type="file" data-name="custom.pic" data-toggle="webuploader" data-options="
+        {
+            pick: {label: '点击选择文件',multiple:false},
+            server: '../../json/ajaxUpload.json',
+            fileNumLimit: 1,
+            formData: {dir:'custompic'},
+            required: true,
+            uploaded: '',
+            basePath: '',
+            fileNumLimit :1,
+            disableGlobalDnd  :false,
+            accept: {
+                title: '文件',
+                extensions: 'xls',
+                mimeTypes: '.xls'
+            }
+    }">
+</div>

@@ -1,0 +1,188 @@
+<div class="bjui-pageContent">
+	<div class="widget-box">
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="addForm">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>终端信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<input type="hidden" name="id" />
+				<div class="bjui-row col-4">
+					<div class="">
+						<label class="row-label">终端类型:</label>
+						<div class="row-input  required ">
+							<select name="termtype" data-toggle="selectpicker" data-width="100%" data-rule="required" onchange="terminal_edit.changetype(this.value)">
+								<option value="1">车载计程计时终端</option>
+								<option value="2">课堂教学计时终端</option>
+								<option value="3">模拟训练计时终端</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="" id="areadiv">
+						<label class="row-label">片区:</label>
+						<div class="row-input">
+							<select name="areaid" id="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist" data-optiontype="id,name">
+								<option value="">请选择</option>
+							</select>
+						</div>
+						
+					</div>
+
+					<div class="">
+						<label class="row-label">设备编号:</label>
+						<div class="row-input required fill-2">
+							<input type="text" name="code" data-rule="required" maxlength="20">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">生产厂家:</label>
+						<div class="row-input required fill-2">
+							<input type="text" name="vender" data-rule="required" maxlength="20">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">终端型号:</label>
+						<div class="row-input  required fill-2">
+							<input type="text" name="model" data-rule="required" maxlength="20">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">IMEI 号/ MAC 地址:</label>
+						<div class="row-input  required fill-2">
+							<input type="text" name="imei" data-rule="required" maxlength="20">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">终端出厂序列号:</label>
+						<div class="row-input  required fill-2">
+							<input type="text" name="sn" data-rule="required" maxlength="20">
+						</div>
+					</div>
+					
+					<div class="" id="simdiv">
+						<label class="row-label">SIM卡号:</label>
+						<div class="row-input   fill-2">
+							<input type="text" name="sim" maxlength="20">
+						</div>
+					</div>
+					
+					
+
+					<div class="" id="cardiv">
+						<label class="row-label">绑定车辆</label>
+						<div class="row-input ">
+							<input type="text" name="carno" size="17" readonly="readonly" >
+							<input type="hidden" name="carnum" />
+						</div>
+
+						<button type="button" class="btn-blue btn" onclick="terminal_edit.showcar(this);" data-icon="search">选择车辆</button>
+
+					</div>
+
+				</div>
+				
+			</div>
+		</form>
+	</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="terminal_edit.saveterminal()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+		
+	</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	
+	var terminalinfo = clz.getNavtab_more();
+	console.log(terminalinfo)
+	var terminal_edit = {
+		init(){
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'area/listInJson?userType=1',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        terminal_edit.area = json.result;
+			    }
+			})
+			
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				url: config.openBasePath + 'user/add',
+				form_name: 'addForm',
+				data: terminalinfo,
+				callback: function(data) {
+					terminal_edit.changetype(data.termtype)
+				}
+			})
+		},
+		area_menu_type(){
+			return terminal_edit.area;
+		},
+		
+	changetype(value){
+		if(value==1){
+			$.CurrentNavtab.find('#areadiv').show();
+			$.CurrentNavtab.find('#simdiv').show();
+			$.CurrentNavtab.find('#cardiv').show();
+		}else{
+			$.CurrentNavtab.find('#areadiv').hide();
+			$.CurrentNavtab.find('#simdiv').hide();
+			$.CurrentNavtab.find('#cardiv').hide();
+		}
+	},
+	showcar(obj) {
+		BJUI.findgrid({
+			include: 'carno:carNo,carnum:carnum',
+			dialogOptions: {
+				title: '查找车辆',
+				maxable : false
+			},
+			gridOptions: {
+                        tableWidth:'80%',
+                        filterThead : true,
+                        dataUrl: config.openBasePath + 'car/getCarList',
+                        columns: [
+                            {name:'carNo', label:'车牌号码', width : '25%', align:'center'},
+                            {name:'areaId', label:'所属片区', width : '30%', align:'center',type:'select',items: terminal_add.area_menu_type},
+                            {name:'coachName', label:'所属教练', width : '30%', align:'center'},
+                        ]
+                    }
+		})
+	},
+	
+
+	saveterminal() {
+		if($.CurrentNavtab.find('#addForm').isValid()){
+			
+		
+		var data = clz.parseForm($.CurrentNavtab.find('#addForm'));
+		
+		BJUI.alertmsg('confirm', '确认修改终端吗？', {
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/terminal/update",
+							loadingmask: true,
+							data: data,
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', '提交成功！', {})
+								BJUI.navtab('closeCurrentTab');
+							}
+						})
+					}
+				});
+		
+		}
+	}
+
+	}
+	terminal_edit.init()
+</script>

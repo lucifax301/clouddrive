@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.ExamareaMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Examarea" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+   
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="lng" property="lng" jdbcType="DOUBLE" />
+    <result column="lat" property="lat" jdbcType="DOUBLE" />
+    <result column="subject" property="subject" jdbcType="DOUBLE" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, address, lng, lat, subject, cuid, muid, ctime, mtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Examarea" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_examarea
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Examarea" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_examarea
+    <where>
+	    <if test="name != null and name != ''">
+		  and name LIKE concat(concat('%',#{name}),'%')
+		</if>
+		<if test="subject != null ">
+		  and subject = #{subject}
+		</if>
+	</where>
+    order by mtime desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Examarea" >
+    delete from t_examarea
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.Examarea" >
+    insert into t_examarea (
+      name, address, lng, 
+      lat, subject, cuid, muid, 
+      ctime, mtime)
+    values (
+      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{lng,jdbcType=DOUBLE}, 
+      #{lat,jdbcType=DOUBLE}, #{subject,jdbcType=INTEGER}, #{cuid,jdbcType=INTEGER}, #{muid,jdbcType=INTEGER}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Examarea" >
+    update t_examarea
+    set 
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      lng = #{lng,jdbcType=INTEGER},
+      lat = #{lat,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      muid = #{muid,jdbcType=INTEGER}
+      
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,325 @@
+<div class="bjui-pageContent">
+	<div class="">
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+			<div class="bjui-row col-3">
+				<input type="hidden" name="id"/>
+				<label class="row-label">客户名称：</label>
+				<div class="row-input required ">
+					<input type="hidden" name="studentid">
+					<input type="text" readonly name="name">
+				</div>
+				<label class="row-label">处理状态：</label>
+				<div class="row-input required">
+					<select name="handlestate" data-toggle="selectpicker" data-width="100%" data-rule="required" disabled>
+						<option value="0">未处理</option>
+						<option value="1">已处理</option>
+						<option value="2">无需处理</option>
+					</select>
+				</div>
+				<br/>
+				<label class="row-label">客户班别：</label>
+				<div class="row-input">
+					<input type="hidden" name="classid">
+					<input type="text" name="classname" readonly>
+				</div>
+				<label class="row-label">证件号码：</label>
+				<div class="row-input">
+					<input type="text" name="idcard" readonly>
+				</div>
+				<label class="row-label">手机号码：</label>
+				<div class="row-input">
+					<input type="text" name="phone" readonly>
+				</div>
+				<div>
+					<label class="row-label">处理部门：</label>
+					<div class="row-input required">
+						<select name="handledeptype" id="handledeptype" data-toggle="selectpicker" data-width="48.5%" data-rule="required" onchange="customer_servicerecord_add.sethandlername()" disabled>
+						</select>
+						<select name="handledepid" id="handledepid" data-toggle="selectpicker" data-width="48.5%" data-rule="required" onchange="customer_servicerecord_add.sethandlername()" disabled>
+						</select>
+					</div>
+					<label class="row-label">处理人员：</label>
+					<div class="row-input required">
+						<input type="hidden" name="handlername">
+						<select name="handlerid" id="handlerid" data-toggle="selectpicker" data-width="100%" data-rule="required" onchange="customer_servicerecord_add.sethandlername()" disabled>
+						</select>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">服务来源：</label>
+					<div class="row-input required">
+						<select name="servicesource" data-toggle="selectpicker" data-width="100%" disabled>
+							<option value="">请选择</option>
+							<option value="1">服务门店</option>
+							<option value="2">呼叫中心</option>
+							<option value="3">客户来电</option>
+							<option value="4">客户上门</option>
+							<option value="5">主管部门</option>
+							<option value="6">市场活动</option>
+							<option value="7">网上投诉</option>
+							<option value="8">回访投诉</option>
+							<option value="0">其他</option>
+						</select>
+					</div>
+					<label class="row-label">服务方式：</label>
+					<div class="row-input required">
+						<select name="servicemode" data-toggle="selectpicker" data-width="100%" disabled>
+							<option value="">请选择</option>
+							<option value="1">去电</option>
+							<option value="2">上门服务</option>
+							<option value="3">客户来电</option>
+							<option value="4">客户上门</option>
+						</select>
+					</div>
+				</div>
+				<div>
+					<label class="row-label">服务类型：</label>
+					<div class="row-input">
+						<select name="servicetype" id="servicetype" data-toggle="selectpicker" data-width="100%" onchange="customer_servicerecord_view.hahaha()" disabled>
+						</select>
+					</div>
+					<div class="row-input">
+						<select name="servicesubtype" id="servicesubtype" data-toggle="selectpicker" data-width="100%" onchange="customer_servicerecord_view.hahaha()" disabled>
+						</select>
+					</div>
+				</div>
+				<div>
+				<label class="row-label">服务内容：</label>
+				<div class="row-input required fill-2">
+					<input type="text" name="servicecontent" readonly>
+				</div>
+				</div>
+				<label class="row-label">处理措施：</label>
+				<div class="row-input fill-3 clz-radio">
+					<input type="radio" name="handlemethod" value="1" data-toggle="icheck" data-label="学员弃学" disabled>
+					<input type="radio" name="handlemethod" value="2" data-toggle="icheck" data-label="正常运转" disabled>
+					<input type="radio" name="handlemethod" value="3" data-toggle="icheck" data-label="暂停学车" disabled>
+					<input type="radio" name="handlemethod" value="4" data-toggle="icheck" data-label="恢复学车" disabled>
+					<input type="radio" name="handlemethod" value="5" data-toggle="icheck" data-label="申请退学" disabled>
+					<input type="radio" name="handlemethod" value="6" data-toggle="icheck" data-label="转入历史" disabled>
+				</div>
+				<label class="row-label">结果反馈：</label>
+				<div class="row-input fill-3 clz-radio">
+					<input type="radio" name="result" value="1" data-toggle="icheck" data-label="没时间" disabled>
+					<input type="radio" name="result" value="2" data-toggle="icheck" data-label="要求退学" disabled>
+					<input type="radio" name="result" value="3" data-toggle="icheck" data-label="放弃学车" disabled>
+					<input type="radio" name="result" value="4" data-toggle="icheck" data-label="无法联系" disabled>
+					<input type="radio" name="result" value="5" data-toggle="icheck" data-label="学习证过期" disabled>
+					<input type="radio" name="result" value="6" data-toggle="icheck" data-label="正常运转" disabled>
+					<input type="radio" name="result" value="7" data-toggle="icheck" data-label="离开本地" disabled>
+					<input type="radio" name="result" value="8" data-toggle="icheck" data-label="其他" disabled>
+				</div>
+			</div>
+		</form>
+	</div>
+	<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+	var customer_servicerecord_view = {
+		init: function() {
+			var data = clz.getNavtab_more();
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				url: config.openBasePath + 'customer/editCustomerRecord',
+				form_name: 'edit-form',
+				data: data,
+				before: function() {
+					BJUI.ajax('doajax', {
+					    url: config.openBasePath + 'dept/listDeptAreaStore',
+					    loadingmask: true,
+					    async: false,
+					    okCallback: function(json, options) {
+					        var menu = json.result;
+						    var sel=["handledeptype", "handledepid", "handlerid"];
+						    var cs = new CascadeSelect(sel, menu);
+					    }
+					})
+				    
+				    var servicetypemenu = [
+				    	{'val': '1', 'txt': '催交资料', 'menu': [
+				    		{'val': '101', 'txt': '报名资料'},
+				    		{'val': '102', 'txt': '重交资料'},
+				    		{'val': '103', 'txt': '转校资料'},
+				    		{'val': '104', 'txt': '转车型资料'}
+				    	]},
+				    	{'val': '2', 'txt': '理论培训及采集指纹', 'menu': [
+				    		{'val': '200', 'txt': '无'}
+				    	]},
+				    	{'val': '3', 'txt': '科目一测试', 'menu': [
+				    		{'val': '300', 'txt': '无'}
+				    	]},
+				    	{'val': '4', 'txt': '报考试', 'menu': [
+				    		{'val': '401', 'txt': '科目一考试'},
+				    		{'val': '402', 'txt': '科目二考试'},
+				    		{'val': '403', 'txt': '科目三考试'},
+				    		{'val': '404', 'txt': '科目四考试'},
+				    		{'val': '405', 'txt': '改期'},
+				    		{'val': '406', 'txt': '转场'},
+				    		{'val': '400', 'txt': '其它'}
+				    	]},
+				    	{'val': '5', 'txt': '考试批复', 'menu': [
+				    		{'val': '501', 'txt': '科目一考试'},
+				    		{'val': '502', 'txt': '科目二考试'},
+				    		{'val': '503', 'txt': '科目三考试'},
+				    		{'val': '504', 'txt': '科目四考试'},
+				    		{'val': '505', 'txt': '改期'},
+				    		{'val': '500', 'txt': '其它'}
+				    	]},
+				    	{'val': '6', 'txt': '学员回访', 'menu': [
+				    		{'val': '601', 'txt': '交资料'},
+				    		{'val': '602', 'txt': '科目一培训'},
+				    		{'val': '603', 'txt': '科目一练题'},
+				    		{'val': '604', 'txt': '转学'},
+				    		{'val': '605', 'txt': '缺考'},
+				    		{'val': '606', 'txt': '补考'},
+				    		{'val': '607', 'txt': '领证'},
+				    		{'val': '608', 'txt': '更换教练'},
+				    		{'val': '609', 'txt': '服务质量'},
+				    		{'val': '610', 'txt': '暂停学车'},
+				    		{'val': '611', 'txt': '恢复学车'},
+				    		{'val': '612', 'txt': '学习证剩5月到期'},
+				    		{'val': '613', 'txt': '报名日期到期'},
+				    		{'val': '600', 'txt': '其它'}
+				    	]},
+				    	{'val': '7', 'txt': '学车安排', 'menu': [
+				    		{'val': '701', 'txt': '教练分配'},
+				    		{'val': '702', 'txt': '学车体验'},
+				    		{'val': '703', 'txt': '模拟体验'},
+				    		{'val': '704', 'txt': '科目二训练'},
+				    		{'val': '705', 'txt': '科目三训练'},
+				    		{'val': '706', 'txt': '考前强化'},
+				    		{'val': '707', 'txt': '考前测试'},
+				    		{'val': '700', 'txt': '其它'}
+				    	]},
+				    	{'val': '8', 'txt': '其它', 'menu': [
+				    		{'val': '800', 'txt': '无'}
+				    	]}
+				    ];
+				    var servicetypesel = ["servicetype", "servicesubtype"];
+				    var servicetypecs = new CascadeSelect(servicetypesel, servicetypemenu);
+				}
+			})
+			$.CurrentNavtab.find('#datagrid-list').datagrid({
+				paging: false,
+				gridTitle: '历史服务记录',
+				height: '40%',
+				showCheckboxcol: false,
+				showToolbar: false,
+				dataUrl: config.openBasePath + 'customer/customerHistory?studentid=' + $.CurrentNavtab.find("*[name='studentid']").val(),
+				columns: [
+					{ name: 'ctime', label: '服务日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+					{ name: 'servicesource', label: '服务来源', align: 'center' ,render: customer_servicerecord_view.formatServicesource},
+					{ name: 'servicetype', label: '服务类型', align: 'center' ,render: customer_servicerecord_view.formatServicetype},
+					{ name: 'servicemode', label: '服务方式', align: 'center' ,render: customer_servicerecord_view.formatServicemode},
+					{ name: 'cname', label: '提交人', align: 'center' },
+//					{ name: 'handlername', label: '处理人', align: 'center' },
+					{ name: 'handlestate', label: '处理状态', align: 'center', render: customer_servicerecord_view.status }
+				]
+			});
+			
+		    
+		    $.CurrentNavtab.find("*[name='handlername']").val($.CurrentNavtab.find("#handlerid").find("option:selected").text());
+		},
+		status: function(value) {
+			switch(value) {
+				case 0:
+					return "未处理";
+				case 1:
+					return "已处理";
+				case 2:
+					return "无需处理";
+			}
+		},
+		hahaha: function() {
+			
+		},
+		formatServicesource: function(value){
+			switch(value) {
+				case 1: return '服务门店';
+				case 2: return '呼叫中心';
+				case 3: return '客户来电';
+				case 4: return '客户上门';
+				case 5: return '主管部门';
+				case 6: return '市场活动';
+				case 7: return '网上投诉';
+				case 8: return '回访投诉';
+				case 0: return '其他';
+			}
+		},
+		formatServicetype: function(value, data){
+			var servicetype, servicesubtype;
+			switch(value) {
+				case 1: servicetype = '催交资料';break;
+				case 2: servicetype = '理论课培训及采集指纹';break;
+				case 4: servicetype = '科目一测试';break;
+				case 3: servicetype = '报考试';break;
+				case 5: servicetype = '考试批复';break;
+				case 6: servicetype = '学员回访';break;
+				case 7: servicetype = '学车安排';break;
+				case 8: servicetype = '其它';break;
+				default: servicetype = '';
+			}
+			switch(data.servicesubtype) {
+				case 101: servicesubtype = '报名资料';break;
+				case 102: servicesubtype = '重交资料';break;
+				case 103: servicesubtype = '转校资料';break;
+				case 104: servicesubtype = '转车型资料';break;
+				case 200: servicesubtype = '无';break;
+				case 300: servicesubtype = '无';break;
+				case 401: servicesubtype = '科目一考试';break;
+				case 402: servicesubtype = '科目二考试';break;
+				case 403: servicesubtype = '科目三考试';break;
+				case 404: servicesubtype = '科目四考试';break;
+				case 405: servicesubtype = '改期';break;
+				case 406: servicesubtype = '转场';break;
+				case 400: servicesubtype = '其它';break;
+				case 501: servicesubtype = '科目一考试';break;
+				case 502: servicesubtype = '科目二考试';break;
+				case 503: servicesubtype = '科目三考试';break;
+				case 504: servicesubtype = '科目四考试';break;
+				case 505: servicesubtype = '改期';break;
+				case 500: servicesubtype = '其它';break;
+				case 601: servicesubtype = '交资料';break;
+				case 602: servicesubtype = '科目一培训';break;
+				case 603: servicesubtype = '科目一练题';break;
+				case 604: servicesubtype = '转学';break;
+				case 605: servicesubtype = '缺考';break;
+				case 606: servicesubtype = '补考';break;
+				case 607: servicesubtype = '领证';break;
+				case 608: servicesubtype = '更换教练';break;
+				case 609: servicesubtype = '服务质量';break;
+				case 610: servicesubtype = '暂停学车';break;
+				case 611: servicesubtype = '恢复学车';break;
+				case 612: servicesubtype = '学习证剩5月到期';break;
+				case 613: servicesubtype = '报名日期到期';break;
+				case 600: servicesubtype = '其它';break;
+				case 701: servicesubtype = '教练分配';break;
+				case 702: servicesubtype = '学车体验';break;
+				case 703: servicesubtype = '模拟体验';break;
+				case 704: servicesubtype = '科目二训练';break;
+				case 705: servicesubtype = '科目三训练';break;
+				case 706: servicesubtype = '考前强化';break;
+				case 707: servicesubtype = '考前测试';break;
+				case 700: servicesubtype = '其它';break;
+				case 800: servicesubtype = '无';break;
+				default: servicesubtype = '';
+			}
+			var result = servicetype + '-' + servicesubtype;
+			return result != '-'? result:'';
+		},
+		formatServicemode: function(value) {
+			switch(value) {
+				case 1: return '去电';
+				case 2: return '上门服务';
+				case 3: return '客户来电';
+				case 4: return '客户上门';
+			}
+		}
+	}
+	customer_servicerecord_view.init();
+</script>

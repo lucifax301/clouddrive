@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.ClassTypeMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.CoachClassType" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="userid" property="userId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="createdate" property="createDate" jdbcType="TIMESTAMP" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, userid,  status, remark, createdate
+  </sql>
+  <select id="getClassType" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.CoachClassType" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class_type
+    where id = #{id}
+  </select>
+  
+  <select id="listClassType" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class_type 
+    where 1=1
+    <if test="status != null " >
+	      and status = #{status}
+	</if>
+  </select>
+
+
+  <delete id="deleteClassType" parameterType="cn.com.liliyun.coach.model.CoachClassType" >
+    delete from t_class_type
+    where id = #{id}
+  </delete>
+  <insert id="addClassType" parameterType="cn.com.liliyun.coach.model.CoachClassType" useGeneratedKeys="true" keyProperty="id">
+  
+    insert into t_class_type (type, userid, remark,createdate)
+    values (#{type}, #{userId}, #{remark}, now())
+  </insert>
+  
+  <update id="updateClassType" parameterType="cn.com.liliyun.coach.model.CoachClassType" >
+    update t_class_type
+    <set >
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark},
+      </if>
+      
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateClassTypeStatus" parameterType="cn.com.liliyun.coach.model.CoachClassType" >
+    update t_class_type
+    set status=#{status}
+    where id = #{id}
+  </update>
+</mapper>

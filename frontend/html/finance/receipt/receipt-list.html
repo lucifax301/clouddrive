@@ -1,0 +1,331 @@
+<section id="thispage" privilege = "060102"></section>
+<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}" id="search-form">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>学员票据搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">费用类型：</label>
+				<div class="row-input">
+					<select name="type" data-toggle="selectpicker" data-width="100%" data-datajson="financeSubject" data-optiontype="id,subject" data-val="">
+					</select>
+				</div>
+				<label class="row-label">申请状态：</label>
+				<div class="row-input">
+					<select name="modifystate" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="0">未申请</option>
+						<option value="1">已申请未处理</option>
+						<option value="2">已同意未修改</option>
+						<option value="3">已处理未同意</option>
+						<option value="4">已同意已修改</option>
+					</select>
+				</div>
+				<label class="row-label">是否结转：</label>
+				<div class="row-input">
+					<select name="isconfirm" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="0">未结转</option>
+						<option value="1">已结转</option>
+					</select>
+				</div>
+				<label class="row-label">是否已开票：</label>
+				<div class="row-input">
+					<select name="isinvoice" data-toggle="selectpicker" data-width="48.5%">
+						<option value="">请选择</option>
+						<option value="0">未开票</option>
+						<option value="1">已开票</option>
+					</select>
+					<select name="invoicetype" data-toggle="selectpicker" data-width="48.5%">
+						<option value="">请选择</option>
+						<option value="1">专票</option>
+						<option value="2">普票</option>
+					</select>
+				</div>
+				<label class="row-label">领取状态：</label>
+				<div class="row-input">
+					<select name="invoicestate" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="0">未领取</option>
+						<option value="1">收款人</option>
+						<option value="2">转交人</option>
+						<option value="3">客服</option>
+						<option value="4">学员</option>
+					</select>
+				</div>
+				<label class="row-label">收据日期：</label>
+				<div class="row-input fill-2">
+					<div class="w-40 fl">
+						<input name="receiptdatelow" type="text" data-toggle="datepicker" data-rule="date">
+					</div>
+					<span class="fl text-center pl10 pr10">-</span>
+					<div class="w-40 fl">
+						<input name="receiptdatetop" type="text" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+				<label class="row-label">收据编号：</label>
+				<div class="row-input">
+					<input type="text" name="receiptnum" >
+				</div>
+				<label class="row-label">学员姓名：</label>
+				<div class="row-input">
+					<input type="text" name="stuname" >
+				</div>
+				<label class="row-label">学员身份证：</label>
+				<div class="row-input">
+					<input type="text" name="stuidcard" >
+				</div>
+				<label class="row-label">批次号：</label>
+				<div class="row-input">
+					<input type="text" name="batchnum" >
+				</div>
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var finance_receipt_list = {
+		init: function() {
+			var receipt_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					toolbarItem: 'add',
+					toolbarCustom: finance_receipt_list.toolbarCustom(),
+					gridTitle: '学员票据管理',
+					height: '70%',
+					showCheckboxcol: true,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'financeReceipt/list',
+					columns: [
+						{ name: 'areaid', label: '片区', align: 'center', minwidth: 80, render: formatAreaCell},
+						{ name: 'storeid', label: '门店', align: 'center', minwidth: 80, render: formatStoreCell},
+						{ name: 'stuname', label: '学员姓名', minwidth: 60, align: 'center'},
+						{ name: 'stuidcard', label: '身份证号', minwidth: 200, align: 'center'},
+						{ name: 'classinfo', label: '班别', minwidth: 80, align: 'center'},
+						{ name: 'traintype', label: '车型', align: 'center'},
+						//{ name: 'signupcost', label: '实际报名费用', minwidth: 60, align: 'center'},
+						{ name: 'type', label: '费用类型', minwidth: 100, align: 'center', render: formatSubjectCell},
+						{ name: 'receiptnum', label: '收据编号', minwidth: 140,align: 'center'},
+						{ name: 'receiptdate', label: '收据日期', minwidth: 100, align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'receiptmoney', label: '收据金额', minwidth: 60, align: 'center'},
+						{ name: 'invoicename', label: '发票名', minwidth: 180, align: 'center'},
+						{ name: 'invoicenum', label: '发票号', minwidth: 120, align: 'center'},
+						{ name: 'invoicemoney', label: '开票金额', minwidth: 60, align: 'center'},
+						{ name: 'invoicedate', label: '发票日期', minwidth: 100, align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'invoicestate', label: '领取人', minwidth: 70, align: 'center', render: finance_receipt_list.invoicestate},
+						{ name: 'batchnum', label: '批次号', minwidth: 125, align: 'center'},
+						{ name: 'modifystate', label: '修改申请状态', align: 'center', render: finance_receipt_list.modifystate},
+						{ name: 'isconfirm', label: '是否结转', minwidth: 70, align: 'center', render: function(value) {return value==1?'已结转':'未结转'} },
+						{ name: 'confirmdate', label: '结转日期', minwidth: 180, align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd hh:mm:ss' }) } },
+						{ name: 'confirmname', label: '结转人', minwidth: 80, align: 'center'}
+					],
+					editMode: { dialog: { id: 'add_finance_Receipt', title: '新增学员票据', height : 450, width: 800, mask: true, onClose: function() { receipt_list.datagrid('reload', true); } } },
+					add_url: "html/finance/receipt/receipt-add.html",
+				});
+		},
+		editrecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			} else if (data[0].isconfirm == 1) {
+				BJUI.alertmsg('error', '已结转的数据不允许修改！', {});
+				return;
+			} else if (!data[0].updateable) {
+				BJUI.alertmsg('error', '当前记录不允许修改！<br/>修改非当天数据，需先完成「修改申请」！', {});
+				return;
+			}
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_Receipt_edit_' + data[0].id,
+				url: 'html/finance/receipt/receipt-edit.html',
+				title: '修改学员票据',
+				height: 450,
+				width: 800,
+				mask: true,
+				onClose: function() {
+					table.datagrid('reload', true);
+				}
+			})
+		},
+		applyedit: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			} else if (data[0].isconfirm == 1) {
+				BJUI.alertmsg('error', '已结转的数据不允许修改！', {});
+				return;
+			} else if (data[0].modifystate == 1) {
+				BJUI.alertmsg('error', '已提交修改申请，请耐心等候！', {});
+				return;
+			} else if (data[0].updateable) {
+				finance_receipt_list.editrecord();
+				return;
+			}
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_Receipt_apply_' + data[0].id,
+				url: 'html/finance/receipt/receipt-apply.html',
+				title: '学员票据修改申请',
+				height: 300,
+				width: 700,
+				mask: true,
+				onClose: function() {
+					table.datagrid('reload', true);
+				}
+			})
+		},
+		handleapply: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			} else if (data[0].modifystate != 1) {
+				BJUI.alertmsg('error', '无需处理修改申请！', {});
+				return;
+			} 
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_Receipt_handleapply_' + data[0].id,
+				url: 'html/finance/receipt/receipt-review.html',
+				title: '学员票据修改申请',
+				height: 500,
+				width: 700,
+				mask: true,
+				onClose: function() {
+					table.datagrid('reload', true);
+				}
+			})
+		},
+		handleinvoicestate: function(state) {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			} else if(data[0].isconfirm != 1) {
+				BJUI.alertmsg('error', '数据未结转，不允许该操作！', {});
+				return;
+			} else if(data[0].invoicestate + 1 != state) {
+				BJUI.alertmsg('error', '领取人顺序不正确！', {});
+				return;
+			}
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + 'financeReceipt/invoiceState',
+				loadingmask: true,
+				data: {id: data[0].id, invoicestate: state},
+				okCallback: function(json, options) {
+					$.CurrentNavtab.find('#datagrid-list').datagrid('reload', true);
+				}
+			})
+		},
+		toolbarCustom: function() {
+			return "<button data-privilege='060102_datagrid-list_11' type='button' class='btn btn-blue' data-icon='edit' onclick='finance_receipt_list.editrecord()'>修改</button> " + 
+			"<button data-privilege='060102_datagrid-list_12' type='button' class='btn btn-blue ml5' data-icon='pencil' onclick='finance_receipt_list.applyedit()'>修改申请</button> " + 
+			"<button data-privilege='060102_datagrid-list_13' type='button' class='btn btn-blue ml5' data-icon='legal' onclick='finance_receipt_list.handleapply()'>处理修改申请</button> " + 
+			"<button data-privilege='060102_datagrid-list_14' type='button' class='btn btn-blue ml5' data-icon='sign-out' onclick='finance_receipt_list.exportdata()'>导出</button> " + 
+			"<button data-privilege='060102_datagrid-list_15' type='button' class='btn btn-blue ml20' data-icon='' onclick='finance_receipt_list.exportinvoice()'>导出打发票</button> " + 
+			"<button data-privilege='060102_datagrid-list_16' type='button' class='btn btn-blue ml5' data-icon='' onclick='finance_receipt_list.uploadinvoice()'>导入发票信息</button> " + 
+			//"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='finance_receipt_list.editrecord()'>打印发票清单</button> " + 
+			"<button data-privilege='060102_datagrid-list_17' type='button' class='btn btn-blue ml5' data-icon='' onclick='finance_receipt_list.handleinvoicestate(1)'>确认已开票</button> " + 
+			"<button data-privilege='060102_datagrid-list_18' type='button' class='btn btn-blue ml5' data-icon='' onclick='finance_receipt_list.handleinvoicestate(2)'>转交人领票</button> " + 
+			"<button data-privilege='060102_datagrid-list_19' type='button' class='btn btn-blue ml5' data-icon='' onclick='finance_receipt_list.handleinvoicestate(3)'>客服领票</button> " + 
+			"<button data-privilege='060102_datagrid-list_20' type='button' class='btn btn-blue ml5' data-icon='' onclick='finance_receipt_list.handleinvoicestate(4)'>学员领票</button> " + 
+			"<button data-privilege='060102_datagrid-list_21' type='button' class='btn btn-blue ml5' data-icon='' onclick='finance_receipt_list.print_receipt()'>打印收据</button>";
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'financeReceipt/export',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		exportinvoice: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'financeReceipt/invoiceexport',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		uploadinvoice: function() {
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_Receipt_upload',
+				url: 'html/finance/receipt/upload.html',
+				title: '导入发票信息',
+				mask: true,
+				onClose: function() {
+					table.datagrid('reload', true);
+				}
+			})
+		},
+		invoicestate: function(value) {
+			switch(value) {
+				case 0: return "未领取";
+				case 1: return "收款人";
+				case 2: return "转交人";
+				case 3: return "客服";
+				case 4: return "学员";
+				default: return "";
+			}
+		},
+		modifystate: function(value) {
+			switch(value) {
+				case 0: return "未申请";
+				case 1: return "已申请未处理";
+				case 2: return "已同意未修改";
+				case 3: return "已处理未同意";
+				case 4: return "已同意已修改";
+				default: return "";
+			}
+		},
+		print_receipt(){
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			}
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'print_receipt',
+				url: 'html/finance/receipt/print_receipt.html',
+				title: '打印收据',
+				height: 600,
+				width: 800,
+				mask: true,
+			})
+		}
+	}
+	finance_receipt_list.init();
+</script>

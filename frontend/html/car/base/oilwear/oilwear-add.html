@@ -1,0 +1,123 @@
+<div class="bjui-pageContent">
+    <div class="">
+    	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			<input type="hidden" name="carId">
+			<input type="hidden" name="carNo">
+			<div class="bjui-row col-3">
+			<label class="row-label">加油人</label>
+            <div class="row-input required">
+                <input type="text" name="oilSupplier" data-rule="required" maxlength="10">
+            </div>
+            <label class="row-label">油品</label>
+            <div class="row-input required">
+                <select name="oilType" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="0">0#</option>
+                    <option value="1">90#</option>
+                    <option value="2">92#</option>
+                    <option value="3">93#</option>
+                    <option value="4">95#</option>
+                    <option value="5">97#</option>
+                    <option value="6">98#</option>
+                    <option value="7">电</option>
+                </select>
+            </div>
+            <label class="row-label">加油日期</label>
+            <div class="row-input">
+                <input type="text" name="oilDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+            </div>
+            <label class="row-label">加油升数</label>
+            <div class="row-input required">
+                <input type="text" name="oilMl" data-rule="required;plusdigits" maxlength="4">
+            </div>
+            <label class="row-label">单价(元)</label>
+            <div class="row-input required">
+                <input type="text" name="cost" data-rule="required;length[1~11];plusnumber" maxlength="5">
+            </div>
+            <label class="row-label">加油金额(元)</label>
+            <div class="row-input ">
+                <input type="text" name="sumCost" data-rule="plusnumber" maxlength="5">
+            </div>
+            <label class="row-label">油站名</label>
+            <div class="row-input ">
+                <input type="text" name="oilstatName" data-rule="" maxlength="30">
+            </div>
+            <label class="row-label">录入人</label>
+            <div class="row-input ">
+                <input type="text" name="cname" data-rule="" maxlength="10">
+            </div>    
+            <label class="row-label">录入日期</label>
+            <div class="row-input ">
+                <input type="text" name="ctime" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+            </div>  
+            <label class="row-label">折扣</label>
+            <div class="row-input required">
+                <input type="text" name="discount" data-rule="required;plusnumber">
+            </div>
+            <label class="row-label">折扣率</label>
+            <div class="row-input required">
+                <input type="text" name="discountRate" data-rule="required;plusnumber">
+            </div>
+            <label class="row-label">实际折扣率</label>
+            <div class="row-input required">
+                <input type="text" name="actualDiscountRate" data-rule="required;plusnumber">
+            </div>
+            <label class="row-label">挂牌价</label>
+            <div class="row-input required">
+                <input type="text" name="hangBrandPrice" data-rule="required;plusnumber">
+            </div>
+            <label class="row-label">剩余折扣</label>
+            <div class="row-input required">
+            	<input type="text" name="surplusDiscount" data-rule="required;plusnumber">
+            </div>
+            <label class="row-label">上期折扣</label>
+            <div class="row-input required">
+            	<input type="text" name="previousDiscount" data-rule="required;plusnumber">
+            </div>
+            <label class="row-label">油站代码</label>
+            <div class="row-input ">
+            	<input type="text" name="oilStationCode" data-rule="">
+            </div>
+            <label class="row-label">油品代码</label>
+            <div class="row-input ">
+                <input type="text" name="oilTypeCode" data-rule="">
+            </div> 
+            <label class="row-label">油卡金额</label>
+            <div class="row-input required">
+            	<input type="text" name="oilCardPrice" data-rule="required;plusnumber">
+            </div>
+            
+            
+            <label class="row-label">付款方式</label>
+            <div class="row-input required">        
+                <select name="costType" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="1">油卡</option>
+                    <option value="2">现金</option>
+                </select>
+            </div>           
+            <label class="row-label">备注</label>
+            <div class="row-input fill-2 ">
+                <input type="text" name="remark" data-rule="" maxlength="100">
+            </div>
+      </div>
+    	</form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="submit" class="btn-default" data-icon="save">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	var cardata = clz.getWindowJson();
+	clz.CurrentDom_init({
+		current:'Dialog',
+		url : config.openBasePath + 'car/addCarOilwear',
+		form_name : 'add-form',
+		before : function(data){         
+            data.carId = cardata.carId;
+            data.carNo = cardata.carNo;
+            return data;
+        }
+	})
+</script>

@@ -1,0 +1,138 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<input type="hidden" id="applyid" name="id" />
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>恢复学车申请</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3" id="auditdiv" style="display: none;">
+					<div class="row-input fill-2">
+						<button type="button" class='btn-blue' data-icon="" onclick="resumeaudit(1)">审核通过</button>
+						<button type="button" class='btn-blue' data-icon="" onclick="resumeaudit(2)">审核不通过</button>
+
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">申请类型:</label>
+					<div class="row-input">
+						<input type="text" value="恢复学车" class="clear-style" />
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">学员姓名:</label>
+					<div class="row-input">
+						<input type="text" name="studentname" id="stuname" data-width="100%" readonly="readonly">
+						<input type="hidden" name="studentid" id="studentid" />
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">学车状态:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="applyexam" id="applyexam" data-width="100%">
+					</div>
+					<label class="row-label">身份证号:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="idcard" id="idcard" data-width="100%">
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">手机号码:</label>
+					<div class="row-input">
+						<input type="text" readonly="readonly" name="phone" id="mobile" data-width="100%">
+					</div>
+				</div>
+
+				<div class="bjui-row col-4">
+					<label class="row-label">备注:</label>
+					<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="remark" maxlength="300" ></textarea>
+					</div>
+					
+				</div>
+			</div>
+
+		</div>
+</div>
+</form>
+
+</div>
+
+<script>
+	$.CurrentDialog.find("#applyid").val(clz.getWindowJson());
+	BJUI.ajax('doajax', {
+		url: config.openBasePath + "student/learnpause/get",
+		loadingmask: true,
+		async: false,
+		data: {
+			id: $.CurrentDialog.find("#applyid").val()
+		},
+		okCallback: function(json, options) {
+			console.log(json)
+			clz.CurrentDom_init({
+				current: 'Dialog',
+
+				form_name: 'view-form',
+				data: json.result
+			});
+			$.CurrentDialog.find("#applyexam").val(studentStatus(json.result.applyexam,json.result.applystatus))
+			if(json.result.status == 0) {
+				if(json.result.modapplystat == 1 || json.result.modapplystat == 2|| json.result.modapplystat == 4) {
+
+					if(json.result.modapplystat == 1) { //可以审核
+						$("#auditdiv").css("display", "")
+					} else if(json.result.modapplystat == 2) { //可以取消
+
+					}else if(json.result.modapplystat == 4) { //可以审核和取消
+						$("#auditdiv").css("display", "")
+					}
+
+				}
+			}
+
+		}
+	})
+
+	function resumeaudit(state) {
+		if(state == 1)
+			BJUI.alertmsg('confirm', '确认审核通过？', {
+				displayPosition: 'middlecenter',
+				okCall: function() {
+					doresumeaudit(1)
+				}
+			})
+		if(state == 2)
+			BJUI.alertmsg('confirm', '确认审核不通过？', {
+				displayPosition: 'middlecenter',
+				okCall: function() {
+					doresumeaudit(2)
+				}
+			})
+	}
+
+	
+
+	function doresumeaudit(state) {
+
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/student/learnpause/audit",
+			loadingmask: true,
+			data: {
+				"id": $.CurrentDialog.find("#applyid").val(),
+				status: state,
+				type: 2
+			},
+			okCallback: function(json, options) {
+				//console.log(json.result.list)
+				BJUI.alertmsg('ok', '提交成功！', {})
+				BJUI.dialog('closeCurrent')
+				student_apply_list.list.datagrid('refresh', true);
+			}
+		})
+	}
+</script>

@@ -1,0 +1,17 @@
+
+<div class="bjui-row col-3">
+	
+	<label class="row-label">所属片区</label>
+	<div class="row-input required">
+		<select name="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist" data-optiontype="id,name" onchange="staff_add.showstore(this.value)" data-rule="required">
+			<option value="">请选择</option>
+		</select>
+	</div>
+	
+	<label class="row-label">所属门店</label>
+	<div class="row-input required">
+		<select name="storeid" id="storeid" data-toggle="selectpicker" data-width="100%" data-rule="required">
+			<option value="">请选择</option>
+		</select>
+	</div>
+</div>

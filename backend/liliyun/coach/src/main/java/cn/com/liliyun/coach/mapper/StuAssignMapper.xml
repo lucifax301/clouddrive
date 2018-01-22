@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.StuAssignMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.StudentAssign" >
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="mainstoreid" property="storeid" jdbcType="INTEGER" />
+    <result column="teachtypeid" property="teachtypeid" jdbcType="INTEGER" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <select id="list" resultMap="BaseResultMap"  >
+    select 
+    c.areaid,c.mainstoreid,c.teachtypeid,c.coachid,c.name,count(*) as count
+    from t_coach_student s join t_coach c on s.coachid=c.coachid
+    where 1=1
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>	
+     <if test="storeid != null and storeid!=0">
+		and mainstoreid = #{storeid}
+	</if>
+	 <if test="teachtypeid != null and teachtypeid!=0">
+		and teachtypeid = #{teachtypeid}
+	</if>
+	<if test="name != null and name!=''">
+		and c.name like concat('%',#{name})
+	</if>
+	<if test="assigntype != null ">
+		and type = #{assigntype}
+	</if>
+	<if test="begindate != null ">
+		and s.ctime >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and s.ctime < #{enddate}]]> 
+	</if>
+	<if test="domain !=null">
+	    	<if test="domain.storeid !=null ">
+	    		and s.coachid in (select coachid from t_coach_store where storeid=#{domain.storeid}) 
+	    	</if>
+	    	<if test="domain.areaid !=null ">
+	    		and areaid=#{domain.areaid}
+	    	</if>
+	    	
+	</if>
+    group by c.areaid,c.mainstoreid,c.teachtypeid,c.coachid
+  </select>
+
+  
+</mapper>

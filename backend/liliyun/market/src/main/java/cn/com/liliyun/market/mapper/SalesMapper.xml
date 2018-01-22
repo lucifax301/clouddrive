@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.market.mapper.SalesMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.market.model.SalesActivity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="applyuserid" property="applyuserid" jdbcType="INTEGER" />
+    <result column="audituserid" property="audituserid" jdbcType="INTEGER" />
+    <result column="applyuser" property="applyuser" jdbcType="VARCHAR" />
+    <result column="audituser" property="audituser" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="actstatus" property="actstatus" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="activityname" property="activityname" jdbcType="VARCHAR" />
+    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="begindate" property="begindate" jdbcType="TIMESTAMP" />
+    <result column="enddate" property="enddate" jdbcType="TIMESTAMP" />
+    <result column="auditdate" property="auditdate" jdbcType="TIMESTAMP" />
+    
+  </resultMap>
+  
+  <resultMap id="ClassResultMap" type="cn.com.liliyun.market.model.SalesActivityClassinfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="activityid" property="activityid" jdbcType="INTEGER" />
+    <result column="classinfoid" property="classinfoid" jdbcType="INTEGER" />
+    <result column="c1price" property="c1price" jdbcType="INTEGER" />
+    <result column="c2price" property="c2price" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,businessid,transactionid,storeid,applyuserid,audituserid,applyuser,audituser,status,remark,activityname,actstatus,
+    begindate,enddate,createdate,auditdate
+  </sql>
+  
+  <sql id="Class_Column_List" >
+    id,activityid,classinfoid,c1price,c2price
+  </sql>
+  
+  <select id="getSales" resultMap="BaseResultMap" parameterType="cn.com.liliyun.market.model.SalesActivity" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sales_activity
+    where id = #{id}
+  </select>
+  
+  
+  <select id="listSales" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sales_activity
+    <where>
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	<if test="storeid != null and storeid!=0">
+		and storeid = #{storeid}
+	</if>		
+    <if test="status != null ">
+		and status = #{status}
+	</if>
+	 
+	<if test="activityname != null and activityname !=''">
+		and activityname like concat(concat('%',#{activityname}),'%')
+	</if>
+	<if test="begindate != null ">
+		and begindate >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and enddate < #{enddate}]]> 
+	</if>
+	</where>
+	order by id desc
+  </select>
+  
+  <select id="listRunningSales" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sales_activity
+    where
+    <![CDATA[actstatus=0 and begindate<now() and enddate> now() ]]> 
+    
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	<if test="storeid != null and storeid!=0">
+		and storeid = #{storeid}
+	</if>		
+    <if test="status != null ">
+		and status = #{status}
+	</if>
+	 
+	<if test="activityname != null and activityname !=''">
+		and activityname like concat(#{activityname},'%')
+	</if>
+	<if test="begindate != null ">
+		and begindate >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and enddate < #{enddate}]]> 
+	</if>
+	
+	order by id desc
+  </select>
+  
+  <select id="listCloseSales" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sales_activity where actstatus=1
+    
+    
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	<if test="storeid != null and storeid!=0">
+		and storeid = #{storeid}
+	</if>		
+    <if test="status != null ">
+		and status = #{status}
+	</if>
+	 
+	<if test="activityname != null and activityname !=''">
+		and activityname like concat(#{activityname},'%')
+	</if>
+	<if test="begindate != null ">
+		and begindate >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and enddate < #{enddate}]]> 
+	</if>
+	
+	order by id desc
+  </select>
+  
+  <select id="listWaitSales" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sales_activity
+    where
+    <![CDATA[actstatus=0 and begindate>now()  ]]> 
+    
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	<if test="storeid != null and storeid!=0">
+		and storeid = #{storeid}
+	</if>		
+    <if test="status != null ">
+		and status = #{status}
+	</if>
+	 
+	<if test="activityname != null and activityname !=''">
+		and activityname like concat(#{activityname},'%')
+	</if>
+	<if test="begindate != null ">
+		and begindate >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and enddate < #{enddate}]]> 
+	</if>
+	
+	order by id desc
+  </select>
+  
+  <select id="listEndSales" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sales_activity
+    where
+    <![CDATA[actstatus=0 and enddate<now()  ]]> 
+    
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	<if test="storeid != null and storeid!=0">
+		and storeid = #{storeid}
+	</if>		
+    <if test="status != null ">
+		and status = #{status}
+	</if>
+	 
+	<if test="activityname != null and activityname !=''">
+		and activityname like concat(#{activityname},'%')
+	</if>
+	<if test="begindate != null ">
+		and begindate >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and enddate < #{enddate}]]> 
+	</if>
+	
+	order by id desc
+  </select>
+	
+	<select id="listMatchSales" resultMap="BaseResultMap"  >
+    select 
+    a.id,a.businessid,a.transactionid,a.storeid,a.applyuserid,a.audituserid,a.applyuser,a.audituser,a.status,a.remark,a.activityname,a.actstatus,
+    a.begindate,a.enddate,a.createdate,a.auditdate
+    from t_sales_activity a join t_sales_activity_classinfo b on a.id=b.activityid
+    where
+    <![CDATA[a.actstatus=0 and a.begindate<now() and a.enddate> now() ]]> 
+    <if test="classinfoid != null ">
+     and b.classinfoid=#{classinfoid} 
+    </if>
+    
+	order by id desc
+  </select>
+  
+  <select id="statActivityStudent" resultType="map">
+  	select activityid,count(id) as count from t_student 
+  	where activityid in 
+  	<foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.activityid}  
+    </foreach>
+    group by activityid
+  </select>
+
+  <insert id="addSales" parameterType="cn.com.liliyun.market.model.SalesActivity" useGeneratedKeys="true" keyProperty="id">
+    insert into t_sales_activity (activityname, businessid, transactionid,storeid,areaid,actstatus, applyuserid,applyuser,remark,begindate,enddate, createdate)
+    values (#{activityname},#{businessid},#{transactionid}, #{storeid},#{areaid}, ${actstatus}, #{applyuserid},#{applyuser}, #{remark},#{begindate},#{enddate}, now())
+  </insert>
+  
+  <update id="updateSales" parameterType="cn.com.liliyun.market.model.SalesActivity" >
+    update t_sales_activity
+    <set >
+      <if test="activityname != null and activityname !=''" >
+        activityname = #{activityname},
+      </if>
+      <if test="storeid != null " >
+        storeid = #{storeid},
+      </if>
+      <if test="areaid != null " >
+        areaid = #{areaid},
+      </if>
+      <if test="reason != null and reason !=''" >
+        reason = #{reason},
+      </if>
+      
+      <if test="remark != null " >
+        remark = #{remark},
+      </if>
+      
+      <if test="begindate != null " >
+        begindate = #{begindate},
+      </if>
+      <if test="enddate != null " >
+        enddate = #{enddate},
+      </if>
+      <if test="actstatus != null " >
+        actstatus = #{actstatus},
+      </if>
+      
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateSalesStatus" parameterType="cn.com.liliyun.market.model.SalesActivity" >
+    update t_sales_activity
+    set status=#{status},remark=#{remark},audituserid=#{audituserid},audituser=#{audituser},auditdate=#{auditdate}
+    where id = #{id} and status=0
+  </update>
+  
+  <insert id="batchinsertClass" parameterType="java.util.List" >
+  	
+    insert into t_sales_activity_classinfo (activityid,classinfoid, c1price,c2price)
+    values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+    (#{item.activityid,jdbcType=INTEGER},#{item.classinfoid}, #{item.c1price,jdbcType=INTEGER},#{item.c2price,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  
+  <delete id="batchdelClass" parameterType="java.util.List" >
+  	
+    delete from t_sales_activity_classinfo 
+    where id in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.id}  
+    </foreach>  
+  </delete>
+  
+  <update id="updateClass" parameterType="cn.com.liliyun.market.model.SalesActivityClassinfo" >
+    update t_sales_activity_classinfo
+    set c1price=#{c1price},c2price=#{c2price}
+    where id = #{id} 
+  </update>
+  
+  <select id="getClass" resultMap="ClassResultMap" parameterType="cn.com.liliyun.market.model.SalesActivityClassinfo" >
+    select 
+    <include refid="Class_Column_List" />
+    from t_sales_activity_classinfo
+    where activityid = #{activityid}
+  </select>
+  
+  <select id="getMatchClass" resultMap="ClassResultMap" parameterType="cn.com.liliyun.market.model.SalesActivityClassinfo" >
+    select 
+    <include refid="Class_Column_List" />
+    from t_sales_activity_classinfo
+    where activityid = #{activityid} and classinfoid=#{classinfoid}
+  </select>
+</mapper>

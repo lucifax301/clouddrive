@@ -1,0 +1,353 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+		<div class="y-comment border_bottom">
+			<div class="bjui-row col-2" style="width:66.6666%;float:left">
+				<label class="row-label">车牌号</label>
+				<div class="row-input required">
+					<input type="text" name="carNo" data-rule="required;length[6~16]" maxlength="16">
+				</div>
+				<label class="row-label">车牌颜色</label>
+				<div class="row-input required">
+					<select name="carnoColor" data-toggle="selectpicker" data-width="100%" data-rule="required"  >
+						<option value="">请选择</option>
+						<option value="1">蓝色</option>
+						<option value="2">黄色</option>
+						<option value="3">黑色</option>
+						<option value="4">白色</option>
+						<option value="5">绿色</option>
+						<option value="9">其他</option>
+					</select>
+				</div>
+				<label class="row-label">原车牌号</label>
+				<div class="row-input">
+					<input type="text" name="formerCarno" data-rule="length[6~16]" maxlength="16">
+				</div>
+				<label class="row-label">所有权</label>
+				<div class="row-input required">
+					<input type="text" name="carOwner" data-rule="required" maxlength="20">
+				</div>
+				<label class="row-label">片区</label>
+				<div class="row-input required">
+					<select name="areaId" data-toggle="selectpicker" data-rule="required" data-width="100%" data-dataurl="/httpaccess/area/list" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">使用机构</label>
+				<div class="row-input">
+					<select name="org" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/store/list" data-optiontype="id,name">
+					</select>
+				</div>
+			</div>
+			<div class="bjui-row col-1" style="width:33.3333%;float:left">
+				<label class="row-label">上传图片</label>
+				<div class="row-input fill-2"><input type="hidden" name="carImg" id="carImgphoto" />
+					<input type="file" data-name="carImg" data-toggle="webuploader" data-options="
+					            {
+					                pick: {label: '点击选择图片'},
+					                server: config.openBasePath + 'uploadImg',
+					                fileNumLimit: 1,
+					                formData: {},
+					                required: false,
+					                uploaded: '',
+					                basePath: '',
+					                auto: true,
+					                accept: {
+					                    title: '上传图片',
+					                    extensions: 'jpg,png',
+					                    mimeTypes: '.jpg,.png'
+					                },
+					                type: 'img',
+					                uploadSuccess: function(data){
+					                	console.log(data)
+					                	$.CurrentDialog.find('#carImgphoto').val(data.result.pic);
+					                	$.CurrentDialog.find('.statusBar .btns').hide()
+					                	//$.CurrentDialog.find('.statusBar .info').hide()
+					                }
+					            }">
+				</div>
+			</div>
+		</div>
+		<div class="bjui-row col-3 border_bottom y-comment">
+			<label class="row-label">训练场</label>
+			<div class="row-input">
+				<select name="trainareaId" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/trainarea/list" data-optiontype="id,name">
+				</select>
+			</div>
+			<label class="row-label">使用人</label>
+			<div class="row-input">
+			<input type="hidden" name="coachId"/>
+			<input type="text" name="coachName" data-toggle="findgrid" data-options="{
+	            include: 'coachName:name,coachId:coachid',
+	            dialogOptions: {
+	                title:'查找教练',
+	                maxable : false
+	            },
+	            empty : false,
+	            gridOptions: {
+	                tableWidth:'80%',
+	                filterThead : true,
+	                dataUrl: config.openBasePath + 'coach/list?employstatus=0',
+	                columns: [
+	                    {name:'name', label:'姓名', width : '25%', align:'center'},
+	                    {name:'idcard', label:'身份证', width : '30%', align:'center'}
+	                ]
+	            },
+	        }" placeholder="点放大镜按钮查找">
+			</div>
+			<label class="row-label">使用状态</label>
+			<div class="row-input ">
+				<select name="status" data-toggle="selectpicker" data-width="100%">
+					<option value="0">在用</option>
+					<option value="1">停放</option>
+					<option value="2">待出售</option>
+					<option value="3">待报废</option>
+					<option value="4">已出售</option>
+					<option value="5">已报废</option>
+					<option value="6">捐赠</option>
+					<option value="7">被盗</option>
+				</select>
+			</div>
+			<label class="row-label">使用性质</label>
+			<div class="row-input">
+				<select name="property" data-toggle="selectpicker" data-width="100%">
+					<option value="">请选择</option>
+					<option value="0">专职教练车</option>
+					<option value="1">强化教练车</option>
+					<option value="2">测试车</option>
+					<option value="3">组长车</option>
+				</select>
+			</div>
+			<label class="row-label">培训车型</label>
+			<div class="row-input required">
+				<select name="carType" data-toggle="selectpicker" data-width="100%" data-rule="required">
+					<option value="C1">C1</option>
+					<option value="C2">C2</option>
+				</select>
+			</div>
+			<label class="row-label">带教科目</label>
+			<div class="row-input">
+				<select name="teachSubject" data-toggle="selectpicker" data-width="100%">
+					<option value="0">科目二</option>
+					<option value="1">科目三</option>
+					<option value="2">长训</option>
+					<option value="3">全程</option>
+				</select>
+			</div>
+			<label class="row-label">油卡卡号</label>
+			<div class="row-input">
+				<input type="text" name="oilCard" maxlength="30">
+			</div>
+			
+
+
+			<label class="row-label">燃料种类</label>
+			<div class="row-input required">
+				<select name="fuel" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/fuel/validList" data-optiontype="id,name" >
+					<option value="">请选择</option>
+					<!--<option value="7">电</option>
+					<option value="0">0#</option>
+					<option value="1">90#</option>
+					<option value="2">92#</option>
+					<option value="3">93#</option>
+					<option value="4">95#</option>
+					<option value="5">97#</option>
+					<option value="6">98#</option>-->
+				</select>
+			</div>
+			<!--<div>
+				<label class="row-label">停放地点</label>
+				<div class="row-input fill-2">
+					<input type="text" name="parkAddr" maxlength="60">
+				</div>
+			</div>-->
+			
+		   <label class="row-label">停放地点</label>
+		   <div class="row-input ">
+				<input type="hidden" name="parkingId" >
+				<input type="text" name="parkAddr" readonly="true" data-toggle="findgrid" data-options="{
+                include: 'parkingId : id ,parkAddr:packingPlace',
+                dialogOptions: {
+                    title:'查找停车地点',
+                    maxable : false
+                },
+                empty : false,
+                gridOptions: {
+                    tableWidth:'80%',
+                    filterThead : true,
+                    dataUrl: config.openBasePath + 'car/queryParkingList',
+                    columns: [
+                        {name:'id', label:'ID', width : '25%', align:'center'},
+                        {name:'packingPlace', label:'停车地点', width : '30%', align:'center'}
+                    ]
+                },
+            }" placeholder="点放大镜按钮查找" >
+			</div>
+			
+		</div>
+		
+
+		
+		<div class="bjui-row col-3  y-comment">
+			<label class="row-label">发动机号</label>
+			<div class="row-input required">
+				<input type="text" name="engineNum" data-rule="required" maxlength="20">
+			</div>
+			<label class="row-label">发动机型号</label>
+			<div class="row-input required">
+				<input type="text" name="engineModel" data-rule="required" maxlength="20">
+			</div>
+			<label class="row-label">车架号</label>
+			<div class="row-input required">
+				<input type="text" name="frameNum" data-rule="required" maxlength="20">
+			</div>
+			<label class="row-label">证书编号</label>
+			<div class="row-input required">
+				<input type="text" name="motorCode" data-rule="required" maxlength="20">
+			</div>
+			<label class="row-label">资产编号</label>
+			<div class="row-input">
+				<input type="text" name="assetNum" maxlength="20">
+			</div>
+			<label class="row-label">登记机关</label>
+			<div class="row-input required">
+				<select name="regOffice" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/regoffice/validlist" data-optiontype="id,name">
+					<option value="">请选择</option>
+					<!--<option value="0">深圳市公安局交通警察支队车辆管理所</option>
+					<option value="1">东莞市公安局交通警察支队车辆管理所</option>
+					<option value="2">广州市公安局交通警察支队车辆管理所</option>
+					<option value="3">肇庆市公安局交通警察支队车辆管理所</option>
+					<option value="4">肇庆市公安局交通局管理所</option>
+					<option value="-1">暂无</option>-->
+				</select>
+			</div>
+			<label class="row-label">档案编号</label>
+			<div class="row-input">
+				<input type="text" name="fileNo" maxlength="20">
+			</div>
+			<label class="row-label">登记证书发放日期</label>
+			<div class="row-input">
+				<input type="text" name="motorDate" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+			</div>
+			<label class="row-label">报废日期</label>
+			<div class="row-input">
+				<input type="text" name="retireDate" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+			</div>
+			<label class="row-label">报废办理日期</label>
+			<div class="row-input">
+				<input type="text" name="acceptDate" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+			</div>	
+		</div>
+		<div class="bjui-row col-3 border_bottom y-comment">
+			<label class="row-label">生产厂家</label>
+			<div class="row-input required">
+				<select name="manufacturer" data-toggle="selectpicker" data-width="100%" data-rule="required">
+					<option value="1">上海大众</option>
+					<option value="2">一汽奥迪</option>
+					<option value="3">一汽丰田</option>
+				</select>
+			</div>
+			<label class="row-label">品牌</label>
+			<div class="row-input ">
+				<select name="brandId" data-toggle="selectpicker" data-width="100%" data-rule="" clz-change='select' clz-options='{"inputname":"brandName","current":"dialog","father":"add-form"}'>
+					<option value="">请选择车辆</option>
+					<option value="1">捷达</option>
+					<option value="2">神行者</option>
+					<option value="3">迈腾</option>
+				</select>
+			</div>
+			<label class="row-label">车辆型号</label>
+			<div class="row-input required">
+				<input type="text" name="carModel" data-rule="required" maxlength="20">
+			</div>
+			<label class="row-label">车身颜色</label>
+			<div class="row-input required">
+				<select name="carColor" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/carcolor/validlist" data-optiontype="id,name">
+					<!--<option value="1">蓝色</option>
+					<option value="2">黄色</option>
+					<option value="3">黑色</option>
+					<option value="4">白色</option>
+					<option value="5">绿色</option>
+					<option value="9">其他</option>-->
+				</select>
+			</div>
+			<label class="row-label">登记日期</label>
+			<div class="row-input required">
+				<input type="text" name="regDate" readonly="readonly" data-rule="required" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+			</div>
+			<label class="row-label">购买日期</label>
+			<div class="row-input ">
+				<input type="text" name="buyDate" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+			</div>
+			<label class="row-label">出厂日期</label>
+			<div class="row-input ">
+				<input type="text" name="leaveDate" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+			</div>
+			<label class="row-label">购买价格(元)</label>
+			<div class="row-input ">
+				<input type="text" name="buyFee" data-rule="plusnumber" maxlength="7">
+			</div>
+			<label class="row-label">强制报废日期</label>
+			<div class="row-input required">
+				<input type="text" name="scrapDate" readonly="readonly" data-rule="required" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+			</div>
+			<label class="row-label">排量/功率</label>
+			<div class="row-input">
+				<input type="text" name="displacement" size="10" placeholder="排量(ML)" data-rule="plusnumber" maxlength="6"> /
+				<input type="text" name="power" size="10" placeholder="功率(KW)" data-rule="plusnumber" maxlength="6">
+			</div>
+			<label class="row-label">轮距(MM)</label>
+			<div class="row-input ">
+				<input type="text" name="wheelFront" size="10" placeholder="前轮距" maxlength="6"> /
+				<input type="text" name="wheelRear" size="10" placeholder="后轮距" maxlength="6">
+			</div>
+			<label class="row-label">轮胎数/规格</label>
+			<div class="row-input ">
+				<input type="text" name="tyreNum" size="10" placeholder="轮胎数" data-rule="plusnumber" maxlength="6"> /
+				<input type="text" name="tyreSpec" size="10" placeholder="规格" data-rule="plusnumber" maxlength="6">
+			</div>
+			<label class="row-label">轴距(MM)</label>
+			<div class="row-input ">
+				<input type="text" name="wheelbase" data-rule="plusnumber" maxlength="6">
+			</div>
+			<label class="row-label">外轮廓</label>
+			<div class="row-input ">
+				<input type="text" name="length" size="7" placeholder="长(M)" data-rule="plusnumber" maxlength="6">
+				<input type="text" name="width" size="7" placeholder="宽(M)" data-rule="plusnumber" maxlength="6">
+				<input type="text" name="height" size="7" placeholder="高(M)" data-rule="plusnumber" maxlength="6">
+			</div>
+		</div>
+		
+
+	</form>
+</div>
+
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li>
+			<button type="submit" class="btn-blue" data-icon="save">保存</button>
+		</li>
+		<li>
+			<button type="button" class="btn-close" data-icon="close">取消</button>
+		</li>
+	</div>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current: 'Dialog',
+		url: config.openBasePath + 'car/addCar',
+		form_name: 'add-form',
+		table_name: 'car-datagrid1'
+	})
+
+	function getQiniuToken() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + 'qiniuToken',
+			loadingmask: false,
+			okCallback: function(json, options) {
+				console.log(json.result);
+				return json.result;
+			}
+		})
+	}
+	
+
+</script>

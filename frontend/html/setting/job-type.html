@@ -1,0 +1,75 @@
+<section id="thispage" privilege = "070203"></section>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+		var job_type_list = {
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '带教职务列表',
+        toolbarItem: 'add,edit,del',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '85%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath+'/coachSetting/listJob',
+        columns: [
+            {name:'job',label:'带教职务',align:'center'},
+            {name:'createDate',label:'添加时间',align:'center'},
+            {name:'cuser',label:'添加人',align:'center'},
+            {name:'remark',label:'备注',align:'center'},
+			{name:'status',label:'状态',align:'center',render:function(value){return String(value)=='0'?'正常':'停用'}},
+            {name:'op',label:'操作',align:'center',render:jobtypeOperation},
+        ],
+        editMode: {dialog:{width:'460',height:'300',title:'带教职务',mask:true,onClose(){
+        	job_type_list.list.datagrid('refresh',true);
+        	clz.getdictionary({name:'teachtypelist',refresh:true})
+        }}},
+        beforeEdit : function(){
+            window.job_type_object = job_type_list.list.data('selectedDatas')  == null ? null : job_type_list.list.data('selectedDatas')[0];
+            return true;
+		},
+        add_url :  'html/setting/job-type-add.html',
+        edit_url: 'html/setting/job-type-edit.html',
+        delUrl : config.openBasePath + '/coachSetting/deleteJob',
+		delPK : 'id',
+		afterSave:function(){
+			BJUI.navtab('refresh')
+		},
+		afterDelete:function(){
+			BJUI.navtab('refresh')
+		},
+		delPK : 'id',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        
+
+    }),
+
+    
+
+    handleUser: function (id,status) {
+        var title = status == 1 ? "启用" : "停用";
+		var newstatus=status == 1 ? 0 : 1;
+        BJUI.alertmsg('confirm', '确认' + title +'操作该记录！', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/coachSetting/updateJobTypeStatus?id=" + id+'&status='+newstatus,
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        //BJUI.navtab('refresh')
+                        job_type_list.list.datagrid('refresh',true);
+        				clz.getdictionary({name:'teachtypelist',refresh:true})
+                    }
+                })
+            }
+        })
+    }
+	}
+
+	function jobtypeOperation(value,data) {
+        var html;
+        if (data.status == 0) {
+            html = '<button type="button" data-privilege="070203_datagrid-list_09" class="btn-red vhide" onclick="job_type_list.handleUser('+data.id+','+data.status+')">停用</button>'
+        } else {
+            html = '<button type="button" data-privilege="070203_datagrid-list_09" class="btn-green vhide" onclick="job_type_list.handleUser('+data.id+','+data.status+')">启用</button>'
+        }
+        return html
+    }
+</script>

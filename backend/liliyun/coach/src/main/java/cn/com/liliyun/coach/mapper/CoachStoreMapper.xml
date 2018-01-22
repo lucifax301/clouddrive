@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.CoachStoreMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.CoachStore" >
+  	<result column="id" property="id" jdbcType="INTEGER" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+   id,coachid, storeid
+  </sql>
+  
+  
+  <select id="list" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_store
+    where 1=1
+    <if test="coachid != null">
+		and coachid = #{coachid}
+	</if>	
+     <if test="storeid != null and storeid!=0">
+		and storeid = #{storeid}
+	</if>
+	
+	
+  </select>
+
+
+  <insert id="add" parameterType="cn.com.liliyun.coach.model.CoachStore" >
+    insert into t_coach_store (coachid, storeid)
+    values (#{coachid}, #{storeid})
+  </insert>
+  
+  <insert id="batchAdd" parameterType="java.util.List" >
+    insert into t_coach_store (coachid, storeid)
+    values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+				(#{item.coachid},#{item.storeid})
+	</foreach>
+  </insert>
+  
+  <delete id="batchDel" parameterType="java.util.List" >
+    delete from t_coach_store
+    where id in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.id}  
+    </foreach>  
+  </delete>
+  
+  <select id="batchSelectCount" parameterType="java.util.List" resultType="cn.com.liliyun.trainorg.model.Store">
+  	select count(coachid) coachnum, storeid id from t_coach_store 
+  	where storeid in 
+  	<foreach collection="list" item = "item" open="(" separator="," close=")">
+    	#{item}  
+    </foreach>  
+    group by storeid
+  </select>
+</mapper>

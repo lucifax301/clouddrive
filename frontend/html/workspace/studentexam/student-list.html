@@ -1,0 +1,176 @@
+<section id="thispage" privilege = "020303"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" id="search-form"
+      data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>学员考试批复信息搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+                    <select name="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist">
+                    </select>
+				</div>
+                <label class="row-label">变更内容：</label>
+                <div class="row-input">
+                    <select id="type" name="type" data-toggle="selectpicker" data-width="100%">
+                        <option value="">请选择</option>
+                        <option value="0">考场</option>
+                        <option value="1">日期</option>
+                        <option value="2">时间</option>
+                        <option value="3">教练</option>
+                    </select>
+                </div>
+                <label class="row-label">考核类型：</label>
+                <div class="row-input">
+                    <select name="reason" data-toggle="selectpicker" data-width="100%">
+                        <option value="">请选择</option>
+                        <option value="0">主观出错</option>
+                        <option value="1">客观出错</option>
+                    </select>
+                </div>
+                <label class="row-label">学员姓名：</label>
+                <div class="row-input">
+                    <input type="text" name="name">
+                </div>
+                <label class="row-label">证件号码：</label>
+                <div class="row-input">
+                    <input type="text" name="idcard">
+                </div>
+				<label class="row-label">起始日期：</label>
+				<div class="row-input">
+					<input type="text" name="stime" data-toggle="datepicker" placeholder="申请起始时间">
+				</div>
+				<label class="row-label">结束时间：</label>
+				<div class="row-input">
+					<input type="text" name="etime" data-toggle="datepicker" placeholder="申请结束时间">
+				</div>
+			</div>
+				<div class="text-center">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var license_student_exam = {
+		addbatch: function() {
+			BJUI.dialog({
+				id: 'dialog-add',
+				url: 'html/workspace/studentexam/student-add.html',
+				title: '学员考试批复变更申请',
+				width: 660,
+				height: 400,
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+					$(document).off("change", "[name='idcard']")
+				}
+			})
+		},
+		formatChangedate: function(value) {
+			switch (value) {
+				case 0:
+					return "否";
+				case 1:
+					return "是";
+			}
+		}
+	};
+	var license_studentexam_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '学员考试批复修改列表',
+		toolbarItem: '',
+		toolbarCustom:
+			"<button data-privilege='020303_datagrid-list_11' class='btn-blue ml5' " +
+            "data-icon='edit' onclick='license_student_exam.addbatch()'>变更申请</button>",
+        //"<button data-privilege='020303_datagrid-list_12' class='btn-blue ml5' data-icon='edit' onclick='license_orderexam.importdata()'>撤销变更申请</button>",
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showCheckboxcol: true,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'student/examApplyList',
+		columns: [{
+			name: 'storeid',
+			label: '门店',
+			align: 'center',
+            render : function(vlaue,data){return clz.configRender({name:'storelist',val:vlaue,key:'id',dataname:'name'})}
+		}, {
+			name: 'cname',
+			label: '申请人',
+			align: 'center'
+		}, {
+			name: 'ctime',
+			label: '申请时间',
+			align: 'center'
+		}, {
+			name: 'name',
+			label: '学员姓名',
+			align: 'center'
+		}, {
+            name: 'idcard',
+            label: '证件号码',
+            align: 'center'
+        }, {
+            name: 'type',
+            label: '变更内容',
+            align: 'center',
+            render: function (val) {
+                switch (val) {
+                    case 0:
+                        return "考场";
+                    case 1:
+                        return "日期";
+                    case 2:
+                        return "时间";
+                    case 3:
+                        return "教练";
+                }
+            }
+        }, {
+            name: 'beforeval',
+            label: '变更前',
+            align: 'center'
+        }, {
+            name: 'afterval',
+            label: '变更后',
+            align: 'center'
+        }, {
+            name: 'status',
+            label: '状态',
+            align: 'center',
+            render: function (val) {
+                switch (val) {
+                    case 0:
+                        return "办理中";
+                    case 1:
+                        return "审核通过";
+                    case 2:
+                        return "审核不通过";
+                    case 3:
+                        return "撤回取消";
+                }
+            }
+        }, {
+            name: 'deptid',
+            label: '当前部门',
+            align: 'center',
+            render :function(vlaue,data){return clz.configRender({name:'deptlist',val:vlaue,key:'id',dataname:'name'})}
+        }, {
+            name: 'auditname',
+            label: '处理人',
+            align: 'center'
+        }, {
+            name: 'audittime',
+            label: '处理时间',
+            align: 'center'
+        }]
+	});
+</script>

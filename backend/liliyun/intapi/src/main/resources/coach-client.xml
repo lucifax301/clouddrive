@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+    <dubbo:reference id="coachService" interface="cn.com.liliyun.coach.service.CoachService" check="false" />
+	<dubbo:reference id="coachSettingService" interface="cn.com.liliyun.coach.service.CoachSettingService" check="false" />
+	<dubbo:reference id="coachStatService" interface="cn.com.liliyun.coach.service.CoachStatService" check="false" />
+</beans>

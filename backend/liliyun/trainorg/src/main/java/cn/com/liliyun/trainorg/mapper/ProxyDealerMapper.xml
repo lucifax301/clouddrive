@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.ProxyDealerMapper" >
+	
+	<resultMap type="cn.com.liliyun.trainorg.model.ScopeProxy" id="scopeAreaMap">  
+        	<result property="scopeId" column="scopeId" />  
+            <result property="proxyId" column="proxyId" />  
+    </resultMap>
+    
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.ProxyDealer" >
+    <id column="proxyId" property="proxyId" jdbcType="INTEGER" />
+    <result column="proxyName" property="proxyName" jdbcType="VARCHAR" />
+    <result column="dealerPerson" property="dealerPerson" jdbcType="VARCHAR" />
+    <result column="dealerPhone" property="dealerPhone" jdbcType="VARCHAR" />
+    <result column="dealerEmail" property="dealerEmail" jdbcType="VARCHAR" />
+    <result column="dealerAddr" property="dealerAddr" jdbcType="VARCHAR" />
+    <result column="dealerStatus" property="dealerStatus" jdbcType="INTEGER" />
+    <result column="addTime" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="modifyTime" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modifyUser" property="modifyUser" jdbcType="VARCHAR" />
+    <result column="scopeAreas" property="scopeAreas" jdbcType="VARCHAR" />
+    <result column="dealerDescription" property="dealerDescription" jdbcType="VARCHAR" />
+    <collection property="scopeAreaList" ofType="cn.com.liliyun.trainorg.model.ScopeProxy" column="proxyId">  
+	    <result property="scopeId" column="sascopeid" />  
+	    <result property="proxyId" column="saproxyid" />  
+    </collection>  
+  </resultMap>
+  <sql id="Base_Column_List" >
+    proxyId, proxyName, dealerPerson, dealerPhone, dealerEmail, dealerAddr, dealerStatus, 
+    addTime, modifyTime, modifyUser,dealerDescription
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+   select p.*, sa.scopeId sascopeid,sa.proxyId saproxyid
+   from t_proxy_dealer p left join t_scope_proxy sa 
+   on p.proxyId = sa.proxyId
+   where p.proxyId = #{proxyId,jdbcType=INTEGER}
+  </select>
+  	<select id="checkMutliName" parameterType="java.lang.String" resultType="cn.com.liliyun.trainorg.model.ProxyDealer">
+		select
+		count(*)
+		from t_proxy_dealer
+		where proxyName = #{proxyName,jdbcType=VARCHAR}
+	</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_proxy_dealer
+    where proxyId = #{proxyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+  <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="proxyId">
+		SELECT LAST_INSERT_ID() AS proxyId
+	</selectKey>
+    insert into t_proxy_dealer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="proxyId != null" >
+        proxyId,
+      </if>
+      <if test="proxyName != null" >
+        proxyName,
+      </if>
+      <if test="dealerPerson != null" >
+        dealerPerson,
+      </if>
+      <if test="dealerPhone != null" >
+        dealerPhone,
+      </if>
+      <if test="dealerEmail != null" >
+        dealerEmail,
+      </if>
+      <if test="dealerAddr != null" >
+        dealerAddr,
+      </if>
+      <if test="dealerStatus != null" >
+        dealerStatus,
+      </if>
+      <if test="addTime != null" >
+        addTime,
+      </if>
+      <if test="modifyTime != null" >
+        modifyTime,
+      </if>
+      <if test="modifyUser != null" >
+        modifyUser,
+      </if>
+      <if test="dealerDescription != null" >
+        dealerDescription,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="proxyId != null" >
+        #{proxyId,jdbcType=INTEGER},
+      </if>
+      <if test="proxyName != null" >
+        #{proxyName,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerPerson != null" >
+        #{dealerPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerPhone != null" >
+        #{dealerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerEmail != null" >
+        #{dealerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerAddr != null" >
+        #{dealerAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerStatus != null" >
+        #{dealerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null" >
+        #{modifyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerDescription != null" >
+       #{dealerDescription,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+    update t_proxy_dealer
+    <set >
+    <if test="proxyId != null" >
+        proxyId = #{proxyId,jdbcType=INTEGER},
+      </if>
+      <if test="proxyName != null" >
+        proxyName = #{proxyName,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerPerson != null" >
+        dealerPerson = #{dealerPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerPhone != null" >
+        dealerPhone = #{dealerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerEmail != null" >
+        dealerEmail = #{dealerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerAddr != null" >
+        dealerAddr = #{dealerAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerStatus != null" >
+        dealerStatus = #{dealerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null" >
+        addTime = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modifyTime = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null" >
+        modifyUser = #{modifyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dealerDescription != null" >
+       dealerDescription = #{dealerDescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where proxyId = #{proxyId,jdbcType=INTEGER}
+  </update>
+  <update id="onlyUpdateStatus" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+    update t_proxy_dealer
+    <set >
+    <if test="proxyId != null" >
+        proxyId = #{proxyId,jdbcType=INTEGER},
+      </if>
+   	  <if test="dealerStatus != null" >
+        dealerStatus = #{dealerStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where proxyId = #{proxyId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+    select p.*, sa.scopeId sascopeid,sa.proxyId saproxyid from (
+   	  SELECT * FROM t_proxy_dealer 
+   	  <where>
+   	  <if test="proxyName != null" >
+        and proxyName like concat('%', #{proxyName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerPerson != null" >
+        and dealerPerson like concat('%', #{dealerPerson,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerPhone != null" >
+        and dealerPhone like concat('%', #{dealerPhone,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerEmail != null" >
+        and dealerEmail  like concat('%', #{dealerEmail,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerAddr != null" >
+        and dealerAddr  like concat('%', #{dealerAddr,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerStatus != null" >
+        and dealerStatus = #{dealerStatus,jdbcType=INTEGER}
+      </if>
+      <if test="addTime != null" >
+        and addTime = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="modifyTime != null" >
+        and modifyTime = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null" >
+        and modifyUser = #{modifyUser,jdbcType=VARCHAR},
+      </if>
+       <if test="dealerDescription != null" >
+       and dealerDescription  like concat('%', #{dealerDescription,jdbcType=VARCHAR},'%') ,
+      </if>
+      </where>
+	 order by proxyId desc
+     LIMIT #{startRow},#{pageSize} )  p left join t_scope_proxy sa 
+     on p.proxyId = sa.proxyid
+	</select>
+	
+	<select id="getAllByScopeId" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+      	  SELECT 
+      	    pd.proxyId, pd.proxyName, pd.dealerPerson, pd.dealerPhone, pd.dealerEmail, pd.dealerAddr, pd.dealerStatus, 
+    		pd.addTime, pd.modifyTime, pd.modifyUser,pd.dealerDescription
+      	  FROM t_proxy_dealer pd,t_scope_proxy sp WHERE pd.proxyId = sp.proxyId AND sp.scopeId = #{scopeId} and pd.dealerStatus = 1
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Integer" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+	 SELECT count(*) FROM t_proxy_dealer 
+   	  <where>
+   	  <if test="proxyName != null" >
+        and proxyName like concat('%', #{proxyName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerPerson != null" >
+        and dealerPerson like concat('%', #{dealerPerson,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerPhone != null" >
+        and dealerPhone like concat('%', #{dealerPhone,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerEmail != null" >
+        and dealerEmail  like concat('%', #{dealerEmail,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerAddr != null" >
+        and dealerAddr  like concat('%', #{dealerAddr,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="dealerStatus != null" >
+        and dealerStatus = #{dealerStatus,jdbcType=INTEGER}
+      </if>
+      <if test="addTime != null" >
+        and addTime = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="modifyTime != null" >
+        and modifyTime = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null" >
+        and modifyUser = #{modifyUser,jdbcType=VARCHAR},
+      </if>
+       <if test="dealerDescription != null" >
+       and dealerDescription  like concat('%', #{dealerDescription,jdbcType=VARCHAR},'%') ,
+      </if>
+      </where>
+	</select>
+	
+	<insert id="insertScopeProxy">
+		insert into t_scope_proxy (scopeId, proxyId) values
+		<foreach collection="list"  item="item"  separator=",">
+			(#{item.scopeId},#{item.proxyId})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteAllScopeProxy" parameterType="cn.com.liliyun.trainorg.model.ProxyDealer" >
+    delete from t_scope_proxy
+    where proxyId = #{proxyId,jdbcType=INTEGER}
+  </delete>
+	
+</mapper>

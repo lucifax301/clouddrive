@@ -1,0 +1,215 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"> <i class="fa fa-th"></i> </span>
+                <h5>学员基本信息变更申请</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <div class="bjui-row col-3 vhide" id="auditdiv" data-privilege='030302_datagrid-list_12'>
+                    <div class="row-input fill-2">
+                        <button type="button" class="btn-blue" data-icon="edit" onclick="student_mod_apply_template.pauseaudit(1)">审核通过</button>
+                        <button type="button" class="btn-blue" data-icon="edit" onclick="student_mod_apply_template.pauseaudit(2)">审核不通过</button>
+                    </div>
+                </div>
+                <div class="bjui-row col-4">
+                    <label class="row-label">申请类型:</label>
+                    <div class="row-input">
+                        <input type="text" value="学员基本信息变更" class="clear-style"/>
+                    </div>
+                </div>
+                <div class="bjui-row col-4">
+                    <label class="row-label">变更类容：</label>
+                    <div class="row-input">
+                        <select id="type" name="type" data-toggle="selectpicker" data-width="100%" disabled="true">
+                            <option value="0">学员姓名</option>
+                            <option value="1">证件号码</option>
+                            <option value="2">手机号码</option>
+                            <option value="3">合同编号</option>
+                        </select>
+                    </div>
+                    <label class="row-label">考核类型：</label>
+                    <div class="row-input">
+                        <select name="reason" data-toggle="selectpicker" data-width="100%" disabled="true">
+                            <option value="0">主观出错</option>
+                            <option value="1">客观出错</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="bjui-row col-4">
+                    <label class="row-label">学员姓名:</label>
+                    <div class="row-input">
+                        <input type="hidden" id="applyid" name="id" />
+                        <input type="text" name="name" data-width="100%" readonly="readonly">
+                        <input type="hidden" name="studentid" id="studentid"/>
+                    </div>
+                    <label class="row-label">证件号码：</label>
+                    <div class="row-input">
+                        <input type="text" id="idcard" name="idcard" readonly="true">
+                    </div>
+                </div>
+                <div class="bjui-row col-4">
+                    <label class="row-label">修改前：</label>
+                    <div class="row-input">
+                        <input type="text" id="beforeval" name="beforeval" readonly="true">
+                    </div>
+                    <label class="row-label">修改后：</label>
+                    <div class="row-input">
+                        <input type="text" id="afterval" name="afterval" readonly="true">
+                    </div>
+                </div>
+                <div class="bjui-row col-4">
+                    <label class="row-label">申请原因：</label>
+                    <div class="row-input fill-2">
+                        <textarea name="remark" rows="4" readonly="true"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"> <i class="fa fa-th"></i> </span>
+                <h5>审核信息</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <div class="col-3">
+                    <table class='table table-bordered' id="flowinfo">
+                        <tr>
+                            <td>申请人</td>
+                            <td id="cname"></td>
+                            <td>片区</td>
+                            <td id="areaid"></td>
+                            <td>申请时间</td>
+                            <td id="ctime"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bjui-row col-3">
+                    <div id="actiondiv" style="display:none" class="btn-group">
+                        <button type="button" class="btn-blue btn" id="auditbtn" style="display: none;" data-icon=""
+                                onclick="coach_mod_apply_template.audit(1)">审核通过
+                        </button>
+                        <button type="button" class="btn-blue btn" id="unauditbtn" style="display: none;" data-icon=""
+                                onclick="coach_mod_apply_template.audit(2)">审核不通过
+                        </button>
+                        <button type="button" class="btn-blue btn" id="cancelbtn" style="display: none;" data-icon=""
+                                onclick="coach_mod_apply_template.audit(3)">撤回
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    var data = clz.getNavtab_more();
+    BJUI.ajax('doajax', {
+        url: config.openBasePath + "/student/getModApply",
+        data: {transactionid: data.transactionid},
+        loadingmask: true,
+        okCallback: function (json, options) {
+            console.log(json.result);
+            if (json.result) {
+                var formdata = json.result;
+                clz.CurrentNavtab_init({
+                    form_name: 'view-form',
+                    data: json.result
+                });
+                $.CurrentNavtab.find("#applyid").val(data.transactionid);
+                $.CurrentNavtab.find("#cuid").val(formdata.cuid);
+                $.CurrentNavtab.find("#cname").html(formdata.cname);
+                $.CurrentNavtab.find("#areaid").html(formatAreaCell(formdata.areaid));
+                $.CurrentNavtab.find("#ctime").html(formdata.ctime);
+            }
+        }
+    });
+
+    BJUI.ajax('doajax', {
+        url: config.openBasePath + "/flow/listflowstep?flowid=" + data.id,
+        loadingmask: true,
+        async: true,
+        okCallback: function (json, options) {
+            console.log(json);
+            if (json.result && json.result.list) {
+                var sdata = json.result.list;
+                var text = "";
+                for (var i = 0; i < sdata.length; i++) {
+                    var status = "";
+                    if (sdata[i].status == 0) {
+                        status = "未处理"
+                    } else if (sdata[i].status == 1) {
+                        status = "审核通过"
+                    } else if (sdata[i].status == 2) {
+                        status = "审核不通过"
+                    }
+                    text = text + "<tr><td>审核人</td><td>" + sdata[i].user +
+                        "</td><td>处理结果</td><td>" + status + "</td><td>处理时间</td><td>" +
+                        (sdata[i].status == 0 ? "" : sdata[i].updatedate) + "</td></tr>"
+                }
+            }
+
+            $.CurrentNavtab.find("#flowinfo").append($(text));
+            $.CurrentNavtab.find("#flowinfo").trigger(BJUI.eventType.initUI)
+            //flowinfo
+        }
+    })
+
+    var student_mod_apply_template = {
+        audit: function (state) {
+            if (state == 1)
+                BJUI.alertmsg('confirm', '确认审核通过？', {
+                    displayPosition: 'middlecenter',
+                    okCall: function () {
+                        student_mod_apply_template.doaudit(1)
+                    }
+                })
+            if (state == 2)
+                BJUI.alertmsg('confirm', '确认审核不通过？', {
+                    displayPosition: 'middlecenter',
+                    okCall: function () {
+                        student_mod_apply_template.doaudit(2)
+                    }
+                })
+            if (state == 3)
+                BJUI.alertmsg('confirm', '确认撤回申请吗？', {
+                    displayPosition: 'middlecenter',
+                    okCall: function () {
+                        student_mod_apply_template.doaudit(3)
+                    }
+                })
+        },
+        pauseaudit: function (state) {
+            if (state == 1) {
+                BJUI.alertmsg('confirm', '确认审核通过？', {
+                    displayPosition: 'middlecenter',
+                    okCall: function () {
+                        student_mod_apply_template.doaudit(1)
+                    }
+                })
+            } else if (state == 2) {
+                BJUI.alertmsg('confirm', '确认审核不通过？', {
+                    displayPosition: 'middlecenter',
+                    okCall: function () {
+                        student_mod_apply_template.doaudit(2)
+                    }
+                })
+            }
+        },
+        doaudit : function (state) {
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + "/student/auditModApply",
+                loadingmask: true,
+                data: {
+                    transactionid: $.CurrentNavtab.find("#applyid").val(),
+                    status: state
+                },
+                okCallback: function (json, options) {
+                    BJUI.alertmsg('ok', '提交成功！', {});
+                    $.CurrentNavtab.find("#actiondiv").css("display", "none")
+                    BJUI.navtab('refresh');
+                }
+            })
+        }
+    }
+</script>

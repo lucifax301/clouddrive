@@ -1,0 +1,93 @@
+<div class="bjui-pageContent">
+	<form id="check-form">
+		<div class="bjui-row col-3">
+			<input type="hidden" name="itemid"/>
+            <input type="hidden" name="studentid"/>
+			<label class="row-label">一级科目：</label>
+			<div class="row-input required select_disabled">
+				<select name="subject1" data-toggle="selectpicker" data-width="100%">
+					<!--<option value="1">收入</option>-->
+					<option value="2">支出</option>
+            	</select>
+			</div>
+			<label class="row-label">二级科目：</label>
+			<div class="row-input required select_disabled">
+				<select name="subject2" data-toggle="selectpicker" data-width="100%"
+                    data-dataurl="/httpaccess/financeSubject/list" data-optiontype="id,subject" >
+				</select>
+			</div>
+			<label class="row-label">收支金额：</label>
+			<div class="row-input">
+				<input type="text" name="money" readonly="true">
+			</div>
+			<label class="row-label">开票日期：</label>
+			<div class="row-input">
+				<input type="text" name="billdate" data-toggle="datepicker" data-pattern="yyyy-MM-dd">
+			</div>
+			<label class="row-label">票据类型：</label>
+			<div class="row-input">
+				<select name="billtype" data-toggle="selectpicker" data-width="100%">
+					<option value="0">A类</option>
+					<option value="1">B类</option>
+				</select>
+			</div>
+			<label class="row-label">票据号码：</label>
+			<div class="row-input">
+				<input type="text" name="billnum">
+			</div>
+			<label class="row-label">批次号：</label>
+			<div class="row-input">
+				<input type="text" name="tableid" readonly="true">
+			</div>
+			<label class="row-label">备注：</label>
+			<div class="row-input fill-2">
+				<input type="text" name="remark" data-rule="length[~50]">
+			</div>
+			<label class="row-label">审核意见：</label>
+		    <div class="row-input">
+		        <input type="radio" name="checkstatus"  value="2" data-toggle="icheck" data-label="同意" checked="checked">
+		        <input type="radio" name="checkstatus"  value="1" data-toggle="icheck" data-label="不同意">
+		    </div>
+            <div>
+                <label class="row-label">审核备注：</label>
+                <div class="row-input fill-2">
+                    <textarea name="checkremark" data-rule="length[~200]" rows="4"></textarea>
+                </div>
+            </div>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="fee_item_check()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script>
+	var data = clz.getWindowJson();
+	clz.CurrentDom_init({
+		current: 'Dialog',
+		form_name: 'check-form',
+		data: data,
+		timetype:[
+	        {
+	            name:'billdate',
+	            type:'yyyy-MM-dd'
+	        }
+	    ],
+        returnFloat:'money'
+	});
+	
+	function fee_item_check() {
+	    BJUI.ajax('ajaxform', {
+            url : config.openBasePath + "financefee/check",
+            loadingmask: true,
+            form :  $.CurrentDialog.find('#check-form'),
+            okCallback: function() {
+                BJUI.dialog('closeCurrent');
+                finance_fee_list.datagrid("refresh",true);
+				finance_fee_detail_list.datagrid("refresh",true);
+            }
+        });
+ 	}
+</script>

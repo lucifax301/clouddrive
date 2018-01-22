@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.AreaMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Area" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="areanum" property="areanum" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="storecount" property="storecount" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, areanum, status, remark, ctime, mtime
+  </sql>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Area" >
+    select 
+    <include refid="Base_Column_List" />, IFNULL(t1.storecount,0) as storecount
+    from t_area left join 
+	(select areaid, count(areaid) as storecount from t_store group by areaid) t1 on id = t1.areaid
+	<where>
+	    <if test="name != null and name != ''">
+		  and name LIKE concat(concat('%',#{name}),'%')
+		</if>
+	    <if test="status != null" >
+	      and status = #{status,jdbcType=TINYINT}
+	    </if>
+	    <if test="domain !=null">
+	    	<if test="domain.storeid !=null or domain.areaid !=null">
+	    		and t_area.id=#{domain.areaid}
+	    	</if>
+	    </if>
+	</where>
+    order by mtime desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Area">
+    select 
+    <include refid="Base_Column_List" />
+    from t_area
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMap" resultType="cn.com.liliyun.common.dto.MapDTO">
+    select id , name from t_area where status = 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Area" >
+    delete from t_area
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.Area" >
+    insert into t_area (id, name, status, 
+      remark, ctime, mtime
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{remark,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.Area" >
+    insert into t_area
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="areanum != null" >
+        areanum,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="areanum != null" >
+        #{areanum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.Area" >
+    update t_area
+    <set >
+      <if test="areanum != null" >
+        areanum = #{areanum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Area" >
+    update t_area
+    set name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

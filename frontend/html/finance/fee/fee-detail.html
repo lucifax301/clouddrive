@@ -1,0 +1,362 @@
+<div class="bjui-pageContent">
+<form id="detail-form">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i></span>
+			<h5>学员财务信息</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">姓名：</label>
+				<div class="row-input">
+					<input id="studentid" type="hidden" name="studentid">
+					<input type="text" name="name" readonly="true">
+				</div>
+				<label class="row-label">报名日期：</label>
+				<div class="row-input">
+					<input type="text" name="applydate" readonly="true">
+				</div>
+				<label class="row-label">证件号码：</label>
+				<div class="row-input">
+					<input type="text" name="idcard" readonly="true">
+				</div>
+				<label class="row-label">手机号码：</label>
+				<div class="row-input">
+					<input type="text" name="phone" readonly="true">
+				</div>
+				<label class="row-label">门店：</label>
+				<div class="row-input">
+					<select disabled="true" name="storeid" data-toggle="selectpicker" data-width="100%"
+							data-dataurl="/httpaccess/store/list?pageNo=-1" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">班别：</label>
+				<div class="row-input">
+					<select disabled="true" name="classid" data-toggle="selectpicker" data-width="100%"
+							data-datajson="classlist" data-optiontype="id,name">
+		            </select>
+				</div>
+			   	<label class="row-label">车型：</label>
+				<div class="row-input">
+					<select disabled="true" name="traintype" data-toggle="selectpicker" data-width="100%">
+						<option value="C1">C1</option>
+						<option value="C2">C2</option>
+		           </select>
+				</div>
+                <label class="row-label">合同金额：</label>
+                <div class="row-input">
+                    <input type="text" name="contractmoney" readonly="true">
+                </div>
+                <label class="row-label">已交费：</label>
+                <div class="row-input">
+                    <input type="text" name="paymoney" readonly="true">
+                </div>
+                <label class="row-label">减免额：</label>
+                <div class="row-input">
+                    <input type="text" name="submoney" readonly="true">
+                </div>
+                <label class="row-label">欠费总额：</label>
+                <div class="row-input">
+                    <input type="text" name="owemoney" readonly="true">
+                </div>
+                <label class="row-label">欠减免费：</label>
+                <div class="row-input">
+                    <input type="text" name="owesubmoney" readonly="true">
+                </div>
+                <label class="row-label">欠培训费：</label>
+                <div class="row-input">
+                    <input type="text" name="owetrainmoney" readonly="true">
+                </div>
+                <label class="row-label">欠补考费：</label>
+                <div class="row-input">
+                    <input type="text" name="oweresitmoney" readonly="true">
+                </div>
+				<label class="row-label">欠费状态：</label>
+				<div class="row-input">
+					<select disabled="true" name="owestatus" data-toggle="selectpicker" data-width="100%">
+						<option value="0">否</option>
+						<option value="1">是</option>
+		            </select>
+				</div>
+				<label class="row-label">退费状态：</label>
+				<div class="row-input">
+					<select disabled="true" name="returnstatus" data-toggle="selectpicker" data-width="100%">
+						<option value="0">否</option>
+						<option value="1">是</option>
+		            </select>
+			    </div>
+                <label class="row-label">培训教练：</label>
+                <div class="row-input">
+                    <input type="text" name="coachname" readonly="true">
+                </div>
+                <label class="row-label">客服名称：</label>
+                <div class="row-input">
+                    <input type="text" name="cname" readonly="true">
+                </div>
+                <label class="row-label">毕业时间：</label>
+                <div class="row-input">
+                    <input type="text" name="graduatedate" readonly="true">
+                </div>
+		    </div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script type="text/javascript">
+	var data = clz.getNavtab_more();	
+	var studentid = data.studentid;
+	var finance_fee_detail = {
+		add : function() {
+			var json = {};
+			json.studentid = $.CurrentNavtab.find("#studentid").val();
+			clz.setWindowJson(json);
+			BJUI.dialog({
+				id: 'dialog-finance-fee-item-add',
+				url: 'html/finance/fee/fee-item-add.html',
+				title: '新增财务审核',
+				width: 950,
+				height: 380,
+				mask: true,
+				maxable: false,
+				resizable: false
+			})
+		},
+		edit : function() {
+			var data = checkSelectData(finance_fee_detail_list);
+			if (data == null) {
+				return;
+			}
+            if (data[0].checkstatus == 3) {
+                BJUI.alertmsg('warn', '结转数据不能编辑！');
+                return false;
+            }
+            if (data[0].checkstatus != 0) {
+                BJUI.alertmsg('warn', '该数据已审核过！');
+                return false;
+            }
+			BJUI.dialog({
+				id: 'dialog-finance-fee-edit',
+				url: 'html/finance/fee/fee-item-edit.html',
+				title: '编辑财务清单',
+				width: 950,
+				height: 380,
+				mask: true,
+				maxable: false,
+				resizable: false
+			})
+		},		
+		check : function() {
+			var data = checkSelectData(finance_fee_detail_list);
+			if (data == null) {
+				return;
+			}
+			if (data.length > 1) {
+                BJUI.alertmsg('warn', '请选择一条数据！');
+                return false;
+			}
+			if (data[0].checkstatus != 0) {
+				BJUI.alertmsg('warn', '该数据已审核过！');
+				return false;
+			}
+			clz.setWindowJson(data[0]);
+			BJUI.dialog({
+				id: 'dialog-finance-fee-check',
+				url: 'html/finance/fee/fee-item-check.html',
+				title: '审核财务清单',
+				width: 950,
+				height: 380,
+				mask: true,
+				maxable: false,
+				resizable: false
+			})
+		},
+		formatStatus : function(value) {
+			switch(value) {
+				case 0:
+					return "待审核";
+				case 1:
+					return "审核拒绝";
+				case 2:
+					return "审核通过";
+				case 3:
+                    return "结转通过";
+			}
+		},
+		studentinfo : function() {
+			var json = {};
+			json.studentid = $.CurrentNavtab.find("#studentid").val();
+			clz.setWindowJson(json);
+			console.log(json.studentid);
+			BJUI.navtab({
+		        id:'stundet-detail-id' + json.studentid,
+		        url:'html/common/student/student-view.html',
+		        title:'学员详情'
+		    })
+		}
+	};
+	
+	var finance_fee_detail_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '学员财务详情列表',
+		toolbarItem: '',
+		toolbarCustom: "<button class='btn-blue ml5' data-icon='edit' onclick='finance_fee_detail.add()'>新增</button>" +
+			"<button class='btn-blue ml5' data-icon='edit' onclick='finance_fee_detail.edit()'>编辑</button>" +
+			"<button class='btn-blue ml5' data-icon='edit' onclick='finance_fee_detail.check()'>审核</button>" +
+			"<button class='btn-blue ml5' data-icon='edit' onclick='finance_fee_detail.studentinfo()'>绿表</button>",
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showCheckboxcol: true,
+		fieldSortable: false,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'financefee/listallitem',
+		postData : {studentid : studentid},
+		columns: [{
+			name: 'areaid',
+			label: '片区',
+			align: 'center',
+			render : formatAreaCell
+		},{
+			name: 'storeid',
+			label: '门店',
+			align: 'center',
+			render : formatStoreCell
+		},{
+			name: 'name',
+			label: '学员姓名',
+			align: 'center'
+		},
+//       {
+//			name: 'subject1',
+//			label: '一级科目',
+//			align: 'center',
+//			render: function(value) {
+//                switch (value) {
+//                    case 1:
+//                        return "收入";
+//                    case 2:
+//                        return "支出";
+//                }
+//            }
+//		},
+            {
+			label: '二级科目',
+			name : 'subject2',
+			align: 'center',
+			render: formatSubjectCell
+		}, {
+			label: '开票日期',
+			name : 'billdate',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+		},  {
+			label: '票据号',
+			name : 'billnum',
+			align: 'center'
+		},  {
+			label: '票据类型',
+			name : 'billtype',
+			align: 'center',
+			render : function(value) {
+				switch (value) {
+					case 0:
+						return "A类";
+					case 1:
+						return "B类";
+				}
+			}
+		},  {
+			label: '金额',
+			name : 'money',
+			align: 'center',
+            render : function(val) {
+                return clz.filter.returnFloat(val);
+            }
+		}, {
+			name: 'checkstatus',
+			label: '审核状态',
+			align: 'center',
+			render : finance_fee_detail.formatStatus
+		}, {
+			name: 'tableid',
+			label: '批次号',
+			align: 'center'
+		}, {
+			label: '录入时间',
+			name : 'ctime',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+			
+		}, {
+			name: 'cname',
+			label: '录入人',
+			align: 'center'
+		},{
+			label: '审核时间',
+			name : 'checktime',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+			
+		}, {
+			name: 'checkname',
+			label: '审核人',
+			align: 'center'
+		}, {
+			name: 'remark',
+			label: '备注',
+			align: 'center'
+		},  {
+			label: '收费员',
+			name : 'feename',
+			align: 'center'
+			
+		},  {
+			label: '收费日期',
+			name : 'feetime',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+			
+		}, {
+			name: 'mtime',
+			label: '修改日期',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+		},{
+			name: 'mname',
+			label: '修改人',
+			align: 'center'
+		}]
+	});
+	
+	clz.CurrentDom_init({
+		current: 'Navtab',
+		form_name: 'detail-form',
+        returnFloat:'oweresitmoney,paymoney,submoney,contractmoney,owetrainmoney,owemoney,owesubmoney',
+        timetype:[
+            {
+                name:'applydate',
+                type:'yyyy-MM-dd'
+            },
+            {
+                name:'graduatedate',
+                type:'yyyy-MM-dd'
+            }
+        ],
+		before:function(data){
+            var formdata;
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'financefee/init',
+                data : {id : studentid},
+                type : "GET",
+                async : false,
+                loadingmask: false,
+                okCallback: function(json, options) {
+                    formdata = json.result;
+                }
+            });
+            return formdata;
+	    }
+	});
+</script>

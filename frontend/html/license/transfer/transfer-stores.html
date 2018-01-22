@@ -1,0 +1,49 @@
+<div class="bjui-pageContent">
+        <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentDialog.find('#transfer-add-stores')}">
+            <fieldset>
+                <span>片区：</span>
+                <select name="areaid" data-toggle="selectpicker" data-width="15%" data-dataurl="/httpaccess/area/list" data-optiontype="id,name">
+                </select>
+                <span>门店：</span>
+                <input type="text" name="name" size="15">
+                <span>门店代码：</span>
+                <input type="text" name="storenum" size="15">
+                <div class="btn-group">
+                    <button type="submit" class="btn-blue" data-icon="search" style="margin-left:10px;">搜索</button>
+                    <button type="reset" class="btn-blue" data-icon="times" style="margin-left:10px;">重置</button>
+                </div>
+            </fieldset>
+        </form>
+        <table id="transfer-add-stores" class="table table-bordered"></table>
+    <div class="c-bottom-button mt7">
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="add_stores()">确定</button></li>
+    </div>
+</div>
+
+        <script type="text/javascript">
+            var maxable = $.CurrentDialog.find('#transfer-add-stores').datagrid({
+                gridTitle : null,
+                height: '85%',
+                showEditbtnscol:false,
+                paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+                dataUrl:config.openBasePath + 'store/listall',
+                columns: [
+                    {name:'areaid',label:'片区',align:'center',render: formatAreaCell},
+                    {name:'name',label:'门店',align:'center'},
+                    {name:'storenum',label:'门店代码',align:'center'}
+                ],
+                editMode:false
+            });
+
+            function add_stores() {
+                var data = $.CurrentDialog.find('#transfer-add-stores').data('selectedDatas');
+                if (data  == null || data.length == 0) {
+                    BJUI.alertmsg('error', '没有选中任何门店！', {
+                    });
+                    return;
+                }
+                clz.setWindowJson(data);
+                BJUI.dialog('closeCurrent')
+            }
+        </script>

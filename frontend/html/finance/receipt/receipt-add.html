@@ -1,0 +1,176 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="add-form">
+        <div class="bjui-row col-2">
+            <label class="row-label">学员姓名:</label>
+            <div class="row-input required">
+            	<input name="studentid" type="hidden">
+            	<input name="signupcost" type="hidden" >
+                <input name="stuname" type="text" data-rule="required" onchange="finance_receipt_add.selectStudent()">
+            </div>
+            <label class="row-label">身份证号:</label>
+            <div class="row-input required">
+                <input name="stuidcard" type="text" data-rule="" readonly>
+            </div>
+            <label class="row-label">报名日期:</label>
+            <div class="row-input required">
+                 <input type="text" name="signupdate" data-rule="date" readonly>
+            </div>
+            <label class="row-label">班别:</label>
+            <div class="row-input required">
+                 <input type="text" name="classinfo" data-rule="" readonly>
+            </div>
+            <label class="row-label">车型:</label>
+            <div class="row-input required">
+                 <input type="text" name="traintype" data-rule="" readonly>
+            </div>
+            <label class="row-label">费用类型:</label>
+            <div class="row-input required">
+                <select name="type" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/financeSubject/listAll" data-optiontype="id,subject">
+				</select>
+            </div>
+            <label class="row-label">收据号:</label>
+            <div class="row-input">
+                <input type="text" name="receiptnum" data-rule="" readonly>
+            </div>
+            <label class="row-label">实收金额:</label>
+            <div class="row-input required">
+                <input type="text" name="receiptmoney" data-rule="required;plusnumber">
+            </div>
+            <label class="row-label">收款日期:</label>
+            <div class="row-input required">
+                <input type="text" name="receiptdate" data-rule="required;date" data-toggle="datepicker">
+            </div>
+            <label class="row-label">现金:</label>
+            <div class="row-input">
+                <input type="text" name="cashmoney" value="0" data-rule="plusnumber">
+            </div>
+            <label class="row-label">POS机号:</label>
+            <div class="row-input">
+            	<input name="posnum" type="hidden" >
+            	<input name="poscompany" type="hidden" >
+                <select name="posid" data-toggle="selectpicker" data-width="100%" onchange="finance_receipt_add.pos()">
+				</select>
+            </div>
+            <label class="row-label">金额:</label>
+            <div class="row-input">
+                <input type="text" name="posmoney" value="0" data-rule="plusnumber">
+            </div>
+            <label class="row-label">发票类型:</label>
+            <div class="row-input required">
+                <select name="invoicetype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                	<option value="">请选择</option>
+                	<option value="1">专票</option>
+                	<option value="2">普票</option>
+				</select>
+            </div>
+            <label class="row-label">发票名称:</label>
+            <div class="row-input required">
+                <input type="text" name="invoicename" data-rule="required">
+            </div>
+            <label class="row-label">备注:</label>
+            <div class="row-input fill-2">
+                <textarea type="text" name="remark" data-rule="" rows="3"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="submit" class="btn-blue" data-icon="save">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+    var finance_receipt_add = {
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Dialog',
+				url: config.openBasePath + 'financeReceipt/add',
+				form_name: 'add-form',
+				before: function() {
+					BJUI.ajax("doajax",{
+						url: config.openBasePath + "pos/financePosALL",
+						type: "GET",
+						okCallback: function(data) {
+							var html=  '<option value="">请选择</option>';
+							$.each(data.result.list, function(i,m) {
+								html+= '<option value="'+ m.id+'" data-posnum="'+ m.posnum+'" data-poscompany="'+ m.poscompany+'">'+ m.posnum +'</option>'
+							});
+							$.CurrentDialog.find("*[name='posid']").html(html)
+							$.CurrentDialog.find("*[name='posid']").selectpicker('refresh')
+						}
+					})
+				}
+			})
+		},
+		pos: function() {
+			var data = $.CurrentDialog.find("*[name='posid']").find("option:selected").data();
+			$.each(data, function(i,m) {
+				$.CurrentDialog.find("*[name='" + i +"']").val(m);
+			})
+		},
+		selectStudent: function() {
+			
+			var name = $.CurrentDialog.find('input[name="stuname"]').val();
+			var thispop = $.CurrentDialog;
+	        BJUI.ajax('doajax', {
+	            url: config.openBasePath + 'student/list',
+	            data : {name : name},
+	            type : 'GET',
+	            loadingmask: true,
+	            okCallback: function(json, options) {
+	            	var students = json.result.list;
+	                if (students.length == 0) {
+	                    $.CurrentDialog.find('input[name="studentid"]').val("");
+				    	$.CurrentDialog.find('input[name="stuidcard"]').val("未知学员");
+				    	$.CurrentDialog.find('input[name="classinfo"]').val("未知");
+				    	$.CurrentDialog.find('input[name="traintype"]').val("未知");
+	                } else {    
+	                	if (students.length > 1) {
+	        		        BJUI.findgrid({
+							    dialogOptions: {
+							    	title:'选择学员',
+							    	width: '700',
+						    		height: '400'
+							    },
+							    empty: '',
+							    gridOptions: {
+							    	showToolbar : false,
+							    	paging: {pageSize:10, selectPageSize:'20,50,100'},
+							        local: 'remote',
+							        height: '95%',
+							        dataUrl: config.openBasePath + '/student/list',
+							        postData: {name: name},
+							        columns: [
+							            {name:'name',label:'姓名',align:'center'},
+							            {name:'idcard',label:'身份证号',align:'center'},
+							            {name:'applydate',label:'报名日期',align:'center', render: function(value) {return value.substring(0,10)}}
+							        ]
+							    },
+							    onSelect: function(data) {
+							    	thispop.find('input[name="studentid"]').val(data.id);
+							    	thispop.find('input[name="stuname"]').val(data.name);
+							    	thispop.find('input[name="stuidcard"]').val(data.idcard);
+							    	thispop.find('input[name="classinfo"]').val(formatClassCell(data.classid));
+							    	thispop.find('input[name="traintype"]').val(data.traintype);
+							    	thispop.find('input[name="signupcost"]').val(parseFloat(data.contractmoney));
+							    	thispop.find('input[name="signupdate"]').val(data.applydate.substring(0,10));
+							    	BJUI.dialog('closeCurrent');
+							    }
+							});
+	                	} else {
+	                		$.CurrentDialog.find('input[name="studentid"]').val(students[0].id);
+					    	$.CurrentDialog.find('input[name="stuname"]').val(students[0].name);
+					    	$.CurrentDialog.find('input[name="stuidcard"]').val(students[0].idcard);
+					    	$.CurrentDialog.find('input[name="classinfo"]').val(formatClassCell(students[0].classid));
+					    	$.CurrentDialog.find('input[name="traintype"]').val(students[0].traintype);
+					    	$.CurrentDialog.find('input[name="signupcost"]').val(parseFloat(students[0].contractmoney));
+					    	$.CurrentDialog.find('input[name="signupdate"]').val(students[0].applydate.substring(0,10));
+	                	}      
+	                }
+	            }
+	        });  
+		}
+	}
+    finance_receipt_add.init();
+</script>

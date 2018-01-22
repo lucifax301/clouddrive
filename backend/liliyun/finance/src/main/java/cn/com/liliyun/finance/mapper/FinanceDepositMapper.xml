@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.finance.mapper.FinanceDepositMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.finance.model.FinanceDeposit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="depositor" property="depositor" jdbcType="VARCHAR" />
+    <result column="accountid" property="accountid" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="bankname" property="bankname" jdbcType="VARCHAR" />
+    <result column="orderid" property="orderid" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="receipt" property="receipt" jdbcType="VARCHAR" />
+    <result column="remaincash" property="remaincash" jdbcType="DECIMAL" />
+    <result column="receiptdate" property="receiptdate" jdbcType="TIMESTAMP" />
+    <result column="depositdate" property="depositdate" jdbcType="TIMESTAMP" />
+    <result column="isconfirm" property="isconfirm" jdbcType="TINYINT" />
+    <result column="isdel" property="isdel" jdbcType="TINYINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, areaid, storeid, depositor, accountid, account, bankname, orderid, amount, receipt, 
+    remaincash, receiptdate, depositdate, isconfirm, isdel, ctime, cuid, cname, mtime, 
+    muid, mname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_deposit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    delete from t_finance_deposit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    insert into t_finance_deposit (id, areaid, storeid, 
+      depositor, accountid, account, 
+      bankname, orderid, amount, 
+      receipt, remaincash, receiptdate, 
+      depositdate, isconfirm, isdel, 
+      ctime, cuid, cname, 
+      mtime, muid, mname
+      )
+    values (#{id,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{depositor,jdbcType=VARCHAR}, #{accountid,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, 
+      #{bankname,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{receipt,jdbcType=VARCHAR}, #{remaincash,jdbcType=DECIMAL}, #{receiptdate,jdbcType=TIMESTAMP}, 
+      #{depositdate,jdbcType=TIMESTAMP}, #{isconfirm,jdbcType=TINYINT}, #{isdel,jdbcType=TINYINT}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, 
+      #{mtime,jdbcType=TIMESTAMP}, #{muid,jdbcType=INTEGER}, #{mname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    insert into t_finance_deposit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="depositor != null" >
+        depositor,
+      </if>
+      <if test="accountid != null" >
+        accountid,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="bankname != null" >
+        bankname,
+      </if>
+      <if test="orderid != null" >
+        orderid,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="receipt != null" >
+        receipt,
+      </if>
+      <if test="remaincash != null" >
+        remaincash,
+      </if>
+      <if test="receiptdate != null" >
+        receiptdate,
+      </if>
+      <if test="depositdate != null" >
+        depositdate,
+      </if>
+      <if test="isconfirm != null" >
+        isconfirm,
+      </if>
+      <if test="isdel != null" >
+        isdel,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="mname != null" >
+        mname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="depositor != null" >
+        #{depositor,jdbcType=VARCHAR},
+      </if>
+      <if test="accountid != null" >
+        #{accountid,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="receipt != null" >
+        #{receipt,jdbcType=VARCHAR},
+      </if>
+      <if test="remaincash != null" >
+        #{remaincash,jdbcType=DECIMAL},
+      </if>
+      <if test="receiptdate != null" >
+        #{receiptdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="depositdate != null" >
+        #{depositdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isconfirm != null" >
+        #{isconfirm,jdbcType=TINYINT},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    update t_finance_deposit
+    <set >
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="depositor != null" >
+        depositor = #{depositor,jdbcType=VARCHAR},
+      </if>
+      <if test="accountid != null" >
+        accountid = #{accountid,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        bankname = #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null" >
+        orderid = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="receipt != null" >
+        receipt = #{receipt,jdbcType=VARCHAR},
+      </if>
+      <if test="remaincash != null" >
+        remaincash = #{remaincash,jdbcType=DECIMAL},
+      </if>
+      <if test="receiptdate != null" >
+        receiptdate = #{receiptdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="depositdate != null" >
+        depositdate = #{depositdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isconfirm != null" >
+        isconfirm = #{isconfirm,jdbcType=TINYINT},
+      </if>
+      <if test="isdel != null" >
+        isdel = #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER} 
+    	<if test="mtime != null">
+			and date(ctime) = date(#{mtime,jdbcType=TIMESTAMP})
+    	</if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    update t_finance_deposit
+    set areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      depositor = #{depositor,jdbcType=VARCHAR},
+      accountid = #{accountid,jdbcType=INTEGER},
+      account = #{account,jdbcType=VARCHAR},
+      bankname = #{bankname,jdbcType=VARCHAR},
+      orderid = #{orderid,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      receipt = #{receipt,jdbcType=VARCHAR},
+      remaincash = #{remaincash,jdbcType=DECIMAL},
+      receiptdate = #{receiptdate,jdbcType=TIMESTAMP},
+      depositdate = #{depositdate,jdbcType=TIMESTAMP},
+      isconfirm = #{isconfirm,jdbcType=TINYINT},
+      isdel = #{isdel,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      muid = #{muid,jdbcType=INTEGER},
+      mname = #{mname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_deposit
+    <where>
+    	isdel = 0
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="accountid != null">
+    		and accountid = #{accountid,jdbcType=INTEGER}
+    	</if>
+    	<if test="storeid != null">
+    		and storeid = #{storeid,jdbcType=INTEGER}
+    	</if>
+    	<if test="isconfirm != null">
+    		and isconfirm = #{isconfirm,jdbcType=TINYINT}
+    	</if>
+    	<if test="bankname != null and bankname != ''">
+    		and bankname = #{bankname,jdbcType=VARCHAR}
+    	</if>
+    	<if test="depositdatetop != null">
+    		and #{depositdatetop,jdbcType=TIMESTAMP} >= depositdate
+    	</if>
+    	<if test="depositdatelow != null">
+    		and depositdate >= #{depositdatelow,jdbcType=TIMESTAMP}
+    	</if>
+    </where>
+    order by id desc
+  </select>
+  <update id="deleteByIds" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    update t_finance_deposit
+    <set> 
+    	isdel = 1,
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id in (${ids}) and date(ctime) = date(#{mtime,jdbcType=TIMESTAMP})
+  </update>
+  <update id="updateConfirmByIds" parameterType="cn.com.liliyun.finance.model.FinanceDeposit" >
+    update t_finance_deposit
+    <set>
+        isconfirm = 1,
+        <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id in (${ids}) and isconfirm = 0
+  </update>
+</mapper>

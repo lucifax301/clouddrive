@@ -1,0 +1,136 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<input type="hidden" id="applyid" name="id"/>
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>恢复学车申请</h5>
+			</div>
+			<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+            <label class="row-label">申请类型:</label>
+			<div class="row-input">
+				<input type="text" value="恢复学车" class="clear-style"/>
+			</div>
+            </div>
+
+			<div class="bjui-row col-4">
+			<label class="row-label">学员姓名:</label>
+			<div class="row-input">
+			<input type="text" name="studentname" id="stuname" data-width="100%">
+			<input type="hidden" name="studentid" id="studentid"/>
+			</div>
+			</div>
+
+			<div class="bjui-row col-4">
+			<label class="row-label">学车状态:</label>
+			<div class="row-input">
+			<input type="text" readonly="readonly" id="applyexamstr" data-width="100%" >
+			<input type="hidden" readonly="readonly" name="applyexam" id="applyexam" >
+			</div>
+			<label class="row-label">身份证号:</label>
+			<div class="row-input">
+			<input type="text" readonly="readonly" name="idcard" id="idcard" data-width="100%" >
+			</div>
+			</div>
+
+			<div class="bjui-row col-4">
+			<label class="row-label">手机号码:</label>
+			<div class="row-input">
+			<input type="text" readonly="readonly" name="phone" id="mobile" data-width="100%" >
+			</div>
+			</div>
+
+			<div class="bjui-row col-4">
+            <label class="row-label">备注:</label>
+            <div class="row-input">
+                <input type="text" class="input-lg"  name="remark" size="30" maxlength="300">
+            </div>
+            </div>
+        </div>
+		<input type="hidden" name="type" value="2"/>
+		</div></div>
+    </form>
+     
+</div>
+
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="savepauseapply()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+    </ul>
+</div>
+
+<script>
+    
+
+	$.CurrentDialog.find("#applyid").val(clz.getWindowJson());
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "student/learnpause/get",
+                    loadingmask: true,
+					async:false,
+					data:{id:$.CurrentDialog.find("#applyid").val()},
+                    okCallback: function(json, options) {
+                        console.log(json)
+						clz.CurrentDom_init({
+							current:'Dialog',
+							
+							form_name : 'view-form',
+							data:json.result
+						});
+						$.CurrentDialog.find("#applyexamstr").val(studentStatus(json.result.applyexam,json.result.applystatus))	
+						if(json.result.status!=0){
+							$("#auditdiv").css("display","none")
+						}
+
+                    }
+                })
+
+	function showstu(){
+		BJUI.dialog({
+			id:'stu-resume-edit',
+			width:800,
+			height:800,
+			url:'html/teach/pause-student-list.html',
+			title:'学员列表',
+			onClose:function(){
+		    	var data = clz.getWindowJson();
+				console.log(data[0]);
+				if(data[0]){
+				$.CurrentDialog.find("#stuname").val(data[0].name);
+				$.CurrentDialog.find("#studentid").val(data[0].id);
+				$.CurrentDialog.find("#idcard").val(data[0].idcard);
+				$.CurrentDialog.find("#mobile").val(data[0].phone);
+				$.CurrentDialog.find("#applyexam").val(data[0].applyexam);
+				}
+		   		//$.CurrentNavtab.find('input').val(data[0].name)
+		    }
+
+		})
+	}
+
+
+	function savepauseapply(){
+		BJUI.alertmsg('confirm', '确认修改吗？', {
+			displayPosition:'middlecenter' ,
+            okCall: function() {
+				BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/student/learnpause/update",
+                    loadingmask: true,
+					data: $("#view-form").serializeArray(),
+                    okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						//grid.datagrid('refresh',true);
+						BJUI.alertmsg('ok', '修改成功', {})
+						BJUI.dialog('closeCurrent')
+                    }
+                })
+			}
+		})
+		
+	}
+
+	
+</script>
+    

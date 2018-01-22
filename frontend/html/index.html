@@ -1,0 +1,145 @@
+<!--<style type="text/css">-->
+	<!--#index_map_canvas {-->
+		<!--height: 650px;-->
+		<!--width: 100%;-->
+	<!--}-->
+<!--</style>-->
+<div class="widget-box">
+	<div class="widget-title">
+		<span class="icon"> <i class="fa fa-th"></i> </span>
+		<h5>资源统计</h5>
+	</div>
+	<div class="widget-content nopadding">
+		<ul class="site-stats">
+			<li class="bg_lb y-box-flex"><i class="fa fa-users"></i><div class="w-60 fl"><strong><span id="students"></span></strong> <small>学员数量</small></div></li>
+			<li class="bg_lg y-box-flex"><i class="fa fa-user"></i> <div class="w-60 fl"><strong><span id="coaches"></span></strong> <small>教练员数量</small></div></li>
+			<li class="bg_ly y-box-flex"><i class="fa fa-car"></i> <div class="w-60 fl"><strong><span id="cars"></span></strong> <small>教练车数量</small></div></li>
+			<li class="bg_lo y-box-flex"><i class="fa fa-stumbleupon"></i> <div class="w-60 fl"><strong><span id="trainareas"></span></strong> <small>训练场数量</small></div></li>
+			<li class="bg_ls y-box-flex"><i class="fa fa-university"></i> <div class="w-60 fl"><strong><span id="stores"></span></strong> <small>门店数量</small></div></li>
+		</ul>
+	</div>
+</div>
+<div class="y-comment">
+	<div class=" col-lg-6 pl0 pr10">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-bar-chart"></i> </span>
+				<h5>学员数据统计</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="x_content"><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px none; height: 0px; margin: 0px; position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px;"></iframe>
+					<canvas id="stuCnt" class="chart-item" style="width: 645px; height: 322px;" width="645" height="322"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=" col-lg-6 pr0 pl10">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-pie-chart"></i> </span>
+				<h5>教学资源统计</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="x_content"><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px none; height: 0px; margin: 0px; position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px;"></iframe>
+					<canvas id="resource" class="chart-item" style="width: 645px; height: 322px;" width="645" height="322"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--<div class="widget-box">-->
+	<!--<div class="widget-title">-->
+		<!--<span class="icon"> <i class="fa fa-map"></i> </span>-->
+		<!--<h5>地图实时情况 - 在线教练车</h5>-->
+	<!--</div>-->
+	<!--<div class="widget-content nopadding">-->
+		<!--<div id="index_map_canvas"></div>-->
+	<!--</div>-->
+<!--</div>-->
+
+<script>
+//	var map = new BMap.Map("index_map_canvas");
+//	var point = new BMap.Point(114.028886, 22.568357);
+//	map.centerAndZoom(point, 13);
+//	//  map.enableScrollWheelZoom();
+//	map.enableContinuousZoom();
+//	map.addControl(new BMap.NavigationControl());
+
+	BJUI.ajax('doajax', {
+		url: config.openBasePath + 'index/statistics',
+		type : 'GET',
+		loadingmask: true,
+		okCallback: function(json, options) {
+            $.CurrentNavtab.find("#students").html(json.result.studentCount);
+            $.CurrentNavtab.find("#coaches").html(json.result.coachCount);
+            $.CurrentNavtab.find("#cars").html(json.result.coachCarCount);
+            $.CurrentNavtab.find("#trainareas").html(json.result.trainareaCount);
+            $.CurrentNavtab.find("#stores").html(json.result.storeCount);
+
+			var piedata = [];
+			piedata.push(json.result.coachCarCount);
+			piedata.push(json.result.coachCount);
+			piedata.push(json.result.trainareaCount);
+			piedata.push(json.result.studentCount);
+			piedata.push(json.result.storeCount);
+
+            // Pie chart
+            var ctx = $.CurrentNavtab.find("#resource");
+            var data = {
+                datasets: [{
+                    data: piedata,
+                    backgroundColor: [
+                        "#455C73",
+                        "#9B59B6",
+                        "#BDC3C7",
+                        "#26B99A",
+                        "#3498DB"
+                    ],
+                    label: '教学资源' // for legend
+                }],
+                labels: [
+                    "教练车数量",
+                    "教练数量",
+                    "训练场地数量",
+                    "学员数量",
+                    "门店数量"
+                ]
+            };
+
+            var pieChart = new Chart(ctx, {
+                data: data,
+                type: 'pie',
+                otpions: {
+                    legend: false
+                }
+            });
+			var days = json.result.daysCount;
+            var dates = [];
+			var counts = [];
+			for (var i=0 ;i < days.length; i++) {
+                dates.push(days[i].date);
+                counts.push(days[i].count);
+			}
+            // 学员统计
+            var stuCntData = $.CurrentNavtab.find("#stuCnt");
+            var mybarChart = new Chart(stuCntData, {
+                type: 'bar',
+                animationSteps: 1,
+                scaleBeginAtZero: true,
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: '学员报名人数',
+                        backgroundColor: "#26B99A",
+                        data: counts
+                    }]
+//                    , {
+//                        label: '毕业人数',
+//                        backgroundColor: "#03586A",
+//                        data: [3, 2, 6, 1, 1, 0, 0]
+//                    }]
+                }
+            });
+		}
+	});
+</script>

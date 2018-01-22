@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.JobMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.CoachJob" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="job" property="job" jdbcType="VARCHAR" />
+    <result column="userid" property="userId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="createdate" property="createDate" jdbcType="TIMESTAMP" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, job, userid,  status, remark, createdate
+  </sql>
+  <select id="getJob" resultMap="BaseResultMap" parameterType="cn.com.liliyun.coach.model.CoachJob" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_job_type
+    where id = #{id}
+  </select>
+  
+  <select id="listJob" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_job_type where 1=1
+    <if test="status !=null">
+     and status=#{status}
+    </if>
+  </select>
+
+
+  <delete id="deleteJob" parameterType="cn.com.liliyun.coach.model.CoachJob" >
+    delete from t_job_type
+    where id = #{id}
+  </delete>
+  <insert id="addJob" parameterType="cn.com.liliyun.coach.model.CoachJob" >
+    insert into t_job_type (job, userid, remark,createdate)
+    values (#{job}, #{userId}, #{remark}, now())
+  </insert>
+  
+  <update id="updateJob" parameterType="cn.com.liliyun.coach.model.CoachJob" >
+    update t_job_type
+    <set >
+      <if test="job != null" >
+        job = #{job},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark},
+      </if>
+      
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateJobStatus" parameterType="cn.com.liliyun.coach.model.CoachJob" >
+    update t_job_type
+    set status=#{status}
+    where id = #{id}
+  </update>
+</mapper>

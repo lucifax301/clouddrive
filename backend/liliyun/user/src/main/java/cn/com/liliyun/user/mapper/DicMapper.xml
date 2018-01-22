@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.user.mapper.DicMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.user.model.Dic" >
+    <id column="dicid" property="dicid" jdbcType="INTEGER" />
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="isvalid" property="isvalid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dicid, id, name, type, isvalid, cname, cuid, ctime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.user.model.Dic" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_dic
+    where dicid = #{dicid,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.user.model.Dic" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_dic
+    <where>
+      <if test="name != null and name != ''" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if> 
+      <if test="type != null and type !=''" >
+        and type = #{type,jdbcType=VARCHAR}
+      </if> 
+      <if test="isvalid != null" >
+        and isvalid = #{isvalid,jdbcType=VARCHAR}
+      </if> 
+    </where>
+       order by ctime desc
+  </select>
+  <select id="selectValidList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.user.model.Dic" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_dic where and type = #{type,jdbcType=VARCHAR} 
+    <where>
+      <if test="name != null and name != ''" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if> 
+      <if test="type != null and type !=''" >
+        and type = #{type,jdbcType=VARCHAR}
+      </if> 
+      <if test="isvalid != null" >
+        and isvalid = #{isvalid,jdbcType=VARCHAR}
+      </if> 
+    </where>
+       order by ctime desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.user.model.Dic" >
+    delete from t_dic
+    where dicid = #{dicid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.user.model.Dic" >
+    insert into t_dic (dicid, id, name, 
+      type, isvalid, cname, 
+      cuid, ctime)
+    values (#{dicid,jdbcType=INTEGER}, #{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{isvalid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, 
+      #{cuid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.user.model.Dic" >
+    insert into t_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dicid != null" >
+        dicid,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="isvalid != null" >
+        isvalid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dicid != null" >
+        #{dicid,jdbcType=INTEGER},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="isvalid != null" >
+        #{isvalid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.user.model.Dic" >
+    update t_dic
+    <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="isvalid != null" >
+        isvalid = #{isvalid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where dicid = #{dicid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.user.model.Dic" >
+    update t_dic
+    set id = #{id,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      isvalid = #{isvalid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP}
+    where dicid = #{dicid,jdbcType=INTEGER}
+  </update>
+</mapper>

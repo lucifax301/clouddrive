@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.market.mapper.PotentialCustomerMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.market.model.PotentialCustomer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="targetclassid" property="targetclassid" jdbcType="INTEGER" />
+    <result column="targetarea" property="targetarea" jdbcType="INTEGER" />
+    <result column="targetstore" property="targetstore" jdbcType="INTEGER" />
+    <result column="infosource" property="infosource" jdbcType="TINYINT" />
+    <result column="saleschannel" property="saleschannel" jdbcType="INTEGER" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="followerid" property="followerid" jdbcType="INTEGER" />
+    <result column="followername" property="followername" jdbcType="VARCHAR" />
+    <result column="impression" property="impression" jdbcType="TINYINT" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="focuson" property="focuson" jdbcType="VARCHAR" />
+    <result column="extra" property="extra" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="introducetype" property="introducetype" jdbcType="TINYINT" />
+    <result column="introducerid" property="introducerid" jdbcType="INTEGER" />
+    <result column="introducername" property="introducername" jdbcType="VARCHAR" />
+    <result column="introducersex" property="introducersex" jdbcType="TINYINT" />
+    <result column="introducerphone" property="introducerphone" jdbcType="VARCHAR" />
+    <result column="introduceridcard" property="introduceridcard" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, sex, idcard, phone, targetclassid, targetarea, targetstore, infosource, saleschannel, 
+    cuid, cname, ctime, followerid, followername, impression, discount, focuson, extra, 
+    remark, introducetype, introducerid, introducername, introducersex, introducerphone, 
+    introduceridcard, mtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_potential_customer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.Map" >
+    delete from t_potential_customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.market.model.PotentialCustomer" >
+    insert into t_potential_customer (id, name, sex, 
+      phone, idcard, targetclassid, targetarea, 
+      targetstore, infosource, saleschannel, 
+      cuid, cname, ctime, 
+      followerid, followername, impression, 
+      discount, focuson, extra, 
+      remark, introducetype, introducerid, 
+      introducername, introducersex, introducerphone, 
+      introduceridcard, mtime)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
+      #{phone,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{targetclassid,jdbcType=INTEGER}, #{targetarea,jdbcType=INTEGER}, 
+      #{targetstore,jdbcType=INTEGER}, #{infosource,jdbcType=TINYINT}, #{saleschannel,jdbcType=INTEGER}, 
+      #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{followerid,jdbcType=INTEGER}, #{followername,jdbcType=VARCHAR}, #{impression,jdbcType=TINYINT}, 
+      #{discount,jdbcType=DECIMAL}, #{focuson,jdbcType=VARCHAR}, #{extra,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{introducetype,jdbcType=TINYINT}, #{introducerid,jdbcType=INTEGER}, 
+      #{introducername,jdbcType=VARCHAR}, #{introducersex,jdbcType=TINYINT}, #{introducerphone,jdbcType=VARCHAR}, 
+      #{introduceridcard,jdbcType=VARCHAR}, #{mtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.market.model.PotentialCustomer" >
+    insert into t_potential_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="targetclassid != null" >
+        targetclassid,
+      </if>
+      <if test="targetarea != null" >
+        targetarea,
+      </if>
+      <if test="targetstore != null" >
+        targetstore,
+      </if>
+      <if test="infosource != null" >
+        infosource,
+      </if>
+      <if test="saleschannel != null" >
+        saleschannel,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="followerid != null" >
+        followerid,
+      </if>
+      <if test="followername != null" >
+        followername,
+      </if>
+      <if test="impression != null" >
+        impression,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="focuson != null" >
+        focuson,
+      </if>
+      <if test="extra != null" >
+        extra,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="introducetype != null" >
+        introducetype,
+      </if>
+      <if test="introducerid != null" >
+        introducerid,
+      </if>
+      <if test="introducername != null" >
+        introducername,
+      </if>
+      <if test="introducersex != null" >
+        introducersex,
+      </if>
+      <if test="introducerphone != null" >
+        introducerphone,
+      </if>
+      <if test="introduceridcard != null" >
+        introduceridcard,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="targetclassid != null" >
+        #{targetclassid,jdbcType=INTEGER},
+      </if>
+      <if test="targetarea != null" >
+        #{targetarea,jdbcType=INTEGER},
+      </if>
+      <if test="targetstore != null" >
+        #{targetstore,jdbcType=INTEGER},
+      </if>
+      <if test="infosource != null" >
+        #{infosource,jdbcType=TINYINT},
+      </if>
+      <if test="saleschannel != null" >
+        #{saleschannel,jdbcType=INTEGER},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followerid != null" >
+        #{followerid,jdbcType=INTEGER},
+      </if>
+      <if test="followername != null" >
+        #{followername,jdbcType=VARCHAR},
+      </if>
+      <if test="impression != null" >
+        #{impression,jdbcType=TINYINT},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="focuson != null" >
+        #{focuson,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null" >
+        #{extra,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="introducetype != null" >
+        #{introducetype,jdbcType=TINYINT},
+      </if>
+      <if test="introducerid != null" >
+        #{introducerid,jdbcType=INTEGER},
+      </if>
+      <if test="introducername != null" >
+        #{introducername,jdbcType=VARCHAR},
+      </if>
+      <if test="introducersex != null" >
+        #{introducersex,jdbcType=TINYINT},
+      </if>
+      <if test="introducerphone != null" >
+        #{introducerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="introduceridcard != null" >
+        #{introduceridcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.market.model.PotentialCustomer" >
+    update t_potential_customer
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="targetclassid != null" >
+        targetclassid = #{targetclassid,jdbcType=INTEGER},
+      </if>
+      <if test="targetarea != null" >
+        targetarea = #{targetarea,jdbcType=INTEGER},
+      </if>
+      <if test="targetstore != null" >
+        targetstore = #{targetstore,jdbcType=INTEGER},
+      </if>
+      <if test="infosource != null" >
+        infosource = #{infosource,jdbcType=TINYINT},
+      </if>
+      <if test="saleschannel != null" >
+        saleschannel = #{saleschannel,jdbcType=INTEGER},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followerid != null" >
+        followerid = #{followerid,jdbcType=INTEGER},
+      </if>
+      <if test="followername != null" >
+        followername = #{followername,jdbcType=VARCHAR},
+      </if>
+      <if test="impression != null" >
+        impression = #{impression,jdbcType=TINYINT},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="focuson != null" >
+        focuson = #{focuson,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null" >
+        extra = #{extra,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="introducetype != null" >
+        introducetype = #{introducetype,jdbcType=TINYINT},
+      </if>
+      <if test="introducerid != null" >
+        introducerid = #{introducerid,jdbcType=INTEGER},
+      </if>
+      <if test="introducername != null" >
+        introducername = #{introducername,jdbcType=VARCHAR},
+      </if>
+      <if test="introducersex != null" >
+        introducersex = #{introducersex,jdbcType=TINYINT},
+      </if>
+      <if test="introducerphone != null" >
+        introducerphone = #{introducerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="introduceridcard != null" >
+        introduceridcard = #{introduceridcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.market.model.PotentialCustomer" >
+    update t_potential_customer
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      phone = #{phone,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      targetclassid = #{targetclassid,jdbcType=INTEGER},
+      targetarea = #{targetarea,jdbcType=INTEGER},
+      targetstore = #{targetstore,jdbcType=INTEGER},
+      infosource = #{infosource,jdbcType=TINYINT},
+      saleschannel = #{saleschannel,jdbcType=INTEGER},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      followerid = #{followerid,jdbcType=INTEGER},
+      followername = #{followername,jdbcType=VARCHAR},
+      impression = #{impression,jdbcType=TINYINT},
+      discount = #{discount,jdbcType=DECIMAL},
+      focuson = #{focuson,jdbcType=VARCHAR},
+      extra = #{extra,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      introducetype = #{introducetype,jdbcType=TINYINT},
+      introducerid = #{introducerid,jdbcType=INTEGER},
+      introducername = #{introducername,jdbcType=VARCHAR},
+      introducersex = #{introducersex,jdbcType=TINYINT},
+      introducerphone = #{introducerphone,jdbcType=VARCHAR},
+      introduceridcard = #{introduceridcard,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.market.model.PotentialCustomer" >
+    select 
+    	t1.id, t1.name, t1.sex, t1.phone, t1.idcard, t1.targetclassid, t1.targetarea, t1.targetstore, t1.infosource, t1.saleschannel, 
+		t1.cuid, t1.cname, t1.ctime, t1.followerid, t1.followername, t1.impression, t1.discount, t1.focuson, t1.extra, 
+		t1.remark, t1.introducetype, t1.introducerid, t1.introducername, t1.introducersex, t1.introducerphone, 
+		t1.introduceridcard, t1.mtime, ifnull(t2.id,0) applystate, t2.applydate
+    from t_potential_customer as t1 left join t_student as t2 on t1.idcard = t2.idcard 
+    <where>
+    	<if test="targetarea != null">
+    		and t1.targetarea =  #{targetarea,jdbcType=INTEGER}
+    	</if>
+    	<if test="saleschannel != null">
+    		and t1.saleschannel =  #{saleschannel,jdbcType=INTEGER}
+    	</if>
+    	<if test="infosource != null">
+    		and t1.infosource =  #{infosource,jdbcType=TINYINT}
+    	</if>
+    	<if test="infosource != null">
+    		and t1.infosource =  #{infosource,jdbcType=TINYINT}
+    	</if>
+    	<if test="applystate != null and applystate == 0">
+    		and ifnull(t2.id,0) = 0
+    	</if>
+    	<if test="applystate != null and applystate != 0">
+    		and ifnull(t2.id,0) > 0
+    	</if>
+    	<if test="ctimetop != null">
+    		and #{ctimetop,jdbcType=TIMESTAMP} > t1.ctime
+    	</if>
+    	<if test="ctimelow != null">
+    		and t1.ctime >= #{ctimelow,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="name != null and name != ''">
+    		and t1.name like concat('%',#{name,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="idcard != null and idcard != ''">
+    		and t1.idcard = #{idcard,jdbcType=VARCHAR}
+    	</if>
+    	<if test="phone != null and phone != ''">
+    		and t1.phone = #{phone,jdbcType=VARCHAR}
+    	</if>
+    	<if test="followername != null and followername != ''">
+    		and t1.followername = #{followername,jdbcType=VARCHAR}
+    	</if>
+    	<if test="cname != null and cname != ''">
+    		and t1.cname = #{cname,jdbcType=VARCHAR}
+    	</if>
+    </where>
+    
+    order by t1.id desc
+  </select>
+</mapper>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.finance.mapper.FinanceSubjectMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.finance.model.FinanceSubject" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="disable" property="disable" jdbcType="TINYINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, subject, pid, count, disable, ctime, cuid, cname, mtime, muid, mname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_subject
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    delete from t_finance_subject
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    insert into t_finance_subject (id, subject, pid, 
+      count, disable, ctime, 
+      cuid, cname, mtime, 
+      muid, mname)
+    values (#{id,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER}, 
+      #{count,jdbcType=INTEGER}, #{disable,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, #{mtime,jdbcType=TIMESTAMP}, 
+      #{muid,jdbcType=INTEGER}, #{mname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    insert into t_finance_subject
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="count != null" >
+        count,
+      </if>
+      <if test="disable != null" >
+        disable,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="mname != null" >
+        mname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="count != null" >
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="disable != null" >
+        #{disable,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    update t_finance_subject
+    <set >
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="count != null" >
+        count = count + #{count,jdbcType=INTEGER},
+      </if>
+      <if test="disable != null" >
+        disable = #{disable,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER} and must != 1
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    update t_finance_subject
+    set subject = #{subject,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=INTEGER},
+      count = count + #{count,jdbcType=INTEGER},
+      disable = #{disable,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      muid = #{muid,jdbcType=INTEGER},
+      mname = #{mname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_subject
+    <where>
+    	<if test="disable != null">
+    		and disable = #{disable,jdbcType=TINYINT}
+    	</if>
+<!--     	<if test="pid != null"> -->
+<!--     		and pid = #{pid,jdbcType=INTEGER} -->
+<!--     	</if> -->
+<!--     	<if test="level != null and level == 2"> -->
+<!--     		and pid != 0 -->
+<!--     	</if> -->
+<!--     	<if test="level != null and level == 1"> -->
+<!--     		and pid = 0 -->
+<!--     	</if> -->
+    </where>
+  </select>
+  <update id="updateByModel" parameterType="cn.com.liliyun.finance.model.FinanceSubject" >
+    update t_finance_subject
+    <set >
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="count != null" >
+        count = count + #{count,jdbcType=INTEGER},
+      </if>
+      <if test="disable != null" >
+        disable = #{disable,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+    	must != 1
+	    <if test="id != null">
+    		and id = #{id,jdbcType=INTEGER}
+    	</if>
+    	<if test="pid != null">
+    		and pid = #{pid,jdbcType=INTEGER}
+    	</if>
+    </where> 
+  </update>
+  <select id="getMap" resultType="cn.com.liliyun.common.dto.MapDTO">
+    select id, subject name from t_finance_subject
+  </select>
+</mapper>

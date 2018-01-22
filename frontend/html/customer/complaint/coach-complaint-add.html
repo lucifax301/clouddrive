@@ -1,0 +1,307 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>新增教练投诉</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+
+					<div class="bjui-row col-4">
+						<label class="row-label">提交人:</label>
+						<div class="row-input">
+							<input type="text" id="cuid" class="clear-style" />
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">学员姓名:</label>
+						<div class="row-input">
+							<input type="text" name="stuname" id="stuname" readonly="readonly" data-rule="required" data-width="100%" placeholder="点击右侧按钮选择学员">
+							<input type="hidden" name="studentid" id="studentid" />
+						</div>
+						<label><button type="button" class="btn-blue btn" onclick="coach_complaint_add.showstu()" data-icon="search" >选择学员</button></label>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">手机号码:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="studentmobile" data-width="100%">
+						</div>
+						<label class="row-label">身份证号:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="idcard" data-width="100%">
+						</div>
+						<label class="row-label">班别:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="classid" data-width="100%">
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">片区:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="areaid" data-width="100%">
+						</div>
+						<label class="row-label">门店:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="storeid" data-width="100%">
+						</div>
+						<label class="row-label">学车状态:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="applyexam" data-width="100%">
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">被投诉教练:</label>
+						<div class="row-input">
+							<input type="text" name="coachname" id="coachname" readonly="readonly" data-rule="required" data-width="100%" placeholder="点击右侧按钮选择教练">
+							<input type="hidden" name="coachid" id="coachid" />
+						</div>
+						<label><button type="button" class="btn-blue btn" onclick="coach_complaint_add.showcoach()" data-icon="search">选择教练</button></label>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">手机号码:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="coachmobile" data-width="100%">
+						</div>
+						<label class="row-label">带教类型:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="teachtype" data-width="100%">
+						</div>
+						<label class="row-label">教学组长:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="headcoach" data-width="100%">
+						</div>
+					</div>
+					
+
+					<div class="bjui-row col-4">
+						<label class="row-label">投诉内容:</label>
+						<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="content" maxlength="200" placeholder="请输入投诉内容"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="objenum" id="objenum" />
+		<input type="hidden" name="stunum" id="stunum" />
+	</form>
+
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<ul>
+			<li><button type="button" class="btn-blue" data-icon="save" onclick="coach_complaint_add.save()">保存</button></li>
+			<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+
+		</ul>
+	</div>
+</div>
+<script>
+	$.CurrentNavtab.find("#cuid").val(window.liliyun_userinfo.username)
+	var coach_complaint_add = {
+		showstu: function() {
+			BJUI.findgrid({
+				dialogOptions: {
+					title: '选择员工',
+					width: '800',
+					height: '500'
+				},
+				empty: '',
+				gridOptions: {
+					showToolbar: false,
+					local: 'remote',
+					filterThead: true,
+					include: 'name, description:desc',
+					dataUrl: config.openBasePath + '/student/list',
+					columns: [{
+						name: 'name',
+						label: '学员姓名',
+						align: 'center'
+					}, {
+						name: 'idcard',
+						label: '身份证号',
+						align: 'center'
+					},{
+						name: 'phone',
+						label: '手机号码',
+						align: 'center'
+					}, {
+						name: 'areaid',
+						label: '片区',
+						align: 'center',
+						render:function(value){
+							return clz.configRender({name:'arealist',val:value,key:'id'})
+						},
+						type:'select',items: coach_complaint_add.area_menu_type
+					}, {
+						name: 'storeid',
+						label: '门店',
+						align: 'center',
+						render:function(value){
+							return clz.configRender({name:'storelist',val:value,key:'id'});
+						},
+						type:'select',items: coach_complaint_add.store_menu_type
+					},{
+						name: 'classid',
+						label: '班别',
+						align: 'center',
+						render:function(value){
+							return clz.configRender({name:'classlist',val:value,key:'id'});
+						}
+					},{
+						name: 'sex',
+						label: '性别',
+						align: 'center',
+						render:sexState
+					},{
+						name: 'applyexam',
+						label: '学车状态',
+						align: 'center',
+						render:function(value,data){
+							return studentStatus(data.applyexam,data.applystatus)
+						}
+					},{
+						name: 'applydate',
+						label: '报名日期',
+						align: 'center'
+					}]
+				},
+				onSelect: function(data) {
+					$.CurrentNavtab.find('*[name=\'studentid\']').val(data.id);
+					$.CurrentNavtab.find('*[name=\'stuname\']').val(data.name);
+					$.CurrentNavtab.find('#studentmobile').val(data.phone);
+					$.CurrentNavtab.find('#idcard').val(data.idcard);
+					$.CurrentNavtab.find('#classid').val(clz.configRender({name:'classlist',val:data.classid,key:'id'}));
+					$.CurrentNavtab.find('#areaid').val(clz.configRender({name:'arealist',val:data.areaid,key:'id'}));
+					$.CurrentNavtab.find('#storeid').val(clz.configRender({name:'storelist',val:data.storeid,key:'id'}));
+					$.CurrentNavtab.find('#stunum').val(data.stunum);
+					
+					console.log(data.applyexam)
+					$.CurrentNavtab.find("#applyexam").val(studentStatus(data.applyexam,data.applystatus))
+					BJUI.dialog('closeCurrent');
+				}
+			})
+
+		},
+//		formatSubject :function (value) {
+//		switch(value) {
+//			case 0:
+//				return "科目一培训";
+//			case 1:
+//				return "科目一考试";
+//			case 2:
+//				return "科目二培训";
+//			case 3:
+//				return "科目二考试";
+//			case 4:
+//				return "科目三培训";
+//			case 5:
+//				return "科目三考试";
+//			case 6:
+//				return "科目四培训";
+//			case 7:
+//				return "科目四考试";
+//		}
+//		},
+		showcoach: function() {
+			BJUI.findgrid({
+				dialogOptions: {
+					title: '选择教练',
+					width: '1000',
+					height: '600'
+				},
+				empty: '',
+				gridOptions: {
+					showToolbar: false,
+					local: 'remote',
+					filterThead: true,
+					include: 'name, description:desc',
+					dataUrl: config.openBasePath + '/coach/list',
+					columns: [{
+						name: 'name',
+						label: '教练姓名',
+						align: 'center'
+					}, {
+						name: 'mobile',
+						label: '手机号码',
+						align: 'center'
+					}, {
+						name: 'headcoach',
+						label: '教学组长',
+						align: 'center'
+					}, {
+						name: 'teachtypeid',
+						label: '带教类型',
+						align: 'center',
+						render:function(value){
+							return clz.configRender({name:'teachtypelist',val:value,key:'id',dataname:'type'})
+						}
+					}]
+				},
+				onSelect: function(data) {
+					$.CurrentNavtab.find('*[name=\'coachname\']').val(data.name);
+					$.CurrentNavtab.find('#coachmobile').val(data.mobile);
+					$.CurrentNavtab.find('#coachid').val(data.coachid);
+					$.CurrentNavtab.find('#teachtype').val(clz.configRender({name:'teachtypelist',val:data.teachtypeid,key:'id',dataname:'type'}));
+					$.CurrentNavtab.find('#headcoach').val(data.headcoach);
+					$.CurrentNavtab.find('#objenum').val(data.coachnum);
+					
+					BJUI.dialog('closeCurrent');
+				}
+			})
+			
+		},
+		save:function(){
+			if($.CurrentNavtab.find('#add-form').isValid())
+			BJUI.alertmsg('confirm', '确认提交投诉吗？', {
+				displayPosition: 'middlecenter',
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "/complaint/coach/add",
+						loadingmask: true,
+						data: $("#add-form").serializeArray(),
+						okCallback: function(json, options) {
+							//console.log(json.result.list)
+							BJUI.alertmsg('ok', '提交成功！', {})
+							BJUI.navtab('closeCurrentTab');
+						}
+					})
+				}
+			})
+		},
+		area_menu_type: function(){
+			return coach_complaint_add.area;
+		},
+		store_menu_type: function(){
+			return coach_complaint_add.store;
+		},
+		init:function(){
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'area/listInJson?userType=1',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        coach_complaint_add.area = json.result;
+			    }
+			});
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'store/listInJson?userType=1',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        coach_complaint_add.store = json.result;
+			    }
+			})
+		}
+	}
+
+	
+	coach_complaint_add.init()
+	
+
+	
+</script>

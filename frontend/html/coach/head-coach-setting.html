@@ -1,0 +1,200 @@
+<div class="bjui-pageHeader" >
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5>教学组长资料</h5>
+				</div>
+				<div class="widget-content nopadding">
+			
+			<div class="bjui-row col-4">
+			<label class="row-label">教学组长:</label>
+				
+				<div class="row-input">
+					<input type="text" id="headcoachname" class="clear-style"/>
+				</div>
+				
+				
+				
+				<label class="row-label">所属片区:</label>
+				<div class="row-input">
+					<input type="text" id="headcoacharea" class="clear-style"/>
+				</div>
+				
+				
+			</div>
+		</div></div>
+	</form>
+</div>
+<div class="bjui-row col-3" id="auditdiv">
+				<div class="btn-group">
+				<button type="button" class="btn-blue btn" data-icon="" onclick="unbind()">解绑所选教练</button>
+				<button type="button" class="btn-blue btn" data-icon="" onclick="bind()">添加管辖教练</button>
+				
+				</div>
+		</div>
+		<input type="hidden" id="headcoachareaid"/>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	
+	var dd=clz.getNavtab_more();
+	console.log(dd.id)
+	//var cid = JSON.parse(clz.getNavtab_more());
+	var cid = dd.id;
+	
+	//cid = cid.id;
+	var tabledata = '';
+	var newdata=new Array();
+
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'coach/getCoach?coachid='+cid,
+                    loadingmask: true,
+                    okCallback: function(json) {
+						$.CurrentNavtab.find('#headcoachname').val(json.result.name);
+						$.CurrentNavtab.find("#headcoacharea").val(formatAreaCell(json.result.areaid));
+						$.CurrentNavtab.find("#headcoachareaid").val(json.result.areaid);
+					}
+	});
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'coach/list?headcoachid='+cid,
+                    loadingmask: true,
+                    okCallback: function(json) {
+						tabledata = json.result.list;
+                       
+						$.CurrentNavtab.find('#datagrid-list').datagrid({
+							gridTitle: '管辖教练列表',
+							toolbarItem: 'none',
+							toolbarCustom : "<button class='btn-blue' style='' onclick='saveassign()'>保存</button>",
+							paging: {
+								pageSize: 15,
+								selectPageSize: '15,50,100,500'
+							},
+							height: '85%',
+							showCheckboxcol: true,
+							showToolbar: true,
+							data:tabledata,
+							columns: [
+								{name:'name',label:'教练姓名',align:'center',render:function(value, data){
+                return "<a href='html/coach/coach-view.html' data-toggle='navtab' data-options='{id:\"student-view-table"+data.coachid+"\" , title:\"查看教练信息\"}' data-more='" + JSON.stringify(data) + "'>" + value + "</a>"
+				}},
+								{
+									name: 'mobile',
+									label: '手机号码',
+									align: 'center'
+								}, {
+									name: 'areaid',
+									label: '片区',
+									align: 'center',
+									render:formatAreaCell
+								}, {
+									name: 'teachtype',
+									label: '带教类型',
+									align: 'center'
+								}
+
+							],
+							
+						});
+                    }
+                })
+
+	
+
+	function bind(){
+		BJUI.dialog({
+			id:'noassign-coach-list-bind'+cid,
+			width:800,
+			height:800,
+			url:'html/coach/noassign-coach-list.html',
+			title:'未分配教练',
+			onClose:function(){
+				//grid.datagrid('refresh',true);
+				var data = clz.getWindowJson();
+				console.log('data',data)
+				if(data){
+				$.each(data,function(i,m){
+					var exist=false;
+					m.area=formatAreaCell(m.areaid);
+					$.each(tabledata,function(j,n){
+					if(m.coachid==n.coachid){
+						exist=true;
+					}
+					})
+					if(!exist){
+					tabledata.unshift(m);
+					newdata.unshift(m);
+					}
+				})
+				console.log(tabledata)
+				console.log(newdata)
+				$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+					data:tabledata
+				})//刷新
+				}
+			}
+
+		})
+	}
+	
+	var delids="";
+	function unbind(){
+		var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+		if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+			 BJUI.alertmsg('error', '没有选中数据！', {})
+			 return
+		}
+		console.log(data);
+		var ids="";
+		$.each(data,function(j,n){
+			ids=ids+ n.coachid + ","	
+		})
+		if(ids!=""){
+			ids=ids.substr(0,ids.length-1);
+		}
+		delids=ids;
+		console.log(ids);
+		BJUI.ajax('doajax', {
+        url: config.openBasePath + "coach/unassign",
+		data:{headcoachid:cid,coachid:ids},
+        async : false,
+        okCallback: function(json, options) {
+        	BJUI.alertmsg('ok', '教练已经解绑！', {})
+        	BJUI.navtab('refresh')
+        	//BJUI.navtab('closeCurrentTab');
+            //areadata = json.result.list;
+        }
+		});
+
+	}
+	
+	function saveassign(){
+		var ids="";
+		$.each(newdata,function(j,n){
+			ids=ids+ n.coachid + ","	
+		})
+		if(ids!=""){
+			ids=ids.substr(0,ids.length-1);
+		}
+		if(ids==""){
+			BJUI.alertmsg('info', '没有更新数据', {})
+			return;
+		}
+		console.log(ids);
+
+
+		BJUI.ajax('doajax', {
+        url: config.openBasePath + "coach/assign",
+		data:{headcoachid:cid,coachid:ids},
+        async : false,
+        okCallback: function(json, options) {
+        	BJUI.alertmsg('ok', '绑定成功！', {})
+        	BJUI.navtab('refresh')
+			//BJUI.navtab('closeCurrentTab');
+            //areadata = json.result.list;
+        }
+		});
+
+	}
+
+	
+</script>

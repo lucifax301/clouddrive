@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.ComplainReturnMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    <id column="returnid" property="returnid" jdbcType="INTEGER" />
+    <result column="complainid" property="complainid" jdbcType="INTEGER" />
+    <result column="returnuser" property="returnuser" jdbcType="VARCHAR" />
+    <result column="returncontent" property="returncontent" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="BIGINT" />
+    <result column="muid" property="muid" jdbcType="BIGINT" />
+    <result column="cusername" property="cusername" jdbcType="VARCHAR" />
+    <result column="musername" property="musername" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    returnid, complainid, returnuser, returncontent, mtime, ctime, cuid, muid, cusername, 
+    musername
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_complain_return
+    where returnid = #{returnid,jdbcType=INTEGER}
+  </select>
+  
+    
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_complain_return
+    where 1=1
+    <if test="complainid != null and complainid != ''">
+        and complainid = #{complainid,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    delete from t_complain_return
+    where returnid = #{returnid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    insert into t_complain_return (returnid, complainid, returnuser, 
+      returncontent, mtime, ctime, 
+      cuid, muid, cusername, 
+      musername)
+    values (#{returnid,jdbcType=INTEGER}, #{complainid,jdbcType=INTEGER}, #{returnuser,jdbcType=VARCHAR}, 
+      #{returncontent,jdbcType=VARCHAR}, #{mtime,jdbcType=TIMESTAMP}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{cuid,jdbcType=BIGINT}, #{muid,jdbcType=BIGINT}, #{cusername,jdbcType=VARCHAR}, 
+      #{musername,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    insert into t_complain_return
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="returnid != null" >
+        returnid,
+      </if>
+      <if test="complainid != null" >
+        complainid,
+      </if>
+      <if test="returnuser != null" >
+        returnuser,
+      </if>
+      <if test="returncontent != null" >
+        returncontent,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="cusername != null" >
+        cusername,
+      </if>
+      <if test="musername != null" >
+        musername,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="returnid != null" >
+        #{returnid,jdbcType=INTEGER},
+      </if>
+      <if test="complainid != null" >
+        #{complainid,jdbcType=INTEGER},
+      </if>
+      <if test="returnuser != null" >
+        #{returnuser,jdbcType=VARCHAR},
+      </if>
+      <if test="returncontent != null" >
+        #{returncontent,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="cusername != null" >
+        #{cusername,jdbcType=VARCHAR},
+      </if>
+      <if test="musername != null" >
+        #{musername,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    update t_complain_return
+    <set >
+      <if test="complainid != null" >
+        complainid = #{complainid,jdbcType=INTEGER},
+      </if>
+      <if test="returnuser != null" >
+        returnuser = #{returnuser,jdbcType=VARCHAR},
+      </if>
+      <if test="returncontent != null" >
+        returncontent = #{returncontent,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=BIGINT},
+      </if>
+      <if test="cusername != null" >
+        cusername = #{cusername,jdbcType=VARCHAR},
+      </if>
+      <if test="musername != null" >
+        musername = #{musername,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where returnid = #{returnid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.ComplainReturn" >
+    update t_complain_return
+    set complainid = #{complainid,jdbcType=INTEGER},
+      returnuser = #{returnuser,jdbcType=VARCHAR},
+      returncontent = #{returncontent,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=BIGINT},
+      muid = #{muid,jdbcType=BIGINT},
+      cusername = #{cusername,jdbcType=VARCHAR},
+      musername = #{musername,jdbcType=VARCHAR}
+    where returnid = #{returnid,jdbcType=INTEGER}
+  </update>
+</mapper>

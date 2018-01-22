@@ -1,0 +1,110 @@
+<section id="thispage" privilege = "040802"></section>
+<div class="bjui-pageHeader">
+	<form id="edit-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>配件更换提醒设置</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+				 	
+		            <label class="row-label">轮胎：</label>
+		            <div class="row-input fill-3">
+		            	<div class="w-200 fl">
+							<input name="tyremonth" type="text" data-rule="digits" maxlength="2">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">个月或行驶</span>
+						<div class="w-200 fl">
+							<input name="tyremileage" type="text" data-rule="digits" maxlength="6">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">公里提醒更换</span>
+		            </div>
+		            <label class="row-label">机油：</label>
+		            <div class="row-input fill-3">
+		            	<div class="w-200 fl">
+							<input name="oilmonth" type="text" data-rule="digits" maxlength="2">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">个月或行驶</span>
+						<div class="w-200 fl">
+							<input name="oilmileage" type="text" data-rule="digits" maxlength="6">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">公里提醒更换</span>
+		            </div>
+		            <label class="row-label">时规带使用：</label>
+		            <div class="row-input fill-3">
+		            	<div class="w-200 fl">
+							<input name="beltmonth" type="text" data-rule="digits" maxlength="2">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">个月或行驶</span>
+						<div class="w-200 fl">
+							<input name="beltmileage" type="text" data-rule="digits" maxlength="6">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">公里提醒更换</span>
+		            </div>
+		            <label class="row-label">二保：</label>
+		            <div class="row-input fill-3">
+		            	<div class="w-200 fl">
+							<input name="maintainmonth" type="text" data-rule="digits" maxlength="2">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">个月或行驶</span>
+						<div class="w-200 fl">
+							<input name="maintainmileage" type="text" data-rule="digits" maxlength="6">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">公里提醒更换</span>
+		            </div>
+		            <label class="row-label">电池使用：</label>
+		            <div class="row-input fill-3">
+		            	<div class="w-200 fl">
+							<input name="batterymonth" type="text" data-rule="digits" maxlength="2">
+						</div>
+						<span class="fl text-center pl10 pr10 mt2">个月提醒更换。</span>
+		            </div>
+		            <label class="row-label"></label>
+		            <div class="row-input">
+		                <button type="button" data-privilege='040802_11' class="btn-blue vhide" data-icon="save" onclick="maintenance_parts_setting.save()">保存修改</button>
+		       		</div>
+		      	</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<script type="text/javascript">
+	var maintenance_parts_setting = {
+		init: function() {
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'carbiz/getPartsSettings',
+			    type: 'GET',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			    	var data = {}, result = json.result;
+			    	$.each(result, function(i, m) {
+			    		switch(m.partstype) {
+			    			case 1: data.tyremonth = m.month; data.tyremileage = m.mileage; break;
+			    			case 2: data.oilmonth = m.month; data.oilmileage = m.mileage; break;
+			    			case 3: data.beltmonth = m.month; data.beltmileage = m.mileage; break;
+			    			case 4: data.maintainmonth = m.month; data.maintainmileage = m.mileage; break;
+			    			case 5: data.batterymonth = m.month; break;
+			    		}
+			    	});
+			        clz.CurrentDom_init({
+						current: 'Navtab',
+						form_name: 'edit-form',
+						data: data
+					})
+			    }
+			})
+		},
+		save: function() {
+			if($.CurrentNavtab.find('#edit-form').isValid()){
+                BJUI.ajax('ajaxform', {
+                    url: config.openBasePath + 'carbiz/setPartsSetting',
+                    loadingmask: true,
+                    form: $.CurrentNavtab.find('#edit-form'),
+				    validate: true
+                });
+	        };
+		}
+	}
+	maintenance_parts_setting.init();
+</script>

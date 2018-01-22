@@ -1,0 +1,42 @@
+<div class="bjui-pageContent">
+	<form id="check-batch-form">
+		<div class="bjui-row col-3">
+			<input type="hidden" name="ids"/>
+			<input type="hidden" name="tableids"/>
+			<label class="row-label">审核意见：</label>
+		    <div class="row-input">
+		        <input type="radio" name="checkstatus"  value="2" data-toggle="icheck" data-label="同意" checked="checked">
+		        <input type="radio" name="checkstatus"  value="1" data-toggle="icheck" data-label="不同意">
+		    </div>
+		    <label class="row-label">审核备注：</label>
+	    	<div class="row-input fill-2">
+				<textarea name="checkremark" rows="3"></textarea>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="fee_item_check()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script>
+    var data = clz.getWindowJson();
+    clz.CurrentDom_init({
+        current: 'Dialog',
+        form_name: 'check-batch-form',
+        data: data
+    });
+    function fee_item_check() {
+        BJUI.ajax('ajaxform', {
+            url : config.openBasePath + "financefee/checkbatch",
+            loadingmask: true,
+            form :  $.CurrentDialog.find('#check-batch-form'),
+            okCallback: function() {
+                BJUI.dialog('closeCurrent');
+                finance_fee_list.datagrid("refresh",true);
+            }
+        });
+    }
+</script>

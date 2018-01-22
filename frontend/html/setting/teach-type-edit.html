@@ -1,0 +1,84 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form 
+            class="datagrid-edit-form" data-toggle="validate" method="POST" id="editForm">
+			<input type="hidden" name="id" id="id">
+			<div class="bjui-row">
+                <label class="row-label">带教类型:</label>
+                <div class="row-input required">
+                    <input type="text" name="type" data-rule="required">
+                </div>
+				<label class="row-label">带教科目:</label>
+                <div class="row-input required">
+                    <input type="checkbox" name="subject" value="2">科目二<input type="checkbox" name="subject" value="3">科目三
+                </div>
+                <label class="row-label">备注:</label>
+                <div class="row-input">
+                    <input type="text" name="remark" data-rule="">
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="updateteachtype()">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current:'Dialog',
+		url : config.openBasePath + 'coachSetting/updateTeachType',
+		form_name : 'editForm',
+		data : window.teach_type_object,
+		before:function(data){
+			
+			return data
+		},
+		callback:function(data){
+			if(data.subject){
+				var s=""+data.subject;
+				var  sj=s.split(",");
+				for(var i=0;i<sj.length;i++){
+					$.CurrentDialog.find('input[name=subject][value='+sj[i]+']').attr("checked","checked")
+				}
+				
+			}
+			console.log(data)
+		}
+	})
+
+	function updateteachtype(){
+		var hassubject=false;
+		$.CurrentDialog.find('input[name=subject]').each(function(){
+			//console.log($(this).is(':checked'))
+			if($(this).is(':checked')){
+				hassubject=true;
+			}
+		})
+		
+		if(!hassubject){
+			BJUI.alertmsg('error', '至少选择一个科目！')
+				return
+		}
+		
+	if($.CurrentDialog.find('#editForm').isValid())
+	BJUI.alertmsg('confirm', '确认修改带教类型吗？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'coachSetting/updateTeachType',
+                    loadingmask: true,
+					//data: clz.parseForm($.CurrentDialog.find("#editForm")),
+					data: $.CurrentDialog.find('#editForm').serializeArray(),
+                    okCallback: function(json, options) {
+						BJUI.alertmsg('ok', '修改带教类型成功！', {})
+						BJUI.navtab('refresh')
+						BJUI.dialog('closeCurrent')
+					}
+                });
+            }
+        });
+	}
+</script>

@@ -1,0 +1,55 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form 
+            class="datagrid-edit-form" data-toggle="validate" method="POST" id="editForm">
+			<input type="hidden" name="id" id="id">
+			<div class="bjui-row">
+                <label class="row-label">带教职务:</label>
+                <div class="row-input required">
+                    <input type="text" name="job" data-rule="required">
+                </div>
+                <label class="row-label">备注:</label>
+                <div class="row-input ">
+                    <input type="text" name="remark" >
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="updatejobtype()">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current:'Dialog',
+		url : config.openBasePath + 'coachSetting/updateJob',
+		form_name : 'editForm',
+		data : window.job_type_object,
+		
+		callback:function(data){
+			console.log(data)
+		}
+	})
+
+	function updatejobtype(){
+	if($.CurrentDialog.find('#editForm').isValid())
+	BJUI.alertmsg('confirm', '确认修改带教职务吗？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'coachSetting/updateJob',
+                    loadingmask: true,
+					data: clz.parseForm($.CurrentDialog.find("#editForm")),
+                    okCallback: function(json, options) {
+						BJUI.alertmsg('ok', '修改带教职务成功！', {})
+						BJUI.navtab('refresh')
+						BJUI.dialog('closeCurrent')
+					}
+                });
+            }
+        });
+	}
+</script>

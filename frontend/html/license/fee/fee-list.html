@@ -1,0 +1,213 @@
+<section id="thispage" privilege="020301"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>信息搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">批次号：</label>
+				<div class="row-input">
+					<input type="text" name="tableid">
+				</div>
+				<label class="row-label">门店：</label>
+				<div class="row-input">
+					<select name="storeid" id="storeid" data-toggle="selectpicker" data-width="100%"
+                    data-dataurl="/httpaccess/store/list" data-optiontype = "id,name">
+                </select>
+				</div>
+				<label class="row-label">二级科目：</label>
+				<div class="row-input">
+					<select name="subject2" data-toggle="selectpicker" data-width="100%"
+                    data-dataurl="/httpaccess/financeSubject/list?level=2&pid=1" data-optiontype="id,subject">
+            		</select>
+				</div>
+			    <label class="row-label">起始时间：</label>
+	            <div class="row-input">
+	                <input type="text" name="stime" data-toggle="datepicker" placeholder="缴费起始时间"> 
+	            </div>
+	            <label class="row-label">结束时间：</label>
+	            <div class="row-input">
+	                <input type="text" name="etime" data-toggle="datepicker" placeholder="缴费结束时间">
+	            </div>
+				<label class="row-label"></label>
+				<div class="row-input">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var license_fee = {
+		add : function() {
+			BJUI.dialog({
+				id: 'dialog-finance-fee-add',
+				url: 'html/license/fee/fee-add.html',
+				title: '新增缴费清单',
+				width: 780,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+					$(document).off("change", "[name='name']");
+				}
+			})
+		},
+		edit : function() {
+			var data = checkSelectData(license_fee_list);
+			if (data == null) {
+				return;
+			}
+			if (data.length > 1) {
+				BJUI.alertmsg('warn', '请选择一条数据编辑！');
+				return false;
+			}
+			clz.setWindowJson(data[0]);
+			var ctime = data[0].ctime;
+			var datetime = clz.filter.time({ date: ctime, type: 'yyyy-MM-dd'});
+			datetime = datetime + ' 23:59:59';
+			if (new Date(datetime).getTime() < new Date().getTime()) {
+				BJUI.alertmsg('warn', '数据超过当天23:59:59,不能再编辑！');
+				return false;
+			}
+			BJUI.dialog({
+				id: 'dialog-finance-fee-add',
+				url: 'html/license/fee/fee-edit.html',
+				title: '编辑缴费清单',
+				width: 1000,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+					$(document).off("change", "[name='name']");
+				}
+			})
+		},
+		view : function(v) {
+			var data = {};
+			data.tableid = v.tableid;
+			data.applyexam = v.applyexam;
+			data.subject2 = v.subject2;
+			data.money = v.money;
+			clz.setWindowJson(data);
+			BJUI.dialog({
+				id: 'dialog-finance-fee-view',
+				url: 'html/license/fee/fee-view.html',
+				title: '查看缴费清单',
+				width: 1000,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false,
+                onClose: function() {
+                    $(document).off("change", "[name='name']");
+                }
+			})
+		},
+		formatapplyexam : function(value) {
+			switch (value) {
+				case 1:
+					return "科目一";
+				case 2:
+					return "科目二";
+				case 3:
+					return "科目三";
+				case 4:
+					return "科目四";
+			}
+		}
+	}
+
+	var license_fee_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '学员财务列表',
+		toolbarItem: '',
+		toolbarCustom:
+            "<button data-privilege='020301_datagrid-list_01' class='btn-blue ml5' data-icon='edit' onclick='license_fee.add()'>新增</button>" +
+			"<button data-privilege='020301_datagrid-list_02' class='btn-blue ml5' data-icon='edit' onclick='license_fee.edit()'>编辑</button>",
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showCheckboxcol: true,
+		fieldSortable: false,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'financefee/list',
+		columns: [{
+			name: 'tableid',
+			label: '批次号',
+			align: 'center',
+			render: function(value, data) {
+				return "<a href='javascript:' onclick='license_fee.view(" + JSON.stringify(data) + ")'>" + value + "</a>"
+			}
+		}, {
+			label: '二级科目',
+			name : 'subject2',
+			align: 'center',
+			render : formatSubjectCell
+		},  {
+			label: '学车进度',
+			name : 'applyexam',
+			align: 'center',
+			render : license_fee.formatapplyexam
+			
+		},  {
+			label: '单人缴费金额',
+			name : 'money',
+			align: 'center',
+            render : function(val) {
+                return clz.filter.returnFloat(val);
+            }
+			
+		},  {
+			label: '总人数',
+			name : 'total',
+			align: 'center'
+			
+		},  {
+			label: '缴费总额',
+			name : 'totalmoney',
+			align: 'center',
+			render : function(val) {
+			    return clz.filter.returnFloat(val);
+			}
+		}, {
+			name: 'paytotal',
+			label: '已交费人数',
+			align: 'center'
+		},  {
+			label: '已交费总额',
+			name : 'paymoney',
+			align: 'center',
+            render : function(val) {
+                return clz.filter.returnFloat(val);
+            }
+			
+		},  {
+			label: '录入时间',
+			name : 'ctime',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+			
+		}, {
+			name: 'cname',
+			label: '录入人',
+			align: 'center'
+		}, {
+			label: '操作时间',
+			name : 'mtime',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }
+		}, {
+			name: 'mname',
+			label: '操作人',
+			align: 'center'
+		}]
+	});
+</script>

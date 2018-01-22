@@ -1,0 +1,253 @@
+<div class="bjui-pageContent">
+	<div class="widget-box">
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="addForm">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>用户信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<input type="hidden" name="id" id="id">
+				<div class="bjui-row col-4">
+					<div class="">
+						<label class="row-label">用户名:</label>
+						<div class="row-input required">
+							<input type="text" name="realname" id="realname" data-rule="required" >
+							<input type="hidden" name="deptid" id="deptid"/>
+						</div>
+						<div class="row-input">
+							<button type="button" class="btn-blue btn" onclick="showstaff()" data-icon="search">选择员工</button>
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">手机号码:</label>
+						<div class="row-input required fill-2">
+							<input type="hidden" name="username" id="username" />
+							<input type="text" name="mobile" id="mobile" data-rule="required;mobile">
+						</div>
+					</div>
+					<!--
+					<div class="">
+						<label class="row-label">用户名称:</label>
+						<div class="row-input required fill-2">
+							<input type="text" name="realname" data-rule="required">
+						</div>
+					</div>
+					-->
+					<div class="">
+						<label class="row-label">用户密码:</label>
+						<div class="row-input  required fill-2">
+							<input type="text" name="password" data-rule="required" readonly="readonly" value="123456">
+						</div>
+					</div>
+					
+
+					<div class="">
+						<label class="row-label">状态:</label>
+						<div class="row-input  required fill-2">
+							<select name="status" data-toggle="selectpicker" data-width="100%" data-rule="required">
+								<option value="1">停用</option>
+								<option value="0">启用</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">所属片区</label>
+						<div class="row-input ">
+							<select name="areaid" id="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist" data-optiontype="id,name" onchange="showuesraddstore(this.value)">
+								<option value="">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">门店</label>
+						<div class="row-input ">
+							<select name="storeid" id="storeid" data-toggle="selectpicker" data-width="100%"  >
+								<option value="">请选择</option>
+
+							</select>
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">分配角色</label>
+						<div class="row-input required">
+							<input type="text" name="rolename" size="17" data-rule="required"> <input type="hidden" name="roleid">
+
+						</div>
+
+						<button type="button" class="btn-blue btn" onclick="user_useradd_changerole(this);" data-icon="search">查找角色</button>
+
+					</div>
+
+				</div>
+				<input type="hidden" name="staffid" id="staffid" />
+			</div>
+		</form>
+	</div>
+	<div>温馨提示：可以选择员工创建用户或者直接手动录入数据创建用户。</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="saveuser()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+		
+	</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current: 'Navtab',
+		url: config.openBasePath + 'user/add',
+		form_name: 'addForm',
+
+	})
+
+	function user_useradd_changerole(obj) {
+		BJUI.findgrid({
+			include: 'rolename:rolename,roleid:id',
+			dialogOptions: {
+				title: '改变该用户角色'
+			},
+            empty : false,
+			gridOptions: {
+				local: 'local',
+                tableWidth : '90%',
+				toolbarItem: null,
+				filterThead: true,
+				dataUrl: config.openBasePath + '/privilege/listRole?isPage=0&enable=0',
+				columns: [{
+					name: 'rolename',
+					align: 'center',
+					label: '角色名称',
+					width: 100
+				}, {
+					name: 'remark',
+					align: 'center',
+					label: '描述'
+				}, {
+					name: 'userCount',
+					align: 'center',
+					label: '当前角色人数'
+				}],
+				paging: false,
+			}
+		})
+	}
+
+	function showstaff() {
+		BJUI.dialog({
+			id: 'staff-list-select',
+			width: 800,
+			height: 640,
+			url: 'html/system/staff/select-staff-list.html',
+			title: '员工列表',
+			onClose: function() {
+				var data = clz.getWindowJson();
+				console.log(data[0]);
+				if(data[0]) {
+					$.CurrentNavtab.find('#addForm')[0].reset();
+					$.CurrentNavtab.find('#areaid').empty();
+					$.CurrentNavtab.find('#areaid').selectpicker('refresh')
+					$.CurrentNavtab.find('#storeid').empty();
+					$.CurrentNavtab.find('#storeid').selectpicker('refresh')
+					var staffinfo = data[0];
+
+					var detail = JSON.parse(staffinfo.detail);
+					$.CurrentNavtab.find('#areaid').parent().addClass("select_disabled")
+					$.CurrentNavtab.find('#storeid').parent().addClass("select_disabled")
+					$.each(detail, function(name, value) {
+						staffinfo[name] = value;
+					});
+					$.CurrentNavtab.find('#realname').val(staffinfo.name);
+					$.CurrentNavtab.find('#username').val(staffinfo.mobile);
+					$.CurrentNavtab.find('#mobile').val(staffinfo.mobile);
+					$.CurrentNavtab.find('#staffid').val(staffinfo.id);
+					$.CurrentNavtab.find('#deptid').val(staffinfo.deptid);
+					
+					if(staffinfo.areaid) {
+						
+						
+						$.CurrentNavtab.find('#areaid').append("<option value='"+staffinfo.areaid+"'>"+clz.configRender({name:'arealist',val:staffinfo.areaid,key:'id',dataname:'name'})+ "</option>")
+						$.CurrentNavtab.find('#areaid').val(staffinfo.areaid)
+						$.CurrentNavtab.find('#areaid').selectpicker('refresh')
+					}
+					if(staffinfo.storeid) {
+						$.CurrentNavtab.find('#storeid').append("<option value='"+staffinfo.storeid+"'>"+clz.configRender({name:'storelist',val:staffinfo.storeid,key:'id',dataname:'name'})+ "</option>")
+						$.CurrentNavtab.find('#storeid').val(staffinfo.storeid)
+						$.CurrentNavtab.find('#storeid').selectpicker('refresh')
+					}
+					
+				}
+
+			}
+
+		})
+	}
+
+	function showuesraddstore(value){
+		BJUI.ajax('doajax', {
+				url: config.openBasePath + "/store/list?areaid=" + value,
+				loadingmask: true,
+				okCallback: function(json, options) {
+					//console.log(json.result.list)
+					if(json.result && json.result.list) {
+
+						renderselect($.CurrentNavtab.find('#storeid'), json.result.list,true)
+
+						
+					}
+				}
+			})
+	}
+
+	function saveuser() {
+		if($.CurrentNavtab.find('#addForm').isValid()){
+			$.CurrentNavtab.find('#username').val($.CurrentNavtab.find('#mobile').val())
+		
+		
+		var data = clz.parseForm($.CurrentNavtab.find('#addForm'));
+		
+		BJUI.alertmsg('confirm', '确认新增用户吗？', {
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/user/add",
+							loadingmask: true,
+							data: data,
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', '提交成功！', {})
+								BJUI.navtab('closeCurrentTab');
+							}
+						})
+					}
+				});
+		
+		}
+	}
+
+	
+
+	function showadduserstore(areaid) {
+
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/store/list?areaid=" + areaid,
+			loadingmask: true,
+			okCallback: function(json, options) {
+				//console.log(json.result.list)
+				if(json.result && json.result.list) {
+
+					renderselect($.CurrentNavtab.find('#storeid'), json.result.list)
+
+					clz.output_checkbox({
+						data: json.result.list, //数据格式 id name
+						domid: 'storegroup', // 输出容器id
+						name: 'storeid', //checkbox 的name属性
+						place: 'CurrentDialog' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+					})
+
+				}
+			}
+		})
+	}
+</script>

@@ -1,0 +1,122 @@
+<section id="thispage" privilege = "070502"></section>
+<div class="bjui-pageHeader" >
+	<form id="search-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>角色搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">角色名称：</label>
+				<div class="row-input">
+					<input type="text" name="rolename" class="form-control" size="15" >
+				</div>
+				<div class="row-input">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+				</div>
+				
+			</div>
+		</div>
+		</div>
+		
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var role_list = {
+		curtab: clz.getNavtab_privilege(),
+		list:$.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '角色列表',
+			toolbarItem: 'none',
+			toolbarCustom: "<button data-icon='plus' class='btn-blue'  data-privilege='070502_datagrid-list_01' onclick='role_list.add()'>添加</button> <button data-icon='edit' class='btn-blue'  style='' data-privilege='070502_datagrid-list_02' onclick='role_list.edit()'>编辑</button>",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'privilege/listRole',
+			columns: [
+                {name:'rolename',label:'角色名称',align:'center'},
+                {name:'enable',label:'状态',align:'center',type:'select',items:enable_status},
+                {name:'remark',label:'备注',align:'center'},
+                
+            ],
+			keys: {
+				ctime: 'ctime',
+				mtime: 'mtime'
+			},
+			editMode: {navtab:{id:'student-navtab',title:'编辑角色',onClose:function(){
+				role_list.list.datagrid('refresh', true);
+				BJUI.navtab('switchTab', role_list.curtab);
+				}
+			}
+			},
+			add_url: "html/system/role/role-add.html",
+			edit_url: "html/system/role/role-edit.html",
+			//delUrl: config.openBasePath + 'coach/delete',
+			delPK: 'id',
+			beforeEdit : function(){
+				window.role_list_tab = clz.getNavtab_privilege();
+            	window.role_object = role_list.list.data('selectedDatas')  == null ? null : role_list.list.data('selectedDatas')[0];
+            	return true;
+			},
+			afterSave: function() {
+				role_list.list.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				role_list.list.datagrid('refresh', true);
+			},
+			exportOption : {type:"file", options:{
+            url : config.openBasePath + "coach/export",
+            data : $("#search-form").serializeArray()
+            }
+			}
+		}),
+		add:function(){
+			BJUI.navtab({
+				id: 'role-add',
+				url: 'html/system/role/role-add.html',
+				title: '新增角色',
+				onClose: function() {
+					role_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', role_list.curtab);
+				}
+
+			})
+		},
+		edit:function(){
+			var data = role_list.list.data('selectedDatas');
+			console.log(clz.check_table_checked($.CurrentNavtab.find('#datagrid-list')))
+
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('error', '没有选中数据！', {})
+				return
+			}
+			if(data.length > 1) {
+				BJUI.alertmsg('error', '请选择一个角色！', {})
+				return
+			}
+			BJUI.navtab({
+				id: 'role-edit-' + data[0].id,
+				width: 900,
+				height: 800,
+				url: 'html/system/role/role-edit.html',
+				title: '编辑角色'+data[0].rolename,
+				more: JSON.stringify(data[0]),
+				onClose: function() {
+					role_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', role_list.curtab);
+				}
+
+			})
+		}
+	}
+	
+
+    function enable_status() {
+        return [{'0':'启用'},{'1':'停用'}]
+    }
+</script>

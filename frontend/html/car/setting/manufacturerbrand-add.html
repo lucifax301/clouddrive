@@ -1,0 +1,65 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form 
+            class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			
+			<div class="bjui-row">
+                <label class="row-label">类型:</label>
+                <div class="row-input required">
+					<select name="type" id="type" data-toggle="selectpicker" data-width="100%" data-rule="required" onchange="onchangeType(this);" >
+						<option value="2">品牌</option>
+						<option value="1">厂家</option>
+					</select>
+                </div> 
+                <label class="row-label pid">所属厂家:</label>
+                <div class="row-input pid required">
+					<select name="pid" id="pid" data-rule="required" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/car/getAllManufacturerBrand" data-optiontype="id,name" >
+					</select>
+                </div> 
+                <label class="row-label">名称:</label>
+                <div class="row-input required">		
+                    <input type="text" name="name" data-rule="required">
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="manufacturerbrandAdd()">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+    function manufacturerbrandAdd(){
+		if($.CurrentDialog.find('#add-form').isValid())
+		BJUI.alertmsg('confirm', '确认新增吗？', {
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'car/addManufacturerBrand',
+						loadingmask: true,
+						data: clz.parseForm($.CurrentDialog.find("#add-form")),
+						okCallback: function(json, options) {
+							BJUI.alertmsg('ok', '新增成功！', {})
+							BJUI.dialog('closeCurrent')
+						}
+					});
+				}
+		});
+	}
+    var _html=$.CurrentDialog.find('.row-input.pid').html();
+    function onchangeType(e){
+    	var type=$(e).val();
+    	if(type==2){
+			$.CurrentDialog.find('.row-label.pid').show();
+			$.CurrentDialog.find('.row-input.pid.required').show();
+			$.CurrentDialog.find('.row-input.pid.required').html(_html);
+			$.CurrentDialog.find('.row-input.pid.required').trigger(BJUI.eventType.initUI)	
+    	}else if(type==1){
+			$.CurrentDialog.find('.row-label.pid').hide();
+			$.CurrentDialog.find('.row-input.pid.required').hide();
+			$.CurrentDialog.find('.row-input.pid.required').empty();
+    	}
+   
+    }
+</script>

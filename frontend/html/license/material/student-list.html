@@ -1,0 +1,282 @@
+<div class="bjui-pageContent">
+    <section id="thispage" privilege="020305"></section>
+    <form class="datagrid-edit-form" data-toggle="ajaxsearch"
+          data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"> <i class="fa fa-th"></i> </span>
+                <h5>资料搜索</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <div class="bjui-row col-4">
+                    <label class="row-label">批次号：</label>
+                    <div class="row-input">
+                        <input type="text" name="tableid">
+                    </div>
+                    <label class="row-label">办证科目：</label>
+                    <div class="row-input">
+                        <select name="subject" data-toggle="selectpicker" data-width="100%">
+                            <option value="">全部</option>
+                            <option value="0">学习证</option>
+                            <option value="1">申请盖章</option>
+                            <option value="2">驾校盖章</option>
+                            <option value="3">IC卡</option>
+                            <option value="4">三联单打印</option>
+                            <option value="5">三联单盖章</option>
+                            <option value="6">补交资料</option>
+                            <option value="7">归还证件</option>
+                            <option value="8">驾驶证</option>
+                        </select>
+                    </div>
+                    <label class="row-label">起始时间：</label>
+                    <div class="row-input">
+                        <input type="text" name="stime" data-toggle="datepicker" placeholder="录入起始时间">
+                    </div>
+                    <label class="row-label">结束时间：</label>
+                    <div class="row-input">
+                        <input type="text" name="etime" data-toggle="datepicker" placeholder="录入结束时间">
+                    </div>
+
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+                    <button type="reset" class="btn-blue" data-icon="times">重置</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+</div>
+<script type="text/javascript">
+    var license_material = {
+        learncard: function () {
+            BJUI.dialog({
+                id: 'dialog-material-learncard',
+                url: 'html/license/material/learncard-add.html',
+                title: '学习证批量添加',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        applystamp: function () {
+            BJUI.dialog({
+                id: 'dialog-material-applystamp',
+                url: 'html/license/material/apply-stamp.html',
+                title: '学习证申请盖章',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        schoolstamp: function () {
+            BJUI.dialog({
+                id: 'dialog-material-schoolstamp',
+                url: 'html/license/material/school-stamp.html',
+                title: '学习证驾校盖章',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        importiccard: function () {
+            BJUI.dialog({
+                id: 'dialog-iccard-upload-excel',
+                mask: true,
+                url: 'html/license/material/upload.html',
+                title: ' 导入IC卡'
+            })
+        },
+        tribillprint: function () {
+            BJUI.dialog({
+                id: 'dialog-material-tribillprint',
+                url: 'html/license/material/tribill-print.html',
+                title: '三联单打印',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        tribillstamp: function () {
+            BJUI.dialog({
+                id: 'dialog-material-tribillstamp',
+                url: 'html/license/material/tribill-stamp.html',
+                title: '三联单盖章',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        repaymaterial: function () {
+            BJUI.dialog({
+                id: 'dialog-material-repaymaterial',
+                url: 'html/license/material/repay-material.html',
+                title: '补交资料',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        rtnmaterial: function () {
+            BJUI.dialog({
+                id: 'dialog-material-rtnmaterial',
+                url: 'html/license/material/rtn-material.html',
+                title: '归还证件',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        license: function () {
+            BJUI.dialog({
+                id: 'dialog-material-license',
+                url: 'html/license/material/license.html',
+                title: '驾驶证',
+                mask: true,
+                width: 600,
+                height: 600,
+                maxable: false,
+                resizable: false,
+                onClose: function () {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+        detail: function (tableid, subject) {
+            clz.setWindowJson({tableid: tableid});
+            var url;
+            if (subject == 0) {
+                url = 'html/license/material/learncard-detail.html';
+            } else if (subject == 3) {
+                url = 'html/license/material/iccard-detail.html';
+            } else if (subject == 6) {
+                url = 'html/license/material/repay-detail.html';
+            } else if (subject == 7) {
+                url = 'html/license/material/rtn-detail.html';
+            } else {
+                url = 'html/license/material/subject-detail.html';
+            }
+            BJUI.dialog({
+                id: 'dialog-material-detail',
+                url: url,
+                title: '批量详情',
+                width: 650,
+                height: 500,
+                mask: true,
+                maxable: false,
+                resizable: false
+            })
+        },
+        showrepaydetail: function (studentid) {
+            clz.setWindowJson({studentid: studentid});
+            BJUI.dialog({
+                id: 'dialog-materiial-repaydetail',
+                mask: true,
+                width: 650,
+                height: 320,
+                url: 'html/license/material/repay-detail.html',
+                title: '补交资料详情'
+            })
+        },
+        showrtndetail: function (studentid) {
+            clz.setWindowJson({studentid: studentid});
+            BJUI.dialog({
+                id: 'dialog-materiial-rtndetail',
+                mask: true,
+                width: 650,
+                height: 320,
+                url: 'html/license/material/rtn-detail.html',
+                title: '归还资料详情'
+            })
+        },
+        formatsubjecttype: function (value) {
+            switch (value) {
+                case 0:
+                    return "学习证";
+                case 1:
+                    return "申请盖章";
+                case 2:
+                    return "驾校盖章";
+                case 3:
+                    return "IC卡";
+                case 4:
+                    return "三联单打印";
+                case 5:
+                    return "三联单盖章";
+                case 6:
+                    return "补交资料";
+                case 7:
+                    return "归还证件";
+                case 8:
+                    return "驾驶证";
+            }
+        }
+    };
+    var license_material_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+        gridTitle: '学员资料管理信息列表',
+        toolbarItem: '',
+        toolbarCustom:
+        "<button class='btn-blue ml5' data-privilege='020305_datagrid-list_11' data-icon='edit' onclick='license_material.learncard()'>学习证录入</button>" +
+        "<button data-privilege='020305_datagrid-list_12' class='btn-blue ml5' data-icon='edit' onclick='license_material.applystamp()'>申请盖章</button>" +
+        "<button data-privilege='020305_datagrid-list_13' class='btn-blue ml5' data-icon='edit' onclick='license_material.schoolstamp()'>驾校盖章</button>" +
+        "<button data-privilege='020305_datagrid-list_14' class='btn-blue ml5' data-icon='edit' onclick='license_material.importiccard()'>IC卡导入</button>" +
+        "<button data-privilege='020305_datagrid-list_15' class='btn-blue ml5' data-icon='edit' onclick='license_material.tribillprint()'>三联单打印</button>" +
+        "<button data-privilege='020305_datagrid-list_16' class='btn-blue ml5' data-icon='edit' onclick='license_material.tribillstamp()'>三联单盖章</button>" +
+        "<button data-privilege='020305_datagrid-list_17' class='btn-blue ml5' data-icon='edit' onclick='license_material.repaymaterial()'>补交资料</button>" +
+        "<button data-privilege='020305_datagrid-list_18' class='btn-blue ml5' data-icon='edit' onclick='license_material.rtnmaterial()'>归还证件</button>" +
+        "<button data-privilege='020305_datagrid-list_19' class='btn-blue ml5' data-icon='edit' onclick='license_material.license()'>驾驶证</button>",
+        paging: {pageSize: 15, selectPageSize: '15,50,100,500'},
+        height: '80%',
+        toolbarItem: '',
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'material/list',
+        columns: [{
+            name: 'tableid',
+            label: '批次号',
+            align: 'center',
+            render: function (value, data) {
+                return "<a href='javascript:' onclick='license_material.detail(\"" + data.tableid + "\"," + data.subject + " )'>" + value + "</a>"
+            }
+        },
+            {name: 'subject', label: '办证科目', align: 'center', render: license_material.formatsubjecttype},
+            {name: 'itemcount', label: '学员数量', align: 'center'},
+            {name: 'cname', label: '录入人', align: 'center'},
+            {name: 'ctime', label: '录入时间', align: 'center'}
+        ]
+    });
+</script>

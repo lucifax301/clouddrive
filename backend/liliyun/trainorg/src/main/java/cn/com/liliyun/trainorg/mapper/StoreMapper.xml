@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.StoreMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Store" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="storenum" property="storenum" jdbcType="VARCHAR" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="images" property="images" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="licensename" property="licensename" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="INTEGER" />
+    <result column="lng" property="lng" jdbcType="DOUBLE" />
+    <result column="lat" property="lat" jdbcType="DOUBLE" />
+    <result column="tradingarea" property="tradingarea" jdbcType="VARCHAR" />
+    <result column="landmark" property="landmark" jdbcType="VARCHAR" />
+    <result column="busstation" property="busstation" jdbcType="VARCHAR" />
+    <result column="operatetype" property="operatetype" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="scale" property="scale" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="opendate" property="opendate" jdbcType="TIMESTAMP" />
+    <result column="area" property="area" jdbcType="DECIMAL" />
+    <result column="usingarea" property="usingarea" jdbcType="DECIMAL" />
+    <result column="rent" property="rent" jdbcType="DECIMAL" />
+    <result column="deposit" property="deposit" jdbcType="DECIMAL" />
+    <result column="rentunitprice" property="rentunitprice" jdbcType="DECIMAL" />
+    <result column="issublet" property="issublet" jdbcType="TINYINT" />
+    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="renttype" property="renttype" jdbcType="TINYINT" />
+    <result column="rentpaylimit" property="rentpaylimit" jdbcType="VARCHAR" />
+    <result column="licensestart" property="licensestart" jdbcType="TIMESTAMP" />
+    <result column="licenseend" property="licenseend" jdbcType="TIMESTAMP" />
+    <result column="licensetime" property="licensetime" jdbcType="INTEGER" />
+    <result column="owner" property="owner" jdbcType="VARCHAR" />
+    <result column="ownertype" property="ownertype" jdbcType="TINYINT" />
+    <result column="landlord" property="landlord" jdbcType="VARCHAR" />
+    <result column="landlordphone" property="landlordphone" jdbcType="VARCHAR" />
+    <result column="landlordaddress" property="landlordaddress" jdbcType="VARCHAR" />
+    <result column="totalfloor" property="totalfloor" jdbcType="INTEGER" />
+    <result column="curfloor" property="curfloor" jdbcType="INTEGER" />
+    <result column="manager" property="manager" jdbcType="VARCHAR" />
+    <result column="workstart" property="workstart" jdbcType="INTEGER" />
+    <result column="workend" property="workend" jdbcType="INTEGER" />
+    <result column="monitordevice" property="monitordevice" jdbcType="INTEGER" />
+    <result column="topad" property="topad" jdbcType="INTEGER" />
+    <result column="frontad" property="frontad" jdbcType="INTEGER" />
+    <result column="ledad" property="ledad" jdbcType="INTEGER" />
+    <result column="signboard" property="signboard" jdbcType="INTEGER" />
+    <result column="boxad" property="boxad" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+	<result column="address" property="address" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, storenum, areaid, name, images, tel, licensename, region, lng, lat, tradingarea, 
+    landmark, busstation, operatetype, type, scale, status, opendate, area, usingarea, 
+    rent, deposit, rentunitprice, issublet, starttime, endtime, contact, renttype, rentpaylimit, 
+    licensestart, licenseend, licensetime, owner, ownertype, landlord, landlordphone, 
+    landlordaddress, totalfloor, curfloor, manager, workstart, workend, monitordevice, 
+    topad, frontad, ledad, signboard, boxad, ctime, mtime, address
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_store
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    delete from t_store
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    insert into t_store (id, storenum, areaid, 
+      name, images, tel, 
+      licensename, region, lng, 
+      lat, tradingarea, landmark, 
+      busstation, operatetype, type, 
+      scale, status, opendate, 
+      area, usingarea, rent, 
+      deposit, rentunitprice, issublet, 
+      starttime, endtime, contact, 
+      renttype, rentpaylimit, licensestart, 
+      licenseend, licensetime, owner, 
+      ownertype, landlord, landlordphone, 
+      landlordaddress, totalfloor, curfloor, 
+      manager, workstart, workend, 
+      monitordevice, topad, frontad, 
+      ledad, signboard, boxad, 
+      ctime, mtime, address
+      )
+    values (#{id,jdbcType=INTEGER}, #{storenum,jdbcType=VARCHAR}, #{areaid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{images,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{licensename,jdbcType=VARCHAR}, #{region,jdbcType=INTEGER}, #{lng,jdbcType=DOUBLE}, 
+      #{lat,jdbcType=DOUBLE}, #{tradingarea,jdbcType=VARCHAR}, #{landmark,jdbcType=VARCHAR}, 
+      #{busstation,jdbcType=VARCHAR}, #{operatetype,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, 
+      #{scale,jdbcType=TINYINT}, #{status,jdbcType=INTEGER}, #{opendate,jdbcType=TIMESTAMP}, 
+      #{area,jdbcType=DECIMAL}, #{usingarea,jdbcType=DECIMAL}, #{rent,jdbcType=DECIMAL}, 
+      #{deposit,jdbcType=DECIMAL}, #{rentunitprice,jdbcType=DECIMAL}, #{issublet,jdbcType=TINYINT}, 
+      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{contact,jdbcType=VARCHAR}, 
+      #{renttype,jdbcType=TINYINT}, #{rentpaylimit,jdbcType=VARCHAR}, #{licensestart,jdbcType=TIMESTAMP}, 
+      #{licenseend,jdbcType=TIMESTAMP}, #{licensetime,jdbcType=INTEGER}, #{owner,jdbcType=VARCHAR}, 
+      #{ownertype,jdbcType=TINYINT}, #{landlord,jdbcType=VARCHAR}, #{landlordphone,jdbcType=VARCHAR}, 
+      #{landlordaddress,jdbcType=VARCHAR}, #{totalfloor,jdbcType=INTEGER}, #{curfloor,jdbcType=INTEGER}, 
+      #{manager,jdbcType=VARCHAR}, #{workstart,jdbcType=INTEGER}, #{workend,jdbcType=INTEGER}, 
+      #{monitordevice,jdbcType=INTEGER}, #{topad,jdbcType=INTEGER}, #{frontad,jdbcType=INTEGER}, 
+      #{ledad,jdbcType=INTEGER}, #{signboard,jdbcType=INTEGER}, #{boxad,jdbcType=INTEGER}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP}, #{address,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    insert into t_store
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="storenum != null" >
+        storenum,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="images != null" >
+        images,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="licensename != null" >
+        licensename,
+      </if>
+      <if test="region != null" >
+        region,
+      </if>
+      <if test="lng != null" >
+        lng,
+      </if>
+      <if test="lat != null" >
+        lat,
+      </if>
+      <if test="tradingarea != null" >
+        tradingarea,
+      </if>
+      <if test="landmark != null" >
+        landmark,
+      </if>
+      <if test="busstation != null" >
+        busstation,
+      </if>
+      <if test="operatetype != null" >
+        operatetype,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="scale != null" >
+        scale,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="opendate != null" >
+        opendate,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="usingarea != null" >
+        usingarea,
+      </if>
+      <if test="rent != null" >
+        rent,
+      </if>
+      <if test="deposit != null" >
+        deposit,
+      </if>
+      <if test="rentunitprice != null" >
+        rentunitprice,
+      </if>
+      <if test="issublet != null" >
+        issublet,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="renttype != null" >
+        renttype,
+      </if>
+      <if test="rentpaylimit != null" >
+        rentpaylimit,
+      </if>
+      <if test="licensestart != null" >
+        licensestart,
+      </if>
+      <if test="licenseend != null" >
+        licenseend,
+      </if>
+      <if test="licensetime != null" >
+        licensetime,
+      </if>
+      <if test="owner != null" >
+        owner,
+      </if>
+      <if test="ownertype != null" >
+        ownertype,
+      </if>
+      <if test="landlord != null" >
+        landlord,
+      </if>
+      <if test="landlordphone != null" >
+        landlordphone,
+      </if>
+      <if test="landlordaddress != null" >
+        landlordaddress,
+      </if>
+      <if test="totalfloor != null" >
+        totalfloor,
+      </if>
+      <if test="curfloor != null" >
+        curfloor,
+      </if>
+      <if test="manager != null" >
+        manager,
+      </if>
+      <if test="workstart != null" >
+        workstart,
+      </if>
+      <if test="workend != null" >
+        workend,
+      </if>
+      <if test="monitordevice != null" >
+        monitordevice,
+      </if>
+      <if test="topad != null" >
+        topad,
+      </if>
+      <if test="frontad != null" >
+        frontad,
+      </if>
+      <if test="ledad != null" >
+        ledad,
+      </if>
+      <if test="signboard != null" >
+        signboard,
+      </if>
+      <if test="boxad != null" >
+        boxad,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="storenum != null" >
+        #{storenum,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null" >
+        #{images,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="licensename != null" >
+        #{licensename,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null" >
+        #{region,jdbcType=INTEGER},
+      </if>
+      <if test="lng != null" >
+        #{lng,jdbcType=DOUBLE},
+      </if>
+      <if test="lat != null" >
+        #{lat,jdbcType=DOUBLE},
+      </if>
+      <if test="tradingarea != null" >
+        #{tradingarea,jdbcType=VARCHAR},
+      </if>
+      <if test="landmark != null" >
+        #{landmark,jdbcType=VARCHAR},
+      </if>
+      <if test="busstation != null" >
+        #{busstation,jdbcType=VARCHAR},
+      </if>
+      <if test="operatetype != null" >
+        #{operatetype,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="opendate != null" >
+        #{opendate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=DECIMAL},
+      </if>
+      <if test="usingarea != null" >
+        #{usingarea,jdbcType=DECIMAL},
+      </if>
+      <if test="rent != null" >
+        #{rent,jdbcType=DECIMAL},
+      </if>
+      <if test="deposit != null" >
+        #{deposit,jdbcType=DECIMAL},
+      </if>
+      <if test="rentunitprice != null" >
+        #{rentunitprice,jdbcType=DECIMAL},
+      </if>
+      <if test="issublet != null" >
+        #{issublet,jdbcType=TINYINT},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="renttype != null" >
+        #{renttype,jdbcType=TINYINT},
+      </if>
+      <if test="rentpaylimit != null" >
+        #{rentpaylimit,jdbcType=VARCHAR},
+      </if>
+      <if test="licensestart != null" >
+        #{licensestart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licenseend != null" >
+        #{licenseend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licensetime != null" >
+        #{licensetime,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null" >
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="ownertype != null" >
+        #{ownertype,jdbcType=TINYINT},
+      </if>
+      <if test="landlord != null" >
+        #{landlord,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordphone != null" >
+        #{landlordphone,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordaddress != null" >
+        #{landlordaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfloor != null" >
+        #{totalfloor,jdbcType=INTEGER},
+      </if>
+      <if test="curfloor != null" >
+        #{curfloor,jdbcType=INTEGER},
+      </if>
+      <if test="manager != null" >
+        #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="workstart != null" >
+        #{workstart,jdbcType=INTEGER},
+      </if>
+      <if test="workend != null" >
+        #{workend,jdbcType=INTEGER},
+      </if>
+      <if test="monitordevice != null" >
+        #{monitordevice,jdbcType=INTEGER},
+      </if>
+      <if test="topad != null" >
+        #{topad,jdbcType=INTEGER},
+      </if>
+      <if test="frontad != null" >
+        #{frontad,jdbcType=INTEGER},
+      </if>
+      <if test="ledad != null" >
+        #{ledad,jdbcType=INTEGER},
+      </if>
+      <if test="signboard != null" >
+        #{signboard,jdbcType=INTEGER},
+      </if>
+      <if test="boxad != null" >
+        #{boxad,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    update t_store
+    <set >
+      <if test="storenum != null" >
+        storenum = #{storenum,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null" >
+        images = #{images,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="licensename != null" >
+        licensename = #{licensename,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null" >
+        region = #{region,jdbcType=INTEGER},
+      </if>
+      <if test="lng != null" >
+        lng = #{lng,jdbcType=DOUBLE},
+      </if>
+      <if test="lat != null" >
+        lat = #{lat,jdbcType=DOUBLE},
+      </if>
+      <if test="tradingarea != null" >
+        tradingarea = #{tradingarea,jdbcType=VARCHAR},
+      </if>
+      <if test="landmark != null" >
+        landmark = #{landmark,jdbcType=VARCHAR},
+      </if>
+      <if test="busstation != null" >
+        busstation = #{busstation,jdbcType=VARCHAR},
+      </if>
+      <if test="operatetype != null" >
+        operatetype = #{operatetype,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="opendate != null" >
+        opendate = #{opendate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=DECIMAL},
+      </if>
+      <if test="usingarea != null" >
+        usingarea = #{usingarea,jdbcType=DECIMAL},
+      </if>
+      <if test="rent != null" >
+        rent = #{rent,jdbcType=DECIMAL},
+      </if>
+      <if test="deposit != null" >
+        deposit = #{deposit,jdbcType=DECIMAL},
+      </if>
+      <if test="rentunitprice != null" >
+        rentunitprice = #{rentunitprice,jdbcType=DECIMAL},
+      </if>
+      <if test="issublet != null" >
+        issublet = #{issublet,jdbcType=TINYINT},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="renttype != null" >
+        renttype = #{renttype,jdbcType=TINYINT},
+      </if>
+      <if test="rentpaylimit != null" >
+        rentpaylimit = #{rentpaylimit,jdbcType=VARCHAR},
+      </if>
+      <if test="licensestart != null" >
+        licensestart = #{licensestart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licenseend != null" >
+        licenseend = #{licenseend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licensetime != null" >
+        licensetime = #{licensetime,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null" >
+        owner = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="ownertype != null" >
+        ownertype = #{ownertype,jdbcType=TINYINT},
+      </if>
+      <if test="landlord != null" >
+        landlord = #{landlord,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordphone != null" >
+        landlordphone = #{landlordphone,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordaddress != null" >
+        landlordaddress = #{landlordaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfloor != null" >
+        totalfloor = #{totalfloor,jdbcType=INTEGER},
+      </if>
+      <if test="curfloor != null" >
+        curfloor = #{curfloor,jdbcType=INTEGER},
+      </if>
+      <if test="manager != null" >
+        manager = #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="workstart != null" >
+        workstart = #{workstart,jdbcType=INTEGER},
+      </if>
+      <if test="workend != null" >
+        workend = #{workend,jdbcType=INTEGER},
+      </if>
+      <if test="monitordevice != null" >
+        monitordevice = #{monitordevice,jdbcType=INTEGER},
+      </if>
+      <if test="topad != null" >
+        topad = #{topad,jdbcType=INTEGER},
+      </if>
+      <if test="frontad != null" >
+        frontad = #{frontad,jdbcType=INTEGER},
+      </if>
+      <if test="ledad != null" >
+        ledad = #{ledad,jdbcType=INTEGER},
+      </if>
+      <if test="signboard != null" >
+        signboard = #{signboard,jdbcType=INTEGER},
+      </if>
+      <if test="boxad != null" >
+        boxad = #{boxad,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    update t_store
+    set storenum = #{storenum,jdbcType=VARCHAR},
+      areaid = #{areaid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      images = #{images,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      licensename = #{licensename,jdbcType=VARCHAR},
+      region = #{region,jdbcType=INTEGER},
+      lng = #{lng,jdbcType=DOUBLE},
+      lat = #{lat,jdbcType=DOUBLE},
+      tradingarea = #{tradingarea,jdbcType=VARCHAR},
+      landmark = #{landmark,jdbcType=VARCHAR},
+      busstation = #{busstation,jdbcType=VARCHAR},
+      operatetype = #{operatetype,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
+      scale = #{scale,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
+      opendate = #{opendate,jdbcType=TIMESTAMP},
+      area = #{area,jdbcType=DECIMAL},
+      usingarea = #{usingarea,jdbcType=DECIMAL},
+      rent = #{rent,jdbcType=DECIMAL},
+      deposit = #{deposit,jdbcType=DECIMAL},
+      rentunitprice = #{rentunitprice,jdbcType=DECIMAL},
+      issublet = #{issublet,jdbcType=TINYINT},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      contact = #{contact,jdbcType=VARCHAR},
+      renttype = #{renttype,jdbcType=TINYINT},
+      rentpaylimit = #{rentpaylimit,jdbcType=VARCHAR},
+      licensestart = #{licensestart,jdbcType=TIMESTAMP},
+      licenseend = #{licenseend,jdbcType=TIMESTAMP},
+      licensetime = #{licensetime,jdbcType=INTEGER},
+      owner = #{owner,jdbcType=VARCHAR},
+      ownertype = #{ownertype,jdbcType=TINYINT},
+      landlord = #{landlord,jdbcType=VARCHAR},
+      landlordphone = #{landlordphone,jdbcType=VARCHAR},
+      landlordaddress = #{landlordaddress,jdbcType=VARCHAR},
+      totalfloor = #{totalfloor,jdbcType=INTEGER},
+      curfloor = #{curfloor,jdbcType=INTEGER},
+      manager = #{manager,jdbcType=VARCHAR},
+      workstart = #{workstart,jdbcType=INTEGER},
+      workend = #{workend,jdbcType=INTEGER},
+      monitordevice = #{monitordevice,jdbcType=INTEGER},
+      topad = #{topad,jdbcType=INTEGER},
+      frontad = #{frontad,jdbcType=INTEGER},
+      ledad = #{ledad,jdbcType=INTEGER},
+      signboard = #{signboard,jdbcType=INTEGER},
+      boxad = #{boxad,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      address = #{address,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+    <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_store
+    <where>
+	     <if test="name != null and name != ''">
+		  	and name LIKE concat(concat('%',#{name}),'%')
+		 </if>
+	     <if test="areaid != null and areaid != 0" >
+	       and areaid = #{areaid,jdbcType=INTEGER}
+	     </if>
+	     <if test="storenum != null and storenum != ''" >
+	       	and storenum = #{storenum,jdbcType=VARCHAR}
+	     </if>
+	     <if test="status != null and status != 0">
+	       	and status = #{status,jdbcType=TINYINT}
+	     </if>
+	     <if test="operatetype != null and operatetype != 0">
+	       	and operatetype = #{operatetype,jdbcType=TINYINT}
+	     </if>
+	     <if test="type != null and type != 0">
+	     	and type = #{type,jdbcType=TINYINT}
+	     </if>
+	     <if test="usingareatop != null and usingareatop != 0">
+	     	and #{usingareatop,jdbcType=DECIMAL} >= usingarea
+	     </if>
+	     <if test="usingarealow != null and usingarealow != 0">
+	     	and usingarea > #{usingarealow,jdbcType=DECIMAL}
+	     </if>
+	     <if test="rentunitpricetop != null and rentunitpricetop != 0">
+	     	and #{rentunitpricetop,jdbcType=DECIMAL} >= rentunitprice
+	     </if>
+	     <if test="rentunitpricelow != null and rentunitpricelow != 0">
+	     	and rentunitprice > #{rentunitpricelow,jdbcType=DECIMAL}
+	     </if>
+	     <if test="renttimetop != null">
+	     	and #{renttimetop,jdbcType=TIMESTAMP} >= endtime
+	     </if>
+	     <if test="renttimelow != null">
+	     	and endtime > #{renttimelow,jdbcType=TIMESTAMP}
+	     </if>
+	     <if test="opendatetop != null">
+	     	and #{opendatetop,jdbcType=TIMESTAMP} >= opendate
+	     </if>
+	     <if test="opendatelow != null">
+	     	and opendate > #{opendatelow,jdbcType=TIMESTAMP}
+	     </if>
+     </where>
+     order by mtime desc
+  </select>
+
+  <select id="getCount" resultType="int" parameterType="cn.com.liliyun.trainorg.model.Store" >
+    select count(1) from t_store
+  </select>
+    <select id="getMap" resultType="cn.com.liliyun.common.dto.MapDTO">
+    select id , name from t_store 
+  </select>
+</mapper>

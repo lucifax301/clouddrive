@@ -1,0 +1,163 @@
+<div class="bjui-pageContent">
+	<form id="edit-form">
+		<input type="hidden" name="itemid"/>
+		<div class="bjui-row col-3">
+			<label class="row-label">证件号码：</label>
+			<div class="row-input required">
+				<input type="text" name="idcard" data-rule="required;length[~20]" readonly="true">
+			</div>
+			<label class="row-label">姓名：</label>
+			<div class="row-input">
+				<input type="text" name="name" readonly="true">
+			</div>
+			<label class="row-label">班别：</label>
+			<div class="row-input">
+				<select disabled="true" name="classid" data-toggle="selectpicker" data-width="100%"
+						data-datajson="classlist" data-optiontype="id,name">
+				</select>
+			</div>
+			<label class="row-label">车型：</label>
+			<div class="row-input">
+				<select disabled="true" name="traintype" data-toggle="selectpicker" data-width="100%">
+					<option value="C1">C1</option>
+					<option value="C2">C2</option>
+				</select>
+			</div>
+			<label class="row-label">合同金额：</label>
+			<div class="row-input">
+				<input type="text" name="contractmoney" readonly="true">
+			</div>
+			<label class="row-label">已交费：</label>
+			<div class="row-input">
+				<input type="text" name="paymoney" readonly="true">
+			</div>
+			<label class="row-label">减免额：</label>
+			<div class="row-input">
+				<input type="text" name="submoney" readonly="true">
+			</div>
+			<label class="row-label">欠费状态：</label>
+			<div class="row-input">
+				<select disabled="true" name="owestatus" data-toggle="selectpicker" data-width="100%">
+					<option value="0">否</option>
+					<option value="1">是</option>
+				</select>
+			</div>
+			<label class="row-label">欠费额：</label>
+			<div class="row-input">
+				<input type="text" name="owemoney" readonly="true">
+			</div>
+			<label class="row-label">欠减免费：</label>
+			<div class="row-input">
+				<input type="text" name="owesubmoney" readonly="true">
+			</div>
+			<label class="row-label">欠补考费：</label>
+			<div class="row-input">
+				<input type="text" name="oweresitmoney" readonly="true">
+			</div>
+			<label class="row-label">退费状态：</label>
+			<div class="row-input">
+				<select disabled="true" name="returnstatus" data-toggle="selectpicker" data-width="100%">
+					<option value="0">否</option>
+					<option value="1">是</option>
+				</select>
+			</div>
+			<label class="row-label">一级科目：</label>
+			<div class="row-input required">
+				<select name="subject1" data-toggle="selectpicker" data-width="100%">
+					<!--<option value="1">收入</option>-->
+					<option value="2">支出</option>
+            	</select>
+			</div>
+			<label class="row-label">二级科目：</label>
+			<div class="row-input required">
+				<select name="subject2" data-toggle="selectpicker" data-width="100%"
+                    data-dataurl="/httpaccess/financeSubject/list" data-optiontype="id,subject">
+				</select>
+			</div>
+			<label class="row-label">收支金额：</label>
+			<div class="row-input required">
+				<input type="text" name="money" data-rule="required;plusnumber">
+			</div>
+			<label class="row-label">开票日期：</label>
+			<div class="row-input">
+				<input type="text" name="billdate" data-toggle="datepicker">
+			</div>
+			<label class="row-label">票据类型：</label>
+			<div class="row-input">
+				<select name="billtype" data-toggle="selectpicker" data-width="100%">
+					<option value="0">A类</option>
+					<option value="1">B类</option>
+				</select>
+			</div>
+			<label class="row-label">票据号码：</label>
+			<div class="row-input">
+				<input type="text" name="billnum">
+			</div>
+			<label class="row-label">批次号：</label>
+			<div class="row-input">
+				<input type="text" name="tableid" readonly="true">
+			</div>
+			<div>
+				<label class="row-label">备注：</label>
+				<div class="row-input fill-2">
+					<textarea name="remark" data-rule="length[~200]" rows="4"></textarea>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="finance_fee_edit()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script>
+	var data = finance_fee_list.data("selectedDatas")[0];
+	clz.CurrentDom_init({
+		current: 'Dialog',
+		form_name: 'edit-form',
+		table_name: 'datagrid-list',
+	    timetype:[
+	        {
+	            name:'billdate',
+	            type:'yyyy-MM-dd'
+	        }
+	    ],
+	    returnFloat:'oweresitmoney,paymoney,submoney,contractmoney,owemoney,owesubmoney,money',
+	    before:function(data){
+            var formdata;
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'financefee/init',
+                data : {idcard : data.idcard},
+                type : "GET",
+                async : false,
+                loadingmask: false,
+                okCallback: function(json, options) {
+                    formdata = json.result;
+                    formdata.itemid = data.itemid;
+                    formdata.tableid = data.tableid;
+                    formdata.money = data.money;
+                    formdata.subject2 = data.subject2;
+                    formdata.billdate = data.billdate;
+                    formdata.billtype = data.billtype;
+                    formdata.billnum = data.billnum;
+                    formdata.remark = data.remark;
+                }
+            });
+            return formdata;
+	    }
+	});
+	
+	function finance_fee_edit() {
+		BJUI.ajax('ajaxform', {
+            url : config.openBasePath + "financefee/edititem",
+            loadingmask: true,
+            form :  $.CurrentDialog.find('#edit-form'),
+            okCallback: function(json, options) {
+                BJUI.dialog('closeCurrent');
+				finance_fee_list.datagrid("refresh",true);
+            }
+        });
+	}
+</script>

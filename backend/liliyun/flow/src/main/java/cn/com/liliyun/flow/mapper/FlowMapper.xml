@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.flow.mapper.FlowMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.flow.model.Flow" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+    <result column="templateid" property="templateid" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="fuserid" property="fuserid" jdbcType="INTEGER" />
+    <result column="curuserid" property="curuserid" jdbcType="INTEGER" />
+    <result column="step" property="step" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    
+    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+   
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, transactionid,description, templateid, businessid, fuserid,curuserid, step, description, status, createdate 
+    
+    
+  </sql>
+  <select id="get" resultMap="BaseResultMap" parameterType="int" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_flow
+    where id = #{id}
+  </select>
+  
+  <select id="getByTransaction" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_flow
+    where transactionid = #{transactionid}
+  </select>
+  
+  <select id="countTemplateFlow" resultType="int"  parameterType="cn.com.liliyun.flow.model.Flow" >
+    select id from t_flow where templateid=#{templateid} limit 1
+    
+  </select>
+  
+  <select id="listFlow" resultMap="BaseResultMap" parameterType="cn.com.liliyun.flow.model.Flow" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_flow
+    where 1=1
+    <if test="curuserid != null ">
+        and curuserid = #{curuserid}
+     </if>
+     <if test="status != null">
+        and status = #{status}
+     </if>
+  </select>
+  
+  <select id="listUserFlow" resultType="cn.com.liliyun.flow.model.Flow" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    select 
+    a.id, a.transactionid, a.templateid, a.businessid, a.fuserid,a.curuserid, a.step, a.description, a.status, a.createdate,a.description, c.name as business,c.template
+    from t_flow a join t_flow_step b on a.id=b.flowid join t_business c on a.businessid=c.businessid
+    where b.userid=#{userid} and b.status = #{status}
+    order by a.id desc
+  </select>
+  
+  <select id="listMyFlow" resultType="cn.com.liliyun.flow.model.Flow" parameterType="cn.com.liliyun.flow.model.Flow" >
+    select 
+    a.id, a.transactionid, a.templateid, a.businessid, a.fuserid,a.curuserid, a.step, a.description, a.status, a.createdate,a.description,c.name as business,c.template
+    from t_flow a join t_business c on a.businessid=c.businessid
+    where a.fuserid=#{fuserid} 
+    order by a.id desc
+  </select>
+  
+  <insert id="addFlow" parameterType="cn.com.liliyun.flow.model.Flow" useGeneratedKeys="true" keyProperty="id">
+    insert into t_flow (transactionid, templateid, businessid, 
+      fuserid, step, description, 
+      createdate)
+    values (#{transactionid}, #{templateid}, #{businessid}, 
+      #{fuserid}, #{step}, #{description}, now())
+  </insert>
+  
+  
+  
+  <update id="updateFlowStep" parameterType="cn.com.liliyun.flow.model.Flow" >
+    update t_flow
+    set curuserid = #{curuserid,jdbcType=INTEGER},
+    step=#{step}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateFlowStatus" parameterType="cn.com.liliyun.flow.model.Flow" >
+    update t_flow
+    set status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+ 	
+  	
+</mapper>

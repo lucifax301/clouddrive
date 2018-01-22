@@ -1,0 +1,62 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form action="" class="datagrid-edit-form" data-toggle="validate" method="POST" id="formedit">
+			<input type="hidden" name="id">
+			<div class="bjui-row col-3">
+                <label class="row-label">姓名</label>
+                <div class="row-input required">
+                    <input type="text" name="username" id="username" data-rule="required;length[6~16]">
+                </div>
+                <label class="row-label">真实姓名</label>
+                <div class="row-input required">
+                    <input type="text" name="realname" data-rule="required">
+                </div>
+                <label class="row-label">车型</label>
+                <div class="row-input required">
+                    <select name="cartype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                        <option value="">全部</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+                </div>
+                <label class="row-label">出生日期</label>
+                <div class="row-input required">
+                    <input type="text" name="birthday" data-toggle="datepicker" data-rule="required;date">
+                </div>
+                <label class="row-label">出生时间</label>
+                <div class="row-input required">
+                    <input type="text" name="time" data-toggle="datepicker" data-rule="required" data-pattern="HH:mm">
+                </div>
+                <input type="checkbox" name="haha" value="1"/>
+                <input type="checkbox" name="haha" value="2"/>
+                <input type="radio" name="aaaaaa" value="1"/>
+                <input type="radio" name="aaaaaa" value="2"/>
+                <input type="radio" name="aaaaaa" value="3"/>
+                <input type="radio" name="aaaaaa" value="4"/>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="submit" class="btn-default" data-icon="save">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current:'Dialog',
+		url : config.openBasePath + 'user/add',
+		form_name : 'formedit',
+		table_name : 'aaaaaaaaaaaaaaaaaaa',
+		callback :function(data){//数据输出后的事件
+			console.log(data)
+		},
+		before: function(data){//数据显示前，对data处理，
+			data.haha = 1;
+			data.aaaaaa = 2;
+			return data
+		}
+	})
+	
+</script>

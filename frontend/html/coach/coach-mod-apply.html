@@ -1,0 +1,509 @@
+<div class="bjui-pageContent">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>教练信息</h5>
+		</div>
+		<div class="widget-content nopadding">
+
+			<span><label id="name"></label></span>
+			<br/>
+			<span>手机号：</span>
+			<label id="mobile"></label>
+			<span>教练车：</span>
+			<label id="carno"></label>
+			<span>负荷学员：</span>
+			<label id="curstudentload"></label>
+
+		</div>
+	</div>
+	<div class="c-tabs-box">
+
+		<div class="coachinfo" id="id1">
+			<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+				<input type="hidden" name="coachid" id="coachid" />
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>基本资料</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">姓名</label>
+							<div class="row-input required">
+								<input type="text" name="name" data-rule="required;length[1~60]">
+							</div>
+							<label class="row-label">手机号码</label>
+							<div class="row-input required">
+								<input type="text" name="mobile" data-rule="required,mobile">
+							</div>
+							<label class="row-label">性别</label>
+							<div class="row-input required">
+								<select name="sex" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="0">男</option>
+									<option value="1">女</option>
+								</select>
+							</div>
+							<label class="row-label">身份证号</label>
+							<div class="row-input required">
+								<input type="text" name="idcard" data-rule="required">
+							</div>
+							<label class="row-label">准教车型</label>
+							<div class="row-input required">
+								<select name="teachpermitted" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="C1">C1</option>
+									<option value="C2">C2</option>
+									<option value="C3">C3</option>
+									<option value="C4">C4</option>
+									<option value="C5">C5</option>
+									<option value="A1">A1</option>
+									<option value="A2">A2</option>
+									<option value="A3">A3</option>
+									<option value="B1">B1</option>
+									<option value="B2">B2</option>
+									<option value="D">D</option>
+									<option value="E">E</option>
+									<option value="F">F</option>
+									<option value="M">M</option>
+									<option value="N">N</option>
+									<option value="P">P</option>
+								</select>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>供职信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">供职方式</label>
+							<div class="row-input required">
+								<select name="workType" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="1">直营</option>
+									<option value="2">加盟</option>
+									<option value="3">挂靠</option>
+								</select>
+							</div>
+							<label class="row-label">供职状态</label>
+							<div class="row-input required">
+								<select name="employstatus" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="0">在职</option>
+									<option value="1">离职</option>
+								</select>
+							</div>
+							<label class="row-label">入职日期</label>
+							<div class="row-input required">
+								<input type="text" name="hiredate" id="hiredate" data-rule="required">
+							</div>
+							<label class="row-label">离职日期</label>
+							<div class="row-input">
+								<input type="text" name="leavedate">
+							</div>
+							<label class="row-label">所属片区</label>
+							<div class="row-input">
+								<select name="areaid" data-toggle="selectpicker" data-width="100%" data-rule="required" data-optiontype="id,name" data-datajson="arealist_filter">
+									<option value="">请选择</option>
+								</select>
+							</div>
+							<label class="row-label">设置为组长</label>
+							<div class="row-input">
+								<select name="headcoachflag" data-toggle="selectpicker" data-width="100%" >
+									<option value="0">否</option>
+									<option value="1">是</option>
+								</select>
+							</div>
+							<label class="row-label">是否备案</label>
+							<div class="row-input">
+								<select name="recordflag" data-toggle="selectpicker" data-width="100%" disabled="true">
+									<option value="0">否</option>
+									<option value="1">是</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>驾驶证信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">驾驶证号</label>
+							<div class="row-input required">
+								<input type="text" name="drilicence" data-rule="required">
+							</div>
+							<label class="row-label">准驾车型</label>
+							<div class="row-input required">
+								<select name="dripermitted" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="">请选择</option>
+									<option value="C1">C1</option>
+									<option value="C2">C2</option>
+									<option value="C3">C3</option>
+									<option value="C4">C4</option>
+									<option value="C5">C5</option>
+									<option value="A1">A1</option>
+									<option value="A2">A2</option>
+									<option value="A3">A3</option>
+									<option value="B1">B1</option>
+									<option value="B2">B2</option>
+									<option value="D">D</option>
+									<option value="E">E</option>
+									<option value="F">F</option>
+									<option value="M">M</option>
+									<option value="N">N</option>
+									<option value="P">P</option>
+								</select>
+							</div>
+							<label class="row-label">初领日期</label>
+							<div class="row-input required">
+								<input type="text" name="fstdrilicdate" data-rule="required">
+							</div>
+							<label class="row-label">有效期至</label>
+							<div class="row-input">
+								<input type="text" name="expireDate">
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>职能信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+
+							<label class="row-label">教学组长</label>
+							<div class="row-input">
+								<select name="headcoachid" id="headcoachid" class="canmod" data-toggle="selectpicker" data-width="100%" data-optiontype="coachid,name">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教类型</label>
+							<div class="row-input">
+								<select name="teachtypeid" class="canmod" data-toggle="selectpicker" data-width="100%" data-datajson="teachtypelist" data-optiontype="id,type">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教职务</label>
+							<div class="row-input">
+								<select name="jobid" class="canmod" data-toggle="selectpicker" data-width="100%" data-datajson="teachjoblist" data-optiontype="id,job">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教车型</label>
+							<div class="row-input">
+								<select name="teachcartype" class="canmod" data-toggle="selectpicker" data-width="100%" data-datajson="cartypelist" data-optiontype="type,type">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+							<label class="row-label">带教状态</label>
+							<div class="row-input">
+								<select name="teachstate" class="canmod" data-toggle="selectpicker" data-width="100%" data-rule="required">
+									<option value="0">请选择</option>
+									<option value="1">正常分配</option>
+									<option value="2">暂停分配</option>
+								</select>
+							</div>
+							<label class="row-label">负荷标准</label>
+							<div class="row-input">
+								<input type="text" class="canmod" name="studentload">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon"> <i class="fa fa-th"></i> </span>
+						<h5>带教信息</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<div class="bjui-row col-3">
+							<label class="row-label">带教班别</label>
+							<div class="row-input fill-3" id="classgroup">
+
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">关联门店</label>
+							<div class="row-input fill-3" id="storegroup">
+
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">主要门店</label>
+							<div class="row-input fill-3">
+								<select name="mainstoreid" id="mainstoreid" class="canmod" data-toggle="selectpicker" data-width="100">
+									<option value="0">请选择</option>
+
+								</select>
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">科目二考场</label>
+							<div class="row-input fill-3" id="step2group">
+
+							</div>
+						</div>
+						<div class="bjui-row col-3">
+							<label class="row-label">科目三考场</label>
+							<div class="row-input fill-3" id="step3group">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+	</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<ul>
+			<li><button type="button" class="btn-blue" data-icon="save" onclick="coach_mod_apply_add.savemodcoach()">提交</button></li>
+			<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	var tdata = clz.getNavtab_more();
+	var coach_mod_apply_add = {
+		init() {
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				url: config.openBasePath + 'coach/modApply',
+				form_name: 'edit-form',
+				table_name: 'datagrid-list',
+				data: tdata,
+				callback: function(data) {
+					//data-dataurl="/httpaccess/area/list"
+					$.CurrentNavtab.find("#name").html(tdata.name)
+					$.CurrentNavtab.find("#mobile").html(tdata.mobile)
+					$.CurrentNavtab.find("#carno").html(tdata.carno)
+					$.CurrentNavtab.find("#curstudentload").html(tdata.curstudentload)
+
+					var info = coach_mod_apply_add.loadextendinfo();
+
+					coach_mod_apply_add.showclassinfo(info)
+					coach_mod_apply_add.showstore(tdata, info);
+					coach_mod_apply_add.loadexam(info);
+
+					$.CurrentNavtab.find('#areaid').bind("change", function() {
+						tdata.areaid = $(this).val()
+						coach_mod_apply_add.showstore(coach_object, info)
+
+					});
+
+				}
+			})
+
+			$("#id1 input[type=text]").each(
+				function() {
+					if(!$(this).hasClass("canmod")) {
+						$(this).attr("readonly", "readonly")
+					}
+				}
+			)
+			$("#id1 select").each(
+				function() {
+					if(!$(this).hasClass("canmod")) {
+						$(this).attr("disabled", "true")
+					}
+				}
+			);
+		},
+		loadextendinfo() {
+			var data;
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/coach/extendinfo",
+				loadingmask: true,
+				async: false,
+				data: {
+					coachid: $.CurrentNavtab.find("#coachid").val()
+				},
+				okCallback: function(json, options) {
+					data = json.result
+				}
+			})
+			return data
+		},
+
+		showclassinfo(info) {
+			var nclssdata = clz.getdictionary({
+				name: 'classlist'
+			})
+
+			var cif = info.classinfoid.split(",");
+			for(var i = 0; i < nclssdata.length; i++) {
+				for(var j = 0; j < cif.length; j++) {
+					if(nclssdata[i].id == cif[j]) {
+						nclssdata[i].checked = true;
+					}
+				}
+			}
+
+			clz.output_checkbox({
+				data: nclssdata, //数据格式 id name
+				domid: 'classgroup', // 输出容器id
+				name: 'classinfoid', //checkbox 的name属性
+				chedata: info.classinfoid, //选中的值， 逗号分隔    1,2
+				place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+			})
+
+		},
+
+		showstore(coachinfo, info) {
+			if(coachinfo.areaid) {
+				BJUI.ajax('doajax', {
+					url: config.openBasePath + "/store/list?areaid=" + coachinfo.areaid,
+					loadingmask: true,
+					okCallback: function(json, options) {
+						//console.log(json.result.list)
+						if(json.result && json.result.list) {
+							var cif = info.storeid.split(",");
+							for(var i = 0; i < json.result.list.length; i++) {
+								for(var j = 0; j < cif.length; j++) {
+									if(json.result.list[i].id == cif[j]) {
+										json.result.list[i].checked = true;
+									}
+								}
+							}
+
+							renderselect($.CurrentNavtab.find('#mainstoreid'), json.result.list)
+							$.CurrentNavtab.find('#mainstoreid').val(coachinfo.mainstoreid);
+							$.CurrentNavtab.find('#mainstoreid').selectpicker('refresh')
+
+							clz.output_checkbox({
+								data: json.result.list, //数据格式 id name
+								domid: 'storegroup', // 输出容器id
+								name: 'storeid', //checkbox 的name属性
+								chedata: info.storeid, //选中的值， 逗号分隔    1,2
+								place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+							})
+							if(json.result.list == 0) {
+								$.CurrentNavtab.find('#storegroup').html("未选择所属片区，无法选择关联门店哦");
+							}
+						}
+						coach_mod_apply_add.disablecheckbox();
+					}
+				})
+
+				BJUI.ajax('doajax', {
+					url: config.openBasePath + "/coach/listhead?areaid=" + coachinfo.areaid,
+					loadingmask: true,
+					okCallback: function(json, options) {
+
+						if(json.result && json.result.list) {
+							rendercoachselect($.CurrentNavtab.find('#headcoachid'), json.result.list)
+
+						}
+						
+						$.CurrentNavtab.find('#headcoachid').val(coachinfo.headcoachid);
+						$.CurrentNavtab.find('#headcoachid').selectpicker('refresh')
+					}
+				});
+			}
+		},
+
+		loadexam(info) {
+
+			var examdata = clz.getdictionary({
+				name: 'examarealist'
+			})
+
+			var examarea2 = new Array();
+			var examarea3 = new Array();
+			for(var i = 0; i < examdata.length; i++) {
+				if(examdata[i].subject == 2) {
+					examarea2.push(examdata[i]);
+				} else if(examdata[i].subject == 3) {
+					examarea3.push(examdata[i]);
+				}
+			}
+
+			var cif2 = info.step2areaid.split(",");
+
+			for(var i = 0; i < examarea2.length; i++) {
+				for(var j = 0; j < cif2.length; j++) {
+					
+					if(examarea2[i].id == cif2[j]) {
+						examarea2[i].checked = true;
+					}
+				}
+			}
+
+			clz.output_checkbox({
+				data: examarea2, //数据格式 id name
+				domid: 'step2group', // 输出容器id
+				name: 'step2areaid', //checkbox 的name属性
+				chedata: info.step2areaid, //选中的值， 逗号分隔    1,2
+				place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+			})
+
+			var cif3 = info.step3areaid.split(",");
+			for(var i = 0; i < examarea3.length; i++) {
+				for(var j = 0; j < cif3.length; j++) {
+					if(examarea3[i].id == cif3[j]) {
+						examarea3[i].checked = true;
+					}
+				}
+			}
+			clz.output_checkbox({
+				data: examarea3, //数据格式 id name
+				domid: 'step3group', // 输出容器id
+				name: 'step3areaid', //checkbox 的name属性
+				chedata: info.step3areaid, //选中的值， 逗号分隔    1,2
+				place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+			})
+
+		},
+
+		disablecheckbox() {
+			$("input[type=checkbox]").each(
+				function() {
+					//$(this).attr("disabled","true")
+				}
+			)
+		},
+
+		savemodcoach() {
+			BJUI.alertmsg('confirm', '确认提交修改申请？', {
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'coach/modApply',
+						loadingmask: true,
+						//data:clz.parseForm( $.CurrentNavtab.find('#edit-form')),
+						data: $.CurrentNavtab.find('#edit-form').serializeArray(),
+						okCallback: function(json, options) {
+
+							BJUI.alertmsg('ok', '提交成功！', {})
+							BJUI.navtab('closeCurrentTab');
+						}
+					});
+				}
+			});
+		}
+	}
+
+	coach_mod_apply_add.init();
+</script>

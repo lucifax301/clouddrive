@@ -1,0 +1,199 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>新增渠道</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">一级渠道名称:</label>
+					<div class="row-input required">
+						<input type="text" name="channel" data-rule="required" maxlength="25" placeholder="请输入一级渠道名称">
+					</div>
+				</div>
+				
+				<div class="bjui-row col-4">
+				<label class="row-label">推荐属性:</label>
+				<div class="row-input">
+					<input type="radio" name="flag" value="coachflag" data-toggle="icheck" data-label="教练推荐" >
+					<input type="radio" name="flag" value="staffflag" data-toggle="icheck" data-label="员工推荐" >
+				</div>
+				</div>
+			</div>
+		</div>
+		
+	</form>
+<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">	
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="channel_add.saveclasstype()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+	</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	var channel_add = {
+		data: [
+//		{
+//			name: '班别1',
+//			amount: '2000',
+//			highflag: 1,
+//			localflag: 0,
+//			status:1
+//		},{
+//			name: '班别2',
+//			amount: '3000',
+//			highflag: 1,
+//			localflag: 0,
+//			status:0
+//		},
+		],
+		list() {
+			$.CurrentNavtab.find('#datagrid-list').datagrid({
+				gridTitle: '二级渠道',
+				toolbarItem: 'add,edit',
+				paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+				height: '85%',
+				showCheckboxcol: true,
+				showToolbar: true,
+				data: channel_add.data,
+				//dataUrl: config.openBasePath + 'saleschannel/list?parentid=0',
+				columns: [
+					{ name: 'channel', label: '二级渠道名称', align: 'center' },
+					{ name: 'status', label: '状态', align: 'center',render: function(value) { return value==0 ? '启用':'禁用' }  },
+					{ name: 'op', label: '操作', align: 'center', render: channel_add.classtypeOperation }
+				],
+				editMode: { dialog: { width: '640', height: '480', title: '二级渠道', mask: true ,
+					onClose:function(){
+						var pushdata = clz.getWindowJson()
+						//pushdata.coachflag = parseInt(pushdata.coachflag)
+						console.log(pushdata)
+						if(pushdata && pushdata!=''){
+							channel_add.removesame(channel_add.editname)
+	    					channel_add.removesame(pushdata.channel)
+							console.log(channel_add.data)
+							channel_add.data.push(pushdata)
+							console.log(channel_add.data)
+							$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+								data:1
+							})//刷新
+							$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+								data:channel_add.data
+							})//刷新
+						}
+					}
+				} },
+				beforeEdit: function() {
+					channel_add.editname = '';
+					return true;
+				},
+				add_url: 'html/market/channel-second-add.html',
+				edit_url: 'html/market/channel-second-edit.html',
+				delPK: 'id',
+				
+				paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+			})
+		},
+		saveclasstype() {
+			//console.log($.CurrentNavtab.find('input[name="flag"]:checked').val())	
+			if($.CurrentNavtab.find('#add-form').isValid())
+			BJUI.alertmsg('confirm', '确认新增渠道吗？', {
+				okCall: function() {
+					var sdata=clz.parseForm($.CurrentNavtab.find("#add-form"));
+					//var sdata=$.CurrentNavtab.find('#add-form').serializeArray()
+					console.log(JSON.stringify(channel_add.data))
+					if($.CurrentNavtab.find('input[name="flag"]:checked').val()){
+						sdata[$.CurrentNavtab.find('input[name="flag"]:checked').val()]=1
+					}
+					sdata.channels=JSON.stringify(channel_add.data);
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'saleschannel/add',
+						loadingmask: true,
+						data: sdata,
+						okCallback: function(json, options) {
+							BJUI.alertmsg('ok', '新增渠道成功！', {})
+							//$.CurrentNavtab.find("#classtypeid").val()
+							//BJUI.navtab('refresh')
+							//BJUI.dialog('closeCurrent')
+							BJUI.navtab('closeCurrentTab');
+						}
+					});
+				}
+			});
+		},
+		selectflag(){
+				console.log('aaaa')
+				if($.CurrentNavtab.find("input[name=staffflag]").attr("checked")){
+					$.CurrentNavtab.find("input[name=coachflag]").removeAttr("checked")
+				}
+				if($.CurrentNavtab.find("input[name=coachflag]").attr("checked")){
+					$.CurrentNavtab.find("input[name=staffflag]").removeAttr("checked")
+				}
+		},
+		classtypeOperation(value,data){
+	        var html;
+	        if (data.status == 0) {
+	            html = "<button type='button' class='btn-red' onclick='channel_add.disable("+JSON.stringify(data)+")'>停用</button>"
+	        } else {
+	            html = "<button type='button' class='btn-green' onclick='channel_add.enable("+JSON.stringify(data)+")'>启用</button>"
+	        }
+	        html+='<button type="button" class="btn-red" onclick="channel_add.remove(\''+data.channel+'\')">删除</button>'
+	        return html
+	    },
+	    remove(channel){
+	    	BJUI.alertmsg('confirm', '确认删除二级渠道吗？', {
+				okCall: function() {
+					setTimeout(function(){
+	    	channel_add.removesame(channel)
+	    	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+				data:1
+			})//刷新
+			$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+				data:channel_add.data
+			})//刷新
+			},500)
+			return 
+			}
+			})
+	   },
+	   removesame(channel){
+	   		console.log(channel)
+	   		$.each(channel_add.data, function(i,m) {
+	    		if(this.channel == channel){
+	    			channel_add.data[i] = null
+	    			channel_add.data.splice(i,1)
+	    			return 
+	    		}
+	    	});
+	   },
+	   disable(data){
+	   	$.each(channel_add.data, function(i,m) {
+	    		if(this.channel == data.channel){
+	    			channel_add.data[i].status = 1
+	    			return 
+	    		}
+	    	});
+	   	console.log(channel_add.data)
+	   	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+				data:channel_add.data
+			})
+	   },
+	   enable(data){
+	   	$.each(channel_add.data, function(i,m) {
+	    		if(this.channel == data.channel){
+	    			channel_add.data[i].status = 0
+	    			return 
+	    		}
+	    	});
+	   	console.log(channel_add.data)
+	   	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+				data:channel_add.data
+			})
+	   }
+	}
+	channel_add.list();
+	console.log(channel_add.data)
+</script>

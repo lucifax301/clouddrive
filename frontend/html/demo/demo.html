@@ -1,0 +1,388 @@
+<section id="thispage" privilege="000011"></section>
+<div class="y-comment">
+	<div class="c-button-blue w200" onclick="ystep.addnode()"><i class="fa fa-plus"></i>增加节点</div>
+	<div class="ystep-container ystep-lg ystep-blue">
+		<ul class="ystep-container-steps">
+			<li class="ystep-step-done" data-container="body" data-toggle="popover" data-placement="top" data-title="" data-content="实名用户/公益组织发起项目" data-trigger="hover" data-original-title="" title=""><span>发起123123</span>
+				<div class="remove"></div>
+			</li>
+
+		</ul>
+	</div>
+</div>
+
+<div class="c-tabs-box" data-privilege='demo-t1'>
+	<div class="c-tabs-header">
+		<li class="active" data-tabs='id1'>头11</li>
+		<li data-tabs='id2'>头21</li>
+		<li data-tabs='id3'>头31</li>
+		<li data-tabs='id4'>头41</li>
+	</div>
+	<div class="c-tabs-body active" id="id1">
+		<div class="c-tabs-box">
+			<div class="c-tabs-header">
+				<li class="active" data-tabs='i1'>头1</li>
+				<li data-tabs='i2'>头2</li>
+				<li data-tabs='i3'>头3</li>
+				<li data-tabs='i4'>头4</li>
+			</div>
+			<div class="c-tabs-body active" id="i1">
+				123
+			</div>
+			<div class="c-tabs-body" id="i2">
+				1234
+			</div>
+			<div class="c-tabs-body" id="i3">
+				1235
+			</div>
+			<div class="c-tabs-body" id="i4">
+				1236
+			</div>
+		</div>
+	</div>
+	<div class="c-tabs-body" id="id2">
+		1234
+	</div>
+	<div class="c-tabs-body" id="id3">
+		1235
+	</div>
+	<div class="c-tabs-body" id="id4">
+		1236
+	</div>
+</div>
+
+<form class="datagrid-edit-form" action="sdfsd" data-toggle="validate" method="POST" id="add-form" data-privilege='demo-t2'>
+	<div class="bjui-row col-3">
+		<div id='adddom' class="hidden">
+			<label class="row-label">配件</label>
+			<div class="row-input ">
+				<input type="text" name="parts" data-rule="">
+			</div>
+			<label class="row-label">金额</label>
+			<div class="row-input ">
+				<input type="text" name="money" data-rule="">
+			</div>
+		</div>
+		<!--<div class="adddom-btn">
+			    <label class="row-label"></label>
+			    <div class="row-input ">
+			       <div class="c-button-blue" clz-click="adddom" clz-options="{'id':'adddom','current':'navtab'}"><i class="fa fa-plus"></i>增加配件</div>
+			    </div>  
+			</div>-->
+	</div>
+	<span onclick="hahaha()">js获取数据</span>
+	<button type="submit" class="btn-green" data-icon="save">搜索</button>
+</form>
+
+<input type="text" name="opendiolog" onclick="opendialog()" value="打开Dialog1" data-privilege='demo-t3'>
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+	<form id="searchhaha" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#aaaaaaaaaaaaaaaaaaa')}">
+		<fieldset>
+			<legend style="font-weight:normal;">用户搜索：</legend>
+			<span>姓名：</span>
+			<input type="text" name="username" class="form-control" size="15" data-rule="required;carno">
+			<span>下拉框</span>
+			<select name="select.id" data-toggle="selectpicker" data-width="10%" clz-change='select' clz-options='{"inputname":"select.name","current":"navtab","father":"searchhaha"}'>
+				<option value="">全部</option>
+				<option value="0">正常</option>
+				<option value="1">停用</option>
+			</select>
+			<label class="row-label">日期和时间</label>
+			<div class="row-input">
+				<input type="text" id="aaahhhh" value="2016-10" data-toggle="datepicker" data-pattern="yyyy-MM">
+			</div>
+			<input type="hidden" name="select.name">
+			
+			<span>数据小于下面：</span>
+			<input type="text" name="minval" class="form-control" size="15" data-rule="lessThan[maxval,'右边']">
+			<span>数据大于上面：</span>
+			<input type="text" name="maxval" class="form-control" size="15" data-rule="greaterThan[minval,'左边']">
+			<select name="activityid" data-toggle="selectpicker" 
+				data-datajson="examresult" data-width="100%" 
+				data-optiontype="id,name"  data-val="null">
+			</select>
+			<span>过滤手机号：</span>
+			<input type="text" name="username" class="form-control" size="15" data-rule="required;mobile;checkphone[1]">
+			<select name="activityid" data-toggle="selectpicker" 
+				data-datajson="examresult" data-width="100%" 
+				data-optiontype="id,name"  data-val="null">
+			</select>
+			<div class="btn-group">
+				<button type="submit" class="btn-green" data-icon="search">搜索</button>
+				<button type="reset" class="btn-orange" data-icon="times">重置</button>
+			</div>
+
+		</fieldset>
+	</form>
+	<div id="haha"></div>
+</div>
+<a href="javascript:" onclick="newdata()">刷新数据</a>
+<table id="aaaaaaaaaaaaaaaaaaa" data-tabprivilege="t1" class="table table-bordered"></table>
+<table class="table table-bordered" id="j-tbody"></table>
+<script>
+	
+
+	var ystep = {
+		initlist(json) {
+			var html = '';
+			this.data = json.data;
+			if(json.dom) {
+				this.dom = json.dom;
+			}
+			$.each(this.data, function(i, m) {
+				html += '<li class="ystep-step-done"  onclick="ystep.clickrole(' + i + ')"><div class="hr"></div><span>' + (m.name ? m.name : '未选角色') + '</span><div class="remove" onclick="ystep.remove(event,' + i + ')"></div></li>'
+			});
+			this.dom.html(html)
+		},
+		clickrole(item) {
+			BJUI.findgrid({
+				group: 'obj',
+				include: 'name3:name, description:desc',
+				dialogOptions: { title: '查找职业' },
+				empty: false,
+				gridOptions: {
+					local: 'local',
+					dataUrl: config.openBasePath + 'privilege/listRole',
+					columns: [
+						{ name: 'rolename', label: '名称', },
+						{ name: 'rolename', label: '描述' },
+					]
+				},
+				onSelect(data) {
+					ystep.data[item].id = data.id;
+					ystep.data[item].name = data.rolename;
+					ystep.refresh()
+					BJUI.dialog('closeCurrent')
+				}
+			})
+		},
+		refresh() {
+			this.initlist({ data: this.data })
+		},
+		remove(e, item) {
+			this.data.splice(item, 1);
+			ystep.refresh()
+			e.cancelBubble = true;
+		},
+		addnode() {
+			this.data.push({})
+			ystep.refresh()
+		}
+	}
+	ystep.initlist({
+		dom: $.CurrentNavtab.find('.ystep-container-steps'),
+		data: [{
+				name: 'df1',
+				id: 1
+			},
+			{
+				name: 'df2',
+				id: 2
+			},
+			{
+				name: 'df3',
+				id: 3
+			},
+			{
+
+			},
+		]
+	})
+
+	clz.pushaddom({
+		domid: 'adddom',
+		current: 'navtab',
+		btn_name: '增加配件1',
+		data: [{
+				name: 'parts',
+				data: [10, 20, 30],
+			},
+			{
+				name: 'money',
+				data: [101, 210, 301],
+			}
+		]
+	})
+
+	function hahaha() {
+		console.log(clz.parseForm($('#add-form')))
+	}
+	var haha = [{
+			id: 1,
+			name: 'asd',
+			checked: true,
+		},
+		{
+			id: 2,
+			name: 'asd',
+			checked: true,
+		},
+		{
+			id: 3,
+			name: 'asd'
+		},
+	]
+	clz.output_checkbox({
+		data: haha, //数据格式 id name
+		domid: 'haha', // 输出容器id
+		name: 'haha', //checkbox 的name属性
+		place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+	})
+	var haha1 = [{
+			id: 1,
+			data: [{
+					id: 1,
+					data: [
+						{ id: 222 },
+						{ id: 222 },
+					]
+				},
+				{
+					id: 1,
+					data: [
+						{ id: 222 },
+						{ id: 222 },
+					]
+				}
+			]
+		},
+		{
+			id: 2,
+			name: 'asd'
+		},
+		{
+			id: 3,
+			name: 'asd'
+		},
+	]
+
+	function create_tanble(json) {
+		var table = $('#' + json.domid),
+			data = json.data;
+		var html = '<table>';
+
+		function jisuan(json) {
+			var num = 0;
+			if(json.data) {
+				pushmenujson(json.data)
+			}
+
+			function pushmenujson(json) {
+				$.each(json, function(i, m) {
+					if(m.data) {
+						pushmenujson(m.data)
+					} else {
+						num++
+					}
+				})
+			}
+			return num
+		}
+
+	}
+
+	function newdata() {
+		$.CurrentNavtab.find('#aaaaaaaaaaaaaaaaaaa').datagrid('refresh') //刷新
+		//		haha.unshift({
+		//			id: 1,
+		//			username: 'adasd'
+		//		})
+		//		console.log(haha)
+		//		$.CurrentNavtab.find('#aaaaaaaaaaaaaaaaaaa').datagrid('reload', {
+		//			data: haha
+		//		}) //刷新
+	}
+	$.CurrentNavtab.find('#aaaaaaaaaaaaaaaaaaa').datagrid({
+		height: '90%',
+		tableWidth: '100%',
+		gridTitle: '用户管理列表',
+		showToolbar: true,
+		filterThead: false,
+		toolbarItem: 'all',
+		showNoDataTip: false,
+		importOption: { type: "dialog", options: { url: 'html/demo/upload.html', title: '上传文件', width: 400, height: 250, mask: true } },
+		exportOption: { type: "file", options: { url: "http://b-jui.com/demo/export" } },
+		editMode: { dialog: { width: '800', height: 500, title: '用户信息', mask: true } },
+		edit_url: 'html/demo/demo-edit.html',
+		add_url: 'html/demo/demo-add.html', //实现拆开新增和编辑窗口，如果需要将新增和编辑窗口拆开，则分别填写edit_Url和add_Url，如只需要用一个窗口，使用原本的editUrl
+		editType: 'GET', //编辑方法的ajax请求type
+		afterSave: function() { //保存后执行事件
+			$('#aaaaaaaaaaaaaaaaaaa').datagrid('refresh', true) //刷新
+		},
+		afterDelete: function() { //删除后执行事件
+			$('#aaaaaaaaaaaaaaaaaaa').datagrid('refresh', true) //刷新
+		},
+		contextMenuB: true,
+		delUrl: config.openBasePath + 'user/delete',
+		delPK: 'id',
+		paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+		showCheckboxcol: true,
+		data: haha,
+		columns: [{
+				name: 'name',
+				label: '名称',
+				align: 'center',
+				minwidth:40,
+				render: function(value, data) {
+					//要传的值，组装成对象
+					var morejson = {
+						id: data.id
+					}
+					return "<a href='html/demo/demo-show.html?id=" + data.id + "' data-toggle='navtab' data-options='{id:\"menu-table" + 1 + "\", title:\"详情" + data.id + "\",fresh:true,force:true}' data-more='" + JSON.stringify(morejson) + "'>" + value + "</a>"
+				}
+			},
+			{ name: 'realname', label: '真实名称', hide:true,align: 'center', render: function(value, data) { return '<input name="ceshi" val="10">' } },
+
+		],
+		
+		editDialogOp: { width: 500, height: 300, mask: false },
+		initcallback() {
+			$.each($.CurrentNavtab.find('input[name="ceshi"]'), function(i, m) { console.log(m) })
+		}
+	})
+
+	function opendialog() {
+		BJUI.dialog({
+			id: 'test_dialog1113',
+			url: '/html/demo/demo-che.html',
+			title: '11',
+			width: 800,
+			height: 800,
+			onClose: function() {
+				var data = clz.getWindowJson();
+				$.CurrentNavtab.find('input[name="opendiolog"]').val(data[0].id)
+			}
+		})
+	}
+
+	var data111 = [
+		{ 'num1': '001', 'n2': '4', 'n3': '5' },
+		{ 'num1': '002', 'n2': '44', 'n3': '55' },
+		{ 'num1': '002', 'n2': '44', 'n3': '55' },
+		{ 'num1': '003', 'n2': '444', 'n3': '555' },
+		{ 'num1': '003', 'n2': '444', 'n3': '555' },
+		{ 'num1': '004', 'n2': '666', 'n3': '666' },
+		{ 'num1': '004', 'n2': '666', 'n3': '666' }
+	];
+	clz.fittable({
+		data: data111,
+		thead: [{
+				name: 'num1',
+				label: 'num1',
+				align: 'center'
+			},
+			{
+				name: 'n2',
+				label: 'n2',
+				align: 'center'
+			},
+			{
+				name: 'n3',
+				label: 'n3',
+				align: 'center'
+			}
+		],
+		dom: $('#j-tbody'),
+		cols: [0]
+	})
+</script>

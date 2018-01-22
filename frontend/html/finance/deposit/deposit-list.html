@@ -1,0 +1,168 @@
+<section id="thispage" privilege = "060201"></section>
+<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}" id="search-form">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>现金存款搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-3">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">存款方式：</label>
+				<div class="row-input">
+					<select name="accountid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/pos/cashAccountAll" data-optiontype="id,account">
+					</select>
+				</div>
+				<label class="row-label">状态：</label>
+				<div class="row-input">
+					<select name="isconfirm" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="0">未确认</option>
+						<option value="1">已确认</option>
+					</select>
+				</div>
+				<label class="row-label">存款日期：</label>
+				<div class="row-input fill-2">
+					<div class="w-40 fl">
+						<input name="depositdatelow" type="text" data-toggle="datepicker" data-rule="date">
+					</div>
+					<span class="fl text-center pl10 pr10">-</span>
+					<div class="w-40 fl">
+						<input name="depositdatetop" type="text" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+				
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var finance_deposit_list = {
+		init: function() {
+			var deposit_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					toolbarItem: 'add',
+					toolbarCustom: finance_deposit_list.toolbarCustom(),
+					gridTitle: '现金存款管理',
+					height: '73%',
+					showCheckboxcol: true,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'financeDeposit/list',
+					columns: [
+						{ name: 'areaid', label: '片区', align: 'center', render: formatAreaCell},
+						{ name: 'storeid', label: '门店', align: 'center', render: formatStoreCell},
+						{ name: 'depositor', label: '存款人', align: 'center'},
+						{ name: 'account', label: '存款帐号', align: 'center'},
+						{ name: 'amount', label: '存款金额', align: 'center'},
+						{ name: 'receipt', label: '回款说明', align: 'center'},
+						{ name: 'remaincash', label: '当日现金余额', align: 'center'},
+						{ name: 'isconfirm', label: '是否确认', align: 'center', render: function(value) {return value==1?'已确认':'未确认'} },
+						{ name: 'ctime', label: '录入时间', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd hh:mm:ss' }) } },
+						{ name: 'cname', label: '录入人', align: 'center'},
+					],
+					editMode: { dialog: { id: 'add_finance_deposit', title: '新增现金存款', height : 400, onClose: function() { deposit_list.datagrid('reload', true); } } },
+					add_url: "html/finance/deposit/deposit-add.html",
+				});
+		},
+		editrecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			} else if (!data[0].updateable) {
+				BJUI.alertmsg('error', '只能修改当天记录！', {});
+				return;
+			} else if (data[0].isconfirm == 1) {
+				BJUI.alertmsg('error', '已确认数据不允许修改！', {});
+				return;
+			}
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_deposit_edit_' + data[0].id,
+				url: 'html/finance/deposit/deposit-edit.html',
+				title: '编辑现金存款',
+				height : 400,
+				onClose: function() {
+					table.datagrid('reload', true);
+				}
+			})
+
+		},
+		deleterecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择至少一条记录！', {});
+				return;
+			}
+			var ids = '';
+			for(var i = 0; i < data.length; i++) {
+				if (!data[i].updateable) {
+					BJUI.alertmsg('error', '只能删除当天记录！', {});
+					return;
+				} else if (data[i].isconfirm == 1) {
+					BJUI.alertmsg('error', '已确认数据不允许删除！', {});
+					return;
+				}
+				ids = ids + ',' + data[i].id;
+			}
+			ids = ids.substr(1);
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + 'financeDeposit/del',
+				loadingmask: true,
+				data: {ids: ids},
+				okCallback: function(json, options) {
+					$.CurrentNavtab.find('#datagrid-list').datagrid('reload', true);
+				}
+			})
+		},
+		confirmrecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择至少一条记录！', {});
+				return;
+			}
+			var ids = '';
+			for(var i = 0; i < data.length; i++) {
+				ids = ids + ',' + data[i].id;
+			}
+			ids = ids.substr(1);
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + 'financeDeposit/update',
+				loadingmask: true,
+				data: {ids: ids, confirm: 1},
+				okCallback: function(json, options) {
+					$.CurrentNavtab.find('#datagrid-list').datagrid('reload', true);
+				}
+			})
+		},
+		toolbarCustom: function() {
+			return "<button data-privilege='060201_datagrid-list_11' type='button' class='btn btn-blue' data-icon='edit' onclick='finance_deposit_list.editrecord()'>修改</button> " + 
+			"<button data-privilege='060201_datagrid-list_12' type='button' class='btn btn-blue ml5' data-icon='times' onclick='finance_deposit_list.deleterecord()'>删除</button> " +
+			"<button data-privilege='060201_datagrid-list_13' type='button' class='btn btn-blue ml5' data-icon='legal' onclick='finance_deposit_list.confirmrecord()'>确认进账</button> " +
+			"<button data-privilege='060201_datagrid-list_14' type='button' class='btn btn-blue ml5' data-icon='sign-out' onclick='finance_deposit_list.exportdata()'>导出</button>";
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'financeDeposit/export',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		}
+	}
+	finance_deposit_list.init();
+</script>

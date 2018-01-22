@@ -1,0 +1,254 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>新增班型</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">班型名称:</label>
+					<div class="row-input required">
+						<input type="text" name="type" maxlength="12" data-rule="required" placeholder="请输入带教班型名称">
+					</div>
+				</div>
+				<div class="bjui-row col-4">
+					<label class="row-label">备注:</label>
+					<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="remark" maxlength="100" placeholder="请输入备注"></textarea>
+						</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="id" id="classtypeid" value="0"/>
+	</form>
+<!--<table id="datagrid-list" class="table table-bordered"></table>-->
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">	
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="class_type_add.saveclasstype()">保存</button></li>
+		<li><button type="button" class="btn-red" data-icon="close" onclick="class_type_add.leaveaddclasstype()">取消</button></li>
+		
+	</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	var class_type_add = {
+		data: [
+
+		],
+		list() {
+			$.CurrentNavtab.find('#datagrid-list').datagrid({
+				gridTitle: '相关班别',
+				//toolbarItem: 'add,edit',
+				toolbarItem: 'none',
+				toolbarCustom: "<button class='btn btn-blue' data-icon='plus' onclick='class_type_add.addclass()'>添加</button> <button class='btn btn-blue' data-icon='edit'  onclick='class_type_add.editclass()'>编辑</button>",
+				//paging: { pageSize: 30, selectPageSize: '30,50,100,500' },
+				paging:false,
+				height: '85%',
+				showCheckboxcol: true,
+				showToolbar: true,
+				//data: class_type_add.data,
+				dataUrl: config.openBasePath + 'class/list?classtypeid='+ $.CurrentNavtab.find('#classtypeid').val(),
+				columns: [
+					{ name: 'name', label: '班别名称', align: 'center' },
+					{ name: 'c1amount', label: 'C1价格', align: 'center' },
+					{ name: 'c2amount', label: 'C2价格', align: 'center' },
+					{ name: 'type', label: '学车形式', align: 'center',render:function(value){ return value==0?'费用全包':'计时收费'} },
+					{ name: 'status', label: '状态', align: 'center',render: function(value) { return value==0 ? '启用':'禁用' }  },
+					{ name: 'highflag', label: '高端班别', align: 'center', render: function(value) { return value==1 ? '是':'否' } },
+					{ name: 'localflag', label: '外地班别', align: 'center', render: function(value) { return value==1 ? '是':'否' } },
+					{ name: 'op', label: '操作', align: 'center', render: class_type_add.classtypeOperation }
+				],
+				editMode: { dialog: { width: '700', height: '500', title: '新增班别', mask: true ,
+					onClose:function(){
+						var pushdata = clz.getWindowJson()
+						if(pushdata && pushdata!=''){
+							console.log(11111,class_type_add.editname)
+	    					class_type_add.removesame(class_type_add.editname)
+							console.log(class_type_add.data)
+							class_type_add.data.push(pushdata)
+							$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+								data:class_type_add.data
+							})//刷新
+						}
+					}
+				} },
+				beforeEdit: function() {
+					class_type_add.editname = '';
+					return true;
+				},
+				add_url: 'html/setting/class-type-add-class-add.html',
+				edit_url: 'html/setting/class-type-add-class-edit.html',
+				delPK: 'id'
+				
+				
+			})
+		},
+		addclass(){
+			class_type_add.editname = '';
+			BJUI.dialog({
+					id: 'class-type-add-class',
+					width: 700,
+					height: 500,
+					url: 'html/setting/class-type-add-class-add.html',
+					title: '新增班别',
+					onClose: function() {
+						var pushdata = clz.getWindowJson()
+						if(pushdata && pushdata!=''){
+							console.log(11111,class_type_add.editname)
+	    					class_type_add.removesame(class_type_add.editname)
+							console.log(class_type_add.data)
+							class_type_add.data.push(pushdata)
+//							$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+//								data:1
+//							})//刷新
+							$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+								data:class_type_add.data
+							})//刷新
+						}
+					}
+
+				})
+		},
+		editclass(){
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(!data || data.length == 0) {
+				BJUI.alertmsg('info', '请选择一个班别！', {})
+				return
+			}
+			
+			class_type_add.editname = '';
+			BJUI.dialog({
+					id: 'class-type-add-class',
+					width: 700,
+					height: 500,
+					url: 'html/setting/class-type-add-class-edit.html',
+					title: '编辑班别',
+					onClose: function() {
+						var pushdata = clz.getWindowJson()
+						if(pushdata && pushdata!=''){
+							console.log(11111,class_type_add.editname)
+	    					class_type_add.removesame(class_type_add.editname)
+							console.log(class_type_add.data)
+							class_type_add.data.push(pushdata)
+//							$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+//								data:1
+//							})//刷新
+							$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+								data:class_type_add.data
+							})//刷新
+						}
+					}
+
+				})
+		},
+		saveclasstype() {
+			if($.CurrentNavtab.find('#add-form').isValid()){
+//				if(class_type_add.data.length==0){
+//					BJUI.alertmsg('info', '班型必须有至少一个班别！', {})
+//					return;
+//				}else if(class_type_add.data.length>=20){
+//					BJUI.alertmsg('info', '最多只能添加20个班别！', {})
+//					return;
+//				}
+			BJUI.alertmsg('confirm', '确认新增带教班型吗？', {
+				okCall: function() {
+					var sdata=clz.parseForm($.CurrentNavtab.find("#add-form"));
+					//var sdata=$.CurrentNavtab.find('#add-form').serializeArray()
+					//console.log(JSON.stringify(class_type_add.data))
+					//sdata.classinfo=JSON.stringify(class_type_add.data);
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'coachSetting/addClassType',
+						loadingmask: true,
+						data: sdata,
+						okCallback: function(json, options) {
+							BJUI.alertmsg('ok', '新增带教班型成功！', {})
+							//$.CurrentNavtab.find("#classtypeid").val()
+							//BJUI.navtab('refresh')
+							//BJUI.dialog('closeCurrent')
+							BJUI.navtab('closeCurrentTab');
+						}
+					});
+				}
+			})
+			}
+		},
+		leaveaddclasstype(){
+			
+			if(class_type_add.data.length>0||$.CurrentNavtab.find("#add-form").find("input[name=type]").val()!=''){
+			BJUI.alertmsg('confirm', '离开本页面后，编辑的内容将不会保存，是否离开？', {
+				okCall: function() {
+					BJUI.navtab('closeCurrentTab');
+				}
+			})
+			}else{
+				BJUI.navtab('closeCurrentTab');
+			}
+		},
+		classtypeOperation(value,data){
+	        var html;
+	        if (data.status == 0) {
+	            html = "<button type='button' class='btn-red' onclick='class_type_add.disable("+JSON.stringify(data)+")'>停用</button>"
+	        } else {
+	            html = "<button type='button' class='btn-green' onclick='class_type_add.enable("+JSON.stringify(data)+")'>启用</button>"
+	        }
+	        html+='<button type="button" class="btn-red" onclick="class_type_add.remove(\''+data.name+'\')">删除</button>'
+	        return html
+	    },
+	    remove(name){
+	    	BJUI.alertmsg('confirm', '确认删除班别吗？', {
+				okCall: function() {
+					setTimeout(function(){
+						class_type_add.removesame(name)
+				    	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+							data:1
+						})//刷新
+						$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+							data:class_type_add.data
+						})//刷新
+						console.log(class_type_add.data)
+					},500)
+			    	
+					return 
+			}
+			})
+	   },
+	   removesame(name){
+	   		$.each(class_type_add.data, function(i,m) {
+	    		if(this.name == name){
+	    			class_type_add.data[i] = null
+	    			class_type_add.data.splice(i,1)
+	    			return 
+	    		}
+	    	});
+	   },
+	   disable(data){
+	   	$.each(class_type_add.data, function(i,m) {
+	    		if(this.name == data.name){
+	    			class_type_add.data[i].status = 1
+	    			return 
+	    		}
+	    	});
+	   	console.log(class_type_add.data)
+	   	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+				data:class_type_add.data
+			})
+	   },
+	   enable(data){
+	   	$.each(class_type_add.data, function(i,m) {
+	    		if(this.name == data.name){
+	    			class_type_add.data[i].status = 0
+	    			return 
+	    		}
+	    	});
+	   	console.log(class_type_add.data)
+	   	$.CurrentNavtab.find('#datagrid-list').datagrid('reload',{
+				data:class_type_add.data
+			})
+	   }
+	}
+	//class_type_add.list();
+	console.log(class_type_add.data)
+</script>

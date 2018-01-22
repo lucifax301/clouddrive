@@ -1,0 +1,44 @@
+<div class="bjui-pageContent">
+<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    var examplace = [];
+    BJUI.ajax('doajax', {
+        url: config.openBasePath + 'examarea/list',
+        type : 'GET',
+        async : false,
+        okCallback: function(json, options) {
+            var temp = json.result.list;
+            for(var i = 0 ; i < temp.length; i++){
+                var data = {};
+                data[temp[i].id] = temp[i].name;
+                examplace.push(data);
+            }
+        }
+    });
+    var tableid = clz.getWindowJson(tableid);
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: '',
+        height: '95%',
+        paging : false,
+        showToolbar: false,
+        saveAll : true,
+        showLinenumber : true,
+        dataUrl : config.openBasePath + 'orderexam/itemlist',
+        postData : {tableid : tableid},
+        columns: [
+            {name:'name',label:'学员姓名',align:'center'},
+            {name:'traintype',label:'准驾车型',align:'center'},
+            {name:'idcard',label:'证件号码',align:'center'},
+            {name:'flownum',label:'流水号',align:'center'},
+            {name:'subject',label:'预约科目',align:'center',render:license_orderexam.formatSubject},
+            {name:'result',label:'预约结果',align:'center',render:license_orderexam.formatResult},
+            {name:'examdate',label:'考试日期',align:'center',
+                render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}},
+            {name:'examtime',label:'考试时间',align:'center'},
+            {name:'coachname',label:'教练',align:'center'},
+            {name:'examplaceid',label:'考场',align:'center',width:'80',type:'select',items:examplace}
+            //{name:'changedate',label:'是否改期',align:'center',render:license_orderexam.formatChangedate}
+        ]
+    });
+</script>

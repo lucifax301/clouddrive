@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.market.mapper.MarketMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.market.model.MarketActivity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="applyuserid" property="applyuserid" jdbcType="INTEGER" />
+    <result column="audituserid" property="audituserid" jdbcType="INTEGER" />
+    <result column="applyuser" property="applyuser" jdbcType="VARCHAR" />
+    <result column="audituser" property="audituser" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="activityname" property="activityname" jdbcType="VARCHAR" />
+    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="begindate" property="begindate" jdbcType="TIMESTAMP" />
+    <result column="enddate" property="enddate" jdbcType="TIMESTAMP" />
+    <result column="auditdate" property="auditdate" jdbcType="TIMESTAMP" />
+    <result column="feedbackdate" property="feedbackdate" jdbcType="TIMESTAMP" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="attach" property="attach" jdbcType="VARCHAR" />
+    <result column="attachid" property="attachid" jdbcType="VARCHAR" />
+    <result column="rent" property="rent" jdbcType="INTEGER" />
+    <result column="staff" property="staff" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,businessid,transactionid,storeid,areaid,applyuserid,audituserid,applyuser,audituser,status,remark,activityname,
+    begindate,enddate,createdate,auditdate,feedbackdate,address,reason,attach,attachid,rent,staff
+  </sql>
+  <select id="getMarket" resultMap="BaseResultMap" parameterType="cn.com.liliyun.market.model.MarketActivity" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_market_activity
+    where id = #{id}
+  </select>
+  
+  <select id="getMarketByTran" resultMap="BaseResultMap" parameterType="cn.com.liliyun.market.model.MarketActivity" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_market_activity
+    where transactionid = #{transactionid}
+  </select>
+  
+  <select id="listMarket" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_market_activity
+    <where>
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	<if test="storeid != null and storeid!=0">
+		and storeid = #{storeid}
+	</if>		
+    <if test="status != null ">
+		and status = #{status}
+	</if>
+	 
+	<if test="activityname != null and activityname !=''">
+		and activityname like  concat(concat('%',#{activityname}),'%')
+	</if>
+	<if test="begindate != null ">
+		and begindate >= #{begindate}
+	</if>
+	<if test="enddate != null ">
+		<![CDATA[and enddate < #{enddate}]]> 
+	</if>
+	</where>
+	order by id desc
+  </select>
+
+
+  <insert id="addMarket" parameterType="cn.com.liliyun.market.model.MarketActivity" >
+    insert into t_market_activity (activityname, businessid, transactionid,storeid,areaid, applyuserid,applyuser,address,remark,reason,rent,staff,begindate,enddate,attach,attachid,feedbackdate,  createdate)
+    values (#{activityname},#{businessid},#{transactionid}, #{storeid},#{areaid},#{applyuserid},#{applyuser},#{address}, #{remark},#{reason},#{rent},#{staff},#{begindate},#{enddate},#{attach},#{attachid},#{feedbackdate}, now())
+  </insert>
+  
+  <update id="updateMarket" parameterType="cn.com.liliyun.market.model.MarketActivity" >
+    update t_market_activity
+    <set >
+      <if test="activityname != null and activityname !=''" >
+        activityname = #{activityname},
+      </if>
+      <if test="storeid != null " >
+        storeid = #{storeid},
+      </if>
+      <if test="areaid != null " >
+        areaid = #{areaid},
+      </if>
+      <if test="reason != null and reason !=''" >
+        reason = #{reason},
+      </if>
+      <if test="staff != null " >
+        staff = #{staff},
+      </if>
+      <if test="rent != null " >
+        rent = #{rent},
+      </if>
+      <if test="remark != null " >
+        remark = #{remark},
+      </if>
+      <if test="address != null " >
+        address = #{address},
+      </if>
+      <if test="begindate != null " >
+        begindate = #{begindate},
+      </if>
+      <if test="enddate != null " >
+        enddate = #{enddate},
+      </if>
+      <if test="feedbackdate != null " >
+        feedbackdate = #{feedbackdate},
+      </if>
+      <if test="attach != null " >
+        attach = #{attach},
+      </if>
+      <if test="attachid != null " >
+        attachid = #{attachid},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateMarketStatus" parameterType="cn.com.liliyun.market.model.MarketActivity" >
+    update t_market_activity
+    set status=#{status},audituserid=#{audituserid},audituser=#{audituser},auditdate=#{auditdate}
+    where id = #{id} and status=0
+  </update>
+</mapper>

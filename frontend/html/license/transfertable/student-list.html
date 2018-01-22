@@ -1,0 +1,229 @@
+<section id="thispage" privilege = "020202"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>信息搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">批次号：</label>
+				<div class="row-input">
+					<input type="text" name="tableid">
+				</div>
+				<!--<label class="row-label">学员姓名：</label>-->
+				<!--<div class="row-input">-->
+					<!--<input type="text" name="name">-->
+				<!--</div>-->
+				<!--<label class="row-label">证件号码：</label>-->
+				<!--<div class="row-input">-->
+					<!--<input type="text" name="idcard">-->
+				<!--</div>-->
+                <label class="row-label">交表状态：</label>
+                <div class="row-input">
+                    <select name="status" data-toggle="selectpicker" data-width="100%">
+                        <option value="">全部</option>
+                        <option value="0">门店交表</option>
+                        <option value="1">片区交表</option>
+                        <option value="2">牌证收表</option>
+                        <option value="3">退表</option>
+                    </select>
+                </div>
+				<label class="row-label">起始时间：</label>
+				<div class="row-input">
+					<input type="text" name="stime" data-toggle="datepicker" placeholder="交表起始时间">
+				</div>
+				<label class="row-label">结束时间：</label>
+				<div class="row-input">
+					<input type="text" name="etime" data-toggle="datepicker" placeholder="交表结束时间">
+				</div>
+			</div>
+			<div class="text-center">
+				<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+				<button type="reset" class="btn-blue" data-icon="times">重置</button>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var license_transfertable = {
+		storetransfer: function() {
+			BJUI.dialog({
+				id: 'dialog-transfertable-transfer',
+				url: 'html/license/transfertable/store-transfer.html',
+				title: '门店交表',
+				width: 650,
+				height: 500,
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+					$(document).off("change", "[name='name']")
+				}
+			})
+		},
+		areatransfer: function() {
+			var data = checkSelectData(license_transfertable_list);
+			if(data == null) {
+				return;
+			}
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].status != 0) {
+					BJUI.alertmsg('warn', '存在数据状态不可操作的数据!');
+					return false;
+				}
+			}
+            var ids = [];
+            for (var i = 0; i < data.length; i++) {
+                var obj = {};
+                obj.tableid = data[i].tableid;
+                ids.push(obj);
+            }
+			clz.setWindowJson(ids);
+			BJUI.dialog({
+				id: 'dialog-transfertable-receive',
+				url: 'html/license/transfertable/area-transfer.html',
+				title: '片区交表',
+				width: 800,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+					$(document).off("change", "[name='name']")
+				}
+			})
+		},
+		licensereceive: function() {
+			var data = checkSelectData(license_transfertable_list);
+			if(data == null) {
+				return;
+			}
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].status != 1) {
+					BJUI.alertmsg('warn', '存在数据状态不可操作的数据!');
+					return false;
+				}
+			}
+			var ids = [];
+            for (var i = 0; i < data.length; i++) {
+                var obj = {};
+                obj.tableid = data[i].tableid;
+                ids.push(obj);
+            }
+            clz.setWindowJson(ids);
+			BJUI.dialog({
+				id: 'dialog-transfertable-receive',
+				url: 'html/license/transfertable/license-receive.html',
+				title: '牌证收表',
+				width: 800,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false,
+				onClose: function() {
+					$(document).off("change", "[name='name']")
+				}
+			})
+		},
+        tablereturn: function() {
+            BJUI.dialog({
+                id: 'dialog-transfertable-receive',
+                url: 'html/license/transfertable/table-return.html',
+                title: '学员退表',
+                width: 800,
+                height: 600,
+                mask: true,
+                maxable: false,
+                resizable: false,
+                onClose: function() {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+		batchdetail: function(tableid, tablestatus) {
+			var param = {};
+			var url = "html/license/transfertable/table-view.html";
+			if(tablestatus == 0) {
+				param.tableid = tableid;
+				param.tablestatus = 0;
+			} else if(tablestatus == 1) {
+				param.areatableid = tableid;
+                param.tablestatus = 1;
+			} else if (tablestatus == 2) {
+                param.licensetableid = tableid;
+                param.tablestatus = 2;
+            } else if (tablestatus == 3) {
+                param.returntableid = tableid;
+                param.tablestatus = 3;
+                url = "html/license/transfertable/table-return-view.html";
+            }
+			clz.setWindowJson(param);
+			BJUI.dialog({
+				id: 'dialog-transfertable-detail',
+				url: url,
+				title: '学员交表信息',
+				width:900,
+				height: 600,
+				mask: true
+			});
+		},
+		formatStatus: function(value) {
+			switch(value) {
+				case 0:
+					return "门店交表";
+				case 1:
+					return "片区交表";
+				case 2:
+					return "牌证收表";
+				case 3:
+					return "退表";
+			}
+		}
+	};
+
+	var license_transfertable_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '学员表移交管理列表',
+		toolbarItem: '',
+		toolbarCustom:
+			"<button class='btn-blue ml5' data-privilege='020202_datagrid-list_11' data-icon='edit' onclick='license_transfertable.storetransfer()'>门店交表</button>" +
+			"<button class='btn-blue ml5' data-privilege='020202_datagrid-list_12' data-icon='edit' onclick='license_transfertable.areatransfer()'>片区交表</button>" +
+			"<button class='btn-blue ml5' data-privilege='020202_datagrid-list_13' data-icon='edit' onclick='license_transfertable.licensereceive()'>牌证收表</button>" +
+			"<button class='btn-blue ml5' data-privilege='020202_datagrid-list_14' data-icon='edit' onclick='license_transfertable.tablereturn()'>退表</button>",
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showCheckboxcol: true,
+		fieldSortable: false,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'transfertable/list',
+		columns: [{
+			name: 'tableid',
+			label: '批次号',
+			align: 'center',
+			render: function(value, data) {
+				return "<a href='javascript:' onclick='license_transfertable.batchdetail(\"" + data.tableid + "\"," + data.status +")'>" + value + "</a>"
+			}
+		}, {
+			label: '表数量',
+			align: 'center',
+			name : 'itemcount'
+		}, {
+			name: 'transfername',
+			label: '交表人',
+			align: 'center'
+		}, {
+			name: 'transfertime',
+			label: '交表时间',
+			align: 'center'
+		}, {
+			name: 'status',
+			label: '状态',
+			align: 'center',
+			render: license_transfertable.formatStatus
+		}]
+	});
+</script>

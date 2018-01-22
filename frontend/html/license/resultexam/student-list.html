@@ -1,0 +1,175 @@
+<section id="thispage" privilege = "020307"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>考试成绩搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">批次号：</label>
+				<div class="row-input">
+					<input type="text" name="tableid">
+				</div>
+				<label class="row-label">考试科目：</label>
+				<div class="row-input">
+					<select name="subject" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="1">科目一考试</option>
+						<option value="2">科目二考试</option>
+						<option value="3">科目三考试</option>
+						<option value="4">科目四考试</option>
+					</select>
+				</div>
+				<label class="row-label">起始日期：</label>
+				<div class="row-input">
+					<input type="text" name="stime" data-toggle="datepicker" placeholder="录入起始时间">
+				</div>
+				<label class="row-label">结束时间：</label>
+				<div class="row-input">
+					<input type="text" name="etime" data-toggle="datepicker" placeholder="录入结束时间">
+				</div>
+
+			</div>
+				<div class="text-center">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var license_resultexam = {
+        addResultBatch: function() {
+            BJUI.dialog({
+                id: 'dialog-exam-add',
+                url: 'html/license/resultexam/student-exam-add.html',
+                title: '学员考试成绩批量录入',
+                width: 1000,
+                height: 600,
+                mask: true,
+                maxable: false,
+                resizable: false,
+                onClose: function() {
+                    $(document).off("change", "[name='name']")
+                }
+            })
+        },
+		importdata: function() {
+			BJUI.dialog({
+				id: 'dialog-resultexam-upload-excel',
+				url: 'html/license/resultexam/upload.html',
+				title: '培训考试数据导入',
+				mask: true,
+				maxable: false,
+				resizable: false
+			})
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'resultexam/export',
+				data: $.CurrentNavtab.find("#search-form").serializeArray()
+			});
+		},
+		detail: function(tableid,subject) {
+			clz.setWindowJson(tableid);
+			BJUI.dialog({
+				id: 'dialog-resultexam-detail',
+				url: 'html/license/resultexam/resultexam-exam-view.html',
+				title: '批次详情',
+				width: 1000,
+				height: 600,
+				mask: true,
+				maxable: false,
+				resizable: false
+			})
+		},
+		formatSubject: function(value) {
+			switch (value) {
+				case 1:
+					return "科目一考试";
+				case 2:
+					return "科目二考试";
+				case 3:
+					return "科目三考试";
+				case 4:
+					return "科目四考试";
+			}
+		},
+		formatResult: function(value) {
+			switch (value) {
+				case 0:
+					return "合格";
+				case 1:
+					return "不合格";
+				case 2:
+					return "未到";
+				case 3:
+					return "未考";
+				case 4:
+					return "取消";
+			}
+		},
+		formatIndexcat: function(value) {
+			switch (value) {
+				case 0:
+					return "正常";
+				case 1:
+					return "其他";
+				case 2:
+					return "紧急";
+				case 3:
+					return "额外";
+			}
+		}
+	}
+	var license_resultexam_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '报考预约信息列表',
+		toolbarItem: '',
+		toolbarCustom:
+        "<button data-privilege='020307_datagrid-list_01' class='btn-blue ml5' data-icon='edit' onclick='license_resultexam.addResultBatch()'>录入</button>" +
+		"<button data-privilege='020307_datagrid-list_11' class='btn-blue ml5' data-icon='edit' onclick='license_resultexam.importdata()'>导入</button>",
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showCheckboxcol: true,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'resultexam/list',
+		columns: [{
+			name: 'tableid',
+			label: '批次号',
+			align: 'center',
+			render: function(value, data) {
+				return "<a href='javascript:' onclick='license_resultexam.detail(\"" + data.tableid + "\"," + data.subject +")'>" + value + "</a>"
+			}
+		}, {
+			name: 'subject',
+			label: '科目',
+			align: 'center',
+			render: license_resultexam.formatSubject
+		}, {
+			name: 'itemcount',
+			label: '总人次',
+			align: 'center'
+		}, {
+			name: 'okcount',
+			label: '合格人次',
+			align: 'center'
+		}, {
+			name: 'failcount',
+			label: '不合格人次',
+			align: 'center'
+		}, {
+			name: 'cname',
+			label: '录入人',
+			align: 'center'
+		}, {
+			name: 'ctime',
+			label: '录入时间',
+			align: 'center'
+		}]
+	});
+</script>

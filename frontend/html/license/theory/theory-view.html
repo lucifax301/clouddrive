@@ -1,0 +1,213 @@
+<section id="thispage" privilege = "020302"></section>
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="view-form">
+    	<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>理论课信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+		        <div class="bjui-row col-4">
+		            <label class="row-label">课程名称:</label>
+		            <div class="row-input fill-2">
+		                <input type="text" name="lessonname" type="text" class="clear-style" readOnly >
+		            </div>
+		            <label class="row-label">课程状态:</label>
+		            <div class="row-input">
+		                <input type="text" name="stateName" class="clear-style red" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">上课日期:</label>
+		            <div class="row-input">
+		                <input type="text" name="starttime" class="clear-style" readOnly>
+		            </div>
+		            <label class="row-label">上课时间:</label>
+		            <div class="row-input">
+		                <input type="text" name="lessontime" class="clear-style" readOnly>
+		            </div>
+		            <br>
+		            <label class="row-label">携带证件:</label>
+		            <div class="row-input">
+		                <input type="text" name="idcard" class="clear-style" readOnly>
+		            </div>
+		            <label class="row-label">上课地点:</label>
+		            <div class="row-input fill-2">
+		                <input type="text" name="place" class="clear-style" readOnly>
+		            </div>
+		            </br>
+		            <label class="row-label">上课名额:</label>
+		            <div class="row-input">
+		                <input type="text" name="recomnum" class="clear-style" readOnly>
+		            </div>
+		        </div>
+	        </div>
+        </div>
+    </form>
+
+    <table id="theory-students" class="table table-bordered"></table>
+    <div class="c-bottom-button mt30" id = 'user-operation'>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-blue vhide" data-icon="save" data-privilege="020302_datagrid-list_16" onclick="license_theory_view.studentConfirm()">确定</button></li>
+    </div>
+</div>
+
+<script type="text/javascript">
+var license_theory_view = {
+	init: function() {
+		BJUI.ajax('doajax', {
+		    url: config.openBasePath + 'student/theoryLesson?' + license_theory_view.getParams(),
+		    type: 'GET',
+		    loadingmask: true,
+		    okCallback: function(json, options) {
+		        json.result.theory.stateName = clz.filter.theoryState(json.result.theory.state);
+		        json.result.theory.lessontime = clz.filter.time({date:json.result.theory.starttime,type:'hh:mm'}) + '-' + clz.filter.time({date:json.result.theory.endtime,type:'hh:mm'})
+		        clz.CurrentDom_init({
+					current:'Navtab',
+		            form_name : 'view-form',
+		            data : json.result.theory,
+		            timetype:[
+		                {
+		                    name:'starttime',
+		                    type:'yyyy-MM-dd'
+		                }
+		            ]
+		        });
+		        var grid =$.CurrentNavtab.find('#theory-students').datagrid({
+		            gridTitle : '学员列表',
+		            toolbarCustom:'<button type="button" class="btn-blue" data-privilege="020302_datagrid-list_15" onclick="license_theory_view.addstudent('+clz.getNavtab_more().id+')" id="arrange-student">安排学员</button>' +
+		            	"<button class='btn-blue' data-icon='edit' id='import-result' data-privilege='020302_datagrid-list_17' onclick='license_theory_view.importResult()'>录入成绩</button>",
+		            paging: false,
+		            height: '58%',
+		            width:'50%',
+		            showToolbar:true,
+		            toolbarItem:'export',
+		            showCheckboxcol: false,
+		            showEditbtnscol:false,
+		            fieldSortable:false,
+		            columnMenu:false,
+		            data: json.result.list,
+		            columns: [
+//                          {name:'stunum',label:'学员编号',align:'center'},
+		                {name:'name',label:'学员姓名',align:'center'},
+		                {name:'phone',label:'学员手机',align:'center'},
+		                {name:'sex',label:'性别',align:'center',render:function(value){return String(value)=='1'?'男':'女'}},
+		                {name:'traintype',label:'所学车型',align:'center'},
+		                {name:'idcard',label:'证件号码',align:'center'},
+		                {name:'flownum',label:'流水号',align:'center'},
+		                {name:'theoryseatnum',label:'座位号',align:'center'},
+		                {name:'theoryresult',label:'成绩',align:'center', render: function(value){
+		                	var text = '待录入';
+		                	if(value == 1) 
+		                		text = '到';
+		                	else if (value == 2)
+		                		text = '未到';
+		                	else if (value == 3)
+		                		text = '取消';
+		                	return text;
+		                }},
+		                {name:'theoryremark',label:'备注',align:'center'},
+//                          {name:'applyexam',label:'学车状态',align:'center',render:studentStatus},
+		                {name:'id',label:'操作',align:'center',render:function(value, data){
+		                	console.log(window.liliyun_userinfo)
+		                	if (json.result.theory.state > 3 || (window.liliyun_userinfo.level == 2 && json.result.theory.state > 1) )
+		                		return '';
+		                	else 
+		                		return '<button onclick="license_theory_view.delStudent('+ value+')" type="button" class="btn-red">删除</button>'}
+		                },
+		            ],
+		            exportOption:{type:'file', options:{
+		                type:'GET',
+		                url:config.openBasePath + 'student/export/theoryStudent?theoryid=' + clz.getNavtab_more().id
+		            }},
+		            editMode:false
+		        });
+		        if(json.result.theory.state != 1 && json.result.theory.state != 9){
+		        	$.CurrentNavtab.find('#user-operation .btn-close').html('<i class="fa fa-close"></i> 关闭');
+		        	$.CurrentNavtab.find('#user-operation .btn-blue').remove();
+		        	$.CurrentNavtab.find('#arrange-student').remove();
+		        } 
+		        if (json.result.theory.state != 5) {
+	        		$.CurrentNavtab.find('#import-result').remove();
+	        	} else if (json.result.list) {
+		        	for (var i=0; i < json.result.list.length; i++) {
+			        	if (json.result.list[i].theoryresult == 0)
+		        			break;
+		        		$.CurrentNavtab.find('#import-result').remove();
+			        }
+		        }
+		    }
+		});
+	},
+	delStudent: function(value) {
+	    BJUI.alertmsg('confirm', '确认删除该条记录？', {
+	        okCall: function() {
+	            BJUI.ajax('doajax', {
+	                url: config.openBasePath + 'student/edit/theoryStudent',
+	                type: 'POST',
+	                loadingmask: true,
+	                data: 'theoryId=' + clz.getNavtab_more().id + '&ids=' + value + '&isDel=1',
+	                okCallback: function(json, options) {
+	                    BJUI.navtab('refresh');
+	                }
+	            })
+	            BJUI.alertmsg('ok', '您已经成功删除该条记录！', {})
+	        }
+	    })
+	},
+	addstudent: function(id) {
+	    BJUI.dialog({
+	        id:'theory_dialog_students',
+	        url:'html/license/theory/theory-students.html',
+	        title:'添加学员',
+	        resizable:true,
+	        mask:true,
+	        minable:false,
+	        maxable:false,
+	        width:900,
+	        height:600,
+	        fresh:true,
+	        onClose:function () {
+	            BJUI.navtab('refresh');
+	        }
+	    })
+	},
+	getParams: function() {
+	    var params = 'theoryid=' + clz.getNavtab_more().id;
+	    if (clz.getNavtab_more().storeid != null && clz.getNavtab_more().storeid != '')
+	        params = params + '&storeid=' + clz.getNavtab_more().storeid;
+	    return params;
+	},
+	studentConfirm: function() {
+	    BJUI.alertmsg('confirm', '提交学员名单后名单将不可修改，是否继续？', {
+	    okCall: function() {
+	        BJUI.ajax('doajax', {
+	            url: config.openBasePath + 'student/update/theoryLesson',
+	            type: 'POST',
+	            loadingmask: true,
+	            data: 'theoryid=' + clz.getNavtab_more().id + '&state=2',
+	            okCallback: function(json, options) {
+	                BJUI.navtab('refresh');
+	                }
+	            })
+	        }
+	    })
+	},
+	importResult: function () {
+		clz.setWindowJson(clz.getNavtab_more().id);
+        BJUI.dialog({
+            id: 'dialog-import-theory-result',
+            url: 'html/license/theory/theory-result.html',
+            title: '理论课成绩录入',
+            width: 750,
+            height: 500,
+            mask: true,
+            maxable: false,
+            resizable: false,
+            onClose: function () {
+            	BJUI.navtab('refresh');
+            }
+        })
+    },
+}
+license_theory_view.init();
+</script>

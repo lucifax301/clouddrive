@@ -1,0 +1,202 @@
+<section id="thispage" privilege = "050102"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>营销活动搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+
+			<div class="bjui-row col-4">
+
+				<label class="row-label">活动状态：</label>
+				<div class="row-input">
+					<select name="searchstatus" data-toggle="selectpicker" data-width="100%">
+						<option value="" selected>全部</option>
+						<option value="0">未开始</option>
+						<option value="1">进行中</option>
+						<option value="2">已结束</option>
+						<option value="3">已关闭</option>
+					</select>
+				</div>
+
+				<label class="row-label">活动时间：</label>
+				<div class="row-input">
+					<input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择开始日期">
+				</div>
+
+				<label class="row-label">到：</label>
+				<div class="row-input">
+					<input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择结束日期">
+				</div>
+				<label class="row-label">活动名称：</label>
+				<div class="row-input">
+					<input type="text" name="activityname" class="form-control" data-width="100%" placeholder="请输入活动名称查询">
+				</div>
+
+				
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="button" class="btn-blue" onclick="sales_apply_list.export()" data-icon="search">导出</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+				</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	function stringToDate(fDate) {
+		var tempStrs = fDate.split(" ");
+		var fullDate = tempStrs[0].split("-");
+		var fullTime = tempStrs[1].split(":");
+		console.log(fullDate+" "+fullTime)
+		return new Date(fullDate[0], fullDate[1] - 1, fullDate[2], fullTime[0], fullTime[1], fullTime[2]);
+	}
+
+	function getperiod(date1, date2) {
+		var df = (date2.getTime() - date1.getTime()) / 3600 / 1000 / 24;
+		return df + 1;
+	}
+
+	function simpleDate(fDate) {
+		var tempStrs = fDate.split(" ");
+		var fullDate = tempStrs[0].split("-");
+		return fullDate[0] + "-" + (fullDate[1]) + "-" + fullDate[2]
+	}
+
+	var sales_apply_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '',
+			toolbarCustom: "<button class='btn-blue' data-privilege='050102_datagrid-list_01' id='modifyBtn' style='' onclick='sales_apply_list.add()'>新增</button>",
+			toolbarItem: 'none',
+			paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+			height: '85%',
+			showCheckboxcol: false,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'sales/list',
+			columns: [
+
+				{ name: 'activityname', label: '活动名称', align: 'center' },
+				{
+					name: 'activityname',
+					label: '活动起止日期',
+					align: 'center',
+					render: function(value, data) {
+						if(data.begindate) {
+							return simpleDate(data.begindate) + "~" + simpleDate(data.enddate);
+						} else {
+							return "";
+						}
+					}
+				},
+				{
+					name: 'actstatus',
+					label: '状态',
+					align: 'center',
+					render: function(value, data) {
+						if(data.begindate) {
+							if(data.actstatus == 1) {
+								return "已关闭"
+							} else {
+								var bd = stringToDate(data.begindate);
+								var ed = stringToDate(data.enddate);
+								var nd = new Date();
+								if(nd > ed) {
+									return "已结束";
+								} else if(nd > bd) {
+									return "进行中";
+								} else if(nd < bd) {
+									return "未开始";
+								}
+							}
+						}
+					}
+				},
+				{
+					name: 'enrolcount',
+					label: '已招生人数',
+					align: 'center',
+					render: function(value) {
+						if(!value) { return 0 } else { return value; }
+					}
+				},
+				{ name: 'applyuser', label: '添加人', align: 'center' },
+				{ name: 'createdate', label: '添加时间', align: 'center' },
+				{
+					name: 'createdate',
+					label: '操作',
+					align: 'center',
+					render: function(value, data) {
+						var edit = "";
+						if(data.status == 0) {
+							edit = "<a onclick='sales_apply_list.edit(" + JSON.stringify(data) + ")' data-privilege='050102_datagrid-list_02' class='btn-blue btn'  data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "编辑" + "</a>";
+						}
+						return "<a onclick='sales_apply_list.view(" + JSON.stringify(data) + ")' class='btn-blue btn' data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "查看" + "</a>" + "&nbsp;&nbsp;" + edit;
+
+					}
+
+				}
+
+			],
+
+		}),
+
+		add: function() {
+			BJUI.navtab({
+				id: 'market-sales-add',
+				url: 'html/market/sales-add.html',
+				title: '新增活动',
+				onClose: function() {
+					sales_apply_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', sales_apply_list.curtab);
+				}
+			})
+		},
+
+		view: function(info) {
+			BJUI.navtab({
+				id: 'sales-view-' + info.id,
+				width: 640,
+				height: 640,
+				url: 'html/market/sales-view.html',
+				title: '申请营销活动-' + info.activityname,
+				more: JSON.stringify(info),
+				onClose: function() {
+					sales_apply_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', sales_apply_list.curtab);
+
+				}
+
+			})
+		},
+		export: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + "/sales/list/export",
+
+				loadingmask: false,
+				data: $.CurrentNavtab.find('#search-form').serializeArray(),
+
+			})
+		},
+		edit: function(info) {
+			BJUI.navtab({
+				id: 'sales-edit-' + info.id,
+				width: 640,
+				height: 640,
+				url: 'html/market/sales-edit.html',
+				title: '编辑营销活动-' + info.activityname,
+				more: JSON.stringify(info),
+				onClose: function() {
+					sales_apply_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', sales_apply_list.curtab);
+
+				}
+
+			})
+		}
+	}
+</script>

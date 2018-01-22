@@ -1,0 +1,154 @@
+<div class="bjui-pageHeader" >
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教练搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+
+					<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%"  data-dataurl="/httpaccess/area/list">
+						<option value="0">请选择</option>
+					</select>
+				</div>
+				
+				<label class="row-label">带教车型：</label>
+				<div class="row-input">
+					<select name="teachcartype" id="teachcartype" data-toggle="selectpicker" data-width="100%" size="15" data-dataurl="/httpaccess/coachSetting/listCarType" data-optiontype="type,type">
+						<option value="0">请选择</option>
+					</select>
+				</div>
+				<label class="row-label">带教类型：</label>
+				<div class="row-input">
+					<select name="teachtypeid" id="teachtype" data-toggle="selectpicker" size="15" data-width="100%"  data-dataurl="/httpaccess/coachSetting/listTeachType" data-optiontype="id,type">
+						<option value="0">请选择</option>
+					</select>
+				</div>
+				<label class="row-label">教练姓名：</label>
+				<div class="row-input">
+					<input type="text" name="name" class="form-control" data-width="100%">
+				</div>
+				
+				
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						
+				</div>
+				</div>
+			</div>
+			</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var coach_coach_list = {
+		list : $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '教练列表',
+			toolbarItem: 'none',
+			toolbarCustom: "<button class='btn-blue' id='modifyBtn' style='' onclick='coach_coach_list.batchmodify()'>批量修改</button>",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'coach/list',
+			columns: [
+				//{
+				//	name: 'name',
+				//	label: '教练姓名',
+				//	align: 'center',
+				//	render: function(value, data) {
+						//要传的值，组装成对象
+				//		var morejson = {
+				//			id: data.coachid
+				//		}
+				//		return "<a onclick='view(" + data.coachid + ")'  data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' data-more='" + JSON.stringify(morejson) + "'>" + value + "</a>"
+				//	}
+				//}, 
+				{name:'name',label:'教练姓名',align:'center',render:function(value, data){
+                return "<a href='html/coach/coach-view.html' data-toggle='navtab' data-options='{id:\"student-view-table"+data.coachid+"\" , title:\"查看教练信息\"}' data-more='" + JSON.stringify(data) + "'>" + value + "</a>"
+				}},
+				{
+					name: 'areaid',
+					label: '片区',
+					align: 'center',
+					render:formatAreaCell
+				}, {
+					name: 'job',
+					label: '带教职务',
+					align: 'center'
+				}, {
+					name: 'teachcartype',
+					label: '带教车型',
+					align: 'center'
+				}, {
+					name: 'teachtype',
+					label: '带教类型',
+					align: 'center'
+				}, {
+					name: 'studentload',
+					label: '负荷标准',
+					align: 'center'
+				}, {
+					name: 'employstatus',
+					label: '带教班别',
+					align: 'center'
+					
+				}
+
+			],
+			
+
+		}),
+
+	
+
+	batchmodify: function() {
+		var data = coach_coach_list.list.data('selectedDatas');
+		console.log(data);
+		if(!data||data.length==0){
+			 BJUI.alertmsg('error', '没有选中数据！', {})
+			 return
+		}
+
+		console.log(data);
+		clz.setWindowJson(data);
+		BJUI.dialog({
+			id: 'apply_dialog',
+			width: 640,
+			height: 480,
+			url: 'html/coach/coach-batch-setting.html',
+			title: '批量设置带教信息',
+			onClose: function() {
+				BJUI.navtab('refresh')//改为刷新本标签页
+			}
+
+		})
+		
+	},
+
+	applymodify: function () {
+
+		BJUI.dialog({
+			id: 'apply_dialog',
+			width: 800,
+			height: 800,
+			url: 'html/coach/coach-batch-setting.html',
+			title: '设置带教信息',
+			onClose: function() {
+				coach_coach_list.list.datagrid('refresh', true);
+			}
+
+		})
+	}
+
+	
+	}
+</script>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="upload-all" name="chelizi" basedir="./">
+	<description>
+	Chelizi自动编译打包脚本
+	</description>
+	<echo>Building chelizi...</echo>
+	<echo>basedir: ${basedir}</echo>
+
+	<!--发布变量设置-->
+	<property name="myhost" value="127.0.0.1" />
+	<property name="host" value="192.168.82.242" />
+	<property name="user" value="root" />
+	<property name="password" value="BUOf5x41EJqvC6L4OW" />
+
+	<!--定义相关编译变量-->
+	<property name="is_debug" value="on" />
+	<property name="includeantruntime" value="false" />
+	<property name="java-version" value="1.7" />
+	<property name="app-version" value="0.1" />
+	<property name="webapp-version" value="0.1" />
+	<property name="exclude-svn" value="**/*.svn/*.*,servlet-api.jar" />
+	<property name="exclude-local" value="*.propertieslocal,terracotta-toolkit-1.6-runtime-5.5.0.jar" />
+
+	<!--输入变量定义-->
+	<property name="authcode" value="${basedir}/authcode" />
+	<property name="business" value="${basedir}/business" />
+	<property name="car" value="${basedir}/car" />
+	<property name="coach" value="${basedir}/coach" />
+	<property name="common" value="${basedir}/common" />
+	<property name="datasynch" value="${basedir}/datasynch" />
+	<property name="finance" value="${basedir}/finance" />
+	<property name="flow" value="${basedir}/flow" />
+	<property name="httpaccess" value="${basedir}/httpaccess" />
+	<property name="intapi" value="${basedir}/intapi" />
+	<property name="logcommon" value="${basedir}/logcommon" />
+	<property name="market" value="${basedir}/market" />
+	<property name="report" value="${basedir}/report" />
+	<property name="student" value="${basedir}/student" />
+	<property name="system" value="${basedir}/system" />
+	<property name="trainorg" value="${basedir}/trainorg" />
+	<property name="user" value="${basedir}/user" />
+
+	<!-- 自动上传设置 -->
+	<property name="ftpserverdir" value="/www/liliyun" />
+	<property name="webserverdir" value="${host}:${ftpserverdir}" />
+
+	<!-- 编译项目 -->
+	<target name="compile-common">
+		<delete dir="${common}/bin" />
+		<mkdir dir="${common}/bin" />
+		<delete dir="${common}/lib" />
+		<mkdir dir="${common}/lib" />
+		<javac srcdir="${common}/src" destdir="${common}/bin" source="${java-version}" target="${java-version}" debug="${is_debug}" includeantruntime="${includeantruntime}">
+		</javac>
+		<jar basedir="${common}/bin" destfile="${common}/lib/common.jar" />
+	</target>
+
+	<target name="compile-intapi">
+		<delete dir="${intapi}/bin" />
+		<mkdir dir="${intapi}/bin" />
+		<delete dir="${intapi}/lib" />
+		<mkdir dir="${intapi}/lib" />
+		<javac srcdir="${intapi}/src" destdir="${intapi}/bin" source="${java-version}" target="${java-version}" debug="${is_debug}" includeantruntime="${includeantruntime}">
+		</javac>
+		<jar basedir="${intapi}/bin" destfile="${intapi}/lib/intapi.jar" />
+	</target>
+
+
+	<target name="upload-authcode">
+		<echo>==========================car upload==========================</echo>
+		<!-- 上传user到服务器-->
+		<scp file="${authcode}/target/authcode.war" todir="${user}:${password}@${webserverdir}/tomcat_authcode/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================car end upload==========================</echo>
+	</target>
+
+	<target name="upload-business">
+		<echo>==========================car upload==========================</echo>
+		<!-- 上传user到服务器-->
+		<scp file="${business}/target/business.war" todir="${user}:${password}@${webserverdir}/tomcat_business/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================car end upload==========================</echo>
+	</target>
+
+	<target name="upload-car">
+		<echo>==========================car upload==========================</echo>
+		<!-- 上传user到服务器-->
+		<scp file="${car}/target/car.war" todir="${user}:${password}@${webserverdir}/tomcat_car/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================car end upload==========================</echo>
+	</target>
+
+	<target name="upload-coach">
+		<echo>==========================coach upload==========================</echo>
+		<!-- 上传coach到服务器-->
+		<scp file="${coach}/target/coach.war" todir="${user}:${password}@${webserverdir}/tomcat_coach/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================coach end upload==========================</echo>
+	</target>
+
+	<target name="upload-datasynch">
+		<echo>==========================car upload==========================</echo>
+		<!-- 上传user到服务器-->
+		<scp file="${datasynch}/target/datasynch.war" todir="${user}:${password}@${webserverdir}/tomcat_datasynch/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================car end upload==========================</echo>
+	</target>
+
+
+	<target name="upload-finance">
+		<echo>==========================car upload==========================</echo>
+		<!-- 上传user到服务器-->
+		<scp file="${finance}/target/finance.war" todir="${user}:${password}@${webserverdir}/tomcat_finance/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================car end upload==========================</echo>
+	</target>
+
+	<target name="upload-flow">
+		<echo>==========================car upload==========================</echo>
+		<!-- 上传user到服务器-->
+		<scp file="${flow}/target/flow.jar" todir="${user}:${password}@${webserverdir}/tomcat_flow/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================car end upload==========================</echo>
+	</target>
+
+	<target name="upload-httpaccess">
+		<echo>==========================httpaccess upload==========================</echo>
+		<!-- 上传httpaccess到服务器-->
+		<scp file="${httpaccess}/target/httpaccess.war" todir="${user}:${password}@${webserverdir}/tomcat_httpaccess/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================httpaccess end upload==========================</echo>
+	</target>
+
+	<target name="upload-logcommon">
+		<echo>==========================car upload==========================</echo>
+		<!-- 上传user到服务器-->
+		<scp file="${logcommon}/target/logcommon.jar" todir="${user}:${password}@${webserverdir}/tomcat_logcommon/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================car end upload==========================</echo>
+	</target>
+	
+	<target name="upload-market">
+			<echo>==========================market upload==========================</echo>
+			<!-- 上传user到服务器-->
+			<scp file="${market}/target/market.war" todir="${user}:${password}@${webserverdir}/tomcat_market/webapps" trust="true" verbose="true">
+			</scp>
+			<echo>==========================market end upload==========================</echo>
+	</target>
+	
+	<target name="upload-report">
+			<echo>==========================report upload==========================</echo>
+			<!-- 上传user到服务器-->
+			<scp file="${report}/target/report.war" todir="${user}:${password}@${webserverdir}/tomcat_report/webapps" trust="true" verbose="true">
+			</scp>
+			<echo>==========================report end upload==========================</echo>
+	</target>
+
+	<target name="upload-student">
+			<echo>==========================student upload==========================</echo>
+			<!-- 上传student到服务器-->
+			<scp file="${student}/target/student.war" todir="${user}:${password}@${webserverdir}/tomcat_student/webapps" trust="true" verbose="true">
+			</scp>
+			<echo>==========================student end upload==========================</echo>
+	</target>
+	
+	<target name="upload-system">
+			<echo>==========================system upload==========================</echo>
+			<!-- 上传user到服务器-->
+			<scp file="${system}/target/system.war" todir="${user}:${password}@${webserverdir}/tomcat_system/webapps" trust="true" verbose="true">
+			</scp>
+			<echo>==========================system end upload==========================</echo>
+	</target>
+	
+	<target name="upload-trainorg">
+		<echo>==========================trainorg upload==========================</echo>
+		<!-- 上传trainorg到服务器-->
+		<scp file="${trainorg}/target/trainorg.war" todir="${user}:${password}@${webserverdir}/tomcat_trainorg/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================trainorg end upload==========================</echo>
+	</target>
+
+
+	<target name="upload-all" depends="upload-httpaccess,upload-trainorg,upload-coach,upload-student,upload-car,upload-logcommon,upload-datasynch,upload-authcode,upload-report,upload-business,upload-flow,upload-market,upload-system,upload-finance,upload-system">
+	</target>
+</project>

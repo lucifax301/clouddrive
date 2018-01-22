@@ -1,0 +1,400 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>驾校信息管理</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+
+					<div class="bjui-row col-4">
+						<label class="row-label">驾校名称</label>
+						<div class="row-input ">
+							<input type="text" class="clear-style" id="schoolname" data-width="100%">
+						</div>
+
+						<!--<label><button type="button" class="btn-blue btn" onclick="school_index.edit()" data-icon="save">编辑</button></label>-->
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">计时培训资质</label>
+						<div class="row-input ">
+							<input type="text" class="clear-style" id="schoolcheck" data-width="100%" class="clear-style" value="未获取">
+						</div>
+
+						<label>填写驾校信息提交认证，即可获取机动车驾驶员计时培训资质</label>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label"></label>
+						<div class="row-input fill-2">
+							<button type="button" class="btn-blue btn" onclick="school_index.gotoauth()" id="authbtn" data-icon="save">立即认证</button>
+							<button type="button" class="btn-blue btn" onclick="school_index.edit()" id="editbtn" data-icon="save">编辑</button>
+							<button type="button" class="btn-blue btn" onclick="school_index.editauth()" id="editauthbtn" style="display: none;" data-icon="save">编辑后认证</button>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+		
+		<div class="widget-box" id="schoolinfo" style="display: none;">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>驾校信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+					<div class="">
+						<label class="row-label">驾校名称:</label>
+						<div class="row-input fill-2 required">
+							<input type="text" name="name" data-width="100%" maxlength="20" data-rule="required;" placeholder="请输入驾校名称">
+						</div>
+
+					</div>
+					
+					<div class="">
+						<label class="row-label">驾校简称:</label>
+						<div class="row-input fill-2 required">
+							<input type="text" name="shortname" data-width="100%" maxlength="20" data-rule="required;" placeholder="请输入驾校简称">
+						</div>
+
+					</div>
+					
+					<div class="">
+						<label class="row-label">行政区域</label>
+						<div class="row-input required ">
+		                    <select name="province" data-toggle="selectpicker" data-nextselect="#form_city3" data-refurl="/httpaccess/area/region?level={value}" data-width="32%" data-dataurl="/httpaccess/area/region?level=0" data-optiontype="value,label" data-rule="required">
+					        </select>
+					        <select name="city" id="form_city3" data-toggle="selectpicker" data-rule="required" data-nextselect="#form_area3" data-refurl="/httpaccess/area/region?level={value}" data-emptytxt="市" data-width="32%">
+					        	<option value="">市</option>
+					        </select>
+					        <select name="district" id="form_area3" data-toggle="selectpicker" data-emptytxt="区/县" data-width="32%" data-rule="required">
+					        	<option value="">区/县</option>
+					        </select>
+		                </div>
+
+						<label class="row-label">邮政编码</label>
+						<div class="row-input required">
+							<input type="text" name="postcode" data-width="100%" maxlength="5" data-rule="required;" placeholder="请输入邮政编码">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">驾校地址:</label>
+						<div class="row-input fill-2 required">
+							<input type="text" name="address" data-width="100%" maxlength="6" data-rule="required;" placeholder="请输入驾校地址">
+						</div>
+
+					</div>
+					
+					<div class="">
+						<label class="row-label">经营许可证编号:</label>
+						<div class="row-input fill-2 required">
+							<input type="text" name="licnum" data-width="100%" maxlength="6" data-rule="required;" placeholder="请输入经营许可证编号">
+						</div>
+
+					</div>
+
+					<div class="">
+						<label class="row-label">经营许可日期:</label>
+						<div class="row-input required">
+							<input type="text" name="licetime" readonly="readonly"   data-pattern="yyyyMMdd" data-width="100%" data-toggle="datepicker" data-rule="required" placeholder="">
+						</div>
+						
+					</div>
+					
+					<div class="">
+						<label class="row-label">营业执照注册号:</label>
+						<div class="row-input fill-2 required">
+							<input type="text" name="business" data-width="100%" maxlength="6" data-rule="required;" placeholder="请输入营业执照注册号">
+						</div>
+
+					</div>
+					
+					<div class="">
+						<label class="row-label">统一社会信用代码:</label>
+						<div class="row-input fill-2 required">
+							<input type="text" name="creditcode" data-width="100%" maxlength="6" data-rule="required;" placeholder="请输入营业执照注册号">
+						</div>
+
+					</div>
+					
+					<div class="">
+						<label class="row-label">法人代表:</label>
+						<div class="row-input required">
+							<input type="text" name="legal" data-width="100%" maxlength="6" data-rule="required;" placeholder="请输入法人代表">
+						</div>
+						<label class="row-label">联系人:</label>
+						<div class="row-input required">
+							<input type="text" name="contact" data-width="100%" maxlength="5" data-rule="required;" placeholder="请输入联系人">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">联系人电话:</label>
+						<div class="row-input required">
+							<input type="text" name="phone" data-width="100%"  data-rule="required" placeholder="">
+						</div>
+						
+					</div>
+					
+					<div class="">
+						<label class="row-label">经营范围:</label>
+						<div class="row-input required fill-2" id="busiscope">
+							<input type="checkbox" name="busiscope" id="type_A1" data-toggle="icheck" value="A1" data-label="A1">
+							<input type="checkbox" name="busiscope" id="type_A2" data-toggle="icheck" value="A2" data-label="A2">
+							<input type="checkbox" name="busiscope" id="type_A3" data-toggle="icheck" value="A3" data-label="A3">
+							<input type="checkbox" name="busiscope" id="type_B1" data-toggle="icheck" value="B1" data-label="B1">
+							<input type="checkbox" name="busiscope" id="type_B2" data-toggle="icheck" value="B2" data-label="B2">
+							<input type="checkbox" name="busiscope" id="type_C1" data-toggle="icheck" value="C1" data-label="C1">
+							<input type="checkbox" name="busiscope" id="type_C2" data-toggle="icheck" value="C2" data-label="C2">
+							<input type="checkbox" name="busiscope" id="type_C3" data-toggle="icheck" value="C3" data-label="C3">
+							<input type="checkbox" name="busiscope" id="type_C4" data-toggle="icheck" value="C4" data-label="C4">
+							<input type="checkbox" name="busiscope" id="type_C5" data-toggle="icheck" value="C5" data-label="C5">
+							<input type="checkbox" name="busiscope" id="type_D" data-toggle="icheck" value="D" data-label="D">
+							<input type="checkbox" name="busiscope" id="type_E" data-toggle="icheck" value="E" data-label="E">
+							<input type="checkbox" name="busiscope" id="type_F" data-toggle="icheck" value="F" data-label="F">
+							<input type="checkbox" name="busiscope" id="type_M" data-toggle="icheck" value="M" data-label="M">
+							<input type="checkbox" name="busiscope" id="type_N" data-toggle="icheck" value="N" data-label="N">
+							<input type="checkbox" name="busiscope" id="type_P" data-toggle="icheck" value="P" data-label="P">
+						</div>
+						
+					</div>
+
+					<div class="">
+						<label class="row-label">经营状态:</label>
+						<div class="row-input required">
+							<select name="busistatus" data-toggle="selectpicker" class="select_disabled"  data-width="32%"  data-rule="required">
+								<option value="1">营业</option>
+								<option value="2">停业</option>
+								<option value="3">整顿</option>
+								<option value="4">停业整顿</option>
+								<option value="5">歇业</option>
+								<option value="6">注销</option>
+								<option value="9">其他</option>
+					        </select>
+						</div>
+						<label class="row-label">分类等级:</label>
+						<div class="row-input required">
+							<select name="level" data-toggle="selectpicker" class="select_disabled"  data-width="32%"  data-rule="required">
+								<option value="1">一级</option>
+								<option value="2">二级</option>
+								<option value="3">三级</option>
+								
+					        </select>
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">教练员总数:</label>
+						<div class="row-input required">
+							<input type="text" name="coachnumber" data-width="100%" maxlength="5" data-rule="required;" placeholder="">
+						</div>
+						<label class="row-label">考核员总数:</label>
+						<div class="row-input required">
+							<input type="text" name="grasupvnum" data-width="100%" maxlength="5" data-rule="required;" placeholder="">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">安全员总数:</label>
+						<div class="row-input required">
+							<input type="text" name="safmngnum" data-width="100%" maxlength="5" data-rule="required;" placeholder="">
+						</div>
+						<label class="row-label">教练车总数:</label>
+						<div class="row-input required">
+							<input type="text" name="tracarnum" data-width="100%" maxlength="5" data-rule="required;" placeholder="">
+						</div>
+					</div>
+					
+					<div class="">
+						<label class="row-label">教室总面积:</label>
+						<div class="row-input required">
+							<input type="text" name="classroom" data-width="100%" maxlength="5" data-rule="required;" placeholder="">
+						</div>
+						<label class="row-label">理论教室面积:</label>
+						<div class="row-input required">
+							<input type="text" name="thclassroom" data-width="100%" maxlength="5" data-rule="required;" placeholder="">
+						</div>
+					</div>
+
+					<div class="">
+						<label class="row-label">教练场总面积:</label>
+						<div class="row-input required">
+							<input type="text" name="praticefield" data-width="100%" maxlength="100" data-rule="required" placeholder="">
+						</div>
+					</div>
+					
+					
+					
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="instid" />
+	</form>
+
+</div>
+
+
+
+<script>
+	$.CurrentNavtab.find("#schoolname").val(window.liliyun_userinfo.schoolname)
+
+	var school_index = {
+		curtab: clz.getNavtab_privilege(),
+		init: clz.CurrentDom_init({
+			current: 'Navtab',
+			form_name: 'view-form',
+
+			callback: function(data) {
+				BJUI.ajax('doajax', {
+					url: config.openBasePath + "/school/get",
+					loadingmask: true,
+					okCallback: function(json, options) {
+
+						if(json.result) {
+							$.CurrentNavtab.find("#authbtn").css("display","none")
+							
+							$.CurrentNavtab.find("#schoolinfo").css("display","");
+							if(json.result.auth==1){
+								$.CurrentNavtab.find("#schoolcheck").val('认证通过')
+							}else if(json.result.auth==2){
+								$.CurrentNavtab.find("#schoolcheck").val('认证失败')
+							}
+							
+							if(json.result.district) {
+										json.result.province = parseInt(json.result.district/10000);
+										json.result.city = parseInt(json.result.district/100);
+							}
+							
+							clz.CurrentDom_init({
+								current: 'Navtab',
+								form_name: 'add-form',
+								data:json.result,
+								before:function(data){
+									console.log(data.district)
+//									if(data.district) {
+//										data.province = parseInt(data.district/10000);
+//										data.city = parseInt(data.district/100);
+//									}
+									var busiscope = data.busiscope.split(',');
+									$.each($.CurrentNavtab.find('input[name="busiscope"]'),function(i,m){
+										var thisiput = $(this)
+										$.each(busiscope,function(j,n){
+											if(n == thisiput.val()){
+												//m.attr()
+												//m.attr()
+												thisiput.iCheck('check');
+											}
+										})
+									})
+								}
+								
+							})
+							
+							
+							
+							
+							//alert($.CurrentNavtab.find("#schoolinfo input").size())
+							$.CurrentNavtab.find("#schoolinfo input").each(function(){
+								 $(this).attr("readonly","readonly")
+								 
+							})
+							
+							$.CurrentNavtab.find("#schoolinfo input[type=checkbox]").each(function(){
+								 $(this).attr("disabled","disabled")
+								 
+							})
+							
+							$.CurrentNavtab.find("#schoolinfo select").each(function(){
+								 $(this).addClass("select_disabled")
+								 
+							})
+							$.CurrentNavtab.find('#add-form').trigger(BJUI.eventType.initUI)
+							
+						}else{
+							$.CurrentNavtab.find("#editbtn").css("display","none")
+							
+						}
+					}
+				})
+
+			}
+		}),
+		gotoauth() {
+			BJUI.navtab({
+				id: 'school-edit',
+				url: 'html/school/school-edit.html',
+				title: '计时培训资质认证',
+				onClose: function() {
+
+					BJUI.navtab('switchTab', school_index.curtab);
+					BJUI.navtab('refresh')
+				}
+
+			})
+		},
+		edit(){
+			$.CurrentNavtab.find("#editbtn").css("display","none")
+			$.CurrentNavtab.find("#editauthbtn").css("display","")
+				
+			$.CurrentNavtab.find("#schoolinfo input").each(function(){
+					$(this).removeAttr("readonly");
+								 
+			})	
+			
+			$.CurrentNavtab.find("#schoolinfo input[type=checkbox]").each(function(){
+					$(this).removeAttr("disabled");
+			})	
+			$.CurrentNavtab.find("#busiscope").trigger(BJUI.eventType.initUI)
+			$.CurrentNavtab.find("#schoolinfo .bootstrap-select").each(function(){
+				$(this).removeClass("select_disabled");
+				$(this).parent().find('select').removeClass("select_disabled");
+			})
+		},
+		editauth(){
+			if($.CurrentNavtab.find('#add-form').isValid()){
+				
+				BJUI.alertmsg('confirm', '确认提交吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/school/editAndSync",
+							loadingmask: true,
+							data: $.CurrentNavtab.find("#add-form").serializeArray(),
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', '提交成功！', {})
+								BJUI.navtab('refresh')
+							}
+						})
+					}
+				})
+			}
+		},
+		syncdata() {
+			if($.CurrentNavtab.find('#add-form').isValid())
+				BJUI.alertmsg('confirm', '确认提交吗？', {
+					displayPosition: 'middlecenter',
+					okCall: function() {
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + "/enrolindex/editcoach",
+							loadingmask: true,
+							data: $.CurrentNavtab.find("#add-form").serializeArray(),
+							okCallback: function(json, options) {
+								//console.log(json.result.list)
+								BJUI.alertmsg('ok', '提交成功！', {})
+								BJUI.navtab('refresh')
+							}
+						})
+					}
+				})
+
+		}
+
+	}
+</script>

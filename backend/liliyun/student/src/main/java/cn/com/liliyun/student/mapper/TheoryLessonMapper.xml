@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.student.mapper.TheoryLessonMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.theory.model.TheoryLesson" >
+    <id column="theoryId" property="theoryid" jdbcType="INTEGER" />
+    <result column="areaId" property="areaid" jdbcType="INTEGER" />
+    <result column="areaName" property="areaname" jdbcType="VARCHAR" />
+    <result column="lessonName" property="lessonname" jdbcType="VARCHAR" />
+    <result column="startTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="place" property="place" jdbcType="VARCHAR" />
+    <result column="contactName" property="contactname" jdbcType="VARCHAR" />
+    <result column="contactPhone" property="contactphone" jdbcType="VARCHAR" />
+    <result column="cardtype" property="cardtype" jdbcType="TINYINT" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="recomNum" property="recomnum" jdbcType="INTEGER" />
+    <result column="arrangeNum" property="arrangenum" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="isdel" property="isdel" jdbcType="TINYINT" />
+    <result column="reviewerId" property="reviewerid" jdbcType="INTEGER" />
+    <result column="reviewState" property="reviewstate" jdbcType="INTEGER" />
+    <result column="reviewTime" property="reviewtime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    theoryId, areaId, areaName, lessonName, startTime, endTime, place, contactName, contactPhone, 
+    cardtype, idcard, recomNum, arrangeNum, state, isdel, reviewerId, reviewState, reviewTime, 
+    cuid, ctime, mtime, businessid, transactionid
+  </sql>
+  <sql id="LessonStore_Column_List" >
+    t1.theoryId, t1.areaId, t1.areaName, t1.lessonName, t1.startTime, t1.endTime, t1.place, t1.contactName, t1.contactPhone, t1.
+    cardtype, t1.idcard, t1.recomNum, t1.arrangeNum, t1.state, t1.isdel, t1.reviewerId, t1.reviewState, t1.reviewTime, t1.cuid, 
+    t1.ctime, t1.mtime, t2.storeid, t2.recomnum recomnumStore, t2.arrangenum arrangenumStore, t2.extra
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.com.liliyun.theory.model.TheoryLessonExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_theory_lesson
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_theory_lesson
+    where theoryId = #{theoryid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_theory_lesson
+    where theoryId = #{theoryid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.com.liliyun.theory.model.TheoryLessonExample" >
+    delete from t_theory_lesson
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.theory.model.TheoryLesson" >
+    insert into t_theory_lesson (theoryId, areaId, areaName, 
+      lessonName, startTime, endTime, 
+      place, contactName, contactPhone, 
+      cardtype, idcard, recomNum, 
+      arrangeNum, state, isdel, 
+      reviewerId, reviewState, reviewTime, 
+      cuid, ctime, mtime, businessid, transactionid
+      )
+    values (#{theoryid,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, #{areaname,jdbcType=VARCHAR}, 
+      #{lessonname,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{place,jdbcType=VARCHAR}, #{contactname,jdbcType=VARCHAR}, #{contactphone,jdbcType=VARCHAR}, 
+      #{cardtype,jdbcType=TINYINT}, #{idcard,jdbcType=VARCHAR}, #{recomnum,jdbcType=INTEGER}, 
+      #{arrangenum,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{isdel,jdbcType=TINYINT}, 
+      #{reviewerid,jdbcType=INTEGER}, #{reviewstate,jdbcType=INTEGER}, #{reviewtime,jdbcType=TIMESTAMP}, 
+      #{cuid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP},
+      #{businessid,jdbcType=VARCHAR}, #{transactionid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.theory.model.TheoryLesson" useGeneratedKeys="true" keyProperty="theoryid">
+    insert into t_theory_lesson
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="theoryid != null" >
+        theoryId,
+      </if>
+      <if test="areaid != null" >
+        areaId,
+      </if>
+      <if test="areaname != null" >
+        areaName,
+      </if>
+      <if test="lessonname != null" >
+        lessonName,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="place != null" >
+        place,
+      </if>
+      <if test="contactname != null" >
+        contactName,
+      </if>
+      <if test="contactphone != null" >
+        contactPhone,
+      </if>
+      <if test="cardtype != null" >
+        cardtype,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="recomnum != null" >
+        recomNum,
+      </if>
+      <if test="arrangenum != null" >
+        arrangeNum,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="isdel != null" >
+        isdel,
+      </if>
+      <if test="reviewerid != null" >
+        reviewerId,
+      </if>
+      <if test="reviewstate != null" >
+        reviewState,
+      </if>
+      <if test="reviewtime != null" >
+        reviewTime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="businessid != null" >
+        businessid,
+      </if>
+      <if test="transactionid != null" >
+        transactionid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="theoryid != null" >
+        #{theoryid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="areaname != null" >
+        #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="lessonname != null" >
+        #{lessonname,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="place != null" >
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="contactname != null" >
+        #{contactname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactphone != null" >
+        #{contactphone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardtype != null" >
+        #{cardtype,jdbcType=TINYINT},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="recomnum != null" >
+        #{recomnum,jdbcType=INTEGER},
+      </if>
+      <if test="arrangenum != null" >
+        #{arrangenum,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="reviewerid != null" >
+        #{reviewerid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewstate != null" >
+        #{reviewstate,jdbcType=INTEGER},
+      </if>
+      <if test="reviewtime != null" >
+        #{reviewtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessid != null" >
+        #{businessid,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        #{transactionid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.com.liliyun.theory.model.TheoryLessonExample" resultType="java.lang.Integer" >
+    select count(*) from t_theory_lesson
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_theory_lesson
+    <set >
+      <if test="record.theoryid != null" >
+        theoryId = #{record.theoryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaid != null" >
+        areaId = #{record.areaid,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaname != null" >
+        areaName = #{record.areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lessonname != null" >
+        lessonName = #{record.lessonname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.starttime != null" >
+        startTime = #{record.starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endtime != null" >
+        endTime = #{record.endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.place != null" >
+        place = #{record.place,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactname != null" >
+        contactName = #{record.contactname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactphone != null" >
+        contactPhone = #{record.contactphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardtype != null" >
+        cardtype = #{record.cardtype,jdbcType=TINYINT},
+      </if>
+      <if test="record.idcard != null" >
+        idcard = #{record.idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recomnum != null" >
+        recomNum = #{record.recomnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.arrangenum != null" >
+        arrangeNum = #{record.arrangenum,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.isdel != null" >
+        isdel = #{record.isdel,jdbcType=TINYINT},
+      </if>
+      <if test="record.reviewerid != null" >
+        reviewerId = #{record.reviewerid,jdbcType=INTEGER},
+      </if>
+      <if test="record.reviewstate != null" >
+        reviewState = #{record.reviewstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.reviewtime != null" >
+        reviewTime = #{record.reviewtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cuid != null" >
+        cuid = #{record.cuid,jdbcType=INTEGER},
+      </if>
+      <if test="record.ctime != null" >
+        ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mtime != null" >
+        mtime = #{record.mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.businessid != null" >
+        businessid = #{record.businessid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transactionid != null" >
+        transactionid = #{record.transactionid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_theory_lesson
+    set theoryId = #{record.theoryid,jdbcType=INTEGER},
+      areaId = #{record.areaid,jdbcType=INTEGER},
+      areaName = #{record.areaname,jdbcType=VARCHAR},
+      lessonName = #{record.lessonname,jdbcType=VARCHAR},
+      startTime = #{record.starttime,jdbcType=TIMESTAMP},
+      endTime = #{record.endtime,jdbcType=TIMESTAMP},
+      place = #{record.place,jdbcType=VARCHAR},
+      contactName = #{record.contactname,jdbcType=VARCHAR},
+      contactPhone = #{record.contactphone,jdbcType=VARCHAR},
+      cardtype = #{record.cardtype,jdbcType=TINYINT},
+      idcard = #{record.idcard,jdbcType=VARCHAR},
+      recomNum = #{record.recomnum,jdbcType=INTEGER},
+      arrangeNum = #{record.arrangenum,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=INTEGER},
+      isdel = #{record.isdel,jdbcType=TINYINT},
+      reviewerId = #{record.reviewerid,jdbcType=INTEGER},
+      reviewState = #{record.reviewstate,jdbcType=INTEGER},
+      reviewTime = #{record.reviewtime,jdbcType=TIMESTAMP},
+      cuid = #{record.cuid,jdbcType=INTEGER},
+      ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      mtime = #{record.mtime,jdbcType=TIMESTAMP},
+      businessid = #{record.businessid,jdbcType=VARCHAR},
+      transactionid = #{record.transactionid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.theory.model.TheoryLesson" >
+    update t_theory_lesson
+    <set >
+      <if test="areaid != null" >
+        areaId = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="areaname != null" >
+        areaName = #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="lessonname != null" >
+        lessonName = #{lessonname,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="place != null" >
+        place = #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="contactname != null" >
+        contactName = #{contactname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactphone != null" >
+        contactPhone = #{contactphone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardtype != null" >
+        cardtype = #{cardtype,jdbcType=TINYINT},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="recomnum != null" >
+        recomNum = #{recomnum,jdbcType=INTEGER},
+      </if>
+      <if test="arrangenum != null" >
+        arrangeNum = #{arrangenum,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        isdel = #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="reviewerid != null" >
+        reviewerId = #{reviewerid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewstate != null" >
+        reviewState = #{reviewstate,jdbcType=INTEGER},
+      </if>
+      <if test="reviewtime != null" >
+        reviewTime = #{reviewtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessid != null" >
+        businessid = #{businessid,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        transactionid = #{transactionid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where theoryId = #{theoryid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.theory.model.TheoryLesson" >
+    update t_theory_lesson
+    set areaId = #{areaid,jdbcType=INTEGER},
+      areaName = #{areaname,jdbcType=VARCHAR},
+      lessonName = #{lessonname,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=TIMESTAMP},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      place = #{place,jdbcType=VARCHAR},
+      contactName = #{contactname,jdbcType=VARCHAR},
+      contactPhone = #{contactphone,jdbcType=VARCHAR},
+      cardtype = #{cardtype,jdbcType=TINYINT},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      recomNum = #{recomnum,jdbcType=INTEGER},
+      arrangeNum = #{arrangenum,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      isdel = #{isdel,jdbcType=TINYINT},
+      reviewerId = #{reviewerid,jdbcType=INTEGER},
+      reviewState = #{reviewstate,jdbcType=INTEGER},
+      reviewTime = #{reviewtime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where theoryId = #{theoryid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectLessonStore" resultType="cn.com.liliyun.theory.dto.TheoryLessonStoreDto" parameterType="cn.com.liliyun.theory.dto.TheoryLessonStoreDto">
+  	select 
+  		<include refid="LessonStore_Column_List" />
+  	from t_theory_lesson as t1 join t_theory_store as t2 on t1.theoryId = t2.theoryId
+  	where 1 = 1
+  		<if test="isdel != null">
+  			and t1.isdel = #{isdel}
+  		</if>
+  		<if test="theoryid != null">
+  			and t1.theoryId = #{theoryid}
+  		</if>
+  		<if test="areaid != null">
+  			and t1.areaId = #{areaid}
+  		</if>
+  		<if test="state != null">
+  			and t1.state = #{state}
+  		</if>
+  		<if test="starttime != null and endtime != null">
+  			and t1.startTime between #{starttime} and #{endtime}
+  		</if>
+  		<if test="storeid != null">
+  			and t2.storeId = #{storeid}
+  		</if>
+  	order by ctime desc
+  </select>
+  <select id="selectLesson" resultType="cn.com.liliyun.theory.dto.TheoryLessonStoreDto" parameterType="cn.com.liliyun.theory.dto.TheoryLessonStoreDto">
+  	select 
+  		<include refid="Base_Column_List" />
+  	from t_theory_lesson
+  	where 1 = 1
+  		<if test="isdel != null">
+  			and isdel = #{isdel}
+  		</if>
+  		<if test="theoryid != null">
+  			and theoryId = #{theoryid}
+  		</if>
+  		<if test="areaid != null">
+  			and areaId = #{areaid}
+  		</if>
+  		<if test="state != null">
+  			and state = #{state}
+  		</if>
+  		<if test="starttime != null">
+  			and startTime >= #{starttime}
+  		</if>
+  		<if test="endtime != null">
+  			and DATE_ADD(#{endtime}, interval 1 day) > DATE(startTime)
+  		</if>
+  		<if test="transactionid != null and transactionid != ''">
+  			and transactionid = #{transactionid}
+  		</if>
+  	order by ctime desc
+  </select>
+  <update id="updateLessonArrangedNum" parameterType="cn.com.liliyun.theory.model.TheoryLesson">
+  	update t_theory_lesson 
+  		set arrangeNum = (
+  			select ifnull(count(*),0) from t_theory_student where theoryId = #{theoryid}
+  		)
+  	where theoryId = #{theoryid}
+  </update>
+</mapper>

@@ -1,0 +1,22 @@
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    var data = clz.getWindowJson();
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: '',
+        height: '95%',
+        paging: false,
+        showToolbar: false,
+        dataUrl: config.openBasePath + 'material/itemlist',
+        postData: {tableid: data.tableid},
+        showLinenumber: true,
+        columns: [
+            {name: 'subject', label: '办证科目', align: 'center', render: license_material.formatsubjecttype},
+            {name: 'idcard', label: '证件号码', align: 'center'},
+            {name: 'name', label: '姓名', align: 'center'},
+            {name: 'cardnum', label: 'IC卡编号', align: 'center'}
+        ]
+    });
+</script>
+    

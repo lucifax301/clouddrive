@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.user.mapper.PrivilegeMapper">
+	<resultMap id="RoleBaseResultMap" type="cn.com.liliyun.user.model.Role">
+		<result column="rolename" property="rolename" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="isGroup" property="isGroup" jdbcType="INTEGER" />
+		<result column="isAdmin" property="isAdmin" jdbcType="INTEGER" />
+		<result column="enable" property="enable" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="updator" property="updator" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="PrivilegeBaseResultMap" type="cn.com.liliyun.user.model.Privilege">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="TINYINT" />
+		<result column="type" property="type" jdbcType="TINYINT" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="ajax" property="ajax" jdbcType="VARCHAR" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="menuorder" property="menuorder" jdbcType="TINYINT" />
+		<result column="enable" property="enable" jdbcType="TINYINT" />
+		<result column="menulevel" property="menulevel" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="privilege" property="privilege" jdbcType="INTEGER" />
+		
+	</resultMap>
+	
+	<sql id="Role_Base_Column_List">
+		id, isGroup, isAdmin, pid, schoolId, rolename, enable, remark,creator,updator,createTime,updateTime
+	</sql>
+	
+	<sql id="Privilege_Base_Column_List">
+		id, name, pid, url,ajax, type, icon, enable, remark,menuorder,menulevel,privilege
+	</sql>
+
+	<select id="getAllPrivilege" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.Privilege">
+		select
+		<include refid="Privilege_Base_Column_List" />
+		from t_permission where menulevel>=0
+		order by menulevel asc, menuorder asc
+	</select>
+	
+	<select id="getAllDevPrivilege" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.Privilege">
+		select
+		<include refid="Privilege_Base_Column_List" />
+		from t_permission where menulevel>=0 and enable = 1
+		order by menulevel asc, menuorder asc
+	</select>
+
+	<select id="getRole" resultMap="RoleBaseResultMap" parameterType="cn.com.liliyun.user.model.Role">
+		select
+		<include refid="Role_Base_Column_List" />
+		from t_role
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<insert id="insertPrivilege" parameterType="cn.com.liliyun.user.model.Privilege" useGeneratedKeys="true" keyProperty="id">
+		insert into t_permission (id, name, pid, url, ajax, type, enable, remark,menuorder,menulevel,icon,privilege)
+		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{pid,jdbcType=INTEGER},#{url,jdbcType=VARCHAR}, 
+		#{ajax,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT},
+		#{enable,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR},
+		#{menuorder,jdbcType=TINYINT},#{menulevel,jdbcType=TINYINT},#{icon,jdbcType=VARCHAR},#{privilege}
+		)
+	</insert>
+	
+	<update id="updatePrivilege" parameterType="cn.com.liliyun.user.model.Privilege">
+		update t_permission
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="ajax != null">
+				ajax = #{ajax,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=TINYINT},
+			</if>
+			<if test="enable != null">
+				enable = #{enable,jdbcType=TINYINT},
+			</if>
+			<if test="menuorder != null">
+				menuorder = #{menuorder,jdbcType=TINYINT},
+			</if>
+			<if test="menulevel != null">
+				menulevel = #{menulevel,jdbcType=TINYINT},
+			</if>
+			<if test="pid != null">
+				pid = #{pid,jdbcType=INTEGER},
+			</if>
+			<if test="icon != null">
+				icon = #{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="must != null">
+				must = #{must,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="privilege != null">
+				privilege = #{privilege,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<insert id="insertRole" parameterType="cn.com.liliyun.user.model.Role" useGeneratedKeys="true" keyProperty="id">
+		insert into t_role (isGroup,
+		isAdmin, pid, schoolId,
+		rolename, enable, remark,creator
+		)
+		values (
+		#{isGroup,jdbcType=TINYINT},
+		#{isAdmin,jdbcType=TINYINT}, #{pid,jdbcType=INTEGER}, #{schoolid,jdbcType=INTEGER},
+		#{rolename,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="delPrivilege" parameterType="cn.com.liliyun.user.model.Privilege">
+		delete from t_permission
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<delete id="delRole" parameterType="cn.com.liliyun.user.model.Role">
+		delete from t_role
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="listRole" parameterType="cn.com.liliyun.user.model.Role" resultMap="RoleBaseResultMap">
+		select
+		<include refid="Role_Base_Column_List" />
+		from t_role
+		Where 1=1
+		<if test="enable != null and enable != -1">
+			and enable = #{enable,jdbcType=TINYINT}
+		</if>
+		order by enable asc,createTime desc
+	</select>
+	
+	<select id="getRoleTotal" resultType="cn.com.liliyun.user.model.Role">
+		select
+			count(id) 
+			from t_role
+		Where 1=1
+		<if test="enable != null and enable != -1">
+			and enable = #{enable,jdbcType=TINYINT}
+		</if>	
+	</select>
+	
+	<select id="listRolePrivilege" parameterType="cn.com.liliyun.user.model.Privilege" resultMap="PrivilegeBaseResultMap">
+		select
+		<include refid="Privilege_Base_Column_List" />
+		from t_role_permission a join t_permission b on a.permission_id=b.id 
+		Where
+		a.role_id = #{id,jdbcType=INTEGER}
+		order by pid asc
+	</select>
+	
+	<select id="listUserPrivilege" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.User">
+		select distinct 
+		c.id, c.name, c.pid, c.url, c.ajax, c.type, c.enable, c.remark , c.menuorder, c.menulevel ,c.icon,c.privilege
+		from
+			t_role d
+			JOIN t_user a ON d.id = a.roleid
+			JOIN t_role_permission b ON a.roleid = b.role_id
+			JOIN t_permission c ON b.permission_id = c.id
+			WHERE a.id = #{id,jdbcType=INTEGER} and d.enable = 1 and must=0 and c.enable = 1 
+			union
+		select 
+		<include refid="Privilege_Base_Column_List" />
+			from t_permission where must=1
+			order by pid asc,menuorder asc
+	</select>
+	
+	<select id="listUserRolePrivilege" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.Role">
+		select distinct 
+		c.id, c.name, c.pid, c.url, c.ajax, c.type, c.enable, c.remark , c.menuorder, c.menulevel ,c.icon,c.privilege
+		from
+			t_role d
+			JOIN t_role_permission b ON d.id = b.role_id
+			JOIN t_permission c ON b.permission_id = c.id
+			WHERE d.id = #{id,jdbcType=INTEGER} and d.enable = 1 and must=0 and c.enable = 1 
+			union
+		select 
+		<include refid="Privilege_Base_Column_List" />
+			from t_permission where must=1
+			order by pid asc,menuorder asc
+	</select>
+	
+	<select id="listUserBtn" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.User">
+		select distinct 
+		c.id, c.name, c.pid, c.url, c.ajax, c.type, c.enable, c.remark , c.menuorder, c.menulevel ,c.icon,c.privilege
+		from
+			t_role d
+			JOIN t_user a ON d.id = a.roleid
+			JOIN t_role_permission b ON a.roleid = b.role_id
+			JOIN t_permission c ON b.permission_id = c.id
+			WHERE a.id = #{id,jdbcType=INTEGER} and d.enable = 1 and must=0 and c.enable = 1 and c.menulevel=3
+			union
+		select 
+		<include refid="Privilege_Base_Column_List" />
+			from t_permission where must=1 and menulevel=3
+			order by pid asc,menuorder asc
+	</select>
+	
+	<select id="listUserRoleBtn" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.Role">
+		select distinct 
+		c.id, c.name, c.pid, c.url, c.ajax, c.type, c.enable, c.remark , c.menuorder, c.menulevel ,c.icon,c.privilege
+		from
+			t_role d
+			JOIN t_role_permission b ON d.id = b.role_id
+			JOIN t_permission c ON b.permission_id = c.id
+			WHERE d.id = #{id,jdbcType=INTEGER} and d.enable = 1 and must=0 and c.enable = 1 and c.menulevel=3
+			union
+		select 
+		<include refid="Privilege_Base_Column_List" />
+			from t_permission where must=1 and menulevel=3
+			order by pid asc,menuorder asc
+	</select>
+	
+	<insert id="insertRolePrivilege">
+		insert into t_role_permission (permission_id, role_id)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+		 (#{item.privilegeId}, #{item.roleId}	)
+		</foreach>
+	</insert>
+	
+	<delete id="delRolePrivilege" parameterType="cn.com.liliyun.user.model.Role">
+		delete from t_role_permission
+		where role_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<update id="enableRole" parameterType="cn.com.liliyun.user.model.Role">
+		update t_role set
+		enable=#{enable,jdbcType=INTEGER},
+		updator = #{updator,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateRole" parameterType="cn.com.liliyun.user.model.Role">
+		update t_role
+		<set>
+			<if test="rolename != null">
+				rolename = #{rolename,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="updator != null">
+				updator = #{updator,jdbcType=VARCHAR},
+			</if>
+			<if test="isGroup != null">
+				isGroup = #{isGroup,jdbcType=TINYINT},
+			</if>
+			<if test="isAdmin != null">
+				isAdmin = #{isAdmin,jdbcType=TINYINT},
+			</if>
+			<if test="pid != null">
+				pid = #{pid,jdbcType=INTEGER},
+			</if>
+			<if test="enable != null">
+				enable = #{enable,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="insertRoleUser">
+		update t_user set roleid = #{roleId,jdbcType=INTEGER}
+		where id = #{userId,jdbcType=INTEGER}
+	</update>
+	
+	<update id="delRoleUser" parameterType="cn.com.liliyun.user.model.RoleUser">
+		update t_user set roleid = null
+		where id = #{userId,jdbcType=INTEGER} and roleid=#{roleId,jdbcType=INTEGER}
+	</update>
+	
+	<select id="listRoleUserIds" resultType="integer" parameterType="cn.com.liliyun.user.model.RoleUser">
+		select id
+		from t_user 
+			where roleid=#{roleId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="listRoleUser" resultType="cn.com.liliyun.user.model.User">
+		select id, username, realname, mobile, status ,issuper, ctime
+		from t_user where 1 = 1
+		<if test="dblink != null">
+			and dblink = #{dblink,jdbcType=VARCHAR}
+		</if>
+		 <choose>
+	     	<when test="list != null and list.size() > 0">
+	        	and id in 
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+	      			#{item}
+	   			</foreach>
+	        </when>
+	      	<otherwise>
+	            and id = -1 
+	        </otherwise>
+         </choose> 
+	</select>
+	
+	<select id="listNotRoleUser" resultType="cn.com.liliyun.user.model.User">
+		select id, username, realname, mobile, status ,issuper, ctime
+		from t_user where 1 = 1
+		<if test="dblink != null"> 
+			and dblink = #{dblink,jdbcType=VARCHAR}
+		</if> 
+		<if test=" list != null and list.size() > 0 ">
+				and id not in 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+	        	#{item}
+	        </foreach>
+        </if>
+	</select>
+	
+	<select id="listRolePrivilegeCount" resultType="map">
+		select role_id,count(role_id) as count from t_role_permission where role_id in
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+		group by role_Id
+	</select>
+	
+	<select id="listRoleUserCount" resultType="map">
+		select roleid,count(id) as count from t_user where roleid in
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+		group by roleid
+	</select>
+	
+	<select id="getRoleUserTotal" resultType="java.lang.Integer">
+		select
+			count(id) 
+			from 
+		t_user
+		where roleid=#{roleId,jdbcType=INTEGER}	
+	</select>
+	
+</mapper>

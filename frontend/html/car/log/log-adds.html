@@ -1,0 +1,223 @@
+<div class="bjui-pageContent">
+	<div class="widget-box ">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-tag"></i> </span>
+			<h5>车辆调动申请</h5>
+		</div>
+		<div class="widget-content nopadding">
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			<div class="bjui-row col-3">
+					<label class="row-label">车牌号：</label>
+					<div class="row-input required ">
+						<input type="hidden" name="areaid" >
+						<input type="hidden" name="curAreaid" >
+						<input type="hidden" name="changeAreaId" >
+						<input type="hidden" name="curChangeAreaId" >
+						<input type="text" name="carno" readonly="true" data-toggle="findgrid" data-options="{
+	                    include: 'carno : carNo ,areaid:areaId,prename:coachName,property:property',
+	                    dialogOptions: {
+	                        title:'查找车牌号',
+	                        maxable : false
+	                    },
+	                    empty : false,
+	                    gridOptions: {
+	                        tableWidth:'80%',
+	                        filterThead : true,
+	                        dataUrl: config.openBasePath + 'car/getCarList',
+	                        columns: [
+	                            {name:'carNo', label:'车牌号码', width : '25%', align:'center'},
+	                            {name:'areaId', label:'所属片区', width : '30%', align:'center',type:'select',items: log_add.area_menu_type},
+	                            {name:'coachName', label:'所有人', width : '30%', align:'center'}
+	                        ]
+	                    },
+	                }" placeholder="点放大镜按钮查找" data-rule="required">
+					</div>
+					<label class="row-label">原片区：</label>
+					<div class="row-input required">
+						<select name="areaid" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+						</select>
+					</div>
+					<label class="row-label">原保管人：</label>
+					<div class="row-input required">
+						<input type="text" name="prename" data-rule="required" readonly="readonly">
+					</div>
+					<label class="row-label">保管人：</label>
+					<div class="row-input required ">
+						<input type="text" name="name" readonly="true" data-toggle="findgrid" data-options="{
+	                    include: 'name:coachName,curAreaid:areaId,changeCarNo:carNo,changeAreaId:areaId,changeName:coachName',
+	                    dialogOptions: {
+	                        title:'查找车牌号',
+	                        maxable : false
+	                    },
+	                    empty : false,
+	                    gridOptions: {
+	                        tableWidth:'80%',
+	                        filterThead : true,
+	                        dataUrl: config.openBasePath + 'car/getCarList',
+	                        columns: [
+	                            {name:'carNo', label:'车牌号码', width : '25%', align:'center'},
+	                            {name:'areaId', label:'所属片区', width : '30%', align:'center',type:'select',items: log_add.area_menu_type},
+	                            {name:'coachName', label:'所有人', width : '30%', align:'center'},
+	                        ]
+	                    },
+	                }" placeholder="点放大镜按钮查找" data-rule="required">
+					</div>
+					<label class="row-label">调入片区：</label>
+					<div class="row-input required">
+						<select name="curAreaid" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+						</select>
+					</div>
+					<label class="row-label">停车地点：</label>
+					<div class="row-input">
+						<input type="text" name="parkingPlace" data-rule="">
+					</div>
+					<label class="row-label">领用时间：</label>
+					<div class="row-input">
+						<input name="leadDate" type="text" data-toggle="datepicker" readonly="readonly">    
+					</div>
+					<label class="row-label">使用性质：</label>
+					<div class="row-input">
+						<select name="property" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择</option>
+							<option value="0">专职教练车</option>
+							<option value="1">强化教练车</option>
+							<option value="2">测试车</option>
+							<option value="3">组长车</option>
+						</select>
+					</div>
+					<label class="row-label">备注：</label>
+					<div class="row-input">
+						<input type="text" name="remark" >
+					</div>
+					<label class="row-label">调动原因：</label>
+					<div class="row-input fill-2" id='gzinfo'>
+						<input type="text" name="reason" >
+					</div>
+					<br>
+					<label class="row-label">是否换车：</label>
+					<div class="row-input fill-2">
+						<input type="radio" name="changeOrNot" value="1" data-toggle="icheck" data-label="是" >
+						<input type="radio" name="changeOrNot" value="2" data-toggle="icheck" data-label="否">
+					</div>
+					
+					<div class="introducetype_html">
+						<label class="row-label">车牌号：</label>
+						<div class="row-input">
+							<input type="text" name="changeCarNo"  readonly="readonly">
+						</div>
+						<label class="row-label">原片区：</label>
+						<div class="row-input">
+							<select name="changeAreaId" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+							</select>
+						</div>
+						<label class="row-label">原保管人：</label>
+						<div class="row-input">
+							<input type="text" name="changeName" readonly="readonly">
+						</div>
+						<label class="row-label">保管人：</label>
+						<div class="row-input ">
+							<input type="text" name="curChangeName" readonly="true" data-toggle="findgrid" data-options="{
+		                    include: 'curChangeName:coachName,curChangeAreaId:areaId,',
+		                    dialogOptions: {
+		                        title:'查找车牌号',
+		                        maxable : false
+		                    },
+		                    empty : false,
+		                    gridOptions: {
+		                        tableWidth:'80%',
+		                        filterThead : true,
+		                        dataUrl: config.openBasePath + 'car/getCarList',
+		                        columns: [
+		                            {name:'carNo', label:'车牌号码', width : '25%', align:'center'},
+		                            {name:'areaId', label:'所属片区', width : '30%', align:'center',type:'select',items: log_add.area_menu_type},
+		                            {name:'coachName', label:'所有人', width : '30%', align:'center'},
+		                        ]
+		                    },
+		                }" placeholder="点放大镜按钮查找">
+						</div>
+						<label class="row-label">调入片区：</label>
+						<div class="row-input">
+							<select name="curChangeAreaId" data-toggle="selectpicker" data-width="100%"  data-dataurl="/httpaccess/area/list" data-optiontype="id,name"  disabled="disabled">
+							</select>
+						</div>
+						<label class="row-label">停车地点：</label>
+						<div class="row-input">
+							<input type="text" name="changePackingPlace">
+						</div>
+						<label class="row-label">领用时间：</label>
+						<div class="row-input">
+							<input name="changeLeadDate" type="text" data-toggle="datepicker" readonly="readonly">    
+						</div>
+						<label class="row-label">使用性质：</label>
+						<div class="row-input">
+							<select name="changeProperty" data-toggle="selectpicker" data-width="100%">
+								<option value="">请选择</option>
+								<option value="0">专职教练车</option>
+								<option value="1">强化教练车</option>
+								<option value="2">测试车</option>
+								<option value="3">组长车</option>
+							</select>
+						</div>
+						<label class="row-label">备注：</label>
+						<div class="row-input">
+							<input type="text" name="changeRemark" >
+						</div>
+					</div>
+	
+				</div>
+		</div>
+		</form>
+		</div>
+	</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="submit" class="btn-blue" data-icon="button" onclick="addLog();">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+	
+	var log_add = {
+		images : {},
+		init: function() {
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'area/listInJson?userType=1',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        log_add.area = json.result;
+			    }
+			})
+			$.CurrentNavtab.find('input[name="changeOrNot"]').on("ifChanged", function() {
+		    	var value=$(this).val();
+		    	if(value=='1'){
+		    		$(".introducetype_html").show();
+		    	}else{
+		    		$(".introducetype_html").hide();
+		    	}
+	    		$.each($.CurrentNavtab.find('.introducetype_html input'),function(){
+					$(this).parent().trigger(BJUI.eventType.initUI)
+				})
+		    });		
+		},
+		area_menu_type: function(){
+			return log_add.area;
+		},
+	}
+	log_add.init();
+	
+	
+	function addLog(){
+		if($.CurrentNavtab.find('#add-form').isValid()){
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'carbiz/addLog',
+                loadingmask: true,
+                data:$.CurrentNavtab.find('#add-form').serializeArray(),
+			    validate: true,
+                callback: function(json) {
+                    BJUI.navtab('closeCurrentTab');
+                }
+            });
+        };
+	}
+</script>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.CoachClassinfoMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.CoachClassinfo" >
+  	<result column="id" property="id" jdbcType="INTEGER" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="classinfoid" property="classinfoid" jdbcType="INTEGER" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+   id,coachid, classinfoid
+  </sql>
+  
+  
+  <select id="list" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_classinfo
+    where 1=1
+    <if test="coachid != null">
+		and coachid = #{coachid}
+	</if>	
+     <if test="classinfoid != null and classinfoid!=0">
+		and classinfoid = #{classinfoid}
+	</if>
+	
+	
+  </select>
+
+
+  <insert id="add" parameterType="cn.com.liliyun.coach.model.CoachClassinfo" >
+    insert into t_coach_classinfo (coachid, classinfoid)
+    values (#{coachid}, #{classinfoid})
+  </insert>
+  
+  <insert id="batchAdd" parameterType="java.util.List" >
+    insert into t_coach_classinfo (coachid, classinfoid)
+    values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+				(#{item.coachid},#{item.classinfoid})
+	</foreach>
+  </insert>
+  
+  <delete id="batchDel" parameterType="java.util.List" >
+    delete from t_coach_classinfo
+    where id in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.id}  
+    </foreach>  
+  </delete>
+  
+  <select id="selectCoachClassBatch" resultType="cn.com.liliyun.coach.model.CoachClassinfo">
+  	select 
+    	coachid, classinfoid, t2.name className
+    from t_coach_classinfo as t1 join t_classinfo as t2 on t1.classinfoid = t2.id
+    where 1=1
+    <if test="list != null">
+		and coachid in 
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</if>
+  </select>
+  
+</mapper>

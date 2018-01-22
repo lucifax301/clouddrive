@@ -1,0 +1,122 @@
+<section id="thispage" privilege = "060404"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>Pos机搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+		            <label class="row-label">片区：</label>
+		            <div class="row-input">
+		                <select name="areaid" data-toggle="selectpicker" data-width="100%" 
+		                    data-datajson="arealist_filter" data-optiontype = "id,name">
+		                </select>
+		            </div>
+		            <label class="row-label">Pos类型：</label>
+		            <div class="row-input">
+		                <select name="postype" data-toggle="selectpicker" data-width="100%">
+		                	<option value="">全部</option>
+		                	<option value="1">移动</option>
+		                	<option value="2">固定</option>
+		                </select>
+		            </div>
+		            <label class="row-label">Pos机号：</label>
+		            <div class="row-input">
+						<input name="posnum" type="text" data-width="100%">
+		            </div>
+		            <label class="row-label"></label>
+		            <div class="row-input">
+		                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		       		</div>
+		      	</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<table id="datagrid-list" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var finance_pos_list = {
+		init: function() {
+			var pos_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					toolbarItem: 'add',
+					toolbarCustom: finance_pos_list.toolbarCustom(),
+					gridTitle: 'Pos管理',
+					height: '80%',
+					showCheckboxcol: false,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'pos/financePosList',
+					columns: [
+						{ name: 'areaid', label: '片区', align: 'center', render: formatAreaCell},
+						{ name: 'storeid', label: '门店', align: 'center', render: formatStoreCell},
+						{ name: 'posnum', label: 'Pos机号', align: 'center'},
+						{ name: 'postype', label: 'Pos类型', align: 'center', render: function(value) { return value==1?'移动':'固定'}},
+						{ name: 'bankname', label: 'Pos银行', align: 'center' },
+						{ name: 'bankaccount', label: 'Pos帐号', align: 'center'},
+						{ name: 'poscompany', label: 'Pos公司', align: 'center' }
+					],
+					editMode: { dialog: { id: 'finance_pos_add', title: '新增Pos机', height : 400, width: 800,mask:true, onClose: function() { pos_list.datagrid('refresh', true); } } },
+					add_url: "html/finance/pos/pos-add.html",
+				});
+		},
+		toolbarCustom: function() {
+			return "<button type='button' data-privilege='060404_datagrid-list_11' class='btn btn-blue' data-icon='edit' onclick='finance_pos_list.edit()'>修改</button> " +
+				"<button type='button' data-privilege='060404_datagrid-list_12' class='btn btn-red ml5' data-icon='times' onclick='finance_pos_list.delete()'>删除</button> " + 
+				"<button type='button' data-privilege='060404_datagrid-list_13' class='btn btn-blue ml5' data-icon='sign-out' onclick='finance_pos_list.exportdata()'>导出</button> ";
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'pos/getFinancePosExport',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		edit: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行修改操作！', {});
+				return;
+			}
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_pos_edit',
+				url: 'html/finance/pos/pos-edit.html',
+				title: '修改Pos机',
+				mask: true,
+				height : 400, 
+				width: 800,
+				onClose: function() {
+					table.datagrid('refresh', true);
+				}
+			})
+		},
+		delete: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行删除操作！', {});
+				return;
+			}
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + 'pos/delFinancePos',
+				type: "POST",
+				data: {
+					ids: data[0].id
+				},
+				okCallback: function() {
+					$.CurrentNavtab.find('#datagrid-list').datagrid('refresh', true);
+				}
+			});
+		}
+	}
+	finance_pos_list.init();
+</script>

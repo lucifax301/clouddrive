@@ -1,0 +1,50 @@
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del,save',
+        height: '95%',
+        paging: false,
+        showCheckboxcol: true,
+        showToolbar: true,
+        data: [],
+        inlineEditMult: true,
+        saveAll: true,
+        showLinenumber: false,
+        editUrl: config.openBasePath + 'material/learncard',
+        afterSave: function () {
+            BJUI.dialog('closeCurrent');
+            license_material_list.datagrid('refresh', true);
+        },
+        columns: [
+            {name: 'name', label: '姓名', align: 'center'},
+            {name: 'idcard', label: '证件号码', align: 'center', attrs: {readonly: 'readonly'}},
+            {name: 'cardnum', label: '学习证编号', align: 'center', rule: 'required;length[~20]'}
+        ],
+        beforeSave: function () {
+            //判断是否有重复数据提交
+            var alldata = $.CurrentDialog.find('#datagrid-list').data('allData');
+            var ids = [];
+            for (var i = 0; i < alldata.length; i++) {
+                ids.push(alldata[i].idcard);
+            }
+            if (hasReapeat(ids)) {
+                BJUI.alertmsg('warn', '证件号码存在重复数据,请处理后再提交！');
+                return false;
+            }
+            ids.splice(0, 1);
+            for (var i = 0; i < alldata.length; i++) {
+                ids.push(alldata[i].cardnum);
+            }
+            if (hasReapeat(ids)) {
+                BJUI.alertmsg('warn', '学习证号存在重复数据,请处理后再提交！');
+                return false;
+            }
+            return true;
+        }
+    });
+    $(document).on("change", "[name='name']", function () {
+        clz.getStudentIdcard($(this),ApplySubjectEnum.SUBJECT1_OK_LEARNCARD);
+    })
+</script>

@@ -1,0 +1,179 @@
+<section id="thispage" privilege = "040503"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>车辆事故理赔搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+				 	<label class="row-label">车牌号码：</label>
+		            <div class="row-input">
+		                <input type="text" name="carno">
+		            </div>
+		            <label class="row-label">片区：</label>
+		            <div class="row-input">
+		                <select name="areaid" data-toggle="selectpicker" data-width="100%" 
+		                    data-dataurl="/httpaccess/area/list" data-optiontype = "id,name">
+		                </select>
+		            </div>
+		            <label class="row-label">车辆品牌：</label>
+		            <div class="row-input">
+		                <select name="brandid" data-toggle="selectpicker" data-width="100%">
+		                	<option value="">请选择</option>
+		                	<option value="1">捷达</option>
+							<option value="2">神行者</option>
+							<option value="3">迈腾</option>
+		                </select>
+		            </div>
+		            <label class="row-label">责任：</label>
+		            <div class="row-input">
+		               	<select name="liabletype" data-toggle="selectpicker" data-width="100%">
+		                	<option value="">全部</option>
+		                	<option value="1">主责</option>
+		                	<option value="2">同责</option>
+		                	<option value="3">次责</option>
+		                	<option value="4">无责</option>
+		                </select>
+		            </div>
+		            <label class="row-label">事故编号：</label>
+		            <div class="row-input">
+		                <input type="text" name="accidentnum"> 
+		            </div>
+		            <label class="row-label">录入时间：</label>
+		            <div class="row-input fill-2">
+		            	<div class="w-40 fl">
+							<input name="accidentdatelow" type="text" data-toggle="datepicker" readonly="readonly">
+						</div>
+						<span class="fl text-center pl10 pr10">-</span>
+						<div class="w-40 fl">
+							<input name="accidentdatetop" type="text" data-toggle="datepicker" readonly="readonly">
+						</div>
+		            </div>
+		           
+		      	</div>
+
+		            <div class="text-center">
+		                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		       		</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var car_accident_list = {
+		init: function() {
+			var accident_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					//toolbarItem: 'add,export',
+					toolbarItem: 'export',
+					toolbarCustom: car_accident_list.toolbarCustom(),
+					gridTitle: '车辆事故记录',
+					height: '75%',
+					showCheckboxcol: true,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'car/getCarAccidentList',
+					columns: [
+						{ name: 'carno', label: '车牌号', align: 'center'},
+						{ name: 'areaid', label: '片区', align: 'center', render: formatAreaCell},
+						{ name: 'accidentnum', label: '事故编号', align: 'center' },
+						{ name: 'accidentdate', label: '事故日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'ctime', label: '录入时间', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'accidenttype', label: '类型', align: 'center', render: car_accident_list.formattAccidentType},
+						{ name: 'liabletype', label: '责任', align: 'center', render: car_accident_list.formattLiableType},
+						{ name: 'totalcost', label: '总损失(元)', align: 'center' },
+						{ name: 'insurancetotalcost', label: '保险总金额(元)', align: 'center' },
+						{ name: 'thirdindemnity', label: '第三者赔款(元)', align: 'center' },
+						{ name: 'personalindemnity', label: '个人扣款(元)', align: 'center' },
+						{ name: 'handlestate', label: '状态', align: 'center', render: function(value) { return value==1?'已处理':'未处理'}}
+					],
+					editMode: { navtab: { id: 'add_car_accident', title: '新增事故理赔记录', onClose: function() { accident_list.datagrid('refresh', true); } } },
+					add_url: "html/car/accident/accident-add.html",
+					exportOption: {
+						type: "file",
+						options: {
+							url: config.openBasePath + "car/getCarAccidentList/export?pageNo=-1",
+							data: $("#search-form").serializeArray()
+						}
+					}
+				});
+		},
+		editrecord: function() {
+			
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行编辑操作！', {});
+				return;
+			}
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.navtab({
+				id: 'service-edit-' + data[0].id,
+				url: 'html/car/accident/accident-edit.html',
+				title: '编辑事故理赔记录',
+				onClose: function() {
+					table.datagrid('refresh', true);
+				},
+				more: data[0]
+			})
+
+		},
+		toolbarCustom: function() {
+			return /*"<button type='button' class='btn btn-blue' data-icon='sign-out' onclick='car_accident_list.exportdata()'>导出</button> " +*/ "" +
+				//"<button type='button' data-privilege='040503_datagrid-list_02' class='btn btn-blue ml5' data-icon='edit' onclick='car_accident_list.editrecord()'>编辑</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-icon='search' onclick='car_accident_list.viewrecord()'>查看</button>";
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'car/getCarAccidentExport',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		viewrecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+				return;
+			}
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.navtab({
+				id: 'service-view-' + data[0].id,
+				url: 'html/car/accident/accident-view.html',
+				title: '查看事故理赔记录',
+				onClose: function() {
+					table.datagrid('refresh', true);
+				},
+				more: data[0]
+			})
+		},
+		formattAccidentType: function(value) {
+			switch(value) {
+				case 1: return '违章';
+				case 2: return '机械事故';
+				case 3: return '交通事故';
+				case 4: return '人伤事故';
+				case 5: return '财产损失事故';
+				default: return '';
+			}
+		},
+		formattLiableType: function(value) {
+			switch(value) {
+				case 1: return '主责';
+				case 2: return '同责';
+				case 3: return '次责';
+				case 4: return '无责';
+				default: return '';
+			}
+		}
+	}
+	car_accident_list.init();
+</script>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+    <dubbo:application name="user-dubbo-server" />
+    <dubbo:registry address="${zookeeper.addr}"/>
+    <dubbo:consumer timeout="${dubbo.timeout}" />
+    <dubbo:protocol name="dubbo" port="32009" threadpool="fixed" threads="100"/>
+    
+    <dubbo:service id="registerService" interface="cn.com.liliyun.user.service.RegisterService" ref="registerServiceImpl" />
+    <dubbo:service id="userService" interface="cn.com.liliyun.user.service.UserService" ref="userServiceImpl" />
+    <dubbo:service id="appUserService" interface="cn.com.liliyun.user.service.AppUserService" ref="appUserServiceImpl" />
+    <dubbo:service id="privilegeService" interface="cn.com.liliyun.user.service.PrivilegeService" ref="privilegeServiceImpl" />
+    <dubbo:service id="systemService" interface="cn.com.liliyun.user.service.SystemService" ref="systemServiceImpl" />
+    <dubbo:service id="deptService" interface="cn.com.liliyun.user.service.DeptService" ref="deptServiceImpl" />
+</beans>

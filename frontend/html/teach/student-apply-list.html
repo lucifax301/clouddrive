@@ -1,0 +1,214 @@
+<section id="thispage" privilege = "030302"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>申请搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">申请类型：</label>
+				<div class="row-input">
+					<select name="type" data-toggle="selectpicker" data-width="100%">
+						<option value="" selected>全部</option>
+						<option value="1">暂停学车</option>
+						<option value="2">恢复学车</option>
+					</select>
+				</div>
+				<label class="row-label">门店：</label>
+				<div class="row-input">
+					<select name="storeid" id="storeid" data-toggle="selectpicker" data-width="100%" data-datajson="storelist"  data-optiontype="id,name">
+					</select>
+				</div>
+
+				<label class="row-label">审核状态：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="" selected>全部</option>
+						<option value="0">待审核</option>
+						<option value="1">审核通过</option>
+						<option value="2">审核不通过</option>
+						<option value="3">已撤回</option>
+					</select>
+				</div>
+				<div style="margin-top: 5px;"></div>
+				<label class="row-label">申请时间：</label>
+				<div class="row-input">
+					<input type="text" name="stime" readonly="readonly" data-toggle="datepicker" placeholder="起始时间">
+				</div>
+
+				<label class="row-label">到：</label>
+				<div class="row-input">
+					<input type="text" name="etime" readonly="readonly" data-toggle="datepicker" placeholder="结束时间">
+				</div>
+				<label class="row-label">学员姓名：</label>
+				<div class="row-input">
+					<input type="text" name="name" class="form-control" data-width="100%">
+				</div>
+
+				
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+				</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	
+
+	var student_apply_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '',
+			toolbarCustom: "<button class='btn-blue' data-privilege='030302_datagrid-list_01' id='modifyBtn' style='' onclick='student_apply_list.applypause(1)'>新增暂停学车</button> <button data-privilege='030302_datagrid-list_01' class='btn-blue' onclick='student_apply_list.applypause(2)' >新增恢复学车</button>",
+			toolbarItem: 'none',
+			paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'student/learnpause/list',
+			columns: [
+				{ name: 'type', label: '申请类型', align: 'center', render: function(value) { if(value == 1) { return "暂停学车" } else { return "恢复学车" } } },
+				{ name: 'areaid', label: '片区', align: 'center', render: formatAreaCell },
+				{ name: 'storeid', label: '门店', align: 'center', render:function(value){
+					return formatStoreCell(value)==null?"":value+"("+formatStoreCell(value)+")"
+				}  },
+				{ name: 'studentname', label: '学员姓名', align: 'center' },
+				{ name: 'phone', label: '联系电话', align: 'center' },
+				{ name: 'idcard', label: '证件号码', align: 'center' },
+				{ name: 'applyexam', label: '学车状态', align: 'center', render: function(value,data){
+					return studentStatus(data.applyexam,data.applystatus)
+				} },
+				{ name: 'status', label: '审核状态', align: 'center', render: function(value) { if(value == 0) { return "待审核" } else if(value == 1) { return "审核通过" } else if(value==2) { return "审核不通过" } else {return "已撤回"} } },
+				{ name: 'applyuser', label: '申请人', align: 'center' },
+				{ name: 'audituser', label: '当前处理人', align: 'center' },
+				{ name: 'createdate', label: '申请时间', align: 'center' },
+				{
+					name: 'createdate',
+					label: '操作',
+					align: 'center',
+					render: function(value, data) {
+						var edit = "";
+						if(data.status == 0) {
+							if(data.modapplystat==2){
+							edit = "<a onclick='student_apply_list.edit(" + data.id + "," + data.type + ")' data-privilege='030302_datagrid-list_02' class='btn-blue btn vhide'  data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "编辑" + "</a>"
+							+"&nbsp;&nbsp;<a href='###' data-privilege='030302_datagrid-list_11' class='btn-blue btn vhide' onclick='student_apply_list.cancelapply("+data.id+")'>撤回</a>";
+							
+								
+							}
+						}
+						return "<a onclick='student_apply_list.view(" + data.id + "," + data.type + ")' class='btn-blue btn' data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "查看" + "</a>" + "&nbsp;&nbsp;" + edit;
+
+					}
+
+				}
+
+			],
+
+		}),
+
+		applypause: function(stat) {
+			if(stat == 1)
+				BJUI.navtab({
+					id: 'student-pause-add',
+					url: 'html/teach/student-pause-add.html',
+					title: '暂停学车申请',
+					onClose: function() {
+						BJUI.navtab('switchTab', student_apply_list.curtab);
+						student_apply_list.list.datagrid('refresh', true);
+					}
+				})
+			else
+				BJUI.navtab({
+					id: 'student-resume-add',
+					url: 'html/teach/student-resume-add.html',
+					title: '恢复学车申请',
+					onClose: function() {
+						BJUI.navtab('switchTab', student_apply_list.curtab);
+						student_apply_list.list.datagrid('refresh', true);
+					}
+				})
+		},
+
+		view: function(id, type) {
+			clz.setWindowJson(id);
+			if(type == 1)
+				BJUI.dialog({
+					id: 'student-pause-view',
+					width: 800,
+					height: 800,
+					url: 'html/teach/student-pause-view.html',
+					title: '申请详情',
+					onClose: function() {
+						//BJUI.navtab('switchTab', student_apply_list.curtab);
+						student_apply_list.list.datagrid('refresh', true);
+					}
+
+				})
+			else
+				BJUI.dialog({
+					id: 'student-resume-view',
+					width: 800,
+					height: 800,
+					url: 'html/teach/student-resume-view.html',
+					title: '申请详情',
+					onClose: function() {
+						//BJUI.navtab('switchTab', student_apply_list.curtab);
+						student_apply_list.list.datagrid('refresh', true);
+					}
+
+				})
+		},
+		cancelapply:function (applyid){
+			BJUI.alertmsg('confirm', '确认撤回申请吗？', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + "/student/learnpause/audit?id="+applyid+"&status=3",
+	                    loadingmask: true,
+						okCallback: function(json, options) {
+	                        //console.log(json.result.list)
+							//coach_mod_apply_list.list.datagrid('refresh',true);
+							BJUI.navtab('refresh')
+	                    }
+	                })
+	            }
+	        });
+			
+		},
+		edit: function(id, type) {
+			clz.setWindowJson(id);
+			if(type == 1)
+				BJUI.dialog({
+					id: 'student-pause-edit',
+					width: 800,
+					height: 800,
+					url: 'html/teach/student-pause-edit.html',
+					title: '申请编辑',
+					onClose: function() {
+						
+						student_apply_list.list.datagrid('refresh', true);
+					}
+
+				})
+			else
+				BJUI.dialog({
+					id: 'student-resume-edit',
+					width: 800,
+					height: 800,
+					url: 'html/teach/student-resume-edit.html',
+					title: '申请编辑',
+					onClose: function() {
+						student_apply_list.list.datagrid('refresh', true);
+					}
+
+				})
+		}
+	}
+
+	
+</script>

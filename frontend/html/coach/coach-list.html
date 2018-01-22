@@ -1,0 +1,425 @@
+<section id="thispage" privilege = "030101"></section>
+<div class="bjui-pageHeader">
+	<form id="search-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教练搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">带教职务：</label>
+					<div class="row-input">
+						<select name="jobid" id="job" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="teachjoblist" data-optiontype="id,job">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">带教车型：</label>
+					<div class="row-input">
+						<select name="teachcartype" id="teachcartype" data-toggle="selectpicker" data-width="100%" size="15" data-datajson="cartypelist" data-optiontype="type,type">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">带教类型：</label>
+					<div class="row-input">
+						<select name="teachtypeid" id="teachtype" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="teachtypelist" data-optiontype="id,type">
+							<option value="0">全部</option>
+						</select>
+					</div>
+					<label class="row-label">供职状态：</label>
+
+					<div class="row-input">
+						<select name="employstatus" id="employstatus" data-toggle="selectpicker" size="15" data-width="100%" class="w-100">
+							<option value="">全部</option>
+							<option value="0">在职</option>
+							<option value="1">离职</option>
+						</select>
+					</div>
+					<label class="row-label">带教状态：</label>
+
+					<div class="row-input">
+						<select name="teachstate" id="teachstate" data-toggle="selectpicker" data-width="100%" size="15">
+							<option value="">全部</option>
+							<option value="1">正常分配</option>
+							<option value="2">暂停分配</option>
+						</select>
+					</div>
+					<label class="row-label">手机号码：</label>
+					<div class="row-input">
+						<input type="text" name="mobile" class="form-control" data-width="100%" placeholder="请输入手机号码查询">
+					</div>
+					<label class="row-label">教练名称：</label>
+					<div class="row-input">
+						<input type="text" name="name" class="form-control" data-width="100%" placeholder="请输入教练姓名查询">
+					</div>
+					<label class="row-label">教练车：</label>
+					<div class="row-input">
+						<input type="text" name="carno" class="form-control" data-width="100%" placeholder="请输入教练车查询">
+					</div>
+					
+				</div>
+				<div class="text-center">
+<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+						<button type="button" class="btn-blue" data-icon="sign-out" onclick="coachexport()">导出</button>
+					</div>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	
+	var coach_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '教练列表',
+			toolbarItem: 'add,edit',
+			toolbarCustom: "<button class='btn-blue' id='modifyBtn' style='' data-privilege='030101_datagrid-list_11' onclick='coach_list.batchmodify()'>批量修改</button> <button class='btn-blue' id='modifyBtn' style='' data-privilege='030101_datagrid-list_12' onclick='coach_list.applymodify()'>申请修改</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(1)' >正常分配</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(2)'>暂停分配</button> <button class='btn-blue' id='modifyBtn' data-privilege='030101_datagrid-list_15' onclick='coach_list.setemploystatus(1)' >离职</button>",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'coach/list',
+			columns: [{
+					name: 'name',
+					label: '教练姓名',
+					align: 'center',
+					render: function(value, data) {
+						data.previous_tab = clz.getNavtab_privilege();
+						return "<a href='javascript:' onclick='coach_list.view(" + JSON.stringify(data) + ")' >" + value + "</a>"
+					}
+				},
+				//{
+				//	name: 'name',
+				//	label: '教练姓名',
+				//	align: 'center',
+				//	render: function(value, data) {
+				//要传的值，组装成对象
+				//		var morejson = {
+				//			id: data.coachid
+				//		}
+				//		return "<a onclick='view(" + data.coachid + ")'  data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' data-more='" + JSON.stringify(morejson) + "'>" + value + "</a>"
+				//	}
+				//}, 
+				{
+					name: 'mobile',
+					label: '手机号码',
+					align: 'center'
+				}, {
+					name: 'idcard',
+					label: '身份证号',
+					align: 'center'
+				}, {
+					name: 'areaid',
+					label: '片区',
+					align: 'center',
+					render: formatAreaCell
+				}, {
+					name: 'jobid',
+					label: '带教职务',
+					align: 'center',
+					render:function(value){
+						return clz.configRender({name:'teachjoblist',val:value,key:'id',dataname:'job'})
+					}
+				}, {
+					name: 'teachcartype',
+					label: '带教车型',
+					align: 'center'
+				}, {
+					name: 'teachtype',
+					label: '带教类型',
+					align: 'center'
+				}, {
+					name: 'carno',
+					label: '教练车',
+					align: 'center'
+				}, {
+					name: 'curstudentload',
+					label: '负荷学员',
+					align: 'center'
+				}, {
+					name: 'employstatus',
+					label: '供职状态',
+					align: 'center',
+					render: employstatus_status
+				}, {
+					name: 'teachstate',
+					label: '带教状态',
+					align: 'center',
+					render: teachstate_status
+				},{
+					name: 'coachnum',
+					label: '送审状态',
+					align: 'center',
+					render: function(value){
+						if(value!=''){
+							return '审核过'
+						}else{
+							return '未审核'
+						}
+					}
+				},{
+					name: 'coachnum',
+					label: '操作',
+					align: 'center',
+					render: function(value,data){
+						//return "<button class='btn-blue' style=''  onclick='coach_list.dosync("+JSON.stringify(data)+")'>审核</button>";
+						return "";
+					}
+				}
+
+			],
+			keys: {
+				ctime: 'ctime',
+				mtime: 'mtime'
+			},
+			//editMode: {
+			//	dialog: {
+			//		width: '1000',
+			//		height: '500',
+			//		title: '新增教练',
+			//		mask: true
+			//	}
+			//},
+			//editMode: {navtab:{id:'student-navtab',title:'新增教练',onClose:function(){grid.datagrid('refresh',true)}}},
+			add_url: "html/coach/coach-add.html",
+
+			editMode: {
+				navtab: {
+					id: 'coach-navtab',
+					title: '教练信息',
+					onClose: function() {
+						window.coach_object = null;
+						coach_list.list.datagrid('refresh', true);
+						BJUI.navtab('switchTab', coach_list.curtab);
+					}
+				}
+			},
+
+			edit_url: "html/coach/coach-edit.html",
+			//delUrl: config.openBasePath + 'coach/delete',
+			delPK: 'id',
+			beforeEdit: function() {
+				//console.log($.CurrentNavtab.find("#search-form").serializeArray())
+				window.coach_list_tab = clz.getNavtab_privilege();
+				window.coach_object = coach_list.list.data('selectedDatas') == null ? null : coach_list.list.data('selectedDatas')[0];
+				return true;
+			},
+			afterSave: function() {
+				coach_list.list.datagrid('refresh', true);
+				//BJUI.navtab('refresh')
+			},
+			afterDelete: function() {
+				coach_list.list.datagrid('refresh', true);
+				//BJUI.navtab('refresh')
+			},
+			exportOption: {
+				type: "file",
+				options: {
+					url: config.openBasePath + "coach/export",
+					data: $.CurrentNavtab.find("#search-form").serializeArray()
+				}
+			}
+		}),
+
+		setTeachState: function(state) {
+			var data = coach_list.list.data('selectedDatas');
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('error', '没有选中数据！', {})
+				return
+			}
+			if(data.length > 1) {
+				BJUI.alertmsg('error', '请选择一个教练！', {})
+				return
+			}
+			if(data[0].teachstate==1&&state == 1){
+				BJUI.alertmsg('error', '教练已经是正常分配状态！', {})
+				return
+			}
+			if(data[0].teachstate==2&&state == 2){
+				BJUI.alertmsg('error', '教练已经是暂停分配状态！', {})
+				return
+			}
+			var title = (state == 1 ? "正常分配" : "暂停分配");
+			BJUI.alertmsg('confirm', '确认设置该用户' + title + '吗？', {
+				okCall: function() {
+
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "/coach/updateCoachTeachState",
+						loadingmask: true,
+						data: {
+							coachid: data[0].coachid,
+							teachstate: state
+						},
+						okCallback: function(json, options) {
+							//console.log(json.result.list)
+							coach_list.list.datagrid('refresh', true);
+
+						}
+					})
+					//console.log(data[0].coachid)
+				}
+			})
+		},
+
+		setemploystatus: function(state) {
+			var data = coach_list.list.data('selectedDatas');
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('error', '没有选中数据！', {})
+				return
+			}
+			if(data.length > 1) {
+				BJUI.alertmsg('error', '请选择一个教练！', {})
+				return
+			}
+			
+			if(data[0].employstatus==1){
+				BJUI.alertmsg('error', '教练已经是离职状态！', {})
+				return
+			}
+
+			BJUI.alertmsg('confirm', '确认设置该教练离职吗？', {
+				okCall: function() {
+
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "/coach/updateCoachEmploystatus",
+						loadingmask: true,
+						data: {
+							coachid: data[0].coachid,
+							employstatus: state
+						},
+						okCallback: function(json, options) {
+							//console.log(json.result.list)
+							coach_list.list.datagrid('refresh', true);
+						}
+					})
+
+				}
+			})
+		},
+		dosync:function(info){
+			BJUI.ajax('doajax', {
+									url: config.openBasePath + "/sync/onecoach",
+									loadingmask: true,
+									data: info,
+									okCallback: function(json, options) {
+										BJUI.alertmsg('ok', '提交成功！', {})
+										
+									}
+								})
+		},
+		applymodify: function() {
+			var data = coach_list.list.data('selectedDatas');
+			//console.log(clz.check_table_checked($.CurrentNavtab.find('#datagrid-list')))
+
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('error', '没有选中数据！', {})
+				return
+			}
+			if(data.length > 1) {
+				BJUI.alertmsg('error', '请选择一个教练！', {})
+				return
+			}
+			clz.setWindowJson(data[0]);
+
+			//BJUI.dialog({
+			BJUI.navtab({
+				id: 'apply_dialog_' + data[0].coachid,
+				width: 800,
+				height: 800,
+				url: 'html/coach/coach-mod-apply.html',
+				more: JSON.stringify(data[0]),
+				title: '教练信息申请修改',
+				onClose: function() {
+					console.log("aaaa")
+					coach_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', coach_list.curtab);
+				}
+
+			})
+		},
+		batchmodify: function() {
+			var data = coach_list.list.data('selectedDatas');
+			console.log(data);
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('error', '没有选中数据！', {})
+				return
+			}
+
+			console.log(data);
+			clz.setWindowJson(data);
+			BJUI.dialog({
+				id: 'apply_dialog',
+				width:640,
+				height: 480,
+				url: 'html/coach/coach-batch-setting.html',
+				title: '批量设置带教信息',
+				onClose: function() {
+					BJUI.navtab('refresh') //改为刷新本标签页
+				}
+
+			})
+
+		},
+
+		view: function(coachinfo) {
+			console.log(coachinfo)
+			BJUI.navtab({
+				id: 'student-view-table' + coachinfo.coachid,
+				width: 900,
+				height: 800,
+				url: 'html/coach/coach-view.html',
+				title: '教练详情',
+				more: JSON.stringify(coachinfo),
+				onClose: function() {
+					coach_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', coachinfo.previous_tab)
+				}
+
+			})
+		}
+	}
+
+	function employstatus_status(value) {
+		switch(value) {
+			case '0':
+				return "在职";
+			case '1':
+				return "离职";
+
+		}
+	}
+
+	function teachstate_status(value) {
+		switch(value) {
+			case 1:
+				return "正常分配";
+			case 2:
+				return "暂停分配";
+
+		}
+	}
+	
+	function coachexport(){
+		 
+		BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "coach/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find("#search-form").serializeArray()
+                    
+                })
+	}
+</script>

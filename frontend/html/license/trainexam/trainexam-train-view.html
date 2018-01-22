@@ -1,0 +1,25 @@
+<div class="bjui-pageContent">
+<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    var tableid = clz.getWindowJson(tableid);
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: '',
+        height: '95%',
+        paging : false,
+        showToolbar: false,
+        saveAll : true,
+        showLinenumber : true,
+        dataUrl : config.openBasePath + 'trainexam/itemlist',
+        postData : {tableid : tableid},
+        columns: [
+            {name:'name',label:'学员姓名',align:'center'},
+            {name:'traintype',label:'准驾车型',align:'center'},
+            {name:'idcard',label:'证件号码',align:'center'},
+            {name:'flownum',label:'流水号',align:'center'},
+            {name:'subject',label:'培训科目',align:'center',render:license_trainexam.formatSubject},
+            {name:'result',label:'结果',align:'center',render:license_trainexam.formatResult}
+        ]
+    });
+</script>
+    

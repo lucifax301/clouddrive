@@ -1,0 +1,50 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form 
+            class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+			<input type="hidden" name="id" id="id">
+			<div class="bjui-row">
+                <label class="row-label">保险公司名称:</label>
+                <div class="row-input required">
+                    <input type="text" name="name" data-rule="required">
+                </div>
+                
+                
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="updateinsurancecorp()">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current:'Dialog',
+		
+		form_name : 'edit-form',
+		table_name: 'datagrid-list',
+		callback:function(data){
+			console.log(data)
+		}
+	})
+
+	function updateinsurancecorp(){
+	if($.CurrentDialog.find('#edit-form').isValid())
+	BJUI.alertmsg('confirm', '确认修改保险公司吗？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'insurancecorp/update',
+                    loadingmask: true,
+					data: clz.parseForm($.CurrentDialog.find("#edit-form")),
+                    okCallback: function(json, options) {
+						BJUI.alertmsg('ok', '修改保险公司成功！', {})
+						BJUI.dialog('closeCurrent')
+					}
+                });
+            }
+        });
+	}
+</script>

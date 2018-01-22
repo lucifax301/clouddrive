@@ -1,0 +1,75 @@
+<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentDialog.find('#system-store-coach-list')}">
+    <div class="widget-box">         
+        <div class="widget-content nopadding">
+	        <div class="bjui-row col-3">
+	        <label class="row-label">带教车型：</label>
+	        <div class="row-input">
+	            <select name="teachcartype" data-toggle="selectpicker" data-width="100%">
+	                <option value="">全部</option>
+	                <option value="C1">C1</option>
+	                <option value="C2">C2</option>
+	                <option value="C3">C3</option>
+	                <option value="B1">B1</option>
+	                <option value="B2">B2</option>
+	            </select>
+	        </div>
+	        <label class="row-label">带教类型：</label>
+	        <div class="row-input">
+	            <select name="teachtypeid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/coachSetting/listTeachType" data-optiontype = "id,type">
+	            </select>
+	        </div>
+	        <label class="row-label">带教状态：</label>
+	        <div class="row-input">
+	            <select name="teachstate" data-toggle="selectpicker" data-width="100%">
+	                <option value="">全部</option>
+	                <option value="1">正常分配</option>
+	                <option value="2">暂停分配</option>
+	            </select>
+	        </div>
+	        <label class="row-label">教练姓名：</label>
+	        <div class="row-input">
+	            <input type="text" name="name">
+	        </div>
+	        
+	        <label class="row-label"></label>
+	        <div class="row-input">
+	            <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+	            <button type="reset" class="btn-blue" data-icon="times">重置</button>
+	        </div>   
+	        </div>  
+        </div>
+    </div>
+</form>
+<table id="system-store-coach-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var system_store_coach_list = {
+		init : function() {
+			var store_list = 
+		        $.CurrentDialog.find('#system-store-coach-list').datagrid({ 
+		        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+		        height: '80%',
+		        showCheckboxcol: false,
+		        showToolbar: false,
+		        dataUrl: config.openBasePath + 'coach/list?storeid=' + clz.getNavtab_more().id,
+		        columns: [
+		    		{name:'name',label:'教练姓名',align:'center'},
+		    		{name:'mobile',label:'联系电话',align:'center'},
+		    		{name:'teachcartype',label:'带教车型',align:'center'},
+		            {name:'teachtypeid',label:'带教类型',align:'center'},
+		            {name:'curstudentload',label:'负荷学员',align:'center'},
+		            {name:'teachstate',label:'带教状态',align:'center',render:system_store_coach_list.status}
+		        ]
+		    });
+		},
+		status : function(value) {
+			switch (value) {
+	            case 1 :
+	            return "正常分配";
+	            case 2:
+	            return "暂停分配";
+	        }
+		}
+	}
+	
+	system_store_coach_list.init();
+</script>

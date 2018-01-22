@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.exam.mapper.OrderExamItemMapper">
+    <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.OrderExamItem">
+        <id column="tableid" property="tableid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="studentid" property="studentid" jdbcType="INTEGER"/>
+        <result column="schoolname" property="schoolname" jdbcType="VARCHAR"/>
+        <result column="traintype" property="traintype" jdbcType="CHAR"/>
+        <result column="idcard" property="idcard" jdbcType="VARCHAR"/>
+        <result column="flownum" property="flownum" jdbcType="VARCHAR"/>
+        <result column="subject" property="subject" jdbcType="INTEGER"/>
+        <result column="result" property="result" jdbcType="INTEGER"/>
+        <result column="examdate" property="examdate" jdbcType="TIMESTAMP"/>
+        <result column="examtime" property="examtime" jdbcType="CHAR"/>
+        <result column="examplaceid" property="examplaceid" jdbcType="INTEGER"/>
+        <result column="coachid" property="coachid" jdbcType="INTEGER"/>
+        <result column="coachname" property="coachname" jdbcType="VARCHAR"/>
+        <result column="changedate" property="changedate" jdbcType="INTEGER"/>
+        <result column="areaid" property="areaid" jdbcType="INTEGER"/>
+        <result column="storeid" property="storeid" jdbcType="INTEGER"/>
+        <result column="cuid" property="cuid" jdbcType="INTEGER"/>
+        <result column="cname" property="cname" jdbcType="VARCHAR"/>
+        <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    tableid, name, studentid, schoolname, traintype, idcard, flownum, subject, result, 
+    examdate, examtime, examplaceid, coachid, coachname, changedate, areaid, storeid, cuid, cname, ctime
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+        select
+        <include refid="Base_Column_List"/>
+        from t_orderexam_item
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+        select
+        <include refid="Base_Column_List"/>
+        from t_orderexam_item
+        <where>
+            <if test="tableid != null">
+                tableid = #{tableid,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by ctime desc
+    </select>
+
+    <select id="selectCoachStuList" resultMap="BaseResultMap"
+            parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+        select
+        a.tableid, a.name, a.studentid, a.schoolname, a.traintype, a.idcard, a.flownum, a.result, a.subject,
+        a.examdate, a.examtime, a.examplaceid, a.changedate, a.cname, a.ctime
+        from t_orderexam_item a join t_coach_student b on a.studentid=b.studentid where coachid=#{coachid}
+        order by a.ctime desc
+  </select>
+
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+        select
+        <include refid="Base_Column_List"/>
+        from t_orderexam_item
+        <where>
+            <if test="idcard != null">
+                and idcard = #{idcard,jdbcType=VARCHAR}
+            </if>
+            <if test="subject != null">
+                and subject = #{subject,jdbcType=INTEGER}
+            </if>
+            <if test="result != null">
+                and result = #{result,jdbcType=INTEGER}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="selectChangedate" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+        select
+        <include refid="Base_Column_List"/>
+        from t_orderexam_item where
+        studentid = #{studentid,jdbcType=INTEGER} and
+        subject = #{subject,jdbcType=INTEGER} and
+        result = #{result,jdbcType=INTEGER}
+        order by ctime desc limit 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+    delete from t_orderexam_item
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+    insert into t_orderexam_item (tableid, name, studentid, 
+      schoolname, traintype, idcard, 
+      flownum, subject, result, 
+      examdate, examtime, examplaceid, coachid, coachname
+      changedate, areaid, storeid, cuid, cname, 
+      ctime)
+    values (#{tableid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{studentid,jdbcType=INTEGER}, 
+      #{schoolname,jdbcType=VARCHAR}, #{traintype,jdbcType=CHAR}, #{idcard,jdbcType=VARCHAR}, 
+      #{flownum,jdbcType=VARCHAR}, #{subject,jdbcType=INTEGER}, #{result,jdbcType=INTEGER}, 
+      #{examdate,jdbcType=TIMESTAMP}, #{examtime,jdbcType=CHAR}, #{examplaceid,jdbcType=INTEGER},
+      #{coachid,jdbcType=INTEGER}, #{coachname,jdbcType=VARCHAR},
+      #{changedate,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER},#{storeid,jdbcType=INTEGER}, 
+      #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into t_orderexam_item (tableid, name, studentid,
+        schoolname, traintype, idcard,
+        flownum, subject, result,
+        examdate, examtime, examplaceid, coachid, coachname,
+        changedate, areaid, storeid, cuid, cname, ctime) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.tableid,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.studentid,jdbcType=INTEGER},
+            #{item.schoolname,jdbcType=VARCHAR}, #{item.traintype,jdbcType=CHAR}, #{item.idcard,jdbcType=VARCHAR},
+            #{item.flownum,jdbcType=VARCHAR}, #{item.subject,jdbcType=INTEGER}, #{item.result,jdbcType=INTEGER},
+            #{item.examdate,jdbcType=TIMESTAMP}, #{item.examtime,jdbcType=CHAR}, #{item.examplaceid,jdbcType=VARCHAR},
+            #{item.coachid,jdbcType=VARCHAR}, #{item.coachname,jdbcType=VARCHAR}, #{item.changedate,jdbcType=INTEGER}, #{item.areaid,jdbcType=INTEGER},
+            #{item.storeid,jdbcType=INTEGER},#{item.cuid,jdbcType=INTEGER}, #{item.cname,jdbcType=VARCHAR},
+            #{item.ctime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+        insert into t_orderexam_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                tableid,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="studentid != null">
+                studentid,
+            </if>
+            <if test="schoolname != null">
+                schoolname,
+            </if>
+            <if test="traintype != null">
+                traintype,
+            </if>
+            <if test="idcard != null">
+                idcard,
+            </if>
+            <if test="flownum != null">
+                flownum,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="result != null">
+                result,
+            </if>
+            <if test="examdate != null">
+                examdate,
+            </if>
+            <if test="examtime != null">
+                examtime,
+            </if>
+            <if test="examplaceid != null">
+                examplaceid,
+            </if>
+            <if test="coachid != null">
+                coachid,
+            </if>
+            <if test="coachname != null">
+                coachname,
+            </if>
+            <if test="changedate != null">
+                changedate,
+            </if>
+            <if test="cuid != null">
+                cuid,
+            </if>
+            <if test="cname != null">
+                cname,
+            </if>
+            <if test="ctime != null">
+                ctime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableid != null">
+                #{tableid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="studentid != null">
+                #{studentid,jdbcType=INTEGER},
+            </if>
+            <if test="schoolname != null">
+                #{schoolname,jdbcType=VARCHAR},
+            </if>
+            <if test="traintype != null">
+                #{traintype,jdbcType=CHAR},
+            </if>
+            <if test="idcard != null">
+                #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="flownum != null">
+                #{flownum,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null">
+                #{subject,jdbcType=INTEGER},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=INTEGER},
+            </if>
+            <if test="examdate != null">
+                #{examdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="examtime != null">
+                #{examtime,jdbcType=CHAR},
+            </if>
+            <if test="examplaceid != null">
+                #{examplaceid,jdbcType=INTEGER},
+            </if>
+            <if test="coachid != null">
+                #{coachid,jdbcType=INTEGER},
+            </if>
+            <if test="coachname != null">
+                #{coachname,jdbcType=VARCHAR},
+            </if>
+            <if test="changedate != null">
+                #{changedate,jdbcType=INTEGER},
+            </if>
+            <if test="cuid != null">
+                #{cuid,jdbcType=INTEGER},
+            </if>
+            <if test="cname != null">
+                #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="ctime != null">
+                #{ctime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+        update t_orderexam_item
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="studentid != null">
+                studentid = #{studentid,jdbcType=INTEGER},
+            </if>
+            <if test="schoolname != null">
+                schoolname = #{schoolname,jdbcType=VARCHAR},
+            </if>
+            <if test="traintype != null">
+                traintype = #{traintype,jdbcType=CHAR},
+            </if>
+            <if test="idcard != null">
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="flownum != null">
+                flownum = #{flownum,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null">
+                subject = #{subject,jdbcType=INTEGER},
+            </if>
+            <if test="result != null">
+                result = #{result,jdbcType=INTEGER},
+            </if>
+            <if test="examdate != null">
+                examdate = #{examdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="examtime != null">
+                examtime = #{examtime,jdbcType=CHAR},
+            </if>
+            <if test="examplaceid != null">
+                examplaceid = #{examplaceid,jdbcType=INTEGER},
+            </if>
+            <if test="coachid != null">
+                coachid = #{coachid,jdbcType=INTEGER},
+            </if>
+            <if test="coachname != null">
+                coachname = #{coachid,jdbcType=VARCHAR},
+            </if>
+            <if test="changedate != null">
+                changedate = #{changedate,jdbcType=INTEGER},
+            </if>
+            <if test="cuid != null">
+                cuid = #{cuid,jdbcType=INTEGER},
+            </if>
+            <if test="cname != null">
+                cname = #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="ctime != null">
+                ctime = #{ctime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where tableid = #{tableid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.OrderExamItem">
+    update t_orderexam_item
+    set name = #{name,jdbcType=VARCHAR},
+      studentid = #{studentid,jdbcType=INTEGER},
+      schoolname = #{schoolname,jdbcType=VARCHAR},
+      traintype = #{traintype,jdbcType=CHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      flownum = #{flownum,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=INTEGER},
+      result = #{result,jdbcType=INTEGER},
+      examdate = #{examdate,jdbcType=TIMESTAMP},
+      examtime = #{examtime,jdbcType=CHAR},
+      examplaceid = #{examplaceid,jdbcType=INTEGER},
+      coachid = #{coachid,jdbcType=INTEGER},
+      coachname = #{coachname,jdbcType=VARCHAR},
+      changedate = #{changedate,jdbcType=INTEGER},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP}
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+</mapper>

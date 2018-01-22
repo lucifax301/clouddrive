@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.coach.mapper.CoachAreaMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.coach.model.CoachArea" >
+  	<result column="id" property="id" jdbcType="INTEGER" />
+    <result column="coachid" property="coachid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="step" property="step" jdbcType="INTEGER" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+   id,coachid, areaid, step
+  </sql>
+  
+  
+  <select id="list" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_coach_area
+    where 1=1
+    <if test="coachid != null">
+		and coachid = #{coachid}
+	</if>	
+     <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	 <if test="step != null and step!=0">
+		and step = #{step}
+	</if>
+	
+  </select>
+
+
+  <insert id="add" parameterType="cn.com.liliyun.coach.model.CoachArea" >
+    insert into t_coach_area (coachid, areaid, step)
+    values (#{coachid}, #{areaid}, #{step})
+  </insert>
+  
+  <insert id="batchAdd" parameterType="java.util.List" >
+    insert into t_coach_area (coachid, areaid, step)
+    values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+				(#{item.coachid},#{item.areaid},#{item.step})
+	</foreach>
+  </insert>
+  
+  <delete id="batchDel" parameterType="java.util.List" >
+    delete from t_coach_area
+    where id in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.id}  
+    </foreach>  
+  </delete>
+</mapper>

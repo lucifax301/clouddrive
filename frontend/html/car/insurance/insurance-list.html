@@ -1,0 +1,204 @@
+<section id="thispage" privilege = "040502"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>保险信息搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">车牌号：</label>
+					<div class="row-input">
+						<input type="text" name="carNo">
+					</div>
+					<label class="row-label">保险公司：</label>
+					<div class="row-input">
+						<select name="insureCompanyid" data-toggle="selectpicker" data-width="100%"   data-dataurl="/httpaccess/insurancecorp/list" data-optiontype="id,name" >
+							<option value="">全部</option>
+							<!--<option value="1">鼎和保险公司</option>
+							<option value="2">平安保险公司</option>
+							<option value="3">人保保险公司</option>
+							<option value="4">永城保险公司</option>-->
+						</select>
+					</div>
+					<label class="row-label">保险性质：</label>
+					<div class="row-input">
+						<select name="nature" data-toggle="selectpicker" data-width="100%" >
+							<option value="">全部</option>
+							<option value="1">长训教学</option>
+							<option value="2">场内教学</option>
+							<option value="3">场外教学</option>
+						</select>
+					</div>
+					<label class="row-label">险种：</label>
+					<div class="row-input">
+						<select name="paid" data-toggle="selectpicker" data-width="100%" >
+							<option value="">全部</option>
+							<option value="1">玻璃险</option>
+							<option value="2">车损</option>
+							<option value="5">盗抢险</option>
+							
+							<option value="6">第三者10万</option>
+							<option value="7">第三者30万</option>
+							<option value="8">第三者50万</option>
+							<option value="9">第三者100万</option>
+							
+							<option value="3">乘客4座*10万</option>
+							<option value="4">乘客4座*20万</option>
+
+							<option value="10">司机2万</option>
+							<option value="11">司机5万</option>
+							<option value="12">司机10万</option>
+							<option value="13">司机20万</option>	
+						</select>
+					</div>
+					<label class="row-label">商业险投保日期：</label>
+					<div class="row-input">
+						<input type="text" name="busriskStartDate" data-toggle="datepicker" placeholder="开始日期" readonly="readonly">
+					</div>
+					<label class="row-label">商业险投保日期：</label>
+					<div class="row-input">
+						<input type="text" name="busriskEndDate" data-toggle="datepicker" placeholder="终止日期" readonly="readonly">
+					</div>
+					<label class="row-label">交强险投保日期：</label>
+					<div class="row-input">
+						<input type="text" name="saliStartDate" data-toggle="datepicker" placeholder="开始日期" readonly="readonly">
+					</div>
+					<label class="row-label">交强险投保日期：</label>
+					<div class="row-input">
+						<input type="text" name="sailEndDate" data-toggle="datepicker" placeholder="终止日期" readonly="readonly">
+					</div>
+					<label class="row-label">报账日期：</label>
+					<div class="row-input">
+						<input type="text" name="accountStartDate" data-toggle="datepicker" placeholder="开始日期" readonly="readonly">
+					</div>
+					<label class="row-label">报账日期：</label>
+					<div class="row-input">
+						<input type="text" name="accountEndDate" data-toggle="datepicker" placeholder="结束日期" readonly="readonly">
+					</div>
+				</div>
+				<div class="text-center">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var car_insurance_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '保险信息列表',
+		//toolbarItem: 'add,|,edit,|,refresh,|,export',
+		toolbarItem: 'refresh,|,export',
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showCheckboxcol: true,
+		showToolbar: true,
+		dataUrl: config.openBasePath + '/car/getCarInsuranceList',
+		columns: [{
+			name: 'carNo',
+			label: '车牌号',
+			align: 'center'
+		}, {
+			name: 'cname',
+			label: '负责人',
+			align: 'center'
+		}, {
+			name: 'paid',
+			label: '险种',
+			align: 'center',
+			render: function(value) {
+				var paid = '';
+				var paidval = value.toString().split(',');
+				$.each(paidval, function(i, m) {
+					paid += paidvalue(m)
+						//console.log(paidval.length)
+					if ((i + 1) < paidval.length) {
+						//console.log(i)									    		
+						paid += ","
+					}
+				})
+				return paid
+			}
+		}, {
+			name: 'busrisksNo',
+			label: '商业保单号',
+			align: 'center'
+		}, {
+			name: 'busrisksFee',
+			label: '商业险保费',
+			align: 'center'
+		}, {
+			name: 'insureCompanyid',
+			label: '保险公司',
+			align: 'center',
+			render: function(value) {
+				var text = '';
+				if (value == '1') text = '鼎和保险公司';
+				if (value == '2') text = '平安保险公司';
+				if (value == '3') text = '人保保险公司';
+				if (value == '4') text = '永城保险公司';
+				return text
+			}
+		}, {
+			name: 'cname',
+			label: '当前记录',
+			align: 'center'
+		}, {
+			name: 'busrisksStime',
+			label: '开始日期',
+			align: 'center',
+			render: function(value) {
+				return String(value) == '' ? '' : clz.filter.time({
+					date: value,
+					type: 'yyyy-MM-dd'
+				})
+			}
+		}, {
+			name: 'busrisksEtime',
+			label: '结束日期',
+			align: 'center',
+			render: function(value) {
+				return String(value) == '' ? '' : clz.filter.time({
+					date: value,
+					type: 'yyyy-MM-dd'
+				})
+			}
+		}, {
+			name: 'accountDate',
+			label: '报账日期',
+			align: 'center',
+			render: function(value) {
+				return String(value) == '' ? '' : clz.filter.time({
+					date: value,
+					type: 'yyyy-MM-dd'
+				})
+			}
+		}],
+		editMode: {
+			dialog: {
+				width: '1000',
+				height: '750',
+				title: '保险信息',
+				mask: true
+			}
+		},
+		add_url: 'html/car/insurance/insurance-add.html',
+		edit_url: 'html/car/insurance/insurance-edit.html',
+		afterSave: function() {
+			car_insurance_list.datagrid('refresh', true);
+		},
+		exportOption: {
+						type: "file",
+						options: {
+							url: config.openBasePath + "car/getCarInsuranceList/export",
+							data: $("#search-form").serializeArray()
+						}
+					}
+	});
+</script>

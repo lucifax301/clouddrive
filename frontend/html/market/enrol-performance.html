@@ -1,0 +1,270 @@
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+	<div class="c-tabs-header">
+		<li class="active statli" data-tabs='id1'>教练招生绩效</li>
+		<li class="statli" data-tabs='id2'>职能员工招生绩效</li>
+		
+	</div>
+	<div class="stat" id="stat_id1">
+		<form data-toggle="ajaxsearch" id="statform1">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-4">
+						<label class="row-label">片区：</label>
+						<div class="row-input">
+							<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist" data-refdata="storelist,{value},areaid" data-nextselect="#store" data-keys="{'label':'name','value':'id'}" data-optiontype="id,name">
+								<option value="">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">门店：</label>
+						<div class="row-input">
+							<select name="storeid" id="store" data-toggle="selectpicker" size="15" data-width="100%" >
+								<option value="">请选择</option>
+							</select>
+						</div>
+						
+						<label class="row-label">时间：</label>
+						<div class="row-input fill-2">
+							<div class="fl w-40"><input type="text" readonly="readonly" name="begindate" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+							<div class="w-10 fl text-center">-</div>
+							<div class="fl w-40"><input type="text" readonly="readonly" name="enddate" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+			            </div>	
+						<label class="row-label">员工姓名：</label>
+						<div class="row-input">
+							<input type="text" name="name" placeholder="请输入姓名查询">
+						</div>
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_performance_stat_id1()">搜索</button>
+								<button type="reset" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_performance_stat_id1_export()">导出</button>
+								<!--<button type="reset" class="btn-orange" data-icon="times">重置</button>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="type" value="1"/>
+		</form>
+	</div>
+
+	<div class="stat" id="stat_id2" style="display:none">
+		<form data-toggle="ajaxsearch" id="statform2">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-4">
+						<label class="row-label">部门：</label>
+						<div class="row-input">
+							<select name="deptid" id="deptid" data-optiontype="id,name" data-toggle="selectpicker" size="15" data-width="100%" data-dataurl="/httpaccess/dept/list">
+								<option value="">请选择</option>
+							</select>
+						</div>
+						
+						<label class="row-label">时间：</label>
+						<div class="row-input fill-2">
+							<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+							<div class="w-10 fl text-center">-</div>
+							<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+			            </div>	
+			            <label class="row-label">员工姓名：</label>
+						<div class="row-input">
+							<input type="text" name="name" placeholder="请输入姓名查询">
+						</div>
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_performance_stat_id2()">搜索</button>
+								<button type="reset" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_performance_stat_id2_export()">导出</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="type" value="2"/>
+		</form>
+	</div>
+
+	
+	
+</div>
+<div class="bjui-pageContent pr20" id="statinfo">
+
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	
+
+	$.CurrentNavtab.find(".statli").each(
+		function() {
+			$(this).bind("click", function() {
+				//alert($(this).attr("data-tabs"))
+				var idvalue = $(this).attr("data-tabs");
+				$.CurrentNavtab.find(".stat").each(
+					function() { $(this).css("display", "none") }
+				)
+				$.CurrentNavtab.find("#stat_" + idvalue).css("display", "");
+				eval("enrol_performance_stat_" + idvalue).apply(this);
+			})
+		}
+	);
+
+	eval("enrol_performance_stat_id1").apply(this);;
+
+	function enrol_performance_stat_id1() {
+		
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/enrolstat/performance/coach",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform1').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//student_apply_list.data=json.result.list;
+				$.CurrentNavtab.find("#statinfo").html(renderStatTable(json.result,['片区','门店','员工姓名','员工指标','招生人数','超额人数'],
+				['area','store','name','index','enrolcount','exceedcount']
+				));
+			}
+		})
+	}
+	
+	
+	
+	function enrol_performance_stat_id1_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/enrolstat/performance/coach/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform1').serializeArray(),
+			
+		})
+	}
+
+	function enrol_performance_stat_id2() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/enrolstat/performance/staff",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform2').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+				$.CurrentNavtab.find("#statinfo").html(renderStatTable2(json.result,['部门','员工','员工指标','招生人数','超额人数'],
+				['dept','name','index','enrolcount','exceedcount']
+				));
+			}
+		})
+	}
+	
+	
+	
+	function enrol_performance_stat_id2_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/enrolstat/performance/staff/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform2').serializeArray(),
+			
+		})
+	}
+	
+	function renderStatTable(json, columns, dataname) {
+		var header = '<thead><tr>';
+		for(var i = 0; i < columns.length; i++) {
+			header = header + '<th align="center">' + columns[i] + "</th>"
+		}
+		header = header + "</tr></thead>"
+
+		var tablecontent = '';
+		for(var i = 0; i < json.length; i++) {
+			var trcontent = "<tr>";
+			var area = json[i][dataname[0]];
+			if(!area)area="其他";
+			var l1data = json[i]['data'];
+			var l1row = 0;
+			var l2row = 0;
+			for(var j = 0; j < l1data.length; j++) {
+				var l2data = l1data[j]['data'];
+				l1row = l1row + l2data.length;
+			}
+
+			trcontent = trcontent + "<td align='center' rowspan=" + l1row + ">" + area + "</td>";
+			for(var j = 0; j < l1data.length; j++) {
+				var cartype = l1data[j][dataname[1]];
+				var l2data = l1data[j]['data'];
+
+				trcontent = trcontent + "<td align='center' rowspan=" + l2data.length + ">" + cartype + "</td>";
+
+				for(var e = 0; e < l2data.length; e++) {
+
+					if(e == 0) {
+						trcontent = trcontent + generatel3data(l2data[e], dataname);
+						trcontent = trcontent + "</tr>"
+					} else {
+						trcontent = trcontent + "<tr>" + generatel3data(l2data[e], dataname) + "</tr>";
+					}
+				}
+
+			}
+			tablecontent = tablecontent + trcontent;
+
+		}
+		return "<table class='table table-bordered'>" + header + tablecontent + "</table>";
+	}
+
+	function generatel3data(json, dataname) {
+		var v = "<td align='center'>" + json[dataname[2]] + "</td>";
+		for(var i = 3; i < dataname.length; i++) {
+			v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+		}
+		return v;
+		//return +"<td>"+json['studentcount']+"</td>"+"<td>"+json['coachcount']+"</td>"+"<td>"+json['carcount']+"</td>"+"<td>"+json['avgcoachstudentcount']+"</td>"+"<td>"+json['avgcarstudentcount']+"</td>"
+	}
+
+	function renderStatTable2(json,columns,dataname){
+		var header='<thead><tr>';
+		for(var i=0;i<columns.length;i++){
+			header=header+'<th align="center">'+columns[i]+"</th>"
+		}
+		header=header+"</tr></thead>"
+		
+		var tablecontent='';
+		for(var i=0;i<json.length;i++){
+			var trcontent="<tr>";
+			var area=json[i][dataname[0]];
+			var l1data=json[i]['data'];
+			var l1row=l1data.length;
+			
+					
+
+			trcontent=trcontent+"<td align='center' rowspan="+l1row+">"+area+ "</td>";
+			for(var j=0;j<l1data.length;j++){
+					
+				if(j==0){
+					trcontent=trcontent+generatel2data(l1data[j],dataname);
+					trcontent=trcontent+"</tr>"
+				}else{
+					trcontent=trcontent+"<tr>"+generatel2data(l1data[j],dataname)+"</tr>";
+				}
+				
+			}
+			tablecontent=tablecontent+trcontent;
+
+		}
+		return "<table class='table table-bordered'>"+header+tablecontent+"</table>";
+	}
+	
+	function generatel2data(json,dataname){
+		var v="";
+		for(var i=1;i<dataname.length;i++){
+			v=v+"<td align='center'>"+json[dataname[i]]+"</td>";
+		}
+		return v;
+	}
+</script>

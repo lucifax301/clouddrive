@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarOilwearMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarOilwear" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="car_id" property="carId" jdbcType="INTEGER" />
+    <result column="car_no" property="carNo" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="oil_supplier" property="oilSupplier" jdbcType="VARCHAR" />
+    <result column="oil_date" property="oilDate" jdbcType="TIMESTAMP" />
+    <result column="oil_ml" property="oilMl" jdbcType="INTEGER" />
+    <result column="oil_type" property="oilType" jdbcType="TINYINT" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="sum_cost" property="sumCost" jdbcType="INTEGER" />
+    <result column="real_cost" property="realCost" jdbcType="INTEGER" />
+    <result column="cost_type" property="costType" jdbcType="TINYINT" />
+    <result column="oilstat_name" property="oilstatName" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="discount_rate" property="discountRate" jdbcType="DOUBLE" />
+    <result column="actual_discount_rate" property="actualDiscountRate" jdbcType="DOUBLE" />
+    <result column="hang_brand_price" property="hangBrandPrice" jdbcType="DOUBLE" />
+    <result column="surplus_discount" property="surplusDiscount" jdbcType="DOUBLE" />
+    <result column="previous_discount" property="previousDiscount" jdbcType="DOUBLE" />
+    <result column="oilStation_code" property="oilStationCode" jdbcType="VARCHAR" />
+    <result column="oil_type_code" property="oilTypeCode" jdbcType="VARCHAR" />
+    <result column="oil_card_price" property="oilCardPrice" jdbcType="VARCHAR" />
+    <result column="oil_card" property="oilCard" jdbcType="VARCHAR" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, car_id, car_no, oil_supplier, oil_date, oil_ml, oil_type, cost, sum_cost, real_cost, cost_type, 
+    oilstat_name, cname, ctime, remark, is_del,discount,discount_rate,actual_discount_rate,hang_brand_price,surplus_discount,
+    previous_discount,oil_station_code,oil_type_code,oil_card_price,oil_card
+  </sql>
+  
+  <select id="queryCarOilwearList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarOilwear" >
+     select 
+    	<include refid="Base_Column_List" />
+     from t_car_oilwear
+     where is_del=0
+    	<trim suffixOverrides=",">
+			<if test="carId != null">
+				and car_id= #{carId}
+			</if>
+			<if test="carNo != null and carNo != ''">
+				and car_no= #{carNo}
+			</if>
+			<if test="oilType != null">
+				and oil_type= #{oilType}
+			</if>
+			<if test="stime != null">
+				and oil_date >= #{stime}
+			</if>
+			<if test="etime != null">
+				<![CDATA[and oil_date <= #{etime}]]> 
+			</if>
+			<if test="areaId != null">
+				and area_id = #{areaId}
+			</if>
+			<if test="oilCard != null">
+				and oil_card = #{oilCard}
+			</if>	
+		</trim>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_oilwear
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteCarOilwearList" parameterType="cn.com.liliyun.car.model.CarOilwear" >
+    delete from t_car_oilwear
+    where id  in (${ids})
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_car_oilwear
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarOilwear" >
+    insert into t_car_oilwear (id, car_id, oil_supplier, 
+      oil_date, oil_ml, oil_type, 
+      cost, sum_cost, cost_type, 
+      oilstat_name, cname, ctime, 
+      remark, is_del)
+    values (#{id,jdbcType=INTEGER}, #{carId,jdbcType=INTEGER}, #{oilSupplier,jdbcType=VARCHAR}, 
+      #{oilDate,jdbcType=TIMESTAMP}, #{oilMl,jdbcType=INTEGER}, #{oilType,jdbcType=TINYINT}, 
+      #{cost,jdbcType=DECIMAL}, #{sumCost,jdbcType=INTEGER}, #{costType,jdbcType=TINYINT}, 
+      #{oilstatName,jdbcType=VARCHAR}, #{cname,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=TINYINT})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarOilwear" >
+    insert into t_car_oilwear
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carId != null" >
+        car_id,
+      </if>
+      <if test="carNo != null" >
+        car_no,
+      </if>
+      <if test="oilSupplier != null" >
+        oil_supplier,
+      </if>
+      <if test="oilDate != null" >
+        oil_date,
+      </if>
+      <if test="oilMl != null" >
+        oil_ml,
+      </if>
+      <if test="oilType != null" >
+        oil_type,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="sumCost != null" >
+        sum_cost,
+      </if>
+      <if test="realCost != null" >
+        real_cost,
+      </if>
+      <if test="costType != null" >
+        cost_type,
+      </if>
+      <if test="oilstatName != null" >
+        oilstat_name,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="discountRate != null" >
+        discount_rate,
+      </if>
+      <if test="actualDiscountRate != null" >
+        actual_discount_rate,
+      </if>
+      <if test="hangBrandPrice != null" >
+        hang_brand_price,
+      </if>
+      <if test="surplusDiscount != null" >
+        surplus_discount,
+      </if>
+      <if test="previousDiscount != null" >
+        previous_discount,
+      </if>
+      <if test="oilStationCode != null" >
+        oil_station_code,
+      </if>
+      <if test="oilTypeCode != null" >
+        oil_type_code,
+      </if>
+       <if test="oilCardPrice != null" >
+        oil_card_price,
+      </if>
+      <if test="oilCard != null" >
+        oil_card
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null" >
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="carNo != null" >
+        #{carNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oilSupplier != null" >
+        #{oilSupplier,jdbcType=VARCHAR},
+      </if>
+      <if test="oilDate != null" >
+        #{oilDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oilMl != null" >
+        #{oilMl,jdbcType=INTEGER},
+      </if>
+      <if test="oilType != null" >
+        #{oilType,jdbcType=TINYINT},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="sumCost != null" >
+        #{sumCost,jdbcType=INTEGER},
+      </if>
+      <if test="realCost != null" >
+        #{realCost,jdbcType=INTEGER},
+      </if>
+      <if test="costType != null" >
+        #{costType,jdbcType=TINYINT},
+      </if>
+      <if test="oilstatName != null" >
+        #{oilstatName,jdbcType=VARCHAR},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="discount != null" >
+	    #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="discountRate != null" >
+        #{discountRate,jdbcType=DOUBLE},
+      </if>
+      <if test="actualDiscountRate != null" >
+        #{actualDiscountRate,jdbcType=DOUBLE},
+      </if>
+      <if test="hangBrandPrice != null" >
+        #{hangBrandPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="surplusDiscount != null" >
+        #{surplusDiscount,jdbcType=DOUBLE},
+      </if>
+      <if test="previousDiscount != null" >
+        #{previousDiscount,jdbcType=DOUBLE},
+      </if>
+      <if test="oilStationCode != null" >
+        #{oilStationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="oilTypeCode != null" >
+        #{oilTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="oilCardPrice != null" >
+        #{oilCardPrice,jdbcType=DOUBLE}
+      </if>
+       <if test="oilCard != null" >
+        #{oilCard,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarOilwear" >
+    update t_car_oilwear
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="carNo != null" >
+        car_no = #{carNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oilSupplier != null" >
+        oil_supplier = #{oilSupplier,jdbcType=VARCHAR},
+      </if>
+      <if test="oilDate != null" >
+        oil_date = #{oilDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oilMl != null" >
+        oil_ml = #{oilMl,jdbcType=INTEGER},
+      </if>
+      <if test="oilType != null" >
+        oil_type = #{oilType,jdbcType=TINYINT},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="sumCost != null" >
+        sum_cost = #{sumCost,jdbcType=INTEGER},
+      </if>
+      <if test="realCost != null" >
+        real_cost = #{realCost,jdbcType=INTEGER},
+      </if>
+      <if test="costType != null" >
+        cost_type = #{costType,jdbcType=TINYINT},
+      </if>
+      <if test="oilstatName != null" >
+        oilstat_name = #{oilstatName,jdbcType=VARCHAR},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="discount != null" >
+	    discount=#{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="discountRate != null" >
+        discount_rate=#{discountRate,jdbcType=DOUBLE},
+      </if>
+      <if test="actualDiscountRate != null" >
+        actual_discount_rate=#{actualDiscountRate,jdbcType=DOUBLE},
+      </if>
+      <if test="hangBrandPrice != null" >
+        hang_brand_price=#{hangBrandPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="surplusDiscount != null" >
+        surplus_discount=#{surplusDiscount,jdbcType=DOUBLE},
+      </if>
+      <if test="previousDiscount != null" >
+        previous_discount=#{previousDiscount,jdbcType=DOUBLE},
+      </if>
+      <if test="oilStationCode != null" >
+        oil_station_code=#{oilStationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="oilTypeCode != null" >
+        oil_type_code=#{oilTypeCode,jdbcType=VARCHAR},
+      </if>
+       <if test="oilCardPrice != null" >
+        oil_card_price=#{oilCardPrice,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateCarOilwearList" parameterType="cn.com.liliyun.car.model.CarOilwear" >
+    update t_car_oilwear
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="carNo != null" >
+        car_no = #{carNo,jdbcType=VARCHAR},
+      </if>
+      <if test="oilSupplier != null" >
+        oil_supplier = #{oilSupplier,jdbcType=VARCHAR},
+      </if>
+      <if test="oilDate != null" >
+        oil_date = #{oilDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oilMl != null" >
+        oil_ml = #{oilMl,jdbcType=INTEGER},
+      </if>
+      <if test="oilType != null" >
+        oil_type = #{oilType,jdbcType=TINYINT},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="sumCost != null" >
+        sum_cost = #{sumCost,jdbcType=INTEGER},
+      </if>
+      <if test="costType != null" >
+        cost_type = #{costType,jdbcType=TINYINT},
+      </if>
+      <if test="oilstatName != null" >
+        oilstat_name = #{oilstatName,jdbcType=VARCHAR},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT}
+      </if>
+    </set>
+    where id  in (${ids})
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarOilwear" >
+    update t_car_oilwear
+    set car_id = #{carId,jdbcType=INTEGER},
+      oil_supplier = #{oilSupplier,jdbcType=VARCHAR},
+      oil_date = #{oilDate,jdbcType=TIMESTAMP},
+      oil_ml = #{oilMl,jdbcType=INTEGER},
+      oil_type = #{oilType,jdbcType=TINYINT},
+      cost = #{cost,jdbcType=DECIMAL},
+      sum_cost = #{sumCost,jdbcType=INTEGER},
+      cost_type = #{costType,jdbcType=TINYINT},
+      oilstat_name = #{oilstatName,jdbcType=VARCHAR},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <insert id="addCarOilwearBatch" useGeneratedKeys="true" parameterType="java.util.List">  
+    <selectKey resultType="long" keyProperty="id" order="AFTER">  
+        SELECT  
+        LAST_INSERT_ID()  
+    </selectKey>  
+	    insert into t_car_oilwear (oil_card,oil_type,oil_ml,cost,sum_cost,oil_date,discount,oilstat_name,
+	    actual_discount_rate,discount_rate,hang_brand_price,surplus_discount,previous_discount,oil_station_code,oil_type_code,car_id,car_no)   
+	    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.oilCard},#{item.oilType},#{item.oilMl},#{item.cost},#{item.sumCost},#{item.oilDate,jdbcType=TIMESTAMP},#{item.discount},
+        #{item.oilstatName},#{item.actualDiscountRate},#{item.discountRate},#{item.hangBrandPrice},#{item.surplusDiscount},#{item.previousDiscount},
+        #{item.oilStationCode},#{item.oilTypeCode},#{item.carId},#{item.carNo})  
+    </foreach>  
+</insert>  
+  
+  
+</mapper>

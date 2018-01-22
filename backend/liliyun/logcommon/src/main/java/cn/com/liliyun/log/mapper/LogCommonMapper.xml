@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.log.mapper.LogCommonMapper">
+	<resultMap id="BaseResultMap" type="cn.com.liliyun.log.model.LogCommon">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="menuid" property="menuid" jdbcType="INTEGER" />
+		<result column="schoolId" property="schoolId" jdbcType="INTEGER" />
+		<result column="menuname" property="menuname" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="action" property="action" jdbcType="TINYINT" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="userid" property="userid" jdbcType="VARCHAR" />
+		<result column="operatetime" property="operatetime" jdbcType="TIMESTAMP" />
+		
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="relateid" property="relateid" jdbcType="VARCHAR" />
+		<result column="tableid" property="tableid" jdbcType="INTEGER" />
+		<result column="relatetable" property="relatetable" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="detail" property="detail" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, menuid, menuname, url, action, username, userid,
+		operatetime,
+		 ip,
+		relateid, tableid, relatetable, status,
+		remark,schoolId,detail
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_log_common
+		where id = #{id,jdbcType=INTEGER}
+	 	and schoolId = #{schoolId} 
+	</select>
+
+	<select id="findBatch" resultMap="BaseResultMap" >
+		select
+				<include refid="Base_Column_List" />
+		from t_log_common
+			where 1=1
+			<trim suffixOverrides=",">
+				<if test="relatetable != null and relatetable != ''">
+					and relatetable = #{relatetable}
+				</if>
+				<if test="menuid != null and menuid != ''">
+					and menuid = #{menuId}
+				</if>
+				<if test="url != null and url != ''">
+					and url = #{url}
+				</if>
+				<if test="relateid != null and relateid != ''">
+					and relateid = #{relateid}
+				</if>
+			</trim>
+			order by operatetime desc
+			
+	</select>
+
+	<insert id="inertLogList"  parameterType="java.util.List">
+		insert into t_log_common (menuid, menuname, url, action, user_name, userid,
+			 ip, relateid, tableid, relatetable, status, remark,detail ) values
+		 <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+				(#{item.menuid},#{item.menuName},#{item.url},#{item.action},#{item.userName},
+				#{item.userid},#{item.ip},#{item.relateid},#{item.tableid},#{item.relatetable},#{item.status},#{item.remark},#{item.detail})
+		</foreach>
+	</insert>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		t_log_common where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="cn.com.liliyun.log.model.LogCommon">
+		insert into t_log_common (
+		menuid, menuname,
+		url, action, username,
+		userid, operatetime,
+		
+		ip, relateid, tableid,
+		relatetable, status, remark,detail
+		)
+		values
+		(#{menuid,jdbcType=INTEGER},
+		#{menuname,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{action,jdbcType=TINYINT}, #{username,jdbcType=VARCHAR},
+		#{userid,jdbcType=VARCHAR},
+		#{operatetime,jdbcType=TIMESTAMP}, 
+		#{ip,jdbcType=VARCHAR}, #{relateid,jdbcType=VARCHAR},
+		#{tableid,jdbcType=INTEGER},
+		#{relatetable,jdbcType=VARCHAR},
+		#{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR},
+		#{detail,jdbcType=VARCHAR})
+	</insert>
+
+	
+	<insert id="addOne" parameterType="cn.com.liliyun.log.model.LogCommon"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into t_log_common
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="menuId != null">
+				menu_id,
+			</if>
+			<if test="menuName != null">
+				menu_name,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="action != null">
+				action,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="operateTime != null">
+				operate_time,
+			</if>
+			
+			<if test="ip != null">
+				ip,
+			</if>
+			<if test="relateId != null">
+				relate_id,
+			</if>
+			<if test="tableId != null">
+				table_id,
+			</if>
+			<if test="relateTable != null">
+				relate_table,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="detail != null">
+				detail,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="menuId != null">
+				#{menuId,jdbcType=INTEGER},
+			</if>
+			<if test="menuName != null">
+				#{menuName,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="action != null">
+				#{action,jdbcType=TINYINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="operateTime != null">
+				#{operateTime,jdbcType=TIMESTAMP},
+			</if>
+			
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="relateId != null">
+				#{relateId,jdbcType=VARCHAR},
+			</if>
+			<if test="tableId != null">
+				#{tableId,jdbcType=INTEGER},
+			</if>
+			<if test="relateTable != null">
+				#{relateTable,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="detail != null">
+				#{detail,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+
+	<update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.log.model.LogCommon">
+		update t_log_common
+		<set>
+			<if test="menuId != null">
+				menu_id = #{menuId,jdbcType=INTEGER},
+			</if>
+			<if test="menuName != null">
+				menu_name = #{menuName,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="action != null">
+				action = #{action,jdbcType=TINYINT},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="operateTime != null">
+				operate_time = #{operateTime,jdbcType=TIMESTAMP},
+			</if>
+			
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="relateId != null">
+				relate_id = #{relateId,jdbcType=VARCHAR},
+			</if>
+			<if test="tableId != null">
+				table_id = #{tableId,jdbcType=INTEGER},
+			</if>
+			<if test="relateTable != null">
+				relate_table = #{relateTable,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="cn.com.liliyun.log.model.LogCommon">
+		update
+		t_log_common
+		set menu_id = #{menuId,jdbcType=INTEGER},
+		menu_name =
+		#{menuName,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR},
+		action =
+		#{action,jdbcType=TINYINT},
+		user_name = #{userName,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=VARCHAR},
+		operate_time =
+		#{operateTime,jdbcType=TIMESTAMP},
+		
+		ip = #{ip,jdbcType=VARCHAR},
+		relate_id =
+		#{relateId,jdbcType=VARCHAR},
+		table_id = #{tableId,jdbcType=INTEGER},
+		relate_table = #{relateTable,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=TINYINT},
+		remark = #{remark,jdbcType=VARCHAR}
+		where id
+		= #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

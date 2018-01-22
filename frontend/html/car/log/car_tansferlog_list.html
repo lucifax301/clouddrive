@@ -1,0 +1,206 @@
+<section id="thispage" privilege = "040902"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>教练车变更记录搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+
+			<div class="bjui-row col-4">
+				<label class="row-label">车牌号：</label>
+				<div class="row-input">
+					<input type="text" name="carno">
+				</div>
+				<label class="row-label">变更类型：</label>
+				<div class="row-input">
+					<select name="type" data-toggle="selectpicker" data-width="100%" >
+						<option value="">不限</option>
+						<option value="0">新增</option>
+						<option value="1">出售</option>
+						<option value="2">报废</option>
+						<option value="3">领用</option>
+						<option value="4">调动</option>
+						<option value="5">跨区调动</option>
+						<option value="6">捐赠</option>
+						<option value="7">被盗</option>
+						<option value="8">其他</option>
+					</select>
+				</div>
+				<label class="row-label">状态：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%" >
+						<option value="">不限</option>
+						<option value="0">在用</option>
+						<option value="1">停放</option>
+						<option value="2">待出售</option>
+						<option value="3">待报销</option>
+						<option value="4">已出售</option>
+						<option value="5">已报废</option>
+						<option value="6">捐赠</option>
+						<option value="7">被盗</option>
+						<option value="8">其他</option>
+					</select>
+				</div>
+				<label class="row-label">所属片区：</label>
+				<div class="row-input">
+					<select name="areaid" id="areaid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/area/list" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">操作时间：</label>
+	            <div class="row-input">
+	               	<input type="text" name="cstartTime" data-toggle="datepicker" placeholder="操作起始时间"> 
+	            </div>
+	            <label class="row-label">操作时间：</label>
+	            <div class="row-input">
+	                <input type="text" name="cendTime" data-toggle="datepicker" placeholder="操作截止时间"> 
+	            </div>
+				
+			</div>
+			<div class="text-center">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	
+	var car_log_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '教练车信息变更列表',
+		toolbarItem: '',
+		toolbarCustom: " <button class='btn-blue' style='' data-privilege='040902_datagrid-list_11' onclick='transferAppply()'>调动申请</button>",
+		paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+		height: '80%',
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'carbiz/listTransferlog',
+		columns: [
+			{ name: 'carno', label: '车牌号码', align: 'center' },
+			{ name: 'status', label: '状态', align: 'center', render: formatCarStatus },
+			{ name: 'areaName', label: '片区', align: 'center',render:formatAreaCell},	
+			{ name: 'name', label: '保管人', align: 'center' },
+			{ name: 'curAreaid', label: '调入片区', align: 'center',render:formatAreaCell },	
+			{ name: 'prename', label: '原负责人', align: 'center' },	
+			{ name: 'type', label: '变更类型', align: 'center', render: formatCarChangeType },
+			{ name: 'auditStatus', label: '办理状态', align: 'center' ,render:function(value){
+				switch(value) {
+					case 1:
+						return "申请中";
+					case 2:
+						return "已退办";
+					case 3:
+						return "已结束";
+					case 4:
+						return "已拒绝";
+				}
+			}},
+			{ name: 'curAuditName', label: '现处理人', align: 'center' },
+			{ name: 'curAuditAreaid', label: '现处理人片区', align: 'center',render:formatAreaCell },
+			{ name: 'cname', label: '申请人', align: 'center' },
+			{ name: 'ctime', label: '申请日期', align: 'center' },
+			{ name: 'changeOrNot', label: '是否换车', align: 'center',render:function(value){
+					return value==1?"是":"否";
+			}},
+			{ name: 'changeCarNo', label: '车牌号2', align: 'center' },
+			{ name: 'changeAreaId', label: '调出片区', align: 'center',render:formatAreaCell },
+			{ name: 'changeName', label: '原保管人', align: 'center' },
+			{ name: 'curChangeAreaId', label: '调入部门', align: 'center' ,render:formatAreaCell},
+//			{ name: 'cname', label: '操作人', align: 'center' },
+//			{ name: 'ctime', label: '操作时间', align: 'center' },
+			{
+				name: 'createdate',
+				label: '操作',
+				align: 'center',
+				render: function(value, data) {
+					var edit = "";
+//					if(data.status == 0) {
+//						if(data.modapplystat==2){
+						//edit = "<a href='###' class='btn-blue btn' data-privilege='050101_datagrid-list_12' onclick='market_apply_list.cancel(" + data.id + ")'>撤回</a>";
+//						}
+//					}
+					return "<a onclick='view(" + JSON.stringify(data) + ")' class='btn-blue btn' data-toggle='navtab' data-options='{id:\"menu-table\", title:\"标题\"}' >" + "查看" + "</a>" + "&nbsp;&nbsp;" + edit;
+
+				}
+
+			}	
+			
+		],
+
+	});
+	
+	function transferAppply(){
+		var table = $.CurrentNavtab.find('#datagrid-list');
+		BJUI.navtab({
+			id: 'log_apply_dialog',
+			width: 800,
+			height: 800,
+			url: 'html/car/log/car_transferlog_add.html',
+			title: '车辆调动申请',
+			onClose: function() {
+				table.datagrid('refresh', true);
+			},
+		})
+	}
+    
+    function view(info){
+    	var table = $.CurrentNavtab.find('#datagrid-list');
+		BJUI.navtab({
+			id: 'log-view',
+			width: 640,
+			height: 640,
+			url: 'html/car/log/log-view.html',
+			title: '车辆调动申请查看',
+			more: JSON.stringify(info),
+			onClose: function() {
+				table.datagrid('refresh', true);
+			}
+		})
+    }
+    
+	function formatCarStatus(value) {
+		switch(value) {
+			case 0:
+				return "在用";
+			case 1:
+				return "停放";
+			case 2:
+				return "待出售";
+			case 3:
+				return "待报废";
+			case 4:
+				return "已出售";
+			case 5:
+				return "已报废";
+			case 6:
+				return "捐赠";
+			case 7:
+				return "被盗";
+			case 8:
+				return "其他";
+		}
+	}
+
+	function formatCarChangeType(value) {
+		switch(value) {
+			case 0:
+				return "新增";
+			case 1:
+				return "出售";
+			case 2:
+				return "报废";
+			case 3:
+				return "领用";
+			case 4:
+				return "调动";
+			case 5:
+				return "跨区调动";
+			case 6:
+				return "捐赠";
+			case 7:
+				return "被盗";
+			case 8:
+				return "其他";
+		}
+	}
+</script>s

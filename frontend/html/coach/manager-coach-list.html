@@ -1,0 +1,96 @@
+
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var cid=clz.getWindowJson();
+	var manager_coach_list = {
+		list:$.CurrentDialog.find('#datagrid-list').datagrid({
+			gridTitle: '',
+			toolbarItem: 'none',
+			
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: false,
+			showToolbar: false,
+			dataUrl: config.openBasePath + 'coach/list?headcoachid='+cid,
+			columns: [
+				{name:'name',label:'教练姓名',align:'center'},
+				
+				{
+					name: 'mobile',
+					label: '手机号码',
+					align: 'center'
+				}, {
+					name: 'idcard',
+					label: '身份证号',
+					align: 'center'
+				}, {
+					name: 'areaid',
+					label: '片区',
+					align: 'center',
+					render:formatAreaCell
+				}, {
+					name: 'job',
+					label: '带教职务',
+					align: 'center'
+				}, {
+					name: 'teachcartype',
+					label: '带教车型',
+					align: 'center'
+				}, {
+					name: 'teachtype',
+					label: '带教类型',
+					align: 'center'
+				}, {
+					name: 'carno',
+					label: '教练车',
+					align: 'center'
+				}, {
+					name: 'curstudentload',
+					label: '负荷学员',
+					align: 'center'
+				}, {
+					name: 'employstatus',
+					label: '供职状态',
+					align: 'center',
+					render: employstatus_status
+				}, {
+					name: 'teachstate',
+					label: '带教状态',
+					align: 'center',
+					render: teachstate_status
+				}
+
+			],
+			keys: {
+				ctime: 'ctime',
+				mtime: 'mtime'
+			},
+			
+			})
+	}
+	
+	function employstatus_status(value) {
+		switch(value) {
+			case '0':
+				return "在职";
+			case '1':
+				return "离职";
+
+		}
+	}
+
+	function teachstate_status(value) {
+		switch(value) {
+			case 1:
+				return "正常分配";
+			case 2:
+				return "暂停分配";
+
+		}
+	}
+
+	
+</script>

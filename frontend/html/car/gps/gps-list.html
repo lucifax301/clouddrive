@@ -1,0 +1,71 @@
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" 
+    data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+    <fieldset>
+        <legend style="font-weight:normal;">学员搜索：</legend>
+          <div class="bjui-row col-4">
+            <label class="row-label">学员姓名：</label>
+            <div class="row-input">
+                <input type="text" name="name">
+            </div>
+            <label class="row-label">身份证号：</label>
+            <div class="row-input">
+                <input type="text" name="idcard">
+            </div>
+            <label class="row-label">流水编号：</label>
+            <div class="row-input">
+                <input type="text" name="flownum">
+            </div>
+            <label class="row-label">所属班别：</label>
+            <div class="row-input">
+                <select name="classid" data-toggle="selectpicker" data-width="100%"
+                        data-datajson="classlist" data-optiontype="id,name">
+                </select>
+            </div>
+            <label class="row-label">所属片区：</label>
+            <div class="row-input">
+                <select name="areaid" data-toggle="selectpicker" data-width="100%" 
+                    data-dataurl="/httpaccess/area/list" data-optiontype = "id,name">
+                </select>
+            </div>
+            <label class="row-label"></label>
+            <div class="row-input">
+                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var car_gps_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : 'GPS信息列表',
+        toolbarItem: 'add,|,edit,|,del',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'carbiz/gpslist',
+        columns: [
+            {name:'code',label:'资产编码',align:'center'},
+            {name:'cardno',label:'车牌号',align:'center'},
+            {name:'devicecode',label:'设备型号',align:'center'},
+            {name:'devicenum',label:'设备号码',align:'center'},
+            {name:'simcard',label:'SIM卡号',align:'center'}
+        ],
+        editMode: {dialog:{id:'dialog-gps-add', height : 400, mask:true, title:'GPS信息',onClose:function(){license_signup_list.datagrid('refresh',true)}}},
+        add_url : "html/car/gps/gps-add.html",
+        edit_url: "html/car/gps/gps-edit.html",
+        delUrl : config.openBasePath + 'gps/delete',
+		delPK : 'id',
+		afterSave:function() {
+			car_gps_list.datagrid('refresh',true);
+		},
+        beforeEdit : function() {
+            window.student_object = car_gps_list.data('selectedDatas')  == null ? null : car_gps_list.data('selectedDatas')[0];
+            return true;
+        },
+		afterDelete:function() {
+			car_gps_list.datagrid('refresh',true);
+		}
+    });
+</script>

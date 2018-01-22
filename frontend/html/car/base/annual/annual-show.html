@@ -1,0 +1,110 @@
+<div class="bjui-pageContent">
+    <div class="">
+       <form class="datagrid-edit-form" data-toggle="validate" id="show-form">
+			<input type="hidden" name="id">
+			<div style="background-color:#eee; padding:1px;"> </div>
+			<div class="bjui-row col-3">
+            <label class="row-label">行驶证年检有效期</label>
+            <div class="row-input ">
+                <input type="text" name="annualIndate" id="annualIndate"  disabled="true" data-rule="">
+            </div>
+            <label class="row-label">年检费用(元)</label>
+            <div class="row-input ">
+                <input type="text" name="annualCost" id="annualCost"  disabled="true" data-rule="">
+            </div>
+            <label class="row-label">报销日期</label>
+            <div class="row-input">
+                <input type="text" name="reimDate" id="reimDate" data-toggle="datepicker"  disabled="true" data-rule="">
+            </div>
+             <label class="row-label">环保分类标志</label>
+            <div class="row-input ">
+                <select name="ygSign" id="ygSign"  data-toggle="selectpicker" data-width="100%" disabled="true" data-rule="">
+                    <option value="1">黄标</option>
+                    <option value="2">绿标</option>
+                </select>
+            </div>
+            <label class="row-label">黄绿标费用(元)</label>
+            <div class="row-input ">
+                <input type="text" name="ygCost" id="ygCost"  disabled="true" data-rule="">
+            </div>
+            <label class="row-label">综检地点</label>
+            <div class="row-input ">
+                 <select name="detectAddress"  id="detectAddress" data-toggle="selectpicker" disabled="true"  data-width="100%" data-rule="">                        
+                      <option value="0">未知</option>
+                      <option value="1">华隆达</option>
+                      <option value="2">恒顺通</option>
+	              </select>
+            </div>
+            <label class="row-label">环保有效期</label>
+            <div class="row-input ">
+                <input type="text" name="rohsDate" id="rohsDate"  data-toggle="datepicker" disabled="true" data-rule="">
+            </div>  
+            <label class="row-label">综检费用(元)</label>
+            <div class="row-input ">
+                <input type="text" name="detectCost" id="detectCost"  disabled="true" data-rule="">
+            </div>            
+            <label class="row-label">综检报销日期</label>
+            <div class="row-input ">
+                <input type="text" name="dcostDate" id="dcostDate"  data-toggle="datepicker" disabled="true" data-rule="">
+            </div>
+            <label class="row-label">经办人</label>
+            <div class="row-input fill-2 ">
+                <input type="text" name="cname" id="cname"  disabled="true" data-rule="">
+            </div>
+            <label class="row-label">二级维护日期</label>
+            <div class="row-input ">
+                <input type="text" name="assertDate" id="assertDate"  data-toggle="datepicker" disabled="true" data-rule="">
+            </div>
+            <label class="row-label">备注</label>
+            <div class="row-input fill-2 ">
+                <input type="text" name="remark" id="remark"  disabled="true" data-rule="">
+            </div>
+       </div>
+     </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+    </ul>
+   </div>
+</div>
+<script type="text/javascript">	
+	BJUI.ajax('doajax', {
+              url: config.openBasePath + 'car/getCarAnnual?id=' + clz.getNavtab_more().id,
+              type: 'GET',
+              loadingmask: true,
+              okCallback: function(json, options) {
+                  console.log(json); 
+                  clz.CurrentDom_init({
+					current:'Navtab',
+                      form_name : 'show-form',
+                      data : json.result,    
+                      timetype:[
+									    		{
+										        name:'annualIndate',
+										        type:'yyyy-MM-dd'
+										      },
+										      {
+										        name:'reimDate',
+										        type:'yyyy-MM-dd'
+										      },
+										      {
+										        name:'rohsDate',
+										        type:'yyyy-MM-dd'
+										      },
+										      {
+										        name:'dcostDate',
+										        type:'yyyy-MM-dd'
+										      },
+										      {
+										        name:'assertDate',
+										        type:'yyyy-MM-dd'
+										      }
+									    ],
+									                     
+                  });                   
+              }
+    });
+</script>

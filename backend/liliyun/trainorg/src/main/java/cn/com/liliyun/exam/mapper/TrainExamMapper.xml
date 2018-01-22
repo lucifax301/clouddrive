@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.exam.mapper.TrainExamMapper">
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.TrainExam">
+    <id column="tableid" jdbcType="CHAR" property="tableid" />
+    <result column="itemcount" jdbcType="INTEGER" property="itemcount" />
+    <result column="okcount" jdbcType="INTEGER" property="okcount" />
+    <result column="failcount" jdbcType="INTEGER" property="failcount" />
+    <result column="subject" jdbcType="INTEGER" property="subject" />
+    <result column="areaid" jdbcType="INTEGER" property="areaid" />
+    <result column="storeid" jdbcType="INTEGER" property="storeid" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="cuid" jdbcType="INTEGER" property="cuid" />
+    <result column="cname" jdbcType="VARCHAR" property="cname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tableid, itemcount, okcount, failcount, subject, areaid, storeid, ctime, cuid, cname
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_trainexam
+    where tableid = #{tableid,jdbcType=CHAR}
+  </select>
+  <select id="selectList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_trainexam
+    <where>
+    	<if test="tableid != null and tableid != ''" >
+    	 and tableid = #{tableid,jdbcType=VARCHAR}
+    	</if>
+    	<if test="subject != null" >
+    	 and subject = #{subject,jdbcType=INTEGER}
+    	</if>
+    	<if test="stime != null and stime !=''" >
+       	 and ctime >= #{stime,jdbcType=INTEGER}
+	    </if>
+	    <if test="etime != null and etime !=''" >
+	     and date_add(#{etime,jdbcType=INTEGER},interval 1 day) > ctime
+	    </if>
+    </where>
+    order by ctime desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_trainexam
+    where tableid = #{tableid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.TrainExam">
+    insert into t_trainexam (tableid, itemcount, okcount, 
+      failcount, subject, areaid, 
+      storeid, ctime, cuid, 
+      cname)
+    values (#{tableid,jdbcType=CHAR}, #{itemcount,jdbcType=INTEGER}, #{okcount,jdbcType=INTEGER}, 
+      #{failcount,jdbcType=INTEGER}, #{subject,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, 
+      #{storeid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{cuid,jdbcType=INTEGER}, 
+      #{cname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.TrainExam">
+    insert into t_trainexam
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tableid != null">
+        tableid,
+      </if>
+      <if test="itemcount != null">
+        itemcount,
+      </if>
+      <if test="okcount != null">
+        okcount,
+      </if>
+      <if test="failcount != null">
+        failcount,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="areaid != null">
+        areaid,
+      </if>
+      <if test="storeid != null">
+        storeid,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+      <if test="cuid != null">
+        cuid,
+      </if>
+      <if test="cname != null">
+        cname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tableid != null">
+        #{tableid,jdbcType=CHAR},
+      </if>
+      <if test="itemcount != null">
+        #{itemcount,jdbcType=INTEGER},
+      </if>
+      <if test="okcount != null">
+        #{okcount,jdbcType=INTEGER},
+      </if>
+      <if test="failcount != null">
+        #{failcount,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null">
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null">
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null">
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null">
+        #{cname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.TrainExam">
+    update t_trainexam
+    <set>
+      <if test="itemcount != null">
+        itemcount = #{itemcount,jdbcType=INTEGER},
+      </if>
+      <if test="okcount != null">
+        okcount = #{okcount,jdbcType=INTEGER},
+      </if>
+      <if test="failcount != null">
+        failcount = #{failcount,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null">
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null">
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null">
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null">
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tableid = #{tableid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.TrainExam">
+    update t_trainexam
+    set itemcount = #{itemcount,jdbcType=INTEGER},
+      okcount = #{okcount,jdbcType=INTEGER},
+      failcount = #{failcount,jdbcType=INTEGER},
+      subject = #{subject,jdbcType=INTEGER},
+      areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR}
+    where tableid = #{tableid,jdbcType=CHAR}
+  </update>
+</mapper>

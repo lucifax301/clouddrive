@@ -1,0 +1,77 @@
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+    <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentDialog.find('#datagrid-list')}">
+        <fieldset>         
+           
+			<span>姓名：</span>
+            <input type="text" name="name" class="form-control" size="15">
+            <!--
+            	
+            
+            <span>学车阶段：</span>
+            <select></select>
+            
+            <span>学车状态：</span>
+            <select></select>
+			-->
+            <div class="btn-group">
+                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+
+<script type="text/javascript">
+		var acoachid= clz.getWindowJson();
+		
+        var assign_student_list = {
+        list:$.CurrentDialog.find('#datagrid-list').datagrid({
+        gridTitle : '学员列表',
+        toolbarItem: 'none',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '85%',
+        showCheckboxcol: false,
+        showToolbar: false,
+        dataUrl: config.openBasePath + 'student/stuofcoach?coachid='+acoachid,
+        columns: [
+            {name:'name',label:'学员姓名',align:'center'},
+            {name:'phone',label:'手机号码',align:'center'},
+            {name:'idcard',label:'身份证号',align:'center'},
+            {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+            {name:'storeid',label:'门店',align:'center',render:formatStoreCell},
+            {name:'applyexam',label:'学车状态',align:'center',render:formatSubject},
+			{name:'coachname',label:'教练姓名',align:'center'},
+			{name:'assigntime',label:'分配时间',align:'center'},
+			{name:'assignuser',label:'分配操作人',align:'center'}
+
+        ],
+        keys : {
+            ctime : 'ctime',
+            mtime : 'mtime'
+        },
+        
+
+    	})
+		}
+        
+	function formatSubject(value) {
+        switch (value) {
+            case 0 :
+            return "科目一培训";
+            case 1 :
+            return "科目一考试";
+            case 2 :
+            return "科目二培训";
+            case 3 :
+            return "科目二考试";
+            case 4 :
+            return "科目三培训";
+            case 5 :
+            return "科目三考试";
+            case 6 :
+            return "科目四培训";
+            case 7 :
+            return "科目四考试";
+        }
+    }
+</script>

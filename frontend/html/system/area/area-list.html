@@ -1,0 +1,74 @@
+<section id="thispage" privilege = "070303"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" 
+    data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+    <div class="widget-box">         
+            <div class="widget-title">
+            	<span class="icon"> <i class="fa fa-th"></i> </span>
+            	<h5>片区搜索</h5>
+            </div>   
+            <div class="widget-content nopadding">
+	          <div class="bjui-row col-4">
+	            <label class="row-label">片区名称：</label>
+	            <div class="row-input">
+	                <input type="text" name="name">
+	            </div>
+	            <label class="row-label">状态：</label>
+	            <div class="row-input">
+	                <select name="status" data-toggle="selectpicker" data-width="100%">
+	                    <option value="">全部</option>
+	                    <option value="0">启用</option>
+	                    <option value="1">停用</option>
+	                </select>
+	            </div>
+	            <label class="row-label"></label>
+	            <div class="row-input">
+	                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+	                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+	            </div>
+	        </div>
+	    </div>
+    </div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var system_area_list = 
+        $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+            gridTitle : '片区管理列表',
+            toolbarItem: 'add,|,edit,|,cancel,|,save,|,del',
+            paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+            height: '80%',
+            showCheckboxcol: true,
+            showToolbar: true,
+            dataUrl: config.openBasePath + 'area/listall',
+            columns: [
+                {name:'name',label:'片区名称',align:'center',rule:'required'},
+                {name:'areanum',label:'片区编号',align:'center',rule:'required'},
+                {name:'status',label:'片区状态',align:'center',type:'select',
+                    items:"[{'0':'启用'},{'1':'停用'}]"},
+                {name:'storecount',label:'片区门店数',align:'center',edit:false,add:false},
+                {name:'remark',label:'片区描述',align:'center'},
+                {name:'ctime',label:'创建时间',align:'center',edit:false,add:false},
+                {name:'mtime',label:'修改时间',align:'center',edit:false,add:false}
+            ],
+            keys : {
+                ctime : 'ctime',
+                mtime : 'mtime'
+            },
+            addLocation : 'first',
+            editUrl : config.openBasePath + 'area/edit',
+            delUrl : config.openBasePath + 'area/delete',
+    		delPK : 'id',
+    		afterSave:function(){
+    			system_area_list.datagrid('refresh',true);
+    			clz.getdictionary({name:'arealist',refresh:true,async:true})
+    			clz.getdictionary({name:'areaall',refresh:true,async:true})
+    			clz.getdictionary({name:'arealist_filter',refresh:true,async:true})
+    		},
+    		afterDelete:function(){
+    			system_area_list.datagrid('refresh',true);
+    			clz.getdictionary({name:'arealist',refresh:true,async:true})
+    			clz.getdictionary({name:'areaall',refresh:true,async:true})
+    			clz.getdictionary({name:'arealist_filter',refresh:true,async:true})
+    		}
+        });
+</script>

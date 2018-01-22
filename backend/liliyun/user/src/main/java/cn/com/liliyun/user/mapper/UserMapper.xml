@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.user.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.user.model.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="roleid" jdbcType="INTEGER" property="roleid" />
+    <result column="schoolid" jdbcType="INTEGER" property="schoolid" />
+    <result column="schoolname" jdbcType="VARCHAR" property="schoolname" />
+    <result column="issuper" jdbcType="TINYINT" property="issuper" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="mtime" jdbcType="TIMESTAMP" property="mtime" />
+    <result column="isdel" jdbcType="TINYINT" property="isdel" />
+    <result column="dblink" jdbcType="VARCHAR" property="dblink" />
+    <result column="areaid" jdbcType="INTEGER" property="areaid" />
+    <result column="areanum" jdbcType="VARCHAR" property="areanum" />
+    <result column="storenum" jdbcType="VARCHAR" property="storenum" />
+    <result column="storeid" jdbcType="INTEGER" property="storeid" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="isGroup" jdbcType="TINYINT" property="isGroup" />
+    <result column="isAdmin" jdbcType="TINYINT" property="isAdmin" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="roletype" jdbcType="TINYINT" property="roletype" />
+    <result column="rolename" jdbcType="VARCHAR" property="rolename" />
+    <result column="enable" jdbcType="TINYINT" property="enable" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="updator" jdbcType="VARCHAR" property="updator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deptid" jdbcType="INTEGER" property="deptid" />
+    <result column="deptflag" jdbcType="INTEGER" property="deptflag" />
+    <result column="staffid" jdbcType="INTEGER" property="staffid" />
+    <result column="rongtoken" jdbcType="VARCHAR" property="rongToken" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, realname, mobile, roleid, schoolid, schoolname, issuper, level, 
+    status, ctime, mtime, isdel, dblink, deptflag, deptid, areaid, storeid, areanum, storenum, staffid ,password,rongtoken
+  </sql> 
+  <sql id="ColumnWithUserRole_List">
+  	t1.id, t1.username, t1.realname, t1.mobile, t1.roleid, t1.schoolid, t1.schoolname, t1.issuper, t1.
+    status, t1.ctime, t1.mtime, t1.isdel, t1.dblink,
+    t2.level, t2.isGroup, t2.isAdmin, t2.pid, t2.rolename, t2.roletype, t2.enable, t2.remark, t2.creator, t2.updator,
+    t2.createTime, t2.updateTime,deptflag,deptid,areaid,storeid,t1.staffid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user where 1 = 1 
+     <if test="id != null">
+        and id = #{id}
+     </if>
+     <if test="dblink != null">
+        and dblink = #{dblink}
+     </if>
+     <if test="username != null and username != ''">
+        and username like concat(concat('%',#{username}),'%')
+     </if>
+     <if test="realname != null and realname != ''">
+        and realname like concat(concat('%',#{realname}),'%')
+     </if>
+     <if test="mobile != null">
+        and mobile = #{mobile}
+     </if>
+     <if test="status != null">
+        and status = #{status}
+     </if>
+     <if test="schoolid != null">
+        and schoolid = #{schoolid}
+     </if>
+     <choose>
+         <when test="orders != null and orders != ''">
+               order by ${orders}
+         </when>
+         <otherwise>
+               order by ctime desc
+         </otherwise>
+     </choose>
+  </select>
+  <select id="selectOne" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+  	<include refid="Base_Column_List" />
+    from t_user
+    <where>
+	     <if test="dblink != null">
+	        and dblink = #{dblink}
+	     </if>
+	     <if test="username != null">
+	        and username = #{username}
+	     </if>
+	     <if test="realname != null">
+	        and realname = #{realname}
+	     </if>
+	     <if test="password != null">
+	        and password = #{password}
+	     </if>
+	     <if test="mobile != null">
+	        and mobile = #{mobile}
+	     </if>
+	     <if test="status != null">
+	        and status = #{status}
+	     </if>
+	     <if test="staffid != null">
+	        and staffid = #{staffid}
+	     </if>
+	     <if test="id != null">
+	        and id = #{id,jdbcType=INTEGER}
+	     </if>
+     </where>
+     limit 1
+  </select>
+  <select id="selectLoginUser" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+  	 id, username, realname, mobile, roleid, schoolid, schoolname, issuper, level, 
+    status, ctime, mtime, isdel, dblink, deptflag, deptid, areaid, storeid
+    from t_user
+    <where>
+	     <if test="dblink != null">
+	        and dblink = #{dblink}
+	     </if>
+	     <if test="username != null">
+	        and username = #{username}
+	     </if>
+	     <if test="realname != null">
+	        and realname = #{realname}
+	     </if>
+	     <if test="password != null">
+	        and password = #{password}
+	     </if>
+	     <if test="mobile != null">
+	        and mobile = #{mobile}
+	     </if>
+	     <if test="status != null">
+	        and status = #{status}
+	     </if>
+	     <if test="id != null">
+	        and id = #{id,jdbcType=INTEGER}
+	     </if>
+     </where>
+     limit 1
+  </select>
+  <select id="selectRoleUser" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+  	<include refid="Base_Column_List" />
+    from t_user where roleid=#{roleid}  and dblink=#{dblink}
+  </select>
+  
+  <select id="selectMutiUser" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+  	<include refid="Base_Column_List" />
+    from t_user 
+    where id in
+    <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+				#{item}
+	</foreach> 
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.user.model.User">
+    delete from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.user.model.User">
+    insert into t_user (id, username, password, 
+      realname, mobile, roleid, 
+      schoolid, schoolname, issuper, 
+      status, ctime, isdel, 
+      dblink)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{realname,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{roleid,jdbcType=INTEGER}, 
+      #{schoolid,jdbcType=INTEGER}, #{schoolname,jdbcType=VARCHAR}, #{issuper,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=TINYINT}, 
+      #{dblink,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertBatch">
+    insert into t_user (id, username, password, 
+      realname, mobile, roleid, 
+      schoolid, schoolname, issuper, 
+      status, ctime, isdel, 
+      dblink)
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+    (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{realname,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{roleid,jdbcType=INTEGER}, 
+      #{schoolid,jdbcType=INTEGER}, #{schoolname,jdbcType=VARCHAR}, #{issuper,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=TINYINT}, 
+      #{dblink,jdbcType=VARCHAR})
+     </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.user.model.User"  useGeneratedKeys="true" keyProperty="id">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="realname != null">
+        realname,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="roleid != null">
+        roleid,
+      </if>
+      <if test="schoolid != null">
+        schoolid,
+      </if>
+      <if test="schoolname != null">
+        schoolname,
+      </if>
+      <if test="issuper != null">
+        issuper,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+      <if test="isdel != null">
+        isdel,
+      </if>
+      <if test="deptflag  != null">
+        deptflag ,
+      </if>
+      <if test="deptid  != null">
+        deptid ,
+      </if>
+      <if test="areaid  != null">
+        areaid ,
+      </if>
+      <if test="areanum  != null">
+        areanum ,
+      </if>
+      <if test="storeid  != null">
+        storeid ,
+      </if>
+      <if test="storenum  != null">
+        storenum ,
+      </if>
+      <if test="staffid  != null">
+        staffid ,
+      </if>
+      <if test="dblink != null">
+        dblink,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null">
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="schoolid != null">
+        #{schoolid,jdbcType=INTEGER},
+      </if>
+      <if test="schoolname != null">
+        #{schoolname,jdbcType=VARCHAR},
+      </if>
+      <if test="issuper != null">
+        #{issuper,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null">
+        #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="deptflag != null">
+        #{deptflag,jdbcType=TINYINT},
+      </if>
+      <if test="deptid != null">
+        #{deptid,jdbcType=TINYINT},
+      </if>
+      <if test="areaid != null">
+        #{areaid},
+      </if>
+      <if test="areanum != null">
+        #{areanum},
+      </if>
+      <if test="storeid != null">
+        #{storeid},
+      </if>
+      <if test="storenum != null">
+        #{storenum},
+      </if>
+      <if test="staffid  != null">
+      	#{staffid},
+      </if>
+      <if test="dblink != null">
+        #{dblink,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.user.model.User">
+    update t_user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null and password != ''">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null">
+        roleid = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="schoolid != null">
+        schoolid = #{schoolid,jdbcType=INTEGER},
+      </if>
+      <if test="schoolname != null">
+        schoolname = #{schoolname,jdbcType=VARCHAR},
+      </if>
+      <if test="issuper != null">
+        issuper = #{issuper,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null">
+        isdel = #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="areaid != null">
+        areaid = #{areaid},
+      </if>
+      <if test="areanum != null">
+        areanum = #{areanum},
+      </if>
+      <if test="storeid != null">
+        storeid = #{storeid},
+      </if>
+      <if test="storenum != null">
+        storenum = #{storenum},
+      </if>
+      <if test="deptflag != null">
+        deptflag = #{deptflag},
+      </if>
+      <if test="deptid != null">
+        deptid = #{deptid},
+      </if>
+      <if test="rongToken != null">
+        rongtoken = #{rongToken},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.user.model.User">
+    update t_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      roleid = #{roleid,jdbcType=INTEGER},
+      schoolid = #{schoolid,jdbcType=INTEGER},
+      schoolname = #{schoolname,jdbcType=VARCHAR},
+      issuper = #{issuper,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      isdel = #{isdel,jdbcType=TINYINT},
+      dblink = #{dblink,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+   
+  <update id="updatePwdByusername" parameterType="cn.com.liliyun.user.model.User">
+    update t_user set password = #{password,jdbcType=VARCHAR}
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+  
+  <!--  
+  <select id="selectOneWithRole" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+  	<include refid="ColumnWithUserRole_List" />
+    from t_user as t1 left join t_role as t2 on t1.roleid = t2.id 
+    where 1 = 1 
+     <if test="dblink != null">
+        and t1.dblink = #{dblink}
+     </if>
+     <if test="username != null">
+        and t1.username = #{username}
+     </if>
+     <if test="realname != null">
+        and t1.realname = #{realname}
+     </if>
+     <if test="password != null">
+        and t1.password = #{password}
+     </if>
+     <if test="mobile != null">
+        and t1.mobile = #{mobile}
+     </if>
+     <if test="status != null">
+        and t1.status = #{status}
+     </if>
+     <if test="id != null">
+        and t1.id = #{id,jdbcType=INTEGER}
+     </if>
+     limit 1
+  </select>
+  -->
+  
+  <!--  
+  <select id="selectListWithRole" parameterType="cn.com.liliyun.user.model.User" resultMap="BaseResultMap">
+    select 
+  	<include refid="ColumnWithUserRole_List" />
+    from t_user as t1 left join t_role as t2 on t1.roleid = t2.id 
+    where 1 = 1 
+     <if test="dblink != null">
+        and t1.dblink = #{dblink}
+     </if>
+     <if test="username != null and username!=''">
+        and t1.username = #{username}
+     </if>
+     <if test="realname != null and realname !=''">
+        and t1.realname = #{realname}
+     </if>
+     <if test="mobile != null and mobile !=''">
+        and t1.mobile = #{mobile}
+     </if>
+     <if test="status != null">
+        and t1.status = #{status}
+     </if>
+     <if test="id != null">
+        and t1.id = #{id,jdbcType=INTEGER}
+     </if>
+    order by t1.id desc
+  </select>
+  -->
+  
+  
+  
+  
+  <resultMap id="AppBaseResultMap" type="cn.com.liliyun.user.vo.UserVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="jobname" jdbcType="VARCHAR" property="jobname" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="roleid" jdbcType="INTEGER" property="roleid" />
+    <result column="schoolid" jdbcType="INTEGER" property="schoolid" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="schoolname" jdbcType="VARCHAR" property="schoolname" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="issuper" jdbcType="INTEGER" property="issuper" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="isdel" jdbcType="INTEGER" property="isdel" />
+    <result column="areaid" jdbcType="INTEGER" property="areaid" />
+    <result column="areanum" jdbcType="VARCHAR" property="areanum" />
+    <result column="storenum" jdbcType="VARCHAR" property="storenum" />
+    <result column="storeid" jdbcType="INTEGER" property="storeid" />
+    <result column="job" jdbcType="INTEGER" property="job" />
+    <result column="jobname" jdbcType="VARCHAR" property="jobname" />
+    <result column="deptid" jdbcType="INTEGER" property="deptid" />
+    <result column="deptname" jdbcType="VARCHAR" property="deptname" />
+    <result column="deptflag" jdbcType="INTEGER" property="deptflag" />
+    <result column="staffid" jdbcType="INTEGER" property="staffid" />
+  </resultMap>
+  
+  <sql id="App_Base_Column_List">
+	  	id,username,realname,jobname,mobile,roleid,schoolid,sex,schoolname,issuper,status,
+	  isdel,areaid,areanum,storenum,storeid,job,jobname,deptid,deptname,deptflag,staffid
+  </sql> 
+  
+  <select id="selectAppUser" parameterType="cn.com.liliyun.user.model.User" resultMap="AppBaseResultMap">
+    select 
+      u.id,u.username,u.realname,u.mobile,u.roleid,u.schoolid,u.sex,u.schoolname,u.issuper,u.status,
+	  u.isdel,u.areaid,u.areanum,u.storenum,u.storeid,u.deptid,u.deptflag,u.staffid,
+  	  (select d.`name` from t_dept d where d.id=u.deptid) as deptname,
+	  s.job,
+	  s.photo,
+	  (select j.job from t_job_type j where j.id=s.job) as jobname
+    from t_user u LEFT JOIN  t_staff s on u.staffid=s.id
+    <where>
+	     <if test="username != null">
+	        and u.username = #{username}
+	     </if>
+	     <if test="password != null">
+	        and u.password = #{password}
+	     </if>
+	     <if test="mobile != null">
+	        and u.mobile = #{mobile}
+	     </if>
+	     <if test="status != null">
+	        and u.status = #{status}
+	     </if>
+	     <if test="id != null">
+	        and u.id = #{id,jdbcType=INTEGER}
+	     </if>
+     </where>
+     limit 1
+  </select>
+  
+</mapper>

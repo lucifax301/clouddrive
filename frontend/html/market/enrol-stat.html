@@ -1,0 +1,430 @@
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+	<div class="c-tabs-header">
+		<li class="active statli" data-tabs='id1'>按班别统计</li>
+		<li class="statli" data-tabs='id2'>按渠道统计</li>
+		
+	</div>
+	<div class="stat" id="stat_id1">
+		<form data-toggle="ajaxsearch" id="statform1">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-4">
+						
+						<label class="row-label">片区：</label>
+						<div class="row-input">
+							<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist" data-optiontype="id,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<label class="row-label"><input type="checkbox" name="showzero" value="1" checked="checked"/></label>
+						<div class="row-input fill-2">	
+							显示招生量为0的班型
+						</div>	
+						<br />
+						<label class="row-label">时间：</label>
+						<div class="row-input fill-2">
+							<div class="fl w-45"><input type="text" readonly="readonly" name="begindate" id="begindate1" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+							<div class="w-10 fl text-center">-</div>
+							<div class="fl w-45"><input type="text" readonly="readonly" name="enddate" id="enddate1" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+							
+			            </div>	
+						<label class="row-label">
+								<select onchange="changestatdate_id1(this.value)" class="w-100" id="quickdate">
+									<option value="today">本日</option>
+									<option value="week">本周</option>
+									<option value="month" selected="">本月</option>
+									<option value="1">1月</option>
+									<option value="2">2月</option>
+									<option value="3">3月</option>
+									<option value="4">4月</option>
+									<option value="5">5月</option>
+									<option value="6">6月</option>
+									<option value="7">7月</option>
+									<option value="8">8月</option>
+									<option value="9">9月</option>
+									<option value="10">10月</option>
+									<option value="11">11月</option>
+									<option value="12">12月</option>
+								</select>
+						</label>
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_stat_id1()">搜索</button>
+								<button type="button" onclick="resetstat1()" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_stat_id1_export()">导出</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+
+	<div class="stat" id="stat_id2" style="display:none">
+		<form data-toggle="ajaxsearch" id="statform2">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-5">
+						<label class="row-label">统计范围：</label>
+						<div class="row-input">
+							<select name="type" id="type" data-toggle="selectpicker" size="15" data-width="100%" >
+								<option value="1">按片区统计</option>
+								<option value="2">按门店统计</option>
+							</select>
+						</div>
+						
+						<label class="row-label">片区：</label>
+						<div class="row-input">
+							<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist" data-optiontype="id,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						
+						
+						<label class="row-label">时间：</label>
+						<div class="row-input fill-2">
+							<div class="fl w-45"><input type="text" readonly="readonly" name="begindate" id="begindate2" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+							<div class="w-10 fl text-center">-</div>
+							<div class="fl w-45"><input type="text" readonly="readonly" name="enddate" id="enddate2" data-toggle="datepicker" placeholder="点击选择日期" ></div>
+			            </div>
+			            <label class="row-label">
+								<select onchange="changestatdate_id2(this.value)" class="w-100" id="quickdate">
+									<option value="today">本日</option>
+									<option value="week">本周</option>
+									<option value="month" selected="">本月</option>
+									<option value="1">1月</option>
+									<option value="2">2月</option>
+									<option value="3">3月</option>
+									<option value="4">4月</option>
+									<option value="5">5月</option>
+									<option value="6">6月</option>
+									<option value="7">7月</option>
+									<option value="8">8月</option>
+									<option value="9">9月</option>
+									<option value="10">10月</option>
+									<option value="11">11月</option>
+									<option value="12">12月</option>
+								</select>
+						</label>
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_stat_id2()">搜索</button>
+								<button type="button" onclick="resetstat2()" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="enrol_stat_id2_export()">导出</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+
+	
+	
+</div>
+<div class="bjui-pageContent pr20" id="statinfo">
+
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	
+	function resetstat1(){
+		
+		$.CurrentNavtab.find("#stat_id1").find("#area").val('0');
+		$.CurrentNavtab.find("#stat_id1").find('#area').selectpicker('refresh')
+		$.CurrentNavtab.find("#stat_id1").find("#quickdate").val('month');
+		
+		eval("changestatdate_id1").apply(this,['month']);
+	}
+	
+	function resetstat2(){
+		
+		$.CurrentNavtab.find("#stat_id2").find("#area").val('0');
+		$.CurrentNavtab.find("#stat_id2").find('#area').selectpicker('refresh')
+		$.CurrentNavtab.find("#stat_id2").find("#quickdate").val('month');
+		
+		eval("changestatdate_id2").apply(this,['month']);
+	}
+	
+	$.CurrentNavtab.find(".statli").each(
+		function() {
+			$(this).bind("click", function() {
+				//alert($(this).attr("data-tabs"))
+				var idvalue = $(this).attr("data-tabs");
+				$.CurrentNavtab.find(".stat").each(
+					function() { $(this).css("display", "none") }
+				)
+				$.CurrentNavtab.find("#stat_" + idvalue).css("display", "");
+				eval("changestatdate_" + idvalue).apply(this,['month']);
+				eval("enrol_stat_" + idvalue).apply(this);
+				
+				
+			})
+		}
+	);
+
+	eval("changestatdate_id1").apply(this,['month']);
+	eval("enrol_stat_id1").apply(this);;
+
+	function enrol_stat_id1() {
+		
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/enrolstat/stat/class",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform1').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//student_apply_list.data=json.result.list;
+				var columnname= [];
+				var dataname1= [];
+				var dataname2= ['enrolindex','enrolsum','returnsum','realenrolsum','enrolrate','avgprice','outavgprice','highindex','highindexrate', 'highrate','c1','c2','c2rate'];
+				for(var i=0;i<json.result.header.length;i++){
+					columnname[i]=json.result.header[i].name;
+					dataname1[i]=json.result.header[i].id;
+				}
+				
+				
+				$('#testSelect option:selected') .val()
+				$.CurrentNavtab.find("#statinfo").html(renderClassStatTable(json.result.list,columnname,dataname1,dataname2))
+				//student_apply_list.list.datagrid('reload',{columns:[],data:student_apply_list.data})
+			}
+		})
+	}
+	
+	function renderClassStatTable(json, columns, dataname1,dataname2) {
+		var header = '<thead><tr>';
+		header=header+'<th align="center">' + "片区" + "</th>";
+		for(var i = 0; i < columns.length; i++) {
+			header = header + '<th align="center">' + columns[i] + "</th>"
+		}
+		header=header+'<th align="center">' + "招生指标" + "</th>";
+		header=header+'<th align="center">' + "招生小计" + "</th>";
+		header=header+'<th align="center">' + "退费人数" + "</th>";
+		header=header+'<th align="center">' + "实际招生" + "</th>";
+		header=header+'<th align="center">' + "招生完成率" + "</th>";
+		header=header+'<th align="center">' + "均价" + "</th>";
+		header=header+'<th align="center">' + "外地班均价" + "</th>";
+		
+		header=header+'<th align="center">' + "高端班指标" + "</th>";
+		header=header+'<th align="center">' + "高端班完成率" + "</th>";
+		header=header+'<th align="center">' + "高端班占比" + "</th>";
+		header=header+'<th align="center">' + "手动挡" + "</th>";
+		header=header+'<th align="center">' + "自动挡" + "</th>";
+		header=header+'<th align="center">' + "自动挡占比" + "</th>";
+		header = header + "</tr></thead>"
+		
+		var tablecontent = '';
+		for(var i = 0; i < json.length; i++) {
+			var trcontent = "<tr>";
+			var area=formatAreaCell(json[i]['areaid']);
+			if(!area)area="未知片区";
+			trcontent = trcontent + "<td align='center' >" +  area + "</td>";
+			for(var j = 0; j < dataname1.length; j++) {
+				
+			trcontent = trcontent + "<td align='center' >" + json[i]['cls_'+dataname1[j]]  + "</td>";
+			}
+			for(var j = 0; j < dataname2.length; j++) {
+			trcontent = trcontent + "<td align='center' >" + json[i][dataname2[j]]  + "</td>";
+			}
+			trcontent=trcontent+"</tr>";
+			tablecontent=tablecontent+trcontent;
+		}
+		tablecontent = header + tablecontent;
+		return "<table class='table table-bordered'>" + tablecontent + "</table>";
+	}
+	
+	function enrol_stat_id1_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/enrolstat/stat/class/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform1').serializeArray(),
+			
+		})
+	}
+
+	function enrol_stat_id2() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/enrolstat/stat/channel",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform2').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+				var columnname= [];
+				var dataname1= [];
+				var dataname2= ['enrolindex','enrolsum','returnsum','realenrolsum','highrate'];
+				for(var i=0;i<json.result.header.length;i++){
+					columnname[i]=json.result.header[i].channel;
+					dataname1[i]=json.result.header[i].id;
+				}	 
+				var type=$.CurrentNavtab.find("#type").val();
+				if(type==1){
+					$.CurrentNavtab.find("#statinfo").html(renderChannelStatTable(json.result.list,columnname,dataname1,dataname2))
+				}else{
+					$.CurrentNavtab.find("#statinfo").html(renderChannelStatTable2(json.result.list,columnname,dataname1,dataname2))
+				}
+				
+			}
+		})
+	}
+	
+	function renderChannelStatTable(json, columns, dataname1,dataname2) {
+		var header = '<thead><tr>';
+		header=header+'<th align="center">' + "片区" + "</th>";
+		for(var i = 0; i < columns.length; i++) {
+			header = header + '<th align="center">' + columns[i] + "</th>"
+		}
+		header=header+'<th align="center">' + "招生指标" + "</th>";
+		header=header+'<th align="center">' + "招生小计" + "</th>";
+		header=header+'<th align="center">' + "退费人数" + "</th>";
+		header=header+'<th align="center">' + "实际招生" + "</th>";
+		header=header+'<th align="center">' + "高端班占比" + "</th>";
+		
+		
+		header = header + "</tr></thead>"
+		
+		var tablecontent = '';
+		for(var i = 0; i < json.length; i++) {
+			var trcontent = "<tr>";
+			var area=formatAreaCell(json[i]['areaid']);
+			if(!area)area="未知片区";
+			trcontent = trcontent + "<td align='center' >" + area  + "</td>";
+			for(var j = 0; j < dataname1.length; j++) {
+				
+				var clsdata=json[i]['cls_'+dataname1[j]]?json[i]['cls_'+dataname1[j]] :0;
+				
+			trcontent = trcontent + "<td align='center' >" + clsdata  + "</td>";
+			}
+			for(var j = 0; j < dataname2.length; j++) {
+			trcontent = trcontent + "<td align='center' >" + json[i][dataname2[j]]  + "</td>";
+			}
+			trcontent=trcontent+"</tr>";
+			tablecontent=tablecontent+trcontent;
+		}
+		tablecontent = header + tablecontent;
+		return "<table class='table table-bordered'>" + tablecontent + "</table>";
+	}
+	
+	function renderChannelStatTable2(json, columns, dataname1,dataname2) {
+		var header = '<thead><tr>';
+		header=header+'<th align="center">' + "门店" + "</th>";
+		for(var i = 0; i < columns.length; i++) {
+			header = header + '<th align="center">' + columns[i] + "</th>"
+		}
+		header=header+'<th align="center">' + "招生指标" + "</th>";
+		header=header+'<th align="center">' + "招生小计" + "</th>";
+		header=header+'<th align="center">' + "退费人数" + "</th>";
+		header=header+'<th align="center">' + "实际招生" + "</th>";
+		header=header+'<th align="center">' + "高端班占比" + "</th>";
+		
+		
+		header = header + "</tr></thead>"
+		
+		var tablecontent = '';
+		for(var i = 0; i < json.length; i++) {
+			var trcontent = "<tr>";
+			var area=formatStoreCell(json[i]['storeid']);
+			//alert(json[i]['storeis'])
+			if(!area)area="未知门店";
+			trcontent = trcontent + "<td align='center' >" + area  + "</td>";
+			for(var j = 0; j < dataname1.length; j++) {
+				
+				var clsdata=json[i]['cls_'+dataname1[j]]?json[i]['cls_'+dataname1[j]] :0;
+				
+			trcontent = trcontent + "<td align='center' >" + clsdata  + "</td>";
+			}
+			for(var j = 0; j < dataname2.length; j++) {
+			trcontent = trcontent + "<td align='center' >" + json[i][dataname2[j]]  + "</td>";
+			}
+			trcontent=trcontent+"</tr>";
+			tablecontent=tablecontent+trcontent;
+		}
+		tablecontent = header + tablecontent;
+		return "<table class='table table-bordered'>" + tablecontent + "</table>";
+	}
+	function enrol_stat_id2_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/enrolstat/stat/channel/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform2').serializeArray(),
+			
+		})
+	}
+	
+	function changestatdate_id1(value){
+		if(value=='today'){
+			var now=new Date();
+			$.CurrentNavtab.find('#begindate1').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}) );
+			$.CurrentNavtab.find('#enddate1').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}));
+		}else if(value=='month'){
+			var now=new Date();
+			$.CurrentNavtab.find('#begindate1').val(clz.filter.time({date:now,type:'yyyy-MM-'})+"01" );
+			$.CurrentNavtab.find('#enddate1').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}));
+		}else if(value=='week'){
+			var now=new Date();
+			 
+			var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+			var nowDay = now.getDate(); //当前日 
+			var nowMonth = now.getMonth(); //当前月 
+			var nowYear = now.getFullYear(); //当前年 
+			var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
+			$.CurrentNavtab.find('#begindate1').val(clz.filter.time({date:weekStartDate,type:'yyyy-MM-dd'}));
+			$.CurrentNavtab.find('#enddate1').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}));
+		}else{
+			var now=new Date();
+			var nowDay = now.getDate(); //当前日 
+			var nowMonth = value-1; //当前月 
+			var nowYear = now.getFullYear(); //当前年 
+			var newday=new Date(nowYear, nowMonth, 1);
+			$.CurrentNavtab.find('#begindate1').val(clz.filter.time({date:newday,type:'yyyy-MM-dd'}));
+			$.CurrentNavtab.find('#enddate1').val(clz.filter.time({date:getMonthEndDate(nowYear,nowMonth),type:'yyyy-MM-dd'}));
+		}
+	}
+	
+	function changestatdate_id2(value){
+		if(value=='today'){
+			var now=new Date();
+			$.CurrentNavtab.find('#begindate2').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}) );
+			$.CurrentNavtab.find('#enddate2').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}));
+		}else if(value=='month'){
+			var now=new Date();
+			$.CurrentNavtab.find('#begindate2').val(clz.filter.time({date:now,type:'yyyy-MM-'})+"01" );
+			$.CurrentNavtab.find('#enddate2').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}));
+		}else if(value=='week'){
+			var now=new Date();
+			 
+			var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+			var nowDay = now.getDate(); //当前日 
+			var nowMonth = now.getMonth(); //当前月 
+			var nowYear = now.getFullYear(); //当前年 
+			var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
+			$.CurrentNavtab.find('#begindate2').val(clz.filter.time({date:weekStartDate,type:'yyyy-MM-dd'}));
+			$.CurrentNavtab.find('#enddate2').val(clz.filter.time({date:now,type:'yyyy-MM-dd'}));
+		}else{
+			var now=new Date();
+			var nowDay = now.getDate(); //当前日 
+			var nowMonth = value-1; //当前月 
+			var nowYear = now.getFullYear(); //当前年 
+			var newday=new Date(nowYear, nowMonth, 1);
+			$.CurrentNavtab.find('#begindate2').val(clz.filter.time({date:newday,type:'yyyy-MM-dd'}));
+			$.CurrentNavtab.find('#enddate2').val(clz.filter.time({date:getMonthEndDate(nowYear,nowMonth),type:'yyyy-MM-dd'}));
+		}
+	}
+	
+	
+	
+</script>

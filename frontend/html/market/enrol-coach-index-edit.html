@@ -1,0 +1,114 @@
+<section id="thispage" privilege = "050207"></section>
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="add-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教练招生指标设置</h5>
+			</div>
+			<div class="widget-content nopadding">
+        <div class="bjui-row col-4">
+			
+			
+			
+			<div class="bjui-row col-4">
+	            <label class="row-label">教练招生指标</label>
+	            <div class="row-input required">
+	                <input type="text" id="enrolindex"  name="enrolindex" data-width="100%" maxlength="3" data-rule="required;digits"
+                >
+	            </div>
+            
+	        	<label><button type="button" class="btn-blue btn" data-privilege='050207_datagrid-list_02' onclick="coach_enroll_add.savecsindex()" data-icon="save">修改</button></label>    
+			</div>
+			
+			<div class="bjui-row col-4">
+	            <label class="row-label"></label>
+	            <div class="row-input fill-2">
+	                修改招生指标，只修改当月及之后的月份招生指标，过往月份招生指标不会更改
+	            </div>
+            
+	        	    
+			</div>
+			
+			<div class="bjui-row col-4">
+				<div class="datagrid-wrap-b">
+				<table class="table table-bordered" style="font-size:15px" id="indextable">
+					<tr>
+						<td>时间</td><td>招生指标</td>
+					</tr>
+					
+				</table>
+				</div>
+			</div>
+        </div>
+		
+		</div></div>
+    </form>
+     
+</div>
+
+<script>
+var coach_enroll_add = {
+	init:clz.CurrentDom_init({
+		current:'Navtab',
+		form_name:'view-form',
+		url : config.openBasePath + 'student/assignCoach',
+		callback:function(data){
+				
+				BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/enrolindex/getcoach",
+                    loadingmask: true,
+					okCallback: function(json, options) {
+                        console.log(json.result)
+						var sdata=json.result.data;
+						if(sdata){
+							var text="";
+							for(var i=0;i<sdata.length;i++){
+								text=text+"<tr><td>"+sdata[i].year+"-"+sdata[i].month+"</td><td>"+ "<div class='row-input mt5 mb5 '><input type='text' class='clear-style' value='"+sdata[i].enrolindex+"' /></div>"+ "</td></tr>"
+							}
+							
+							var trl= $.CurrentNavtab.find("#indextable tr").length;
+							for (var i = trl-1; i >0; i--) {
+								console.log(i)
+								$.CurrentNavtab.find("#indextable tr").eq(i).remove();
+							}
+							
+							
+							$.CurrentNavtab.find("#indextable").append($(text));
+							$.CurrentNavtab.find("#indextable").trigger(BJUI.eventType.initUI)//重新渲染BJUI
+						}
+						$.CurrentNavtab.find("#enrolindex").val(json.result.enrolindex);
+                    }
+                })
+		}
+	}),
+	
+	
+	savecsindex(){
+		if($.CurrentNavtab.find('#add-form').isValid())
+		BJUI.alertmsg('confirm', '确认提交吗？', {
+			displayPosition:'middlecenter' ,
+            okCall: function() {
+				BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/enrolindex/editcoach",
+                    loadingmask: true,
+					data: $.CurrentNavtab.find("#add-form").serializeArray(),
+                    okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						BJUI.alertmsg('ok', '提交成功！', {})
+						BJUI.navtab('refresh')
+                    }
+                })
+			}
+		})
+		
+	}
+	
+}
+    
+  
+    
+
+	
+</script>
+    

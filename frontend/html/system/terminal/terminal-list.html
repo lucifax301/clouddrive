@@ -1,0 +1,226 @@
+<section id="thispage" privilege = "070306"></section>
+<div class="bjui-pageHeader">
+	<form id="search-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>终端搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					
+					<label class="row-label">片区：</label>
+
+					<div class="row-input">
+						<select name="areaid" id="areaid" data-toggle="selectpicker" size="15" data-width="100%" class="w-100" data-datajson="arealist" data-optiontype="id,name" >
+							
+						</select>
+					</div>
+					
+					<label class="row-label">设备编码：</label>
+					<div class="row-input">
+						<input type="text" name="code" class="form-control" data-width="100%" placeholder="请输入设备编码">
+					</div>
+					<label class="row-label">终端型号：</label>
+					<div class="row-input">
+						<input type="text" name="model" class="form-control" data-width="100%" placeholder="请输入终端型号">
+					</div>
+					<label class="row-label">IMEI：</label>
+					<div class="row-input">
+						<input type="text" name="imei" class="form-control" data-width="100%" placeholder="请输入IMEI">
+					</div>
+					
+					
+				</div>
+				<div class="text-center">
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					</div>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var terminal_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '终端列表',
+			toolbarItem: 'add,export',
+			
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'terminal/list?isdel=0',
+			columns: [{
+					name: 'code',
+					label: '设备编码',
+					align: 'center',
+					render: function(value, data) {
+						data.previous_tab = clz.getNavtab_privilege();
+						return "<a href='javascript:' onclick='terminal_list.view(" + JSON.stringify(data) + ")' >" + value + "</a>"
+					}
+				},
+				{
+					name: 'termtype',
+					label: '类型',
+					align: 'center',
+					render:function(value){
+						if(value==1){
+							return "车载计程计时终端";
+						}else if(value==2){
+							return "课堂教学计时终端";
+						}else {
+							return "模拟训练计时终端"
+						}
+					}
+				}, {
+					name: 'vender',
+					label: '生产厂家',
+					align: 'center'
+					
+				}, {
+					name: 'model',
+					label: '终端型号',
+					align: 'center'
+				}, {
+					name: 'imei',
+					label: 'IMEI 号/ MAC 地址',
+					align: 'center'
+					
+				}, {
+					name: 'sn',
+					label: '终端出厂序列号',
+					align: 'center'
+					 
+				},{
+					name: 'areaid',
+					label: '片区',
+					align: 'center',
+					render:formatAreaCell
+					 
+				},{
+					name: 'carno',
+					label: '绑定车辆车牌',
+					align: 'center'
+					 
+				},{
+					name: 'sim',
+					label: '绑定SIM卡号',
+					align: 'center'
+					 
+				},{
+					name: 'teachstate',
+					label: '操作',
+					align: 'center',
+					render: function(value,data){
+						var html="<button type='button' data-privilege='' data-privilege=’070306_datagrid-list_02' class='btn-blue vhide' onclick='terminal_list.edit("+JSON.stringify(data)+")'>编辑</button>";
+        
+        				html=html+'<button type="button" data-privilege="" data-privilege="070306_datagrid-list_03" class="btn-red vhide" onclick="terminal_list.del('+data.id+')">删除</button>';
+        				return html
+					}
+				}
+
+			],
+			keys: {
+				ctime: 'ctime',
+				mtime: 'mtime'
+			},
+			
+			add_url: "html/system/terminal/terminal-add.html",
+
+			editMode: {
+				navtab: {
+					id: 'staff-navtab',
+					title: '新增终端',
+					onClose: function() {
+						
+						terminal_list.list.datagrid('refresh', true);
+						BJUI.navtab('switchTab', terminal_list.curtab);
+					}
+				}
+			},
+			
+			delPK: 'id',
+			beforeEdit: function() {
+				return true;
+			},
+			afterSave: function() {
+				//coach_list.list.datagrid('refresh', true);
+				BJUI.navtab('refresh')
+			},
+			afterDelete: function() {
+				//coach_list.list.datagrid('refresh', true);
+				BJUI.navtab('refresh')
+			},
+			exportOption: {
+				type: "file",
+				options: {
+					url: config.openBasePath + "terminal/export",
+					data: $("#search-form").serializeArray()
+				}
+			}
+		}),
+		edit: function(staffinfo) {
+			
+			
+			BJUI.navtab({
+				id: 'terminal-edit-table' + staffinfo.id,
+				width: 900,
+				height: 800,
+				url: 'html/system/terminal/terminal-edit.html',
+				title: '修改终端',
+				more: JSON.stringify(staffinfo),
+				onClose: function() {
+					terminal_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', staffinfo.previous_tab)
+				}
+
+			})
+			
+		},
+		del: function(id){
+			BJUI.alertmsg('confirm', '确认删除此终端吗！', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/terminal/del?id=" + id,
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        //BJUI.navtab('refresh')
+                        terminal_list.list.datagrid('refresh', true);
+                    }
+                })
+            }
+        })
+		},
+
+		view: function(staffinfo) {
+			console.log(staffinfo)
+			
+				BJUI.navtab({
+					id: 'terminal-view-table' + staffinfo.id,
+					width: 900,
+					height: 800,
+					url: 'html/system/terminal/terminal-view.html',
+					title: '员工信息',
+					more: JSON.stringify(staffinfo),
+					onClose: function() {
+						terminal_list.list.datagrid('refresh', true);
+						BJUI.navtab('switchTab', terminal_list.curtab)
+					}
+	
+				})
+			
+			
+		}
+	}
+	
+			
+	
+</script>

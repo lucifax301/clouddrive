@@ -1,0 +1,208 @@
+<div class="bjui-pageContent">
+    <form id="add-form" data-toggle="validate">
+        <div class="bjui-row col-2">
+            <label class="row-label">变更类容：</label>
+            <div class="row-input required">
+                <select id="type" name="type" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="">请选择</option>
+                    <option value="0">考场</option>
+                    <option value="1">日期</option>
+                    <option value="2">时间</option>
+                    <option value="3">教练</option>
+                </select>
+            </div>
+            <label class="row-label">考核类型：</label>
+            <div class="row-input required">
+                <select name="reason" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="0">主观出错</option>
+                    <option value="1">客观出错</option>
+                </select>
+            </div>
+            <label class="row-label">证件号码：</label>
+            <div class="row-input required">
+                <input type="hidden" id="bizpk" name="bizpk">
+                <input type="hidden" id="studentid" name="studentid">
+                <input type="text" id="idcard" name="idcard" data-rule="required">
+            </div>
+            <label class="row-label">学员姓名：</label>
+            <div class="row-input">
+                <input type="text" id="name" name="name" readonly="true">
+            </div>
+            <label class="row-label">科目：</label>
+            <div class="row-input">
+                <input type="text" id="subject" readonly="true">
+            </div>
+            <label class="row-label">修改前：</label>
+            <div class="row-input">
+                <input type="text" id="beforeval" name="beforeval" readonly="true">
+            </div>
+            <div id="examarea_div" style="display: none">
+                <label class="row-label">修改后：</label>
+                <div class="row-input">
+                    <select id="examarea" data-toggle="selectpicker" data-width="100%" data-datajson="examarealist">
+                    </select>
+                </div>
+            </div>
+            <div id="examdate_div" style="display: none">
+                <label class="row-label">修改后：</label>
+                <div class="row-input">
+                    <input type="text" id="examdate" data-toggle="datepicker" data-pattern="yyyy-MM-dd">
+                </div>
+            </div>
+            <div id="examtime_div" style="display: none">
+                <label class="row-label">修改后：</label>
+                <div class="row-input">
+                    <input type="text" id="examtime" data-toggle="datepicker" data-pattern="HH:mm">
+                </div>
+            </div>
+            <div id="coach_div" style="display: none">
+                <label class="row-label">修改后：</label>
+                <div class="row-input">
+                    <input type="hidden" id="coachid" name="coachid">
+                    <input type="text" readonly="true" id="coachname" name="coachname" data-toggle="findgrid" data-options="{
+                    include: 'coachname:name,coachid:coachid',
+                    dialogOptions: {
+                        title:'查找教练',
+                        maxable : false
+                    },
+                    empty : false,
+                    gridOptions: {
+                        filterThead : true,
+                        height : '90%',
+                        tableWidth : '90%',
+                        dataUrl: config.openBasePath + 'coach/list?employstatus=0',
+                        columns: [
+                            {name:'name', label:'教练名称', width : '25%', align:'center'},
+                            {name:'idcard', label:'证件号码', width : '30%', align:'center'},
+                            {name:'mobile', label:'手机号码', width : '30%', align:'center'},
+                        ]
+                    }
+                }" placeholder="点放大镜按钮查找">
+                </div>
+            </div>
+            <div>
+                <label class="row-label">申请原因：</label>
+                <div class="row-input fill-2 required">
+                    <textarea name="remark" data-rule="length[~200];required" rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li>
+            <button type="submit" class="btn-blue" data-icon="save" onclick="studentexam.save()">保存</button>
+        </li>
+        <li>
+            <button type="button" class="btn-close" data-icon="close">取消</button>
+        </li>
+    </div>
+</div>
+<script>
+    var type;
+    var studentexam = {
+        save: function () {
+            var formData = $.CurrentDialog.find('#add-form').serializeArray();
+            var afterid,afterval;
+            if (type == 0) {
+                afterid = $.CurrentDialog.find('#examarea').val();
+                afterval = $.CurrentDialog.find('#examarea option:selected').text();
+            } else if (type == 1) {
+                afterval = $.CurrentDialog.find('#examdate').val();
+            } else if (type == 2) {
+                afterval = $.CurrentDialog.find('#examtime').val();
+            } else if (type == 3) {
+                afterid = $.CurrentDialog.find('#coachid').val();
+                afterval = $.CurrentDialog.find('#coachname').val();
+            }
+            formData.push({name : "afterid" ,value:afterid});
+            formData.push({name : "afterval" ,value:afterval});
+            if ($.CurrentDialog.find('#add-form').isValid()) {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'student/examApply',
+                    loadingmask: true,
+                    data: formData,
+                    okCallback: function (json, options) {
+                        BJUI.dialog('closeCurrent');
+                        license_studentexam_list.datagrid('refresh', true);
+                    }
+                });
+            }
+        },
+        hideAll : function() {
+            clz.hideRequired("examtime_div");
+            clz.hideRequired("examarea_div");
+            clz.hideRequired("examdate_div");
+            clz.hideRequired("coach_div");
+        }
+    };
+
+    $.CurrentDialog.find("#type").change(function () {
+        type = $.CurrentDialog.find("#type").val();
+        $.CurrentDialog.find("#studentid").val("");
+        $.CurrentDialog.find("#idcard").val("");
+        $.CurrentDialog.find("#name").val("");
+        $.CurrentDialog.find("#subject").val("");
+        $.CurrentDialog.find("#beforeval").val("");
+        if (type == 0) {
+            studentexam.hideAll();
+            clz.showRequired("examarea_div");
+        } else if (type == 1) {
+            studentexam.hideAll();
+            clz.showRequired("examdate_div");
+        } else if (type == 2) {
+            studentexam.hideAll();
+            clz.showRequired("examtime_div");
+        } else if (type == 3) {
+            studentexam.hideAll();
+            clz.showRequired("coach_div");
+        }
+    });
+    $(document).on("change", "[name='idcard']", function () {
+        if ($.trim($(this).val()) == "") {
+            return;
+        }
+        var type = $.CurrentDialog.find("#type").val();
+        if (type == "") {
+            BJUI.alertmsg('warn', '请先选择变更类容！');
+            $.CurrentDialog.find("#idcard").val("");
+            return false;
+        }
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'orderexam/get',
+            data: {idcard: $(this).val()},
+            type: 'GET',
+            okCallback: function (json, options) {
+                var student = json.result;
+                if (student == null) {
+                    BJUI.alertmsg('warn', '该学员不存在批复记录！');
+                    $.CurrentDialog.find("#studentid").val("");
+                    $.CurrentDialog.find("#idcard").val("");
+                    $.CurrentDialog.find("#name").val("");
+                    $.CurrentDialog.find("#subject").val("");
+                    $.CurrentDialog.find("#beforeval").val("");
+                    return false;
+                } else {
+                    $.CurrentDialog.find("#studentid").val(student.studentid);
+                        $.CurrentDialog.find("#bizpk").val(student.id);
+                        $.CurrentDialog.find("#name").val(student.name);
+                        $.CurrentDialog.find("#subject").val(clz.configRender({name: 'subjecttype', val: student.subject}));
+                        if (type == 0) {
+                            $.CurrentDialog.find("#beforeval").val(clz.configRender({name: 'examarealist', val: student.examplaceid,
+                                key: 'id',
+                                dataname: 'name'
+                            }));
+                        } else if (type == 1) {
+                        $.CurrentDialog.find("#beforeval").val(student.examdate.substring(0, 10));
+                    } else if (type == 2) {
+                        $.CurrentDialog.find("#beforeval").val(student.examtime);
+                    } else if (type == 3) {
+                        $.CurrentDialog.find("#beforeval").val(student.coachname);
+                    }
+                }
+            }
+        });
+    })
+</script>
+    

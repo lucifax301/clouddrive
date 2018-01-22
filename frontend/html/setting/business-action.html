@@ -1,0 +1,59 @@
+<section id="thispage" privilege = "070903"></section>
+<div>温馨提示：业务编号, 如 SPJLXG 审批教练修改 , SPXYXG 审批学员修改 SPXYZL 审批学员资料。</div>
+<table id="business-datagrid" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var business_action_list = {
+		list(){ 
+			$.CurrentNavtab.find('#business-datagrid').datagrid({
+				showToolbar: false,
+				paging: { pageSize: 200, selectPageSize: '200,500' },
+				columns: [
+					{ name: 'actionid', label: '业务URI', align: 'center' },
+					{ name: 'businessid', label: '审批业务', align: 'center',type: 'select',items: business_action_list.bindbusiness }
+					
+				],
+				
+				fieldSortable: false,
+				columnShowhide: false,
+				
+				columnMenu: false,
+				isTree: 'name',
+				contextMenuH: false,
+				height: '98%',
+				addLocation: 'first',
+				showToolbar: true,
+				toolbarItem: 'add,|,edit ,|,cancel,|, del,|, save',
+				treeOptions: {
+					key: 'id',
+					expandAll: true,
+					add: true
+				},
+				afterSave: function() {
+					
+					$.CurrentNavtab.find('#business-datagrid').datagrid('refresh', true)
+				},
+				afterDelete: function() {
+					$.CurrentNavtab.find('#business-datagrid').datagrid('refresh', true)
+				},
+				editUrl: config.openBasePath + 'actionBusiness/edit',
+				editType: 'POST',
+				delPK: 'id',
+				delUrl: config.openBasePath + 'actionBusiness/del',
+				dataUrl: config.openBasePath + 'actionBusiness/list'
+			})
+		},
+		bindbusiness() {
+			console.log(businessdata)
+			var items=new Array();
+			for(var i=0;i<businessdata.length;i++){
+				var data={};
+				data[businessdata[i].businessid]=businessdata[i].name+'-'+businessdata[i].businessid;
+				items.push(data);
+			}
+			console.log(items);
+			return items
+			//return [{ '1': '启用' }, { '0': '停用' }]
+		},
+	}
+	business_action_list.list();
+</script>

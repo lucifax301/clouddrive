@@ -1,0 +1,96 @@
+<section id="thispage" privilege = "040805"></section>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+		var insurance_cort_list = {
+			list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+	        gridTitle : '保险公司列表',
+	        toolbarItem: 'add',
+	        paging: false,
+	        height: '85%',
+//	        showCheckboxcol: true,
+	        showToolbar: true,
+	        dataUrl: config.openBasePath+'/insurancecorp/list',
+	        columns: [
+	            {name:'name',label:'保险公司',align:'center'},
+	            {name:'status',label:'状态',align:'center',render:function(value){return String(value)=='0'?'正常':'停用'}},
+	            {name:'op',label:'操作',align:'center',render:insuraceCorpOperation},
+	        ],
+	        editMode: {dialog:{width:'640',height:'400',title:'保险公司信息',mask:true,
+	        onClose: function() {
+					
+						insurance_cort_list.list.datagrid('refresh', true);
+					
+					}
+	        }},
+	        
+	        add_url :  'html/car/setting/insurance-corp-add.html',
+	        edit_url: 'html/car/setting/insurance-corp-edit.html',
+	        delUrl : config.openBasePath + '/insurancecorp/delete',
+			delPK : 'id',
+			afterSave:function(){
+				//BJUI.navtab('refresh')
+				insurance_cort_list.list.datagrid('refresh',true);
+			},
+			afterDelete:function(){
+				//BJUI.navtab('refresh')
+				insurance_cort_list.list.datagrid('refresh',true);
+			},
+			delPK : 'id'
+	        
+	
+	    }),
+		edit:function(data){
+			BJUI.dialog({
+					id: 'insurance-corp-edit',
+					width: 640,
+					height: 400,
+					url: 'html/car/setting/insurance-corp-edit.html',
+					title: '编辑保险公司',
+					onClose: function() {
+						insurance_cort_list.list.datagrid('refresh', true);
+					}
+
+				})
+		},
+	    delete:function(data){
+	    	BJUI.alertmsg('confirm', '确认删除该保险公司吗！', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + "/insurancecorp/del?id=" + data.id,
+	                    loadingmask: true,
+	                    okCallback: function(json, options) {
+	                        insurance_cort_list.list.datagrid('refresh',true);
+	                    }
+	                })
+	            }
+	        })
+	    },
+	
+	    handleUser: function (id,status) {
+	        var title = status == 1 ? "启用" : "停用";
+			var newstatus=status == 1 ? 0 : 1;
+	        BJUI.alertmsg('confirm', '确认' + title +'操作该保险公司！', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + "/insurancecorp/enable?id=" + id+'&status='+newstatus,
+	                    loadingmask: true,
+	                    okCallback: function(json, options) {
+	                        insurance_cort_list.list.datagrid('refresh',true);
+	                    }
+	                })
+	            }
+	        })
+	    }
+	}
+
+	function insuraceCorpOperation(value,data) {
+        var html;
+        if (data.status == 0) {
+            html = '<button type="button" data-privilege="040805_datagrid-list_09" class="btn-red vhide" onclick="insurance_cort_list.handleUser('+data.id+','+data.status+')">停用</button>'
+        } else {
+            html = '<button type="button" data-privilege="040805_datagrid-list_09" class="btn-green vhide" onclick="insurance_cort_list.handleUser('+data.id+','+data.status+')">启用</button>'
+        }
+        html=html+"<button class='btn btn-blue vhide' data-icon='edit' data-privilege='040805_datagrid-list_02' onclick='insurance_cort_list.edit("+JSON.stringify(data)+")'>编辑</button> <button class='btn btn-red vhide' data-icon='times' data-privilege='040805_datagrid-list_03' onclick='insurance_cort_list.delete("+JSON.stringify(data)+")'>删除</button>";
+        return html
+    }
+</script>

@@ -1,0 +1,194 @@
+<section id="thispage" privilege = "020204"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#transfer-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>学员搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">学员姓名：</label>
+				<div class="row-input">
+					<input type="text" name="name">
+				</div>
+				<label class="row-label">证件号码：</label>
+				<div class="row-input">
+					<input type="text" name="idcard">
+				</div>
+				<label class="row-label">资料移交方式：</label>
+				<div class="row-input">
+					<select name="filetransfertype" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="1">快递</option>
+						<option value="2">人工移交</option>
+					</select>
+				</div>
+				<label class="row-label">快递单号：</label>
+				<div class="row-input">
+					<input type="text" name="transferno">
+				</div>
+				<div style="margin-top: 5px;"></div>
+				<label class="row-label">转店类型：</label>
+				<div class="row-input">
+					<select name="isoutarea" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">片区内</option>
+						<option value="1">片区外</option>
+					</select>
+				</div>
+				<label class="row-label">原门店区域：</label>
+				<div class="row-input">
+					<select name="fromareaid" data-toggle="selectpicker" data-width="48.5%" data-dataurl="/httpaccess/area/list" data-optiontype="id,name" data-refurl="/httpaccess/store/listInJson?areaid={value}" data-nextselect="#fromstoreid">
+					</select>
+					<select name="fromstoreid" id="fromstoreid" data-toggle="selectpicker" data-width="48.5%">
+						<option value="">请选择</option>
+					</select>
+				</div>
+				<label class="row-label">审核状态：</label>
+				<div class="row-input">
+					<select name="state" data-toggle="selectpicker" data-width="100%">
+						<option value="" selected>全部</option>
+						<option value="1">待审核</option>
+						<option value="2">审核通过</option>
+						<option value="9">审核拒绝</option>
+					</select>
+				</div>
+
+			</div>
+
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="transfer-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var grid = $.CurrentNavtab.find('#transfer-list').datagrid({
+		gridTitle: '学员转店列表',
+		toolbarItem: '',
+		toolbarCustom: "<button class='btn-blue ml5' data-privilege='020204_datagrid-list_01' data-icon='plus' onclick='addTransfer()'>新增</button>",
+		paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+		height: '75%',
+		showCheckboxcol: false,
+		showToolbar: true,
+		dataUrl: config.openBasePath + 'transferStudent/list',
+		columns: [{
+				name: 'name',
+				label: '学员姓名',
+				align: 'center',
+				render: function(value, data) {
+					return "<a href='html/common/student/student-view.html' data-toggle='navtab' data-options='{id:\"student-view-table" + data.id + "\" , title:\"查看学员信息\"}' data-more='" + JSON.stringify(data) + "'>" + value + "</a>"
+				}
+			},
+//			{ name: 'studentNum', label: '学员编号', align: 'center' },
+			{ name: 'idcard', label: '证件号码', align: 'center' },
+			{ name: 'fromstoreid', label: '原门店', align: 'center', render: formatStoreCell },
+			{ name: 'fromstorenum', label: '原门店代码', align: 'center' },
+			{ name: 'cname', label: '申请人', align: 'center' },
+			{ name: 'ctime', label: '申请时间', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd hh:mm' }) } },
+			{ name: 'targetstoreid', label: '目标门店', align: 'center', render: formatStoreCell },
+			{ name: 'targetstorenum', label: '目标门店代码', align: 'center' },
+			{ name: 'filetransfertype', label: '资料移交方式', align: 'center', render: function(value) { return value == 1 ? '快递' : '人工移交' } },
+			{ name: 'transferno', label: '快递单号', align: 'center', render: function(value, data) { return data.filetransfertype == 1 ? value : '' } },
+			{ name: 'state', label: '审核状态', align: 'center', render: function(value) { return clz.filter.transferState(value) } },
+			{ name: 'reviewtime', label: '转店时间', align: 'center', render: function(value) { return value != '' ? clz.filter.time({ date: value, type: 'yyyy-MM-dd hh:mm' }) : '' } },
+			{ name: 'state', label: '操作', align: 'center', render: transferOp }
+		]
+	});
+
+	function transferOp(state, data) {
+		var morejson = {
+			id: data.id
+		};
+		morejson = JSON.stringify(morejson);
+		var html = "<button onclick='transferHandle(" + morejson + ",1)' type='button' class='btn-green'>查看</button>";
+		var reviewhtml = "<button data-privilege='020204_datagrid-list_11' onclick='transferHandle(" + morejson + ",2)' type='button' class='btn-blue vhide'>审核</button>";
+		var edithtml = "<button data-privilege='020204_datagrid-list_02' onclick='transferHandle(" + morejson + ",3)' type='button' class='btn-green vhide'>编辑</button>" +
+				"<button data-privilege='020204_datagrid-list_03' onclick='transferHandle(" + data.id + ",0)' type='button' class='btn-red vhide'>删除</button>"
+		if(state == 1) {
+			if (!window.config.userinfo.areaid || 
+					(data.isoutarea == 0 && !window.config.userinfo.storeid && window.config.userinfo.areaid == data.targetareaid)) {
+				//拥有最高数据权限
+				html += reviewhtml;
+				html += edithtml;
+			} else if ((!window.config.userinfo.storeid && window.config.userinfo.areaid == data.targetareaid) 
+							|| window.config.userinfo.storeid == data.targetstoreid) {
+				//拥有目标片区的片区数据权限
+				//拥有目标门店的门店数据权限
+				html += reviewhtml;
+			} else if ((!window.config.userinfo.storeid && window.config.userinfo.areaid == data.fromareaid)
+							|| window.config.userinfo.storeid == data.fromstoreid) {
+				//拥有来源片区的片区数据权限
+				//拥有来源门店的门店数据权限
+				html += edithtml;
+			} 
+		}
+		return html;
+	}
+
+	function transferHandle(morejson, op) {
+		var title = '',
+			url = '',
+			tapid = '';
+		switch(op) {
+			case 1:
+				title = '学员转店详情';
+				url = 'html/license/transfer/student-view.html';
+				tapid = 'transfer-detail-' + morejson.id;
+				break;
+			case 2:
+				title = '学员转店审核';
+				url = 'html/license/transfer/student-review.html';
+				tapid = 'transfer-review-' + morejson.id;
+				break;
+			case 3:
+				title = '学员转店编辑';
+				url = 'html/license/transfer/student-edit.html';
+				tapid = 'transfer-edit-' + morejson.id;
+				break;
+			default:
+				break;
+		}
+		if(op != 0) {
+			BJUI.navtab({
+				id: tapid,
+				url: url,
+				title: title,
+				onClose: function() {
+					grid.datagrid('reload', true);
+				},
+				more: morejson
+			})
+		} else {
+			BJUI.alertmsg('confirm', '确认删除该条记录？', {
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'transferStudent/update',
+						type: 'POST',
+						loadingmask: true,
+						data: 'id=' + morejson + '&state=0',
+						okCallback: function(json, options) {
+							grid.datagrid('reload', true);
+						}
+					});
+					BJUI.alertmsg('ok', '您已经成功删除该条记录！', {})
+				}
+			})
+		}
+	}
+
+	function addTransfer() {
+		BJUI.navtab({
+			id: 'transfer_add',
+			url: 'html/license/transfer/student-add.html',
+			title: '新增学员转店',
+			onClose: function() {
+				grid.datagrid('reload', true);
+			}
+		})
+	}
+</script>

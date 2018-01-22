@@ -1,0 +1,139 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>角色基础信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+        <div class="bjui-row col-4">
+			<label class="row-label">角色名称:</label>
+			<div class="row-input required">
+			<input type="text" name="rolename" id="rolename" size="20" data-rule="required">
+			</div>
+			
+			
+			<label class="row-label">状态:</label>
+			<div class="row-input">
+				<select name="enable" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                        <option value="0">启用</option>
+						<option value="1">停用</option>
+                </select>
+			</div>
+			
+			<br/>
+			
+            <label class="row-label">备注:</label>
+            <div class="row-input fill-2">
+						<textarea type="text" rows="2" name="remark" maxlength="300" placeholder="请输入备注"></textarea>
+					</div>
+            
+        </div>
+        </div>
+       </div>
+        
+		<div style="background-color:#eee; padding:5px;">
+			<p>角色权限</p>
+        </div>
+		
+        <div id="tree-container" class="ml30"></div>
+		<input type="hidden" name="id"/>
+    </form>
+     
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button" >
+    <ul>
+        <li><button type="button" id="actionbtn" class="btn-blue" data-icon="save" onclick="system_role_role_edit.savepauseapply()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+    </ul>
+    </div>
+</div>
+<script>
+	var roleinfo = clz.getNavtab_more();
+	var system_role_role_edit = {
+		init(){
+			clz.CurrentDom_init({
+		    	current:'Navtab',
+				form_name:'view-form',
+				data:roleinfo,
+				url : config.openBasePath + 'student/assignCoach',
+				callback: function(data) {
+					if(data.id==1){
+						//$.CurrentNavtab.find('#actionbtn').remove();
+					}
+				}
+			})
+			var privilege = [];
+			BJUI.ajax('doajax', {
+		        url: config.openBasePath +'privilege/getRole?id='+roleinfo.id,
+		        type : 'GET',
+		        async : false,
+		        loadingmask: true,
+		        okCallback: function(json) {
+		        	var data = json.result.privileges;
+		           	$.each(data,function(i,m){
+		           		m.checked = false;
+		           		if(!m.pid){
+		           			privilege.push(m)
+		           		}else{
+		           			privilege_each(data,m)
+		           		}
+		           	})
+		           	console.log(json)
+		        }
+		    });  
+			function privilege_each(data,thisjson){
+				$.each(data,function(i,m){
+					if(m.id == thisjson.pid){
+						if(m.children == null){m.children = []}
+						m.children.push(thisjson)
+					}
+				})
+			}
+		    $.CurrentNavtab.find('#tree-container').highCheckTree({
+		        data: privilege
+		    });
+		    function clickcheckbox(){
+		    	$.each($.CurrentNavtab.find('#tree-container').find('div.arrow.collapsed'),function(){
+		    		$.CurrentNavtab.find('#tree-container').find('div.arrow.collapsed').trigger("click");
+		    		clickcheckbox();
+		    		return
+		    	})
+		    }
+		    clickcheckbox()
+		},
+		savepauseapply(){
+			if($.CurrentNavtab.find('#view-form').isValid()){
+			var data = clz.parseForm($.CurrentNavtab.find('#view-form'));
+			data.privilegestr = '';
+			$.CurrentNavtab.find('#tree-container').find('div.checkbox.checked').each(function(){
+				var rel = $(this).parent('li').attr('rel');
+				data.privilegestr += rel+',';
+			});
+			$.CurrentNavtab.find('#tree-container').find('div.checkbox.half_checked').each(function(){
+				var rel = $(this).parent('li').attr('rel');
+				data.privilegestr += rel+',';
+			});
+			data.privilegestr = data.privilegestr.replaceAll("a","")
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + "/privilege/updateRole",
+				loadingmask: true,
+				data: data,
+				okCallback: function(json, options) {
+					//console.log(json.result.list)
+					//grid.datagrid('refresh',true);
+					BJUI.alertmsg('ok', '提交成功！', {})
+					BJUI.navtab('closeCurrentTab');
+				}
+			})
+			}
+		}
+	}
+system_role_role_edit.init()
+	
+	
+	
+</script>
+    

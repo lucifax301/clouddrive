@@ -1,0 +1,97 @@
+<div class="index-menu">
+	<div class="w1000 center  ">
+		<div class="col c6 topbar-col">
+			<h1 class="logo-wrap">
+				<a href="index.html">
+					<img src="ext/assets/images/website/logo-top.png" alt="喱喱驾培云">
+					<span class="z-fl"><span>喱喱驾培云</span></span>
+				</a>
+			</h1>
+		</div>
+		<div class="col c6 topbar-col">
+			<a href="register.html" class="top-zhuce fr">注册</a>
+			<a href="login.html" class="top-login fr mr20">登录</a>
+		</div>
+	</div>
+</div>
+<div class="container-wrap footer">
+	<div class="container row w1000">
+        
+        <div class="col c4 footer-links">
+            <p class="foot-subtit">更多产品</p>
+            <li><a title="喱喱学车" target="_blank" href="http://www.lilixc.com/">喱喱学车</a></li>
+            <li><a title="喱喱教练" target="_blank" href="http://www.lilixc.com/">喱喱教练</a></li>
+        </div>
+        <!--<div class="col c3 footer-links">
+            <p class="foot-subtit">友情链接</p>
+            <a title="城投集团" target="_blank" href="http://www.shenchengtou.com/">城投集团</a>
+            <a title="中国电信" ="_blank" href="http://www.gdsgxy.com/">中国电信</a>
+            <a title="深港驾校" target="_blank" href="http://www.caronline.cn/">深港驾校</a>
+            <a title="广仁驾校" target="_blank" href="http://www.grjx.cn/">广仁驾校</a>
+        </div>-->
+        <div class="col c4 footer-links">
+            <p class="foot-subtit">协议声明</p>
+            <li><a title="支付协议" target="_blank" href="#">支付协议</a></li>
+            <li><a title="法律声明" target="_blank" href="http://www.lilixc.com/infShow.html?type=4">法律声明</a></li>
+        </div>
+        <div class="col c4 footer-contact">
+            <p class="foot-subtit">联系方式</p>
+            <p class="foot-line">400-666-6666</p>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:30px;" class="container row">
+    	<div class="logo-wrap logo-footer f12 lh20" style="display:inline-block; margin-bottom:0;color: #ffffff;">
+    		深圳市车厘子网络科技有限公司<br>
+			<a href="http://www.miibeian.gov.cn/" target="_blank" >
+				<span style="font-size:14px; margin-left:10px;color: #FFFFFF;line-height: 20px;">©2016 liliyun.com.cn All Rights Reserved. 粤ICP备15101713号-2
+			</a>
+		</div>
+    </div>
+</div>
+<script>
+	var new_top,old_top=0,down_flag=true;
+	var getScrollTop =  function(){
+		var y;
+		if(document.body.scrollTop){ //非标准写法,chrome能识别
+			y=document.body.scrollTop;
+		}
+		else{ //标准写法
+			y=document.documentElement.scrollTop;
+		}
+		return y;
+	};
+	$(window).bind('scroll',function(){
+		new_top = getScrollTop();
+		if (new_top-old_top > 0 && down_flag) {
+			$('.index-menu').animate({'top' : -65},100);
+			$('.nav-ation ul').slideUp(100);
+			down_flag = false;
+		}else if(new_top == 0){
+			$('.index-menu').animate({'top' : 0},100);
+			down_flag = true;
+		}
+		old_top = new_top;
+	});
+	//获取url判断
+	function btnInit(){
+		var nowurl = location.href;
+		var nowurlSplit = nowurl.split('/');
+		var linkurl = nowurlSplit[nowurlSplit.length-1];
+		if(linkurl == 'login.html'){
+			$('.top-zhuce').show();
+			$('.top-login').hide();
+		}
+		if(linkurl == 'register.html') {
+			$('.top-login').show();
+			$('.top-zhuce').hide();
+		}
+		if(linkurl == 'forgetpwd.html'){
+			$('.top-login').show();
+			$('.top-zhuce').hide();
+		} else {
+			$('.top-login').show();
+			$('.top-zhuce').show();
+		}
+	}
+	btnInit();
+</script>

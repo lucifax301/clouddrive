@@ -1,0 +1,183 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+		<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>新增代收费用</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+					<input type="hidden" name="id"/>
+					<label class="row-label">代收类别：</label>
+					<div class="row-input required">
+						<select name="chargetype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value>请选择</option>
+							<option value="1">代收陪驾费</option>
+							<option value="2">代收学员费用</option>
+						</select>
+					</div>
+					<label class="row-label">代收人：</label>
+					<div class="row-input required">
+						<input type="text" name="charger" data-rule="required">
+					</div>
+					<br>
+					<label class="row-label">代收金额：</label>
+					<div class="row-input required">
+						<input type="text" name="total" data-rule="required;number">
+					</div>
+					<label class="row-label">代收日期：</label>
+					<div class="row-input required">
+						<input name="chargedate" type="text" data-toggle="datepicker" data-rule="required;date">
+					</div>
+					<br>
+					<label class="row-label">现金金额：</label>
+					<div class="row-input">
+						<input type="text" name="cashmoney" data-rule="number">
+					</div>
+					<br>
+					<label class="row-label">Pos机号：</label>
+					<div class="row-input">
+						<select name="posid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/pos/financePosALL" data-optiontype="id,posnum">
+						</select>
+					</div>
+					<label class="row-label">刷卡金额：</label>
+					<div class="row-input">
+						<input type="text" name="cardmoney" data-rule="number">
+					</div>
+					<br>
+					<label class="row-label">学员姓名：</label>
+					<div class="row-input required">
+						<input type="hidden" name="studentid" />
+						<input type="text" name="name" data-rule="required">
+					</div>
+					<label class="row-label">身份证号：</label>
+					<div class="row-input required">
+						<input type="text" name="idcard" data-rule="required">
+					</div>
+					<br>
+					<label class="row-label">班别：</label>
+					<div class="row-input required">
+						<input type="text" name="classinfo" data-rule="required">
+					</div>
+					<label class="row-label">车型：</label>
+					<div class="row-input required">
+						<input type="text" name="traintype" data-rule="required">
+					</div>
+					<br>
+					<label class="row-label">散学学时：</label>
+					<div class="row-input">
+						<input type="text" name="classhour" data-rule="number">
+					</div>
+					<label class="row-label">发票类型：</label>
+					<div class="row-input required">
+						<select name="receipttype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value>请选择</option>
+							<option value="1">专票</option>
+							<option value="2">普票</option>
+						</select>
+					</div>
+					<br>
+					<label class="row-label">发票名称：</label>
+					<div class="row-input fill-2 required">
+						<input type="text" name="receiptname" data-rule="required">
+					</div>
+					<br>
+					<label class="row-label">备注：</label>
+					<div class="row-input fill-2">
+						<textarea type="text" name="remark" data-rule=""></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="finance_subcharge_edit.save()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+	</div>
+</div>
+<script type="text/javascript">
+	var finance_subcharge_edit = {
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				url: config.openBasePath + '/financeSubcharge/update',
+				form_name: 'edit-form',
+				data: clz.getNavtab_more(),
+				timetype:[
+					{name:'chargedate',type:'yyyy-MM-dd'},
+				]
+			})
+		},
+		selectStudent: function() {
+			var name = $.CurrentNavtab.find('input[name="name"]').val();
+	        BJUI.ajax('doajax', {
+	            url: config.openBasePath + 'student/list',
+	            data : {name : name},
+	            type : 'GET',
+	            loadingmask: true,
+	            okCallback: function(json, options) {
+	            	var students = json.result.list;
+	                if (students.length == 0) {
+	                    $.CurrentNavtab.find('input[name="idcard"]').val("未知学员");
+	                } else {    
+	                	if (students.length > 1) {
+	        		        BJUI.findgrid({
+							    dialogOptions: {
+							    	title:'选择学员',
+							    	width: '700',
+						    		height: '400'
+							    },
+							    empty: '',
+							    gridOptions: {
+							    	showToolbar : false,
+							    	paging: {pageSize:10, selectPageSize:'20,50,100'},
+							        local: 'remote',
+							        height: '95%',
+							        dataUrl: config.openBasePath + '/student/list',
+							        postData: {name: name},
+							        columns: [
+							            {name:'name',label:'姓名',align:'center'},
+							            {name:'idcard',label:'身份证号',align:'center'},
+							            {name:'classid',label:'班别',align:'center',render:formatClassCell},
+							            {name:'traintype',label:'车型',align:'center'}
+							        ]
+							    },
+							    onSelect: function(data) {
+							    	$.CurrentNavtab.find('input[name=\'studentid\']').val(data.id);
+							    	$.CurrentNavtab.find('input[name=\'name\']').val(data.name);
+							    	$.CurrentNavtab.find('input[name=\'idcard\']').val(data.idcard);
+							    	$.CurrentNavtab.find('input[name=\'classinfo\']').val(formatClassCell(data.classid));
+							    	$.CurrentNavtab.find('input[name=\'traintype\']').val(data.traintype);
+							    	BJUI.dialog('closeCurrent');
+							    }
+							});
+	                	} else {
+	                		$.CurrentNavtab.find('input[name=\'studentid\']').val(students[0].id);
+					    	$.CurrentNavtab.find('input[name=\'name\']').val(students[0].name);
+					    	$.CurrentNavtab.find('input[name=\'idcard\']').val(students[0].idcard);
+					    	$.CurrentNavtab.find('input[name=\'classinfo\']').val(formatClassCell(students[0].classid));
+					    	$.CurrentNavtab.find('input[name=\'traintype\']').val(students[0].traintype);
+	                	}      
+	                }
+	            }
+	        });  
+		},
+		save: function() {
+			if($.CurrentNavtab.find('#edit-form').isValid()){
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'financeSubcharge/update',
+                    loadingmask: true,
+                    data :  $.CurrentNavtab.find('#edit-form').serializeArray(),
+                    okCallback: function(json, options) {
+                        BJUI.navtab('closeCurrentTab');
+                    }
+                });
+	        };
+		}
+	}
+			
+	finance_subcharge_edit.init();
+	//$.CurrentNavtab.find('input[name="name"]').attr("onchange","finance_subcharge_edit.selectStudent()");
+</script>

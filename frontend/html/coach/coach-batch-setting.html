@@ -1,0 +1,240 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		
+        <div class="bjui-row col-4" >	
+
+				<div class="row-label" style="width: 20px;margin-left: 30px;"><input type="checkbox" id="studentloadcheckbox" name="batchStudentload" value="0"></div>
+				<label class="row-label">负荷标准:</label>
+				<div class="row-input" >
+					<input type="text" name="studentload" id="studentload" data-rule="digits" maxlength="4" data-width="100%" placeholder="请输入负荷标准人数">
+				</div>
+				<br>
+	
+				<div class="row-label" style="width: 20px;margin-left: 30px;"><input  type="checkbox" id="teachtypeidcheckbox" name="batchTeachtypeid" value="0"></div>
+				<label class="row-label">带教类型:</label>
+				<div class="row-input"  >
+					<select name="teachtypeid" id="teachtype"    data-toggle="selectpicker" size="15"  data-dataurl="/httpaccess/coachSetting/listAvailTeachType" data-optiontype="id,type" data-width="100%" >
+						<option value="0">请选择</option>
+					</select>
+				</div>
+				<br>
+	
+				<div class="row-label" style="width: 20px;margin-left: 30px;"><input type="checkbox" name="batchClassinfoid" id="classgroupcheckbox" value="0" ></div>
+				<label class="row-label">带教班别:</label>
+				<div class="row-input f10" id="classgroup"  style="width: 400px;">
+				
+				</div>
+				<br>
+					
+				<div id="storegroupDiv">
+					<div class="row-label" style="width: 20px;margin-left: 30px;"><input type="checkbox" name="batchStoreid" id="storegroupcheckbox" value="0"></div>
+					<label class="row-label">关联门店:</label>
+					<div class="row-input" id="storegroup" style="width: 400px;">
+						未选择所属片区，无法选择关联门店哦
+					</div>
+				</div>
+				<br>
+				<div id="mainstoreidDiv">
+					<div class="row-label" style="width: 20px;margin-left: 30px;"><input type="checkbox" value="0" id="mainstoreidcheckbox" name="batchMainstoreid" onclick="mainstoreidcheckbox(this)"></div>
+					<label class="row-label">主要门店:</label>
+					<div class="row-input" style="width: 400px;">
+						<select name="mainstoreid" id="mainstoreid"  data-toggle="selectpicker" data-width="100">
+							<option value="0">请选择</option>
+	
+						</select>
+					</div>
+				</div>
+				<br>
+				
+				<div id="stepgroup">
+					<div class="row-label" style="width: 20px;margin-left: 30px;"><input type="checkbox" name="batchStep2areaid" id="step2groupcheckbox" value="0"></div>
+					<label class="row-label">科目二考场:</label>
+					<div class="row-input f10" id="step2group"  style="width: 400px;">
+	
+					</div>
+					<br>
+					<div class="row-label" style="width: 20px;margin-left: 30px;"><input type="checkbox" name="batchStep3areaid" id="step3groupcheckbox" value="0"></div>
+					<label class="row-label">科目三考场:</label>
+					<div class="row-input f10" id="step3group" style="width: 400px;" >
+				</div>
+				
+				</div>	
+        </div>
+        <div class="pl30 pr40">			
+			温馨提示：只有勾选的选项才能被更新，不需要修改的维度请勿录入，本次修改仅会修改录入新值得带教信息维度。
+		</div>
+		<input type="hidden" id="ids" name="ids"/>
+    </form>
+     
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		<li><button type="button" class="btn-default" data-icon="save" onclick="batchsetting()">保存</button></li>
+    </ul>
+</div>
+<script>
+
+	BJUI.ajax('doajax', {
+				url: config.openBasePath + "/examarea/listall",
+				loadingmask: true,
+				okCallback: function(json, options) {
+					//console.log(json.result.list)
+					if(json.result) {
+						var examarea2 = new Array();
+						var examarea3 = new Array();
+						for(var i = 0; i < json.result.length; i++) {
+							if(json.result[i].subject == 2) {
+								examarea2.push(json.result[i]);
+							} else if(json.result[i].subject == 3) {
+								examarea3.push(json.result[i]);
+							}
+						}
+						clz.output_checkbox({
+							data: examarea2, //数据格式 id name
+							domid: 'step2group', // 输出容器id
+							name: 'step2areaid', //checkbox 的name属性
+							place: 'CurrentDialog' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+						})
+						clz.output_checkbox({
+							data: examarea3, //数据格式 id name
+							domid: 'step3group', // 输出容器id
+							name: 'step3areaid', //checkbox 的name属性
+							place: 'CurrentDialog' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+						})
+					}
+				}
+	})
+	
+    var data=clz.getWindowJson();
+	var areaid=data[0].areaid;
+	var teachtypeid=data[0].teachtypeid;
+	var sameAreaidFlag=true;//判断所选片区是否在同一个片区标志
+	var sameTeachtypeFlag=true;//判断带教类型是否相同
+	for(var i=0;i<data.length;i++){//判断是否在同一个片区
+		var coach=data[i];
+		if(areaid!=coach.areaid){
+			sameAreaidFlag=false;
+			break;
+		}
+	}
+	for(var i=0;i<data.length;i++){
+		var coach=data[i];
+		if(teachtypeid!=coach.teachtypeid){
+			sameTeachtypeid=false;
+			break;
+		}
+	}
+	if(!sameAreaidFlag){
+		$("#storegroupDiv").hide();
+		$("#mainstoreidDiv").hide();
+	}
+	if(!sameTeachtypeFlag){
+		$("#stepgroup").hide();
+	}
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/class/list",
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						if(json.result&&json.result.list){
+							clz.output_checkbox({
+								data:json.result.list, //数据格式 id name
+								domid:'classgroup', // 输出容器id
+								name:'classinfoid', //checkbox 的name属性
+								place:'CurrentDialog' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+							})
+						}
+                    }
+     })
+	
+	if(areaid){
+	BJUI.ajax('doajax', {
+		url: config.openBasePath + "/store/list?areaid=" + areaid,
+		loadingmask: true,
+		okCallback: function(json, options) {
+			//console.log(json.result.list)
+			if(json.result && json.result.list) {
+
+				renderselect($.CurrentDialog.find('#mainstoreid'), json.result.list)
+
+				clz.output_checkbox({
+					data: json.result.list, //数据格式 id name
+					domid: 'storegroup', // 输出容器id
+					name: 'storeid', //checkbox 的name属性
+					place: 'CurrentDialog' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+				})
+				if(json.result.list == 0) {
+					$.CurrentDialog.find('#storegroup').html("没有可选择关联门店哦");
+				}
+				
+			}
+		}
+	});
+	}
+	
+	function batchsetting(){
+		if($.CurrentDialog.find('#view-form').isValid()){
+		var ids="";
+		$.each(data,function(j,n){
+			ids=ids+ n.coachid + ","	
+		})
+		if(ids!=""){
+			ids=ids.substr(0,ids.length-1);
+		}
+		console.log(ids);
+		$("#ids").val(ids);
+		//var data1 = clz.parseForm($.CurrentDialog.find("#view-form"));
+		var data1 = $.CurrentDialog.find("#view-form").serializeArray();
+		BJUI.alertmsg('confirm', '确认提交修改吗？', {
+			displayPosition:'middlecenter' ,
+            okCall: function() {
+				BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/coach/batchupdate",
+                    loadingmask: true,
+					data: data1,
+                    okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						BJUI.alertmsg('ok', '提交成功！', {})
+						BJUI.dialog('closeCurrent');
+						//grid.datagrid('refresh',true);
+                    }
+                })
+			}
+		})
+		}
+	}
+	
+	$("#studentloadcheckbox").click(function(){
+		changeCheckBoxValue(this);
+	});
+	$("#teachtypeidcheckbox").click(function(){
+		changeCheckBoxValue(this);
+	});
+	$("#classgroupcheckbox").click(function(){
+		changeCheckBoxValue(this);
+	});
+	$("#storegroupcheckbox").click(function(){
+		changeCheckBoxValue(this);
+	});
+	$("#mainstoreidcheckbox").click(function(){
+		changeCheckBoxValue(this);
+	});
+	$("#step2groupcheckbox").click(function(){
+		changeCheckBoxValue(this);
+	});
+	$("#step3groupcheckbox").click(function(){
+		changeCheckBoxValue(this);
+	});
+
+	function changeCheckBoxValue(e){
+		if($(e).is(':checked')){
+			$(e).val(1);	
+		}else{
+			$(e).val(0);
+		}
+	}
+	
+	
+</script>
+    

@@ -1,0 +1,96 @@
+<section id="thispage" privilege = "040806"></section>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+		var car_color_list = {
+			list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+	        gridTitle : '车身颜色列表',
+	        toolbarItem: 'add',
+	        paging: false,
+	        height: '85%',
+//	        showCheckboxcol: true,
+	        showToolbar: true,
+	        dataUrl: config.openBasePath+'/carcolor/list',
+	        columns: [
+	            {name:'name',label:'车身颜色',align:'center'},
+	            {name:'status',label:'状态',align:'center',render:function(value){return String(value)=='0'?'正常':'停用'}},
+	            {name:'op',label:'操作',align:'center',render:carcolorOperation},
+	        ],
+	        editMode: {dialog:{width:'640',height:'400',title:'车身颜色信息',mask:true,
+	        onClose: function() {
+					
+						car_color_list.list.datagrid('refresh', true);
+					
+					}
+	        }},
+	        
+	        add_url :  'html/car/setting/car-color-add.html',
+	        edit_url: 'html/car/setting/car-color-edit.html',
+	        delUrl : config.openBasePath + '/carcolor/delete',
+			delPK : 'id',
+			afterSave:function(){
+				//BJUI.navtab('refresh')
+				car_color_list.list.datagrid('refresh',true);
+			},
+			afterDelete:function(){
+				//BJUI.navtab('refresh')
+				car_color_list.list.datagrid('refresh',true);
+			},
+			delPK : 'id'
+	        
+	
+	    }),
+		edit:function(data){
+			BJUI.dialog({
+					id: 'reg-office-edit',
+					width: 640,
+					height: 400,
+					url: 'html/car/setting/car-color-edit.html',
+					title: '编辑车身颜色',
+					onClose: function() {
+						car_color_list.list.datagrid('refresh', true);
+					}
+
+				})
+		},
+	    delete:function(data){
+	    	BJUI.alertmsg('confirm', '确认删除该车身颜色吗！', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + "/carcolor/del?id=" + data.id,
+	                    loadingmask: true,
+	                    okCallback: function(json, options) {
+	                        car_color_list.list.datagrid('refresh',true);
+	                    }
+	                })
+	            }
+	        })
+	    },
+	
+	    handleUser: function (id,status) {
+	        var title = status == 1 ? "启用" : "停用";
+			var newstatus=status == 1 ? 0 : 1;
+	        BJUI.alertmsg('confirm', '确认' + title +'操作该登记机关！', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + "/carcolor/enable?id=" + id+'&status='+newstatus,
+	                    loadingmask: true,
+	                    okCallback: function(json, options) {
+	                        car_color_list.list.datagrid('refresh',true);
+	                    }
+	                })
+	            }
+	        })
+	    }
+	}
+
+	function carcolorOperation(value,data) {
+        var html;
+        if (data.status == 0) {
+            html = '<button type="button" data-privilege="040806_datagrid-list_09" class="btn-red vhide" onclick="car_color_list.handleUser('+data.id+','+data.status+')">停用</button>'
+        } else {
+            html = '<button type="button" data-privilege="040806_datagrid-list_09" class="btn-green vhide" onclick="car_color_list.handleUser('+data.id+','+data.status+')">启用</button>'
+        }
+        html=html+"<button class='btn btn-blue vhide' data-icon='edit' data-privilege='040806_datagrid-list_02' onclick='car_color_list.edit("+JSON.stringify(data)+")'>编辑</button> <button class='btn btn-red vhide' data-icon='times' data-privilege='040806_datagrid-list_03' onclick='car_color_list.delete("+JSON.stringify(data)+")'>删除</button>";
+        return html
+    }
+</script>

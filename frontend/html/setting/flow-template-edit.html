@@ -1,0 +1,239 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="edit-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>审批节点配置</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+
+					<div class="bjui-row col-4">
+						<label class="row-label">审批流名称:</label>
+						<div class="row-input required">
+							<input type="text" name="name" maxlength="16" data-rule="required">
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">审批业务:</label>
+						<div class="row-input required">
+							<select name="businessid" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/business/list" data-optiontype="businessid,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="widget-content nopadding">
+			<div class="y-comment mt20 mb20">
+				<div class="c-button-blue w200" onclick="ystep_edit.addnode()"><i class="fa fa-plus"></i>增加节点</div>
+				<div class="ystep-container ystep-lg ystep-blue">
+					<ul class="ystep-container-steps mt20">
+						<li class="ystep-step-done" data-container="body" data-toggle="popover" data-placement="top" data-title="" data-content="申请发起" data-trigger="hover" data-original-title="" title="">
+							<div class="hr"></div><span>申请发起</span></li>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="id" />
+	</form>
+
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<ul>
+			<li><button type="button" class="btn-blue" data-icon="save" onclick="ystep_edit.updatetemplate()">保存</button></li>
+			<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+
+		</ul>
+	</div>
+</div>
+<script>
+	var ystep_edit = {
+		firstnode: '<li class="ystep-step-done" data-container="body" data-toggle="popover" data-placement="top" data-title="" data-content="申请发起" data-trigger="hover" data-original-title="" title=""><div class="hr"></div><span>申请发起</span></li>',
+		initlist(json) {
+			var html = '';
+			this.data = json.data;
+			if(json.dom) {
+				this.dom = json.dom;
+			}
+			$.each(this.data, function(i, m) {
+				html += '<li class="ystep-step-done"  onclick="ystep_edit.clickrole(' + i + ')"><div class="hr"></div><span>' + (m.name ? m.name : '未选角色') + '</span><div class="remove" onclick="ystep_edit.remove(event,' + i + ')"></div></li>'
+			});
+			this.dom.html(this.firstnode + html)
+		},
+		clickrole(item){
+			BJUI.dialog({
+				id: 'test_dialog3',
+				url: 'html/setting/flow-template-check.html',
+				height:600,
+				width:700,
+				title: '选择角色',
+				onClose: function() {
+					var data = clz.getWindowJson();
+					console.log(data)
+					
+					for(var i=0;i<ystep_edit.data.length;i++){
+						if(ystep_edit.data[i].id==data.id){
+							BJUI.alertmsg('info', '此角色已经配置了', {})
+							return
+						}
+					}
+					
+					if(data.sstype==1){
+						ystep_edit.data[item].id = data.id;
+			    		ystep_edit.data[item].name = data.rolename;
+					}else{
+						ystep_edit.data[item].id = data.id;
+			    		ystep_edit.data[item].name = data.realname;
+					}
+					ystep_edit.data[item].sstype = data.sstype;
+
+			    	ystep_edit.refresh()
+				}
+			})
+		},
+		refresh() {
+			this.initlist({
+				data: this.data
+			})
+		},
+		remove(e, item) {
+			this.data.splice(item, 1);
+			ystep_edit.refresh()
+			e.cancelBubble = true;
+		},
+		addnode() {
+			this.data.push({})
+			ystep_edit.refresh()
+		},
+		updatetemplate() {
+			if($.CurrentNavtab.find('#edit-form').isValid()) {
+				var sdata = clz.parseForm($.CurrentNavtab.find("#edit-form"));
+
+				if(ystep_edit.data.length == 0) {
+					BJUI.alertmsg('warn', '至少配置一个审批节点！', {})
+					return;
+				}
+
+				console.log(JSON.stringify(ystep_edit.data))
+				for(var i = 0; i < ystep_edit.data.length; i++) {
+					if(!ystep_edit.data[i].id) {
+						BJUI.alertmsg('warn', '节点必须配置角色！', {})
+						return;
+					}
+				}
+
+				var rule = "";
+				for(var i = 0; i < ystep_edit.data.length; i++) {
+					rule = rule + ystep_edit.data[i].id
+					if(i < ystep_edit.data.length - 1) {
+						rule = rule + ",";
+					}
+				}
+
+				sdata.rule = rule;
+				BJUI.alertmsg('confirm', '确认修改审批模版吗？', {
+					okCall: function() {
+
+						BJUI.ajax('doajax', {
+							url: config.openBasePath + 'flowtemplate/update',
+							loadingmask: true,
+							data: sdata,
+							okCallback: function(json, options) {
+								BJUI.alertmsg('ok', '修改审批模版成功！', {})
+
+								BJUI.navtab('closeCurrentTab');
+								BJUI.navtab('switchTab', window.template_list_tab);
+							}
+						});
+					}
+				})
+			}
+		}
+	}
+	
+	var templateinfo = clz.getNavtab_more();
+	clz.CurrentDom_init({
+		form_name: 'edit-form',
+		current: 'Navtab',
+		data: templateinfo,
+		callback: function(data) {
+			curdata = data;
+			console.log(curdata)
+			var rules = curdata.rule.split(",");
+			var ruledata = new Array();
+//			var ids="";
+//			for(var i = 0; i < rules.length; i++) {
+//				var ruleone= rules[i].split(":");
+//				if(ruleone[1]=='1'){//role type
+//					
+//				}else{//user type
+//					if(ids.length>0){
+//						ids+=",";
+//					}
+//					ids+=ruleone[0];
+//				}
+//			}
+//			
+//			var userlist= loadSomeUser(ids);
+//			
+//			for(var i = 0; i < rules.length; i++) {
+//				var ruleone= rules[i].split(":");
+//				
+//				if(ruleone[1]=='1'){//role type
+//					ruledata.push({
+//						name: formatRoleCell(ruleone[0]),
+//						//id: rules[i]
+//						id: ruleone[0]
+//					})
+//				}else{
+//					
+//					for(var j=0;j<userlist.length;j++){
+//						
+//						if(userlist[j].id==ruleone[0]){
+//							ruledata.push({
+//								name: userlist[j].realname,
+//								//id: rules[i]
+//								id: ruleone[0]
+//							})
+//						}
+//					}
+//				}
+//			}
+//			
+			for(var i = 0; i < rules.length; i++) {
+				ruledata.push({
+								name: formatRoleCell(rules[i]),
+								id: rules[i]
+								
+							})
+			}
+			
+			ystep_edit.initlist({
+				dom: $.CurrentNavtab.find('.ystep-container-steps'),
+				data: ruledata
+			})
+		}
+	})
+	
+	function loadSomeUser(ids){
+		var userdata;
+		BJUI.ajax('doajax', {
+						url: config.openBasePath + "/user/listsome",
+						data: {
+							ids: ids
+						},
+						async:false,
+						okCallback: function(json, options) {
+							userdata=json.result.list
+						}
+					})
+		return userdata;
+	}
+</script>

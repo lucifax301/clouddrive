@@ -1,0 +1,74 @@
+
+<div class="h-100" style="">
+    <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#test-datagrid1')}">
+        <fieldset>         
+            <legend style="font-weight:normal;">用户搜索：</legend>   
+            <span>姓名：</span>
+            <input type="text" name="username" class="form-control" size="15">
+            <div class="btn-group">
+                <button type="submit" class="btn-green" data-icon="search">搜索</button>
+                <button type="reset" class="btn-orange" data-icon="times">重置</button>
+            </div>
+        </fieldset>
+    </form>
+<table id="test-datagrid1" class="table table-bordered"></table>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="save()">保存</button></li>
+    </ul>
+</div>
+<script>
+	var dialog = $.CurrentDialog.find('#test-datagrid1')
+	dialog.datagrid({ 
+		height: '400',
+		tableWidth:'100%',
+        gridTitle : '用户管理列表',
+        showToolbar: true,
+		filterThead : false,
+        toolbarItem: ' refresh',
+        showNoDataTip : false,
+        importOption : {type:"dialog", options:{url:'html/demo/upload.html', title:'上传文件' ,width:400, height:250,mask:true}},
+        exportOption : {type:"file", options:{url:"http://b-jui.com/demo/export"}},
+        editMode: {dialog:{width:'800',height:500,title:'用户信息',mask:true}},
+        edit_Url: 'html/demo/demo-edit.html',
+        add_Url:'html/demo/demo-add.html',//实现拆开新增和编辑窗口，如果需要将新增和编辑窗口拆开，则分别填写edit_Url和add_Url，如只需要用一个窗口，使用原本的editUrl
+		editType:'GET',//编辑方法的ajax请求type
+		afterSave:function(){//保存后执行事件
+			dialog.datagrid('refresh',true)//刷新
+		},
+		afterDelete:function(){//删除后执行事件
+			dialog.datagrid('refresh',true)//刷新
+		},
+		delUrl : config.openBasePath + 'user/delete',
+		delPK : 'id',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        showCheckboxcol: true,
+        //data:haha1,
+        dataUrl: config.openBasePath + 'user/list',
+        columns: [
+            {name:'username',label:'名称',align:'center',
+            	render:function(value, data){
+            		//要传的值，组装成对象
+            		var morejson = {
+	            		id:data.id 
+	            	}
+            		return "<a href='html/demo/demo-show.html?id=" + data.id + "' data-toggle='navtab' data-options='{id:\"menu-table" + 1+ "\", title:\"详情" + data.id + "\",fresh:true,force:true}' data-more='" + JSON.stringify(morejson) + "'>" + value + "</a>"
+            	}
+            },
+			{name:'realname',label:'真实名称',align:'center',},
+        ],
+     	editDialogOp:{width:500, height:300, mask:false}, 
+    })
+	function save(){
+		var data = dialog.data('selectedDatas');
+		if(!data){
+			 BJUI.alertmsg('error', '没有选中数据！', {})
+			 return
+		}
+		clz.setWindowJson(data);
+		BJUI.dialog('closeCurrent')
+	}
+</script>
+    
+

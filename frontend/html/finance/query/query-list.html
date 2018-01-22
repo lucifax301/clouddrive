@@ -1,0 +1,185 @@
+<section id="thispage" privilege = "060301"></section>
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxsearch"
+          data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span class="icon"> <i class="fa fa-th"></i> </span>
+                <h5>信息搜索</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <div class="bjui-row col-4">
+                    <label class="row-label">二级科目：</label>
+                    <div class="row-input">
+                        <select name="subject2" data-toggle="selectpicker" data-width="100%"
+                                data-dataurl="/httpaccess/financeSubject/list?level=2" data-optiontype="id,subject">
+                        </select>
+                    </div>
+                    <label class="row-label">批次号：</label>
+                    <div class="row-input">
+                        <input type="text" name="tableid">
+                    </div>
+                    <label class="row-label">姓名：</label>
+                    <div class="row-input">
+                        <input type="text" name="name">
+                    </div>
+                    <label class="row-label">身份证号：</label>
+                    <div class="row-input">
+                        <input type="text" name="idcard">
+                    </div>
+                    <label class="row-label">起始时间：</label>
+                    <div class="row-input">
+                        <input type="text" name="stime" data-toggle="datepicker" placeholder="审核起始时间">
+                    </div>
+                    <label class="row-label">结束时间：</label>
+                    <div class="row-input">
+                        <input type="text" name="etime" data-toggle="datepicker" placeholder="审核结束时间">
+                    </div>
+                    <label class="row-label"></label>
+                    <div class="row-input">
+                        <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+                        <button type="reset" class="btn-blue" data-icon="times">重置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <table id="datagrid-list" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+</div>
+<script type="text/javascript">
+    var finance_query_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+        gridTitle: '财务综合查询列表',
+        toolbarItem: '',
+        paging: {
+            pageSize: 15,
+            selectPageSize: '15,50,100,500'
+        },
+        height: '80%',
+        showCheckboxcol: true,
+        fieldSortable: false,
+        showToolbar: false,
+        dataUrl: config.openBasePath + 'financefee/listitem',
+        columns: [{
+            name: 'areaid',
+            label: '片区',
+            align: 'center',
+            render: formatAreaCell
+        }, {
+            name: 'storeid',
+            label: '门店',
+            align: 'center',
+            render: formatStoreCell
+        }, {
+            name: 'name',
+            label: '学员姓名',
+            align: 'center',
+            render: function (value, data) {
+                var postdata = {studentid: data.studentid};
+                return "<a href='html/finance/query/query-detail.html' data-toggle='navtab' data-options='{id:\"finance-fee-detail-table"
+                    + data.studentid + "\" , title:\"学员财务详情\"}' data-more='" + JSON.stringify(postdata) + "'>" + value + "</a>"
+            }
+        }, {
+            label: '二级科目',
+            name: 'subject2',
+            align: 'center',
+            render: formatSubjectCell
+        }, {
+            label: '开票日期',
+            name: 'billdate',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+        }, {
+            label: '票据号',
+            name: 'billnum',
+            align: 'center'
+        }, {
+            label: '票据类型',
+            name: 'billtype',
+            align: 'center',
+            render: function (value) {
+                switch (value) {
+                    case 0:
+                        return "A类";
+                    case 1:
+                        return "B类";
+                }
+            }
+        }, {
+            label: '金额',
+            name: 'money',
+            align: 'center'
+        }, {
+            name: 'checkstatus',
+            label: '审核状态',
+            align: 'center',
+            render: function (value) {
+                switch (value) {
+                    case 0:
+                        return "待审核";
+                    case 1:
+                        return "审核拒绝";
+                    case 2:
+                        return "审核通过";
+                    case 3:
+                        return "票据审核";
+                }
+            }
+        }, {
+            name: 'notenum',
+            label: '单号',
+            align: 'center'
+        }, {
+            label: '录入时间',
+            name: 'ctime',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+        }, {
+            name: 'cname',
+            label: '录入人',
+            align: 'center'
+        }, {
+            label: '审核时间',
+            name: 'checktime',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+        }, {
+            name: 'checkname',
+            label: '审核人',
+            align: 'center'
+        }, {
+            name: 'remark',
+            label: '备注',
+            align: 'center'
+        }, {
+            label: '收费员',
+            name: 'feename',
+            align: 'center'
+
+        }, {
+            label: '收费日期',
+            name: 'feetime',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+
+        }, {
+            name: 'mtime',
+            label: '修改日期',
+            align: 'center',
+            render: function (value) {
+                return clz.filter.time({date: value, type: 'yyyy-MM-dd'})
+            }
+        }, {
+            name: 'mname',
+            label: '修改人',
+            align: 'center'
+        }]
+    });
+</script>

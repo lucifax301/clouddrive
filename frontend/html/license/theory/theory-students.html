@@ -1,0 +1,65 @@
+<div class="bjui-pageContent">
+        <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentDialog.find('#theory-add-students')}">
+            <fieldset>
+                <span>姓名：</span>
+                <input type="text" name="name" size="20" placeholder="请输入学员姓名">
+                <span>证件号码：</span>
+                <input type="text" name="idcard" size="30" placeholder="请输入学员证件号码">
+                <div class="btn-group">
+                    <button type="submit" class="btn-blue" data-icon="search" style="margin-left:10px;">搜索</button>
+                    <button type="reset" class="btn-blue" data-icon="times" style="margin-left:10px;">重置</button>
+                </div>
+            </fieldset>
+        </form>
+        <table id="theory-add-students" class="table table-bordered"></table>
+    <div class="c-bottom-button mt30">
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="add_students()">确定</button></li>
+    </div>
+</div>
+
+        <script type="text/javascript">
+            var maxable = $.CurrentDialog.find('#theory-add-students').datagrid({
+                gridTitle : null,
+                height: '75%',
+                showCheckboxcol: true,
+                showEditbtnscol:false,
+                paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+                dataUrl:config.openBasePath + 'student/theoryStudents?theoryid=' + clz.getNavtab_more().id,
+                columns: [
+//                  {name:'stunum',label:'学员编号',align:'center'},
+                    {name:'name',label:'学员姓名',align:'center'},
+                    {name:'phone',label:'学员手机',align:'center'},
+                    {name:'sex',label:'性别',align:'center',render:function(value){return String(value)=='1'?'男':'女'}},
+                    {name:'idcard',label:'证件号码',align:'center'},
+//                  {name:'applyexam',label:'学车状态',align:'center',render:studentStatus}
+                ],
+                editMode:false
+            });
+
+            function add_students() {
+                var data = $.CurrentDialog.find('#theory-add-students').data('selectedDatas');
+                if (data  == null || data.length == 0) {
+                    BJUI.alertmsg('error', '没有选中任何学员！', {
+                    });
+                    return;
+                }
+                var students = new Array();
+                for (i=0; i<data.length; i++) {
+                    students.push('&ids=' + data[i].id);
+                }
+                var formData = new FormData();
+                formData.append('theoryId', clz.getNavtab_more().id);
+                formData.append('ids', students);
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'student/edit/theoryStudent',
+                    type: 'POST',
+                    loadingmask: true,
+                    data: 'theoryId=' + clz.getNavtab_more().id + students.toString().replaceAll(',',''),
+                    okCallback: function(json, options) {
+                        console.log('返回内容：\n'+ JSON.stringify(json));
+                        BJUI.dialog('closeCurrent');
+                    }
+                })
+            }
+        </script>

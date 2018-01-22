@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>年审记录查询</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+		            <div class="row-input">
+		                <select name="areaid" data-toggle="selectpicker" data-width="100%" 
+		                    data-dataurl="/httpaccess/area/list" data-optiontype = "id,name">
+		                </select>
+		            </div>
+		            <label class="row-label">科目：</label>
+					<div class="row-input">
+						<select name="teachSubject" data-toggle="selectpicker" data-width="100%">
+							<option value="0">科目二</option>
+							<option value="1">科目三</option>
+							<option value="2">长训</option>
+							<option value="3">全程</option>
+						</select>
+		           </div>
+		            <label class="row-label">油品：</label>
+		            <div class="row-input">
+		                <select name="fuel" data-toggle="selectpicker" data-width="100%">
+		                    <option value="" selected>全部</option>
+		                    <option value="0">0#</option>
+		                    <option value="1">90#</option>
+		                    <option value="2">92#</option>
+		                    <option value="3">93#</option>
+		                    <option value="4">95#</option>
+		                    <option value="5">97#</option>
+		                    <option value="6">98#</option>
+		                    <option value="7">电</option>
+		                </select>
+		            </div>
+		            <label class="row-label">时间：</label>
+		            <div class="row-input">
+		               	<input type="text" name="stime" data-toggle="datepicker" placeholder="起始时间"> 
+		            </div>
+		            <label class="row-label">时间：</label>
+		            <div class="row-input">
+		                <input type="text" name="etime" data-toggle="datepicker" placeholder="截止时间"> 
+		            </div>
+				 	<label class="row-label">车牌号码：</label>
+		            <div class="row-input">
+		                <input type="text" name="carNo" value="">
+		            </div>
+		            
+		      	</div>
+		            <div class="text-center">
+		                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		       		</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<table id="annual-datagrid" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+		var grid = $.CurrentNavtab.find('#annual-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: 'export',
+			toolbarCustom: "",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/car/getCarAnnualList',
+			columns: [{
+				name: 'carNo',
+				label: '车牌号',
+				align: 'center'
+			},{
+				name: 'annualIndate',
+				label: '行驶证有效期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'ygSign',
+				label: '环保分类标志',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '1' ? '黄标' : '绿标'
+				}
+			}, {
+				name: 'rohsDate',
+				label: '环保有效期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'annualCost',
+				label: '年检费用',
+				align: 'center'
+			}, {
+				name: 'reimDate',
+				label: '年检报销年月',
+				align: 'center',
+				render: function(value) {
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy-MM'
+					})
+				}
+			}, {
+				name: 'ygCost',
+				label: '黄绿标费用',
+				align: 'center'
+			}, {
+				name: 'dcostDate',
+				label: '综检报销年月',
+				align: 'center',
+				render: function(value) {
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy-MM'
+					})
+				}
+			}, {
+				name: 'detectAddress',
+				label: '综检检测地点',
+				align: 'center',
+				render: function(value) {
+					var text = '';
+					if (value == '0') text = '未知';
+					if (value == '1') text = '华隆达';
+					if (value == '2') text = '恒顺通';
+					return text
+				}
+			}, {
+				name: 'detectCost',
+				label: '综检费用',
+				align: 'center'
+			}, {
+				name: 'assertDate',
+				label: '二级维护日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}],
+			editMode: {
+				dialog: {
+					width: '780',
+					height: '500',
+					title: '年审',
+					mask: true
+				}
+			},
+			add_url: 'html/car/base/annual/annual-add.html',
+			edit_url: 'html/car/base/annual/annual-edit.html',
+			delUrl: config.openBasePath + '/car/deleteCarAnnual',
+			delPK: 'id',
+			beforeEdit: function() {
+				var carId = thisdata.car.carId;
+				clz.setWindowJson(carId);
+				return true;
+			},
+			onSelect: function() {
+				//alert(111);
+			},
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				grid.datagrid('refresh', true);
+			},
+		});
+</script>

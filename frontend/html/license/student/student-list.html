@@ -1,0 +1,167 @@
+<div class="bjui-pageHeader">
+	<form id="search-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-test-filter')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>学员搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">学员姓名：</label>
+				<div class="row-input">
+					<input type="text" name="realname" class="form-control" >
+				</div>
+				<label class="row-label">证件号码：</label>
+				<div class="row-input">
+					<input type="text" name="realname" class="form-control" >
+				</div>
+				<label class="row-label">所属班别：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">正常</option>
+						<option value="1">停用</option>
+					</select>
+
+				</div>
+				<label class="row-label">报名时间：</label>
+				<div class="row-input">
+					<input type="text" name="stattime" data-toggle="datepicker"  placeholder="报名起始时间">
+
+				</div>
+				<label class="row-label">报名时间：</label>
+				<div class="row-input">
+					<input type="text" name="stattime" data-toggle="datepicker"  placeholder="报名结束时间">
+
+				</div>
+				<label class="row-label">是否欠费：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">是</option>
+						<option value="1">否</option>
+					</select>
+
+				</div>
+				<label class="row-label">所属片区：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">正常</option>
+						<option value="1">停用</option>
+					</select>
+
+				</div>
+				<label class="row-label">所属门店：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">正常</option>
+						<option value="1">停用</option>
+					</select>
+
+				</div>
+				<label class="row-label">审核状态：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">无需审核</option>
+						<option value="1">待审核</option>
+						<option value="2">审核通过</option>
+						<option value="3">审核拒绝</option>
+					</select>
+
+				</div>
+				<label class="row-label">学车状态：</label>
+				<div class="row-input">
+					<select name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">正常</option>
+						<option value="1">停用</option>
+					</select>
+
+				</div>
+				
+			</div>
+			<div class="text-center">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+			</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var grid = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '学员汇总列表',
+		toolbarItem: 'export',
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		showCheckboxcol: true,
+		showToolbar: true,
+		dataUrl: config.openBasePath + '/student/list',
+		columns: [{
+			name: 'studentid',
+			label: '学员编号',
+			align: 'center'
+		}, {
+			name: 'name',
+			label: '学员姓名',
+			align: 'center'
+		}, {
+			name: 'idcard',
+			label: '学员证件号',
+			align: 'center'
+		}, {
+			name: 'issuper',
+			label: '报名时间',
+			align: 'center',
+			render: function(value) {
+				return String(value) == '0' ? '子账号' : '根账号'
+			}
+		}, {
+			name: 'ctime',
+			label: '报考班别',
+			align: 'center'
+		}, {
+			name: 'mtime',
+			label: '报考车型',
+			align: 'center'
+		}, {
+			name: 'mtime',
+			label: '学车状态',
+			align: 'center'
+		}, {
+			name: 'mtime',
+			label: '联系电话',
+			align: 'center'
+		}, {
+			name: 'mtime',
+			label: '片区',
+			align: 'center'
+		}, {
+			name: 'mtime',
+			label: '门店',
+			align: 'center',
+			render: function(value) {}
+		}],
+		afterSave: function() {
+			grid.datagrid('refresh', true);
+		},
+		afterDelete: function() {
+			grid.datagrid('refresh', true);
+		},
+		exportOption: {
+			type: "file",
+			options: {
+				url: config.openBasePath + "student/export",
+				data: $("#search-form").serializeArray()
+			}
+		}
+
+	});
+</script>

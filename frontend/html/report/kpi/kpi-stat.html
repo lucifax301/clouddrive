@@ -1,0 +1,812 @@
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+	<div class="c-tabs-header">
+			<li class="active statli" data-tabs='kid1'>按片区统计</li>
+			<li class="statli" data-tabs='kid2'>按教练统计</li>
+			<li class="statli" data-tabs='kid3'>按教学组长统计</li>
+			<li class="statli" data-tabs='kid4'>按班别统计</li>
+			<li class="statli" data-tabs='kid5'>按考场统计</li>
+			<li class="statli" data-tabs='kid6'>按门店统计</li>
+	</div>
+	<div class="stat" id="stat_kid1">
+    <form data-toggle="ajaxsearch" id="statform1" >
+        <fieldset>  
+              
+            <div class="bjui-row col-4">
+			
+            <label class="row-label">片区：</label>
+			<div class="row-input">
+            <select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%"  data-optiontype="id,name" data-datajson="arealist_filter">
+                        <option value="0">请选择</option>
+            </select>
+           	</div>
+            <label class="row-label">考试科目：</label>
+            <div class="row-input">
+            <select name="subjectid" id="subjectid" data-toggle="selectpicker" size="15"  data-width="100%" data-optiontype = "id,type">
+                        <option value="">请选择</option>
+						<option value="1">科目一</option>
+						<option value="2">科目二</option>
+						<option value="3">科目三</option>
+						<option value="4">科目四</option>
+            </select>
+            </div>
+			
+			<br/>
+			<label class="row-label">排序方式：</label>
+			<div class="row-input">
+            <select name="type" id="type" data-toggle="selectpicker" size="15" data-width="100%">
+                        <option value="">请选择</option>
+						<option value="1">合格率降序</option>
+						<option value="2">合格率升序</option>
+            </select>
+           	</div>
+			<label class="row-label">考试时间：</label>
+			<div class="row-input fill-2">
+				<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+				<div class="w-10 fl text-center">-</div>
+				<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+            </div>
+			
+			<div class="mt10">
+            	<label class="row-label"></label>
+            	<div class="row-input fill-2">
+	           		<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid1()">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+                	<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid1_export()">导出</button>
+	            </div>
+            </div>
+            </div>
+        </fieldset>
+    </form>
+	</div>
+
+	<div class="stat" id="stat_kid2" style="display:none">
+    <form data-toggle="ajaxsearch" id="statform2">
+        <fieldset>         
+               
+            <div class="bjui-row col-4">
+            
+            <label class="row-label">片区：</label>
+			<div class="row-input">
+            <select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%"  data-optiontype="id,name" data-datajson="arealist_filter">
+                        <option value="">请选择</option>
+            </select>
+           	</div>
+            <label class="row-label">考试科目：</label>
+            <div class="row-input">
+            <select name="subjectid" id="subjectid" data-toggle="selectpicker" data-width="100%" size="15" >
+                        <option value="">请选择</option>
+						<option value="1">科目一</option>
+						<option value="2">科目二</option>
+						<option value="3">科目三</option>
+						<option value="4">科目四</option>
+            </select>
+            </div>
+			
+			<label class="row-label">教练姓名：</label>
+			<div class="row-input">
+				<input type="text" name="name" class="form-control" data-width="100%">
+			</div>
+			<br/>
+			<label class="row-label">考试时间：</label>
+			<div class="row-input fill-2">
+				<div class="fl w-40"><input type="text" readonly="readonly" name="begindate" data-toggle="datepicker" placeholder="点击选择日期"></div>
+				<div class="w-10 fl text-center">-</div>
+				<div class="fl w-40"><input type="text" readonly="readonly" name="enddate" data-toggle="datepicker" placeholder="点击选择日期"></div>
+            </div>	
+			<label class="row-label">排序方式：</label>
+			<div class="row-input">
+            <select name="type" id="type" data-toggle="selectpicker" size="15" data-width="100%">
+                        <option value="">请选择</option>
+						<option value="1">合格率降序</option>
+						<option value="2">合格率升序</option>
+            </select>
+           	</div>
+			<div class="mt10">
+            	<label class="row-label"></label>
+            	<div class="row-input fill-2">
+	           		<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid2()">搜索</button>
+                	<button type="reset" class="btn-blue" data-icon="times">重置</button>
+                	<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid2_export()">导出</button>
+	            </div>
+            </div>
+            </div>
+        </fieldset>
+    </form>
+	</div>
+
+	<div class="stat" id="stat_kid3" style="display:none">
+    <form data-toggle="ajaxsearch" id="statform3">
+        <fieldset>         
+               
+            <div class="bjui-row col-4">
+            
+            <label class="row-label">片区：</label>
+			<div class="row-input">
+            <select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+                        <option value="">请选择</option>
+            </select>
+           	</div>
+            <label class="row-label">考试科目：</label>
+            <div class="row-input">
+            <select name="subjectid" id="subjectid" data-toggle="selectpicker" size="15" data-width="100%">
+                        <option value="">请选择</option>
+						<option value="1">科目一</option>
+						<option value="2">科目二</option>
+						<option value="3">科目三</option>
+						<option value="4">科目四</option>
+            </select>
+            </div>
+			
+			<label class="row-label">教学组长：</label>
+			<div class="row-input">
+            <select name="headcoachid" id="headcoachid" data-toggle="selectpicker" data-width="100%" size="15" data-dataurl="/httpaccess/coach/listhead" data-optiontype = "coachid,name" >
+                        <option value="">请选择</option>
+						
+            </select>
+            </div>
+            
+			<br/>
+			<label class="row-label">排序方式：</label>
+			<div class="row-input">
+            <select name="type" id="type" data-toggle="selectpicker" size="15" data-width="100%">
+                        <option value="">请选择</option>
+						<option value="1">合格率降序</option>
+						<option value="2">合格率升序</option>
+            </select>
+           	</div>
+
+			<label class="row-label">考试时间：</label>
+			<div class="row-input fill-2">
+				<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+				<div class="w-10 fl text-center">-</div>
+				<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+            </div>	
+
+			<div class="mt10">
+            	<label class="row-label"></label>
+            	<div class="row-input fill-2">
+	           		<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid3()">搜索</button>
+                	<button type="reset" class="btn-blue" data-icon="times">重置</button>
+                	<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid3_export()">导出</button>
+	            </div>
+            </div>
+            </div>
+        </fieldset>
+    </form>
+	</div>
+
+	<div class="stat" id="stat_kid4" style="display:none">
+    <form data-toggle="ajaxsearch" id="statform4">
+        <fieldset>         
+              
+            <div class="bjui-row col-4">
+			
+            <label class="row-label">片区：</label>
+			<div class="row-input">
+            <select name="areaid" id="area" data-toggle="selectpicker" data-width="100%" size="15"  data-optiontype="id,name" data-datajson="arealist_filter">
+                        <option value="">请选择</option>
+            </select>
+           	</div>
+            <label class="row-label">考试科目：</label>
+            <div class="row-input">
+            <select name="subjectid" id="subjectid" data-toggle="selectpicker" data-width="100%" size="15" >
+                        <option value="">请选择</option>
+						<option value="1">科目一</option>
+						<option value="2">科目二</option>
+						<option value="3">科目三</option>
+						<option value="4">科目四</option>
+            </select>
+            </div>
+
+			<label class="row-label">班别：</label>
+            <div class="row-input">
+            <select name="classinfoid" id="classinfoid" data-toggle="selectpicker" data-width="100%" size="15" data-optiontype="id,name" data-datajson="classlist">
+                        <option value="">请选择</option>
+						
+            </select>
+            </div>
+
+			<br/>
+			<label class="row-label">排序方式：</label>
+			<div class="row-input">
+            <select name="type" id="type" data-toggle="selectpicker" data-width="100%" size="15" >
+                        <option value="">请选择</option>
+						<option value="1">合格率降序</option>
+						<option value="2">合格率升序</option>
+            </select>
+           	</div>
+
+			<label class="row-label">考试时间：</label>
+			<div class="row-input fill-2">
+				<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+				<div class="w-10 fl text-center">-</div>
+				<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+            </div>	
+
+			<div class="mt10">
+            	<label class="row-label"></label>
+            	<div class="row-input fill-2">
+	           		<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid4()">搜索</button>
+                	<button type="reset" class="btn-blue" data-icon="times">重置</button>
+                	<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid4_export()">导出</button>
+	            </div>
+            </div>
+            </div>
+        </fieldset>
+    </form>
+	</div>
+
+	<div class="stat" id="stat_kid5" style="display:none">
+    <form data-toggle="ajaxsearch" id="statform5">
+        <fieldset>         
+              
+            <div class="bjui-row col-4">
+			
+            <label class="row-label">片区：</label>
+			<div class="row-input">
+            <select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%"  data-optiontype="id,name" data-datajson="arealist_filter">
+                        <option value="">请选择</option>
+            </select>
+           	</div>
+            <label class="row-label">考试科目：</label>
+            <div class="row-input">
+            <select name="subjectid" id="subjectid" data-toggle="selectpicker" data-width="100%" size="15" >
+                        <option value="">请选择</option>
+						<option value="1">科目一</option>
+						<option value="2">科目二</option>
+						<option value="3">科目三</option>
+						<option value="4">科目四</option>
+            </select>
+            </div>
+
+			<label class="row-label">考场：</label>
+            <div class="row-input">
+            <select name="subjectid" id="subjectid" data-toggle="selectpicker" size="15" data-width="100%" data-optiontype="id,name" data-datajson="examarealist" >
+                        <option value="">请选择</option>
+						
+            </select>
+            </div>
+			
+			<br/>
+
+			<label class="row-label">排序方式：</label>
+			<div class="row-input">
+            <select name="type" id="type" data-toggle="selectpicker" data-width="100%" size="15" >
+                        <option value="">请选择</option>
+						<option value="1">合格率降序</option>
+						<option value="2">合格率升序</option>
+            </select>
+           	</div>
+
+			<label class="row-label">考试时间：</label>
+			<div class="row-input fill-2">
+				<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+				<div class="w-10 fl text-center">-</div>
+				<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+            </div>	
+
+			<div class="mt10">
+            	<label class="row-label"></label>
+            	<div class="row-input fill-2">
+	           		<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid5()">搜索</button>
+                	<button type="reset" class="btn-blue" data-icon="times">重置</button>
+                	<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid5_export()">导出</button>
+	            </div>
+            </div>
+            </div>
+        </fieldset>
+    </form>
+	</div>
+
+	<div class="stat" id="stat_kid6" style="display:none">
+    <form data-toggle="ajaxsearch" id="statform6">
+        <fieldset>  
+              
+            <div class="bjui-row col-4">
+			
+			
+            <label class="row-label">片区：</label>
+			<div class="row-input">
+            <select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%"  data-optiontype="id,name" data-datajson="arealist_filter" data-refdata="storelist,{value},areaid" data-nextselect="#store" data-keys="{'label':'name','value':'id'}">
+                        <option value="">请选择</option>
+            </select>
+           	</div>
+            <label class="row-label">考试科目：</label>
+            <div class="row-input">
+            <select name="subjectid" id="subjectid" data-toggle="selectpicker" size="15" data-width="100%"  data-optiontype = "id,type">
+                        <option value="">请选择</option>
+						<option value="1">科目一</option>
+						<option value="2">科目二</option>
+						<option value="3">科目三</option>
+						<option value="4">科目四</option>
+            </select>
+            </div>
+			
+			<label class="row-label">门店：</label>
+            <div class="row-input">
+            <select name="storeid" id="store" data-toggle="selectpicker" size="15" data-width="100%"  >
+                        <option value="">请选择</option>
+            </select>
+			</div>
+			
+			<br/>
+
+			<label class="row-label">排序方式：</label>
+			<div class="row-input">
+            <select name="type" id="type" data-toggle="selectpicker" data-width="100%" size="15" >
+                        <option value="">请选择</option>
+						<option value="1">合格率降序</option>
+						<option value="2">合格率升序</option>
+            </select>
+           	</div>
+
+			<label class="row-label">考试时间：</label>
+			<div class="row-input fill-2">
+				<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+				<div class="w-10 fl text-center">-</div>
+				<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期"></div>
+            </div>	
+
+			<div class="mt10">
+            	<label class="row-label"></label>
+            	<div class="row-input fill-2">
+	           		<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid6()">搜索</button>
+	           		<button type="reset" class="btn-blue" data-icon="times">重置</button>
+					<button type="button" class="btn-blue" data-icon="search" onclick="stat_kid6_export()">导出</button>
+                	
+	            </div>
+            </div>
+            </div>
+        </fieldset>
+    </form>
+	</div>
+</div>
+	<div class="bjui-pageContent pr20" id="statinfo">
+		<table>
+			<!--
+            	作者：offline
+            	时间：2017-03-02
+            	描述：
+            
+			<tr><td>片区</td><td>车型</td><td>类型</td></tr>
+			
+			<tr>
+			<td rowspan="4">片区1</td><td rowspan="2">c1</td><td>类型1</td>
+			</tr>
+			<tr>
+			<td>类型2</td>
+			</tr>
+	
+			<tr>
+			<td rowspan="2">c2</td><td>类型3</td>
+			</tr>
+			<tr>
+			<td>类型4</td>
+			</tr>
+			-->
+		</table>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	$.CurrentNavtab.find(".statli").each(
+		function(){
+			$(this).bind("click",function(){
+				//alert($(this).attr("data-tabs"))
+				var idvalue=$(this).attr("data-tabs");
+				$.CurrentNavtab.find(".stat").each(
+					function(){$(this).css("display","none")}
+				)
+				$.CurrentNavtab.find("#stat_"+idvalue).css("display","");
+				eval("stat_"+idvalue).apply(this); ;			
+			})
+		}
+	);
+	
+	eval("stat_kid1").apply(this); ;
+
+	function stat_kid1(){	
+
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/report/kpi/areastat",
+                    loadingmask: true,
+					data : $.CurrentNavtab.find('#statform1').serializeArray(),
+                    okCallback: function(json, options) {
+                        console.log(json.result)
+						//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+						$.CurrentNavtab.find("#statinfo").html(renderStatTable2(json.result,['片区','考试科目','实到人数','合格人数','未到人数','取消人数','其他','合格率','及格率','未到率','取消率'],
+						['area','subject','reachcount','passcount','unreachcount','cancelcount','othercount','qualifiedrate','passrate','unreachrate','cancelrate']
+						));
+                    }
+                })
+	}
+	
+	function stat_kid1_export(){	
+
+	BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "/report/kpi/areastat/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find('#statform1').serializeArray()
+                    
+                })
+	}
+
+	function stat_kid2(){	
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/report/kpi/coachstat",
+                    loadingmask: true,
+					data : $.CurrentNavtab.find('#statform2').serializeArray(),
+                    okCallback: function(json, options) {
+                        console.log(json.result)
+						//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+						$.CurrentNavtab.find("#statinfo").html(renderCoachStatTable(json.result,['教练','带教类型','片区','门店','考试科目','实到人数','合格人数','未到人数','取消人数','其他','合格率','及格率','未到率','取消率'],
+						['coachname', 'teachtype','area','store','subject','reachcount','passcount','unreachcount','cancelcount','othercount','qualifiedrate','passrate','unreachrate','cancelrate']
+						));
+                    }
+                })
+	}
+	
+	function stat_kid2_export(){	
+	BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "/report/kpi/coachstat/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find('#statform2').serializeArray()
+                    
+                })
+	}
+
+	function stat_kid3(){	
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/report/kpi/headcoachstat",
+                    loadingmask: true,
+					data : $.CurrentNavtab.find('#statform3').serializeArray(),
+                    okCallback: function(json, options) {
+                        console.log(json.result)
+						//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+						$.CurrentNavtab.find("#statinfo").html(renderStoreStatTable(json.result,['教学组长','片区','考试科目','实到人数','合格人数','未到人数','取消人数','其他','合格率','及格率','未到率','取消率'],
+						['coachname','area','subject','reachcount','passcount','unreachcount','cancelcount','othercount','qualifiedrate','passrate','unreachrate','cancelrate']
+						));
+                    }
+                })
+	}
+	
+	function stat_kid3_export(){	
+	BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "/report/kpi/headcoachstat/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find('#statform3').serializeArray()
+                    
+                })
+	}
+
+	function stat_kid4(){	
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/report/kpi/classstat",
+                    loadingmask: true,
+					data : $.CurrentNavtab.find('#statform4').serializeArray(),
+                    okCallback: function(json, options) {
+                        console.log(json.result)
+						//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+						$.CurrentNavtab.find("#statinfo").html(renderKpiStatTable(json.result,['班别','片区','考试科目','实到人数','合格人数','未到人数','取消人数','其他','合格率','及格率','未到率','取消率'],
+						['classname', 'area','subject','reachcount','passcount','unreachcount','cancelcount','othercount','qualifiedrate','passrate','unreachrate','cancelrate']
+						));
+                    }
+                })
+	}
+	
+	function stat_kid4_export(){	
+	BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "/report/kpi/classstat/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find('#statform4').serializeArray()
+                    
+                })
+	}
+
+	function stat_kid5(){	
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/report/kpi/examstat",
+                    loadingmask: true,
+					data : $.CurrentNavtab.find('#statform5').serializeArray(),
+                    okCallback: function(json, options) {
+                        console.log(json.result)
+						//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+						$.CurrentNavtab.find("#statinfo").html(renderExamStatTable(json.result,['考场','片区','考试科目','实到人数','合格人数','未到人数','取消人数','其他','合格率','及格率','未到率','取消率'],
+						['examname','area','subject','reachcount','passcount','unreachcount','cancelcount','othercount','qualifiedrate','passrate','unreachrate','cancelrate']
+						));
+                    }
+                })
+	}
+	
+	function stat_kid5_export(){	
+	BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "/report/kpi/examstat/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find('#statform5').serializeArray()
+                    
+                })
+	}
+
+	function stat_kid6(){	
+	BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/report/kpi/storestat",
+                    loadingmask: true,
+					data : $.CurrentNavtab.find('#statform6').serializeArray(),
+                    okCallback: function(json, options) {
+                        console.log(json.result)
+						//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+						$.CurrentNavtab.find("#statinfo").html(renderStoreStatTable(json.result,['门店','片区','考试科目','实到人数','合格人数','未到人数','取消人数','其他','合格率','及格率','未到率','取消率'],
+						['store','area','subject','reachcount','passcount','unreachcount','cancelcount','othercount','qualifiedrate','passrate','unreachrate','cancelrate']
+						));
+                    }
+                })
+	}
+	
+	function stat_kid6_export(){	
+	BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "/report/kpi/storestat/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find('#statform6').serializeArray()
+                    
+                })
+	}
+
+    function renderKpiStatTable(json,columns,dataname){
+		var header='<thead><tr>';
+		for(var i=0;i<columns.length;i++){
+			header=header+'<th align="center">'+columns[i]+"</th>"
+		}
+		header=header+"</tr></thead>"
+		
+		var tablecontent='';
+		for(var i=0;i<json.length;i++){
+			var trcontent="<tr>";
+			var area=json[i][dataname[0]];
+			var l1data=json[i]['data'];
+			var l1row=0;
+			var l2row=0;
+			for(var j=0;j<l1data.length;j++){
+				var l2data=l1data[j]['data'];
+				l1row=l1row+l2data.length;
+			}
+
+			trcontent=trcontent+"<td align='center' rowspan="+l1row+">"+area+ "</td>";
+			for(var j=0;j<l1data.length;j++){
+				var cartype=l1data[j][dataname[1]];
+				var l2data=l1data[j]['data'];
+				
+				trcontent=trcontent+"<td align='center' rowspan="+l2data.length+">"+cartype+"</td>";
+				
+				
+				for(var e=0;e<l2data.length;e++){
+					
+					if(e==0){
+						trcontent=trcontent+generatelKpi3data(l2data[e],dataname);
+						trcontent=trcontent+"</tr>"
+					}else{
+						trcontent=trcontent+"<tr>"+generatelKpi3data(l2data[e],dataname)+"</tr>";
+					}
+				}
+				
+			}
+			tablecontent=tablecontent+trcontent;
+
+		}
+		return "<table class='table table-bordered'>"+header+tablecontent+"</table>";
+	}
+	
+	function renderStatTable2(json,columns,dataname){
+		var header='<thead><tr>';
+		for(var i=0;i<columns.length;i++){
+			header=header+'<th align="center">'+columns[i]+"</th>"
+		}
+		header=header+"</tr></thead>"
+		console.log(1111,json,columns,dataname)
+		var tablecontent='';
+		for(var i=0;i<json.length;i++){
+			var trcontent="<tr>";
+			var area=json[i][dataname[0]];
+			var l1data=json[i]['data'];
+			var l1row=l1data.length;
+			
+					
+
+			trcontent=trcontent+"<td align='center' rowspan="+l1row+">"+area+ "</td>";
+			for(var j=0;j<l1data.length;j++){
+					
+				if(j==0){
+					trcontent=trcontent+generatel2data(l1data[j],dataname);
+					trcontent=trcontent+"</tr>"
+				}else{
+					trcontent=trcontent+"<tr>"+generatel2data(l1data[j],dataname)+"</tr>";
+				}
+				
+			}
+			tablecontent=tablecontent+trcontent;
+
+		}
+		return "<table class='table table-bordered'>"+header+tablecontent+"</table>";
+	}
+	
+	function generatel2data(json,dataname){
+		var v="";
+		for(var i=1;i<dataname.length;i++){
+			v=v+"<td align='center'>"+json[dataname[i]]+"</td>";
+		}
+		return v;
+	}
+
+	function generatelKpi3data(json,dataname){
+		var v="<td align='center'>"+json[dataname[2]]+"</td>";
+		for(var i=3;i<dataname.length;i++){
+			v=v+"<td align='center'>"+json[dataname[i]]+"</td>";
+		}
+		return v;
+	}
+	
+	function generatel3coachdata(json,dataname){
+		var v="<td align='center'>"+json[dataname[4]]+"</td>";
+		for(var i=5;i<dataname.length;i++){
+			v=v+"<td align='center'>"+json[dataname[i]]+"</td>";
+		}
+		return v;
+	}
+
+
+	function renderCoachStatTable(json,columns,dataname){
+		var header='<thead><tr>';
+		for(var i=0;i<columns.length;i++){
+			header=header+'<th align="center">'+columns[i]+"</th>"
+		}
+		header=header+"</tr></thead>"
+		
+		var tablecontent='';
+		for(var i=0;i<json.length;i++){
+			var trcontent="<tr>";
+			var coach=json[i][dataname[0]];
+			var teachtype=json[i][dataname[1]];
+			var area=json[i][dataname[2]];
+			
+			var l1data=json[i]['data'];
+			var l1row=0;
+			var l2row=0;
+			for(var j=0;j<l1data.length;j++){
+				var l2data=l1data[j]['data'];
+				l1row=l1row+l2data.length;
+			}
+
+			trcontent=trcontent+"<td align='center' rowspan="+l1row+">"+coach+ "</td>"+"<td align='center' rowspan="+l1row+">"+teachtype+ "</td>"+"<td align='center' rowspan="+l1row+">"+area+ "</td>";
+			for(var j=0;j<l1data.length;j++){
+				var cartype=l1data[j][dataname[3]];
+				var l2data=l1data[j]['data'];
+				
+				trcontent=trcontent+"<td align='center' rowspan="+l2data.length+">"+cartype+"</td>";
+				
+				
+				for(var e=0;e<l2data.length;e++){
+					
+					if(e==0){
+						trcontent=trcontent+generatel3coachdata(l2data[e],dataname);
+						trcontent=trcontent+"</tr>"
+					}else{
+						trcontent=trcontent+"<tr>"+generatel3coachdata(l2data[e],dataname)+"</tr>";
+					}
+				}
+				
+			}
+			tablecontent=tablecontent+trcontent;
+
+		}
+		return "<table class='table table-bordered'>"+header+tablecontent+"</table>";
+	}
+
+	function renderStoreStatTable(json,columns,dataname){
+		var header='<thead><tr>';
+		for(var i=0;i<columns.length;i++){
+			header=header+'<th align="center">'+columns[i]+"</th>"
+		}
+		header=header+"</tr></thead>"
+		
+		var tablecontent='';
+		for(var i=0;i<json.length;i++){
+			var trcontent="<tr>";
+			var store=json[i][dataname[0]];
+			var area=json[i][dataname[1]];
+			var l1data=json[i]['data'];
+			var l1row=l1data.length;
+			
+					
+
+			trcontent=trcontent+"<td align='center' rowspan="+l1row+">"+store+ "</td>"+"<td align='center' rowspan="+l1row+">"+area+ "</td>";
+			for(var j=0;j<l1data.length;j++){
+					
+				if(j==0){
+					trcontent=trcontent+generatelstoredata(l1data[j],dataname);
+					trcontent=trcontent+"</tr>"
+				}else{
+					trcontent=trcontent+"<tr>"+generatelstoredata(l1data[j],dataname)+"</tr>";
+				}
+				
+			}
+			tablecontent=tablecontent+trcontent;
+
+		}
+		return "<table class='table table-bordered'>"+header+tablecontent+"</table>";
+	}
+	
+	function generatelstoredata(json,dataname){
+		var v="";
+		for(var i=2;i<dataname.length;i++){
+			v=v+"<td align='center'>"+json[dataname[i]]+"</td>";
+		}
+		return v;
+	}
+
+	function renderExamStatTable(json,columns,dataname){
+		var header='<thead><tr>';
+		for(var i=0;i<columns.length;i++){
+			header=header+'<th align="center">'+columns[i]+"</th>"
+		}
+		header=header+"</tr></thead>"
+		
+		var tablecontent='';
+		for(var i=0;i<json.length;i++){
+			var trcontent="<tr>";
+			var exam=json[i][dataname[0]];
+			//var area=json[i][dataname[1]];
+			var l1data=json[i]['data'];
+			//var l1row=l1data.length;
+			
+			var l1row=0;
+			var l2row=0;
+			for(var j=0;j<l1data.length;j++){
+				var l2data=l1data[j]['data'];
+				l1row=l1row+l2data.length;
+			}		
+			if(!exam)exam='未知考场'
+			trcontent=trcontent+"<td align='center' rowspan="+l1row+">"+exam+ "</td>";
+			
+			////
+			for(var j=0;j<l1data.length;j++){
+				var area=l1data[j][dataname[1]];
+				var l2data=l1data[j]['data'];
+				
+				trcontent=trcontent+"<td align='center' rowspan="+l2data.length+">"+area+"</td>";
+				
+				
+				for(var e=0;e<l2data.length;e++){
+					
+					if(e==0){
+						trcontent=trcontent+generatelExamdata(l2data[e],dataname);
+						trcontent=trcontent+"</tr>"
+					}else{
+						trcontent=trcontent+"<tr>"+generatelExamdata(l2data[e],dataname)+"</tr>";
+					}
+				}
+				
+			}
+			////
+			
+//			for(var j=0;j<l1data.length;j++){
+//					
+//				if(j==0){
+//					trcontent=trcontent+generatelExamdata(l1data[j],dataname);
+//					trcontent=trcontent+"</tr>"
+//				}else{
+//					trcontent=trcontent+"<tr>"+generatelExamdata(l1data[j],dataname)+"</tr>";
+//				}
+//				
+//			}
+			tablecontent=tablecontent+trcontent;
+
+		}
+		return "<table class='table table-bordered'>"+header+tablecontent+"</table>";
+	}
+	
+	function generatelExamdata(json,dataname){
+		var v="";
+		for(var i=2;i<dataname.length;i++){
+			v=v+"<td align='center'>"+json[dataname[i]]+"</td>";
+		}
+		return v;
+	}
+</script>

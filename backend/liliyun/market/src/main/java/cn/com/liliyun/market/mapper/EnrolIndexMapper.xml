@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.market.mapper.EnrolIndexMapper" >
+  <resultMap id="AreaResultMap" type="cn.com.liliyun.market.model.AreaEnrolIndex" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="month" property="month" jdbcType="INTEGER" />
+    <result column="enrolindex" property="enrolindex" jdbcType="INTEGER" />
+    <result column="highrate" property="highrate" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="StoreResultMap" type="cn.com.liliyun.market.model.StoreEnrolIndex" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="month" property="month" jdbcType="INTEGER" />
+    <result column="enrolindex" property="enrolindex" jdbcType="INTEGER" />
+    <result column="highrate" property="highrate" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Area_Base_Column_List" >
+    id,areaid,year,month,enrolindex,highrate
+  </sql>
+  
+  <sql id="Store_Base_Column_List" >
+    id,areaid,storeid,year,month,enrolindex,highrate
+  </sql>
+  
+  <select id="getAreaEnrolIndex" resultMap="AreaResultMap" parameterType="cn.com.liliyun.market.model.AreaEnrolIndex" >
+    select 
+    <include refid="Area_Base_Column_List" />
+    from t_area_enrol_index
+    where id = #{id}
+  </select>
+  
+  <select id="getAreaEnrolIndexByDate" resultMap="AreaResultMap" parameterType="cn.com.liliyun.market.model.AreaEnrolIndex" >
+    select 
+    <include refid="Area_Base_Column_List" />
+    from t_area_enrol_index
+    where areaid = #{areaid} and year=#{year} and month=#{month}
+  </select>
+  
+  <select id="listAreaEnrolIndex" resultMap="AreaResultMap"  >
+    select 
+    <include refid="Area_Base_Column_List" />
+    from t_area_enrol_index
+    <where>
+    <if test="areaid != null and areaid!=0">
+		and areaid = #{areaid}
+	</if>
+	
+	<if test="beginyear != null ">
+		and year >= #{beginyear}
+	</if>
+	<if test="beginmonth != null ">
+		and month >= #{beginmonth}
+	</if>
+	<if test="endyear != null ">
+		<![CDATA[and year <= #{endyear}]]> 
+	</if>
+	<if test="endmonth != null ">
+		<![CDATA[and month <= #{endmonth}]]> 
+	</if>
+	</where>
+	order by id desc
+  </select>
+
+
+  <insert id="addAreaEnrolIndex" parameterType="cn.com.liliyun.market.model.AreaEnrolIndex" >
+    insert into t_area_enrol_index (areaid, year, month,enrolindex,highrate,  createdate)
+    values (#{areaid},#{year},#{month}, #{enrolindex},#{highrate},now())
+  </insert>
+  
+  <update id="updateAreaEnrolIndex" parameterType="cn.com.liliyun.market.model.AreaEnrolIndex" >
+    update t_area_enrol_index
+    <set >
+      <if test="enrolindex != null" >
+        enrolindex = #{enrolindex},
+      </if>
+      <if test="highrate != null " >
+        highrate = #{highrate},
+      </if>
+      
+    </set>
+    where id = #{id}
+  </update>
+  
+  <delete id="delAreaEnrolIndex" parameterType="cn.com.liliyun.market.model.AreaEnrolIndex" >
+    delete from t_area_enrol_index
+    where id = #{id}
+  </delete>
+  
+  <insert id="batchAddStoreEnrolIndex" parameterType="java.util.List" >
+    insert into t_store_enrol_index (areaid,storeid, year, month,enrolindex,highrate,  createdate)
+    values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+				(#{item.areaid},#{item.storeid},#{item.year},#{item.month},#{item.enrolindex},#{item.highrate},now())
+	</foreach>
+  </insert>
+  
+  <update id="updateStoreEnrolIndex" parameterType="cn.com.liliyun.market.model.StoreEnrolIndex" >
+    update t_store_enrol_index
+    <set >
+      <if test="enrolindex != null" >
+        enrolindex = #{enrolindex},
+      </if>
+      <if test="highrate != null " >
+        highrate = #{highrate},
+      </if>
+      
+    </set>
+    where id = #{id}
+  </update>
+  
+  <select id="listStoreEnrolIndex" resultMap="StoreResultMap"  >
+    select 
+    <include refid="Store_Base_Column_List" />
+    from t_store_enrol_index
+    where areaid = #{areaid} and year=#{year} and month=#{month}
+	order by id desc
+  </select>
+  
+  <delete id="delStoreEnrolIndex" parameterType="cn.com.liliyun.market.model.StoreEnrolIndex" >
+    delete from t_store_enrol_index
+    where areaid = #{areaid}
+  </delete>
+  
+</mapper>

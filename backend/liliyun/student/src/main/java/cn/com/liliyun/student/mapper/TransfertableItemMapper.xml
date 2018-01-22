@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.student.mapper.TransfertableItemMapper">
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.TransfertableItem">
+    <result column="tableid" jdbcType="VARCHAR" property="tableid" />
+    <result column="studentid" jdbcType="INTEGER" property="studentid" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="photoback" jdbcType="VARCHAR" property="photoback" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="rtnreason" jdbcType="VARCHAR" property="rtnreason" />
+    <result column="islocal" jdbcType="INTEGER" property="islocal" />
+    <result column="areatableid" jdbcType="VARCHAR" property="areatableid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tableid, studentid, idcard, name, photoback, status, rtnreason, islocal ,areatableid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="cn.com.liliyun.student.model.TransfertableItem" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_transfertable_item
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectList" parameterType="cn.com.liliyun.student.model.TransfertableItem" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_transfertable_item where 1 = 1 
+     <if test="tableid != null and tableid != ''">
+        and tableid = #{tableid,jdbcType=INTEGER}
+     </if>
+     <if test="areatableid != null and areatableid != ''">
+        and areatableid = #{areatableid,jdbcType=INTEGER}
+     </if>
+     <if test="islocal != null">
+        and islocal = #{islocal,jdbcType=INTEGER}
+     </if>
+     <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+     </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.student.model.TransfertableItem">
+    delete from t_transfertable_item
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.student.model.TransfertableItem">
+    insert into t_transfertable_item (tableid, idcard, name, 
+      photoback, status, rtnreason, 
+      islocal)
+    values (#{tableid,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{photoback,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{rtnreason,jdbcType=VARCHAR}, 
+      #{islocal,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List">
+  	insert into t_transfertable_item (tableid, studentid, idcard, name, photoback, status, rtnreason, islocal, areatableid) 
+  		values
+	    <foreach collection="list" index="index" item="item" separator=",">
+           (
+              #{item.tableid,jdbcType=VARCHAR}, 
+              #{item.studentid,jdbcType=INTEGER},
+		      #{item.idcard,jdbcType=VARCHAR}, 
+		      #{item.name,jdbcType=VARCHAR}, 
+	      	  #{item.photoback,jdbcType=VARCHAR}, 
+	      	  #{item.status,jdbcType=INTEGER},
+	      	  #{item.rtnreason,jdbcType=VARCHAR},
+	      	  #{item.islocal,jdbcType=INTEGER},
+	      	  #{item.areatableid,jdbcType=VARCHAR}
+      	 )
+       	</foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.student.model.TransfertableItem">
+    insert into t_transfertable_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tableid != null">
+        tableid,
+      </if>
+      <if test="idcard != null">
+        idcard,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="photoback != null">
+        photoback,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="rtnreason != null">
+        rtnreason,
+      </if>
+      <if test="islocal != null">
+        islocal,
+      </if>
+      <if test="areatableid != null">
+        areatableid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tableid != null">
+        #{tableid,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="photoback != null">
+        #{photoback,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rtnreason != null">
+        #{rtnreason,jdbcType=VARCHAR},
+      </if>
+      <if test="islocal != null">
+        #{islocal,jdbcType=INTEGER},
+      </if>
+      <if test="areatableid != null">
+        #{areatableid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.student.model.TransfertableItem">
+    update t_transfertable_item
+    <set>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="photoback != null">
+        photoback = #{photoback,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rtnreason != null">
+        rtnreason = #{rtnreason,jdbcType=VARCHAR},
+      </if>
+      <if test="islocal != null">
+        islocal = #{islocal,jdbcType=INTEGER},
+      </if>
+      <if test="areatableid != null">
+        areatableid = #{areatableid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateStoreReturn" parameterType="cn.com.liliyun.student.model.TransfertableItem">
+    update t_transfertable_item
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rtnreason != null">
+        rtnreason = #{rtnreason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tableid = #{tableid,jdbcType=VARCHAR} and idcard = #{idcard,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateAreaReturn" parameterType="cn.com.liliyun.student.model.TransfertableItem">
+    update t_transfertable_item
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rtnreason != null">
+        rtnreason = #{rtnreason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where areatableid = #{areatableid,jdbcType=VARCHAR} and idcard = #{idcard,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateTableIdBatch"  parameterType="java.util.List">
+	<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+		 update t_transfertable_item set areatableid = #{item.areatableid,jdbcType=VARCHAR}		  
+		 where tableid = #{item.tableid,jdbcType=VARCHAR} and status = 0
+	</foreach>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.student.model.TransfertableItem">
+    update t_transfertable_item
+    set idcard = #{idcard,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      photoback = #{photoback,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      rtnreason = #{rtnreason,jdbcType=VARCHAR},
+      islocal = #{islocal,jdbcType=INTEGER}
+    where tableid = #{tableid,jdbcType=VARCHAR}
+  </update>
+</mapper>

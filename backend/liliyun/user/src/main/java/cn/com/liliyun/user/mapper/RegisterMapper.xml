@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.user.mapper.RegisterMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.user.model.Register" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="schoolname" property="schoolname" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="applyname" property="applyname" jdbcType="VARCHAR" />
+    <result column="dblink" property  ="applyname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="acquire" property="acquire" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="invitecode" property="invitecode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, schoolname, contact, qq, email, applyname, password, acquire, ctime, mtime, status, invitecode
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.user.model.Register" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_register
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+   <select id="selectOne" resultMap="BaseResultMap" parameterType="cn.com.liliyun.user.model.Register" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_register
+    where 1 = 1 
+    <if test="dblink != null" >
+       and dblink = #{dblink,jdbcType=VARCHAR}
+    </if>
+    <if test="invitecode != null" >
+       and invitecode = #{invitecode,jdbcType=VARCHAR} and status = 1
+    </if>
+    <if test="email != null" >
+       and email = #{email,jdbcType=VARCHAR}
+    </if>
+    limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.user.model.Register" >
+    delete from t_register
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.user.model.Register" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_register where 1 = 1
+      <if test="status != null" >
+        and status = #{status}
+      </if>
+      <if test="condition != null and condition != ''" >
+        and 
+        (
+        	schoolname like concat(concat('%',#{condition}),'%')
+        	or applyname like concat(concat('%',#{condition}),'%')
+        	or contact like concat(#{condition},'%')
+        )
+      </if>
+      order by mtime desc
+  </select>
+  <insert id="insert" parameterType="cn.com.liliyun.user.model.Register" >
+    insert into t_register (id, schoolname, contact, 
+      qq, email, password , applyname, 
+      acquire, ctime, status, 
+      invitecode)
+    values (#{id,jdbcType=INTEGER}, #{schoolname,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{applyname,jdbcType=VARCHAR}, 
+      #{acquire,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{invitecode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.user.model.Register" useGeneratedKeys="true" keyProperty="id">
+    insert into t_register
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="schoolname != null" >
+        schoolname,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="qq != null" >
+        qq,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="applyname != null" >
+        applyname,
+      </if>
+      <if test="acquire != null" >
+        acquire,
+      </if>
+      <if test="dblink != null" >
+        dblink,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="invitecode != null" >
+        invitecode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="schoolname != null" >
+        #{schoolname,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+         #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="applyname != null" >
+        #{applyname,jdbcType=VARCHAR},
+      </if>
+      <if test="acquire != null" >
+        #{acquire,jdbcType=VARCHAR},
+      </if>
+      <if test="dblink != null" >
+        #{dblink,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="invitecode != null" >
+        #{invitecode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.user.model.Register" >
+    update t_register
+    <set >
+      <if test="schoolname != null" >
+        schoolname = #{schoolname,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="applyname != null" >
+        applyname = #{applyname,jdbcType=VARCHAR},
+      </if>
+      <if test="acquire != null" >
+        acquire = #{acquire,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="dblink != null" >
+        dblink = #{dblink,jdbcType=VARCHAR},
+      </if>
+      <if test="invitecode != null" >
+        invitecode = #{invitecode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.user.model.Register" >
+    update t_register
+    set schoolname = #{schoolname,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      applyname = #{applyname,jdbcType=VARCHAR},
+      acquire = #{acquire,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      invitecode = #{invitecode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

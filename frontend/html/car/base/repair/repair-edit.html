@@ -1,0 +1,130 @@
+<div class="bjui-pageContent">
+	<div class="">
+		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+			<input type="hidden" name="id">
+			<div style="background-color:#eee; padding:1px;"></div>
+			<div class="bjui-row col-3">
+				<label class="row-label">维修原因</label>
+				<div class="row-input required">
+					<input type="text" name="reason" id="reason" data-rule="required" maxlength="100">
+				</div>
+				<label class="row-label">维修状态</label>
+				<div class="row-input required">
+					<select name="state" id="state" data-toggle="selectpicker" data-width="100%" data-rule="required">
+						<option value="0">二保</option>
+						<option value="1">大修</option>
+						<option value="2">中修</option>
+						<option value="3">小修</option>
+						<option value="4">自费维修</option>
+						<option value="5">外单位维修</option>
+						<option value="6">事故车</option>
+						<option value="7">柴油添加剂</option>
+						<option value="8">四轮保修</option>
+						<option value="9">一保</option>
+					</select>
+				</div>
+				<label class="row-label">维修项目数</label>
+				<div class="row-input required">
+					<input type="text" name="itemNum" id="itemNum" data-rule="required;digits" maxlength="4">
+				</div>
+				<label class="row-label">维修单位</label>
+				<div class="row-input required">
+					<input type="text" name="hwu" id="hwu" data-rule="required" maxlength="4">
+				</div>
+				<label class="row-label">开始日期</label>
+				<div class="row-input">
+					<input type="text" name="stime" id="stime" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+				</div>
+				<label class="row-label">结束日期</label>
+				<div class="row-input ">
+					<input type="text" name="etime" id="etime" readonly="readonly" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+				</div>
+				<div id='adddom' class="hidden">
+					<label class="row-label">配件</label>
+					<div class="row-input ">
+						<input type="text" name="parts" id="parts" data-rule="" maxlength="20">
+					</div>
+					<label class="row-label">金额(元)</label>
+					<div class="row-input ">
+						<input type="text" name="pmoney" id="pmoney" data-rule="length[1~11];plusnumber" maxlength="6">
+					</div>
+				</div>
+				<label class="row-label">修理工</label>
+				<div class="row-input required">
+					<input type="text" name="repairman" id="repairman" data-rule="required">
+				</div>
+				<label class="row-label">经办人</label>
+				<div class="row-input ">
+					<input type="text" name="cname" id="cname" data-rule="">
+				</div>
+				<br />
+				<label class="row-label">备注</label>
+				<div class="row-input fill-2 ">
+					<input type="text" name="remark" class="form-control" data-rule="">
+				</div>
+			</div>
+
+	</div>
+	</form>
+</div>
+</div>
+<div class="bjui-pageFooter">
+	<ul>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+		<li><button type="submit" class="btn-default" data-icon="save">保存</button></li>
+	</ul>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current: 'Dialog',
+		url: config.openBasePath + 'car/updateCarRepair',
+		form_name: 'edit-form',
+		table_name: 'repair-datagrid',
+		callback: function(data) {
+			$.CurrentDialog.find('[name="parts"]').val('')
+			var d=JSON.parse(data.parts);
+			console.log(JSON.parse(data.parts).length)
+			var d2=new Array();
+			
+			var pd=new Array();
+			var md=new Array();
+			for(var i=0;i<d.length;i++){
+				
+				pd.push(d[i].parts);
+				md.push(d[i].pmoney);
+			}
+			var po=[
+				{
+					name:'parts',
+					data:pd,
+				},
+				{
+					name:'pmoney',
+					data:md
+				}
+			];
+			
+			console.log(po)
+			clz.pushaddom({
+				domid: 'adddom',
+				current: 'dialog',
+				btn_name: '增加配件',
+//				data: [{
+//					name: 'parts',
+//					data: [data.parts],
+//				}, {
+//					name: 'money',
+//					data: [data.money],
+//				}]
+				data:po
+			})
+		},
+		timetype: [{
+			name: 'stime',
+			type: 'yyyy-MM-dd'
+		}, {
+			name: 'etime',
+			type: 'yyyy-MM-dd'
+		}]
+	})
+</script>

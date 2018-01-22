@@ -1,0 +1,41 @@
+<section id="thispage" privilege = "020203"></section>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var license_accept_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '学员考场受理列表',
+        toolbarItem: '',
+        toolbarCustom : 
+                    "<button class='btn-blue ml5' data-privilege='020203_datagrid-list_11' data-icon='edit' onclick='license_accept.importflownum()'>导入流水号</button>" + 
+                    "<button class='btn-blue ml5' data-privilege='020203_datagrid-list_12' data-icon='edit' onclick='license_accept.download()'>下载模板</button>",
+        paging: false,
+        height: '100%',
+        showToolbar: true,
+        data : [],
+        columns: [
+            {name:'name',label:'学员姓名',align:'center'},
+            {name:'idcard',label:'学员证件号',align:'center'},
+            {name:'flownum',label:'流水号',align:'center'},
+            {name:'applydate',label:'受理时间',align:'center',render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}},
+            {name:'traintype',label:'报考车型',align:'center'}
+        ]
+    });
+
+    var license_accept = {
+        importflownum : function() {
+            BJUI.dialog({
+                id : 'dialog-accept-upload-excel',
+                mask : true,
+                url : 'html/license/accept/upload.html',
+                title : '导入流水号'
+            })
+        },
+        download : function() {
+            BJUI.ajax('ajaxdownload', {
+                url: config.openBasePath + 'student/download',
+                type : "GET",
+                data : {type : "flownum"}
+            });
+        },
+
+    }
+</script>

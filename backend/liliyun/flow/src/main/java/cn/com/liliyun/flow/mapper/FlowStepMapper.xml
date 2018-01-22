@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.flow.mapper.FlowStepMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.flow.model.FlowStep" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="flowid" property="flowid" jdbcType="INTEGER" />
+    <result column="step" property="step" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="updatedate" property="updatedate" jdbcType="TIMESTAMP" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, flowid, step, userid, status, createdate ,updatedate
+    
+    
+  </sql>
+  <select id="get" resultMap="BaseResultMap" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_flow_step
+    where id = #{id}
+  </select>
+  
+  <select id="getById" resultMap="BaseResultMap" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_flow_step
+    where id = #{id}
+  </select>
+  
+  <select id="getLast" resultMap="BaseResultMap" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_flow_step
+    where flowid = #{flowid}
+    order by id desc limit 1
+  </select>
+  <select id="getLastByTransactionid" resultMap="BaseResultMap" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    select 
+    a.*
+    from t_flow_step a join t_flow b on a.flowid=b.id
+    where b.transactionid = #{transactionid}
+    order by id desc limit 1
+  </select>
+  
+  
+  <select id="getByFlowId" resultMap="BaseResultMap" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_flow_step
+    where flowid = #{flowid} order by id asc
+  </select>
+  
+  
+  <insert id="add" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    insert into t_flow_step (flowid, step, userid, 
+      createdate)
+    values (#{flowid}, #{step}, #{userid}, now())
+  </insert>
+  
+  
+  
+  <update id="update" parameterType="cn.com.liliyun.flow.model.FlowStep" >
+    update t_flow_step
+    set status=#{status}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+ 	
+  	
+</mapper>

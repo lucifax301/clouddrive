@@ -1,0 +1,183 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>恢复学车申请</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+
+					<div class="bjui-row col-4">
+						<label class="row-label">申请类型:</label>
+						<div class="row-input">
+							<input type="text" value="恢复学车" class="clear-style" />
+						</div>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">学员姓名:</label>
+						<div class="row-input">
+							<input type="text" name="stuname" id="stuname" data-rule="required" readonly="readonly" data-width="100%" placeholder="点击右侧按钮选择学员">
+							<input type="hidden" name="studentid" id="studentid" />
+						</div>
+						<label><button type="button" class="btn-blue btn" onclick="showpausestu()" data-icon="search">选择学员</button></label>
+					</div>
+
+					<div class="bjui-row col-4">
+						<label class="row-label">学车状态:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="applyexam" data-width="100%">
+						</div>
+						<label class="row-label">身份证号:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="idcard" data-width="100%">
+						</div>
+					</div>
+					<br/>
+					<div class="bjui-row col-4">
+						<label class="row-label">手机号码:</label>
+						<div class="row-input">
+							<input type="text" readonly="readonly" id="mobile" data-width="100%">
+						</div>
+					</div>
+
+					<br/>
+					<div class="bjui-row col-4">
+						<label class="row-label">备注:</label>
+						<div class="row-input fill-2">
+							<textarea type="text" rows="2" name="remark" maxlength="300" placeholder="请输入备注"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="type" value="2" />
+		<input type="hidden" name="pauseid" id="pauseid" value="" />
+	</form>
+	
+	<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>暂停学车相关记录</h5>
+			</div>
+			<div class="widget-content nopadding">
+	
+	<div class="bjui-row col-4">
+		<div class="bjui-row col-4">
+			<label class="row-label">暂停周期:</label>
+			<div class="row-input">
+				<input type="text" name="begindate" readonly="readonly" id="pbegindate">
+			</div>
+			<label class="row-label">到:</label>
+			<div class="row-input">
+				<input type="text" name="enddate" readonly="readonly" id="penddate">
+			</div>
+		</div>
+		<br/>
+		<div class="bjui-row col-4">
+			<label class="row-label">暂停原因:</label>
+			<div class="row-input fill-2">
+				<textarea type="text" rows="2" name="reason" maxlength="60" readonly="readonly" id="preason"></textarea>
+				
+			</div>
+		</div>
+		<br/>
+		<div class="bjui-row col-4">
+			<label class="row-label">备注:</label>
+			<div class="row-input fill-2">
+				<textarea type="text" rows="2" name="remark" maxlength="300" id="premark" readonly="readonly"></textarea>	
+				
+			</div>
+		</div>
+	</div>
+</div>
+</div></div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="savepauseapply()">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+	</ul>
+	</div>
+</div>
+<script>
+	clz.CurrentDom_init({
+		current: 'Navtab',
+		form_name: 'view-form',
+		url: config.openBasePath + 'student/assignCoach',
+	})
+
+	function showpausestu() {
+		BJUI.dialog({
+			id: 'student-resume-add-showstu',
+			width: 840,
+			height: 800,
+			url: 'html/teach/pause-student-list.html',
+			title: '学员列表',
+			onClose: function() {
+				var data = clz.getWindowJson();
+				//console.log(data[0]);
+				if(data[0]) {
+					$.CurrentNavtab.find("#stuname").val(data[0].name);
+					$.CurrentNavtab.find("#studentid").val(data[0].id);
+					$.CurrentNavtab.find("#idcard").val(data[0].idcard);
+					$.CurrentNavtab.find("#mobile").val(data[0].phone);
+					$.CurrentNavtab.find("#applyexam").val(data[0].applyexam);
+					$.CurrentNavtab.find("#applyexam").val(studentStatus(data[0].applyexam,data[0].applystatus))
+					getPauseInfo(data[0].id);
+				}
+				//$.CurrentNavtab.find('input').val(data[0].name)
+			}
+
+		})
+	}
+
+	
+
+	function getPauseInfo(stuid) {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "student/learnpause/getByStuId",
+			loadingmask: true,
+			async: false,
+			data: {
+				studentid: stuid,
+				type: 1
+			},
+			okCallback: function(json, options) {
+				console.log(json)
+
+				if(json.result) {
+					$.CurrentNavtab.find("#pbegindate").val(json.result.begindate.substr(0, 11));
+					$.CurrentNavtab.find("#penddate").val(json.result.enddate.substr(0, 11));
+					$.CurrentNavtab.find("#preason").val(json.result.reason);
+					$.CurrentNavtab.find("#premark").val(json.result.remark);
+					$.CurrentNavtab.find("#pauseid").val(json.result.id);
+				}
+
+			}
+		})
+
+	}
+
+	function savepauseapply() {
+		if($.CurrentNavtab.find('#view-form').isValid())
+			BJUI.alertmsg('confirm', '确认提交申请吗？', {
+				displayPosition: 'middlecenter',
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + "/student/learnpause/addresume",
+						loadingmask: true,
+						data: $("#view-form").serializeArray(),
+						okCallback: function(json, options) {
+							//console.log(json.result.list)
+							BJUI.alertmsg('ok', '提交成功！', {})
+							BJUI.navtab('closeCurrentTab');
+						}
+					})
+				}
+			})
+
+	}
+</script>

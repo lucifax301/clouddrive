@@ -1,0 +1,164 @@
+<div class="bjui-pageContent">
+    <form id="add-form">
+        <div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>转出学员</h5>
+			</div>
+			<div class="widget-content nopadding">
+	            <div class="bjui-row col-4">
+	            	<label class="row-label"><a href="javascript:" class="btn btn-primary btn-sm" onclick="transfer_student_add.chestudent()">选择学员</a></label>
+	            	<input type='hidden' name='studentid' data-rule='required'>
+	            	</br>
+	            	<label class="row-label">姓名：</label>
+	                <div class="row-input">
+	                	<input type="text" id="name" readonly class="clear-style">
+                	</div>
+                	<!--<label class="row-label">学员编号：</label>
+	                <div class="row-input">
+	                	<input type="text" id="stunum" readonly class="clear-style">
+                	</div>-->
+                	<label class="row-label">证件号：</label>
+	                <div class="row-input">
+	                	<input type="text" id="idcard" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">手机号：</label>
+	                <div class="row-input">
+	                	<input type="text" id="phone" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">学车状态：</label>
+	                <div class="row-input">
+	                	<input type="text" id="apply" readonly class="clear-style">
+                	</div>
+                	</br>
+		            <label class="row-label">资料转移方式：</label>
+	            	<div class="row-input required">
+			            <select name="filetransfertype" data-toggle="selectpicker" data-width="100%">
+			                <option value="1">快递</option>
+			                <option value="2">人工移交</option>
+			            </select>
+		            </div>
+		            <d id="express">
+		                <label class="row-label">快递单号：</label>
+		                <div class="row-input required">
+		                	<input type="text" name="transferno" data-rule="required">
+	                	</div>
+		            </d>
+	            </div>
+            </div>
+        </div>
+        <div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>转入门店</h5>
+			</div>
+			<div class="widget-content nopadding">
+	            <div class="bjui-row col-4">
+            		<label class="row-label"><a href="javascript:" class="btn btn-primary btn-sm" onclick="transfer_student_add.chestore()">选择门店</a></label>
+	            	<input type='hidden' name='targetstoreid' data-rule='required'>
+	                <input type='hidden' name='targetareaid'>
+	                <input type='hidden' name='targetstorenum'>
+            		</br>
+	            	<label class="row-label">转入门店：</label>
+	                <div class="row-input">
+	                	<input type="text" id="storename" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">目标门店代码：</label>
+	                <div class="row-input">
+	                	<input type="text" id="storenum" readonly class="clear-style">
+                	</div>
+                	<label class="row-label">门店电话：</label>
+	                <div class="row-input">
+	                	<input type="text" id="tel" readonly class="clear-style">
+                	</div>
+                	</br>
+		            <label class="row-label">转店原因：</label>
+		            <div class="row-input fill-2 required">
+		            	<textarea rows="4" name="reason" data-rule="required"></textarea>
+	            	</div>
+	            </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="transfer_student_add.add_Transfer()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+	var transfer_student_add = {
+		init: function() {
+			$.CurrentNavtab.find('[name="filetransfertype"]').change(function () {
+		        var val = $(this).val();
+		        if(val == 1){
+		            $.CurrentNavtab.find('#express').html('<label class="row-label">快递单号：</label>' +
+		            	'<div class="row-input required">' +
+		                '<input type="text" name="transferno" data-rule="required">' +
+		            	'</div>')
+		            $.CurrentNavtab.trigger(BJUI.eventType.initUI)//重新渲染BJUI
+		        }else{
+		            $.CurrentNavtab.find('#express').html('');
+		        }
+		    });
+		},
+		chestudent: function() {
+			BJUI.dialog({
+	            id:'transfer_student',
+	            url:'html/license/transfer/transfer-students.html',
+	            title:'选择转店学员',
+	            mask:true,
+	            width:890,
+	            height:750,
+	            onClose:function(){
+	                var data = clz.getWindowJson();
+	                data = data[0];
+	                $.CurrentNavtab.find('#name').val(data.name);
+	                $.CurrentNavtab.find('#stunum').val(data.stunum);
+	                $.CurrentNavtab.find('#idcard').val(data.idcard);
+	                $.CurrentNavtab.find('#phone').val(data.phone);
+	                $.CurrentNavtab.find('#apply').val(studentStatus(data.applyexam, data.applystatus));
+	                $.CurrentNavtab.find('input[name="studentid"]').val(data.id);
+	            }
+	        })
+		},
+		chestore: function() {
+	        BJUI.dialog({
+	            id:'transfer_store',
+	            url:'html/license/transfer/transfer-stores.html',
+	            title:'选择转入门店',
+	            mask:true,
+	            width:890,
+	            height:750,
+	            onClose:function(){
+	                var data = clz.getWindowJson();
+	                data = data[0];
+	                $.CurrentNavtab.find('#storename').val(data.name);
+	                $.CurrentNavtab.find('#storenum').val(data.storenum);
+	                $.CurrentNavtab.find('#tel').val(data.tel);
+	                $.CurrentNavtab.find('input[name="targetstoreid"]').val(data.id);
+	                $.CurrentNavtab.find('input[name="targetareaid"]').val(data.areaid);
+	                $.CurrentNavtab.find('input[name="targetstorenum"]').val(data.storenum);
+	            }
+	        })
+	    },
+	    add_Transfer: function() {
+	        BJUI.alertmsg('confirm', '确认提交转店申请？', {
+	            okCall: function() {
+	                BJUI.ajax('ajaxform', {
+	                    url: config.openBasePath + 'transferStudent/add',
+	                    loadingmask: true,
+	                    form :  $.CurrentNavtab.find('#add-form'),
+	                    okCallback: function(json, options) {
+	                        console.log('返回内容：\n'+ JSON.stringify(json));
+	                        BJUI.navtab('closeCurrentTab');
+	                    }
+	                });
+	            }
+	        });
+	    }
+		
+	}
+	transfer_student_add.init();
+</script>

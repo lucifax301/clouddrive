@@ -1,0 +1,81 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="add-form">
+        <div class="bjui-row col-2">
+        	<label class="row-label">Pos机号:</label>
+            <div class="row-input required">
+                <input type="text" name="posnum" data-rule="required;posnum">
+            </div>
+            <label class="row-label">Pos类型:</label>
+            <div class="row-input required">
+                <select name="postype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                	<option value="">请选择</option>
+                	<option value="1">移动</option>
+                	<option value="2">固定</option>
+                </select>
+            </div>
+            <label class="row-label">Pos片区:</label>
+            <div class="row-input required">
+                <select name="areaid" data-toggle="selectpicker" data-width="100%" data-rule="required" data-nextselect="#store" data-dataurl="/httpaccess/area/list" data-optiontype="id,name" data-refurl="/httpaccess/store/listInJson?areaid={value}">
+				</select>
+            </div>
+            <label class="row-label">Pos门店:</label>
+            <div class="row-input required">
+                <select name="storeid" id="store" data-toggle="selectpicker" data-width="100%" data-rule="required">
+					<option value="">请选择</option>
+				</select>
+            </div>
+            <label class="row-label">Pos帐号:</label>
+            <div class="row-input required">
+            	<input type="hidden" name="bankaccount" />
+                <select name="accountid" data-toggle="selectpicker" data-width="100%"  data-rule="required" onchange="finance_pos_add.account()">
+				</select>
+            </div>
+            <label class="row-label">Pos银行:</label>
+            <div class="row-input">
+                <input type="text" name="bankname" readonly>
+            </div>
+            <label class="row-label">Pos所属公司:</label>
+            <div class="row-input">
+                <input type="text" name="poscompany" readonly>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="submit" class="btn-blue" data-icon="save">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+    var finance_pos_add = {
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Dialog',
+				url: config.openBasePath + 'pos/addFinancePos',
+				form_name: 'add-form',
+				before: function() {
+					BJUI.ajax("doajax",{
+						url: config.openBasePath + "pos/posAccountAll",
+						type: "GET",
+						okCallback: function(data) {
+							var html=  '<option value="">请选择</option>';
+							$.each(data.result.list, function(i,m) {
+								html+= '<option value="'+ m.id+'" data-bankaccount="'+ m.account+'" data-bankname="'+ m.bankname+'" data-poscompany="'+ m.poscompany+'">'+ m.account +'</option>'
+							});
+							$.CurrentDialog.find("*[name='accountid']").html(html)
+							$.CurrentDialog.find("*[name='accountid']").selectpicker('refresh')
+						}
+					})
+				}
+			})
+		},
+		account: function() {
+			var data = $.CurrentDialog.find("*[name='accountid']").find("option:selected").data();
+			$.each(data, function(i,m) {
+				$.CurrentDialog.find("*[name='" + i +"']").val(m);
+			})
+		}
+	}
+    finance_pos_add.init();
+</script>

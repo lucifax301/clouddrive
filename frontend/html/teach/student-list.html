@@ -1,0 +1,87 @@
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+    <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentDialog.find('#datagrid-list')}">
+        <fieldset>         
+           
+			<span>姓名：</span>
+            <input type="text" name="name" class="form-control" size="15">
+			
+            <div class="btn-group">
+                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="confirmselectstu()">确定</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+		var can_pause_student_list = {
+        list:$.CurrentDialog.find('#datagrid-list').datagrid({ 
+        gridTitle : '',
+        toolbarItem: 'none',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '85%',
+        showCheckboxcol: true,
+        showToolbar: false,
+        dataUrl: config.openBasePath + 'student/list?learnstatus=0',
+        columns: [
+            {name:'name',label:'学员姓名',align:'center'},
+            {name:'phone',label:'手机号码',align:'center'},
+            {name:'idcard',label:'身份证号',align:'center'},
+            {name:'areaid',label:'片区',align:'center',render:formatAreaCell},
+            {name:'storeid',label:'门店',align:'center',render:formatStoreCell},
+            {name:'applyexam',label:'学车状态',align:'center',render:function(value, data) { 
+            	console.log(data.applyexam);
+            	console.log(data.applystatus);
+            	return studentStatus(data.applyexam, data.applystatus)}},
+			//{name:'coachname',label:'教练姓名',align:'center'},
+			{name:'applydate',label:'报名日期',align:'center',render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}}
+
+        ],
+        keys : {
+            ctime : 'ctime',
+            mtime : 'mtime'
+        },
+        
+
+    })
+	}
+	
+	function confirmselectstu(){
+		var data = can_pause_student_list.list.data('selectedDatas');
+		if(!data){
+			 BJUI.alertmsg('error', '没有选中数据！', {})
+			 return
+		}
+		if(data.length>1){
+			 BJUI.alertmsg('error', '只能选中一个学员', {})
+			 return
+		}
+		clz.setWindowJson(data);
+		BJUI.dialog('closeCurrent')
+	}
+
+	function formatSubject(value) {
+        switch (value) {
+            case 0 :
+            return "科目一培训";
+            case 1 :
+            return "科目一考试";
+            case 2 :
+            return "科目二培训";
+            case 3 :
+            return "科目二考试";
+            case 4 :
+            return "科目三培训";
+            case 5 :
+            return "科目三考试";
+            case 6 :
+            return "科目四培训";
+            case 7 :
+            return "科目四考试";
+        }
+    }
+</script>

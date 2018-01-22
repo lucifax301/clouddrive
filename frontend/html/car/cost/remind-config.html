@@ -1,0 +1,58 @@
+<section id="thispage" privilege = "040801"></section>
+<form class="datagrid-edit-form" data-toggle="ajaxform" id="edit-form">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>缴费提醒设置信息</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-3">
+				<label class="row-label">车船税到期提前天数:</label>
+				<div class="row-input required">
+					<input type="text" name="tax" data-rule="required;digits" maxlength="5">
+				</div>
+				<label class="row-label">年审到期提前天数:</label>
+				<div class="row-input required">
+					<input type="text" name="annualcheck" data-rule="required;digits" maxlength="5">
+				</div>
+				<div>
+				<label class="row-label">保险到期提前天数:</label>
+				<div class="row-input required">
+					<input type="text" name="insurance" data-rule="required;digits" maxlength="5">
+				</div>
+				<label class="row-label">强制报废到期提前天数:</label>
+				<div class="row-input required">
+					<input type="text" name="retire" data-rule="required;digits" maxlength="5">
+				</div>
+				</div>
+				<label class="row-label"></label>
+				<div class="row-input">
+					<button type="submit" data-privilege='040801_11' class="btn-blue vhide" data-icon="save">保存修改</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+    clz.CurrentDom_init({
+        current : 'Navtab',
+        url : config.openBasePath + 'carbiz/updateremind',
+        form_name : 'edit-form',
+        before : function(data){         
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'carbiz/loadremind',
+                type : "GET",
+                async : false,
+                okCallback: function(json, options) {
+                	if(json.result){
+                    data.tax = json.result.tax;
+                    data.annualcheck = json.result.annualcheck;
+                    data.insurance = json.result.insurance;
+                    data.retire = json.result.retire;
+                   }
+                }
+            });
+            return data;
+        }
+    })
+</script>

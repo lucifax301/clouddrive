@@ -1,0 +1,104 @@
+
+<div class="bjui-row col-3">
+	<form id="jobform" >
+	<label class="row-label">准教车型</label>
+	<div class="row-input required">
+		<select name="teachpermitted" data-toggle="selectpicker" data-width="100%" data-rule="required">
+			<option value="">请选择</option>
+			<option value="C1">C1</option>
+			<option value="C2">C2</option>
+			<option value="C3">C3</option>
+			<option value="C4">C4</option>
+			<option value="C5">C5</option>
+			<option value="A1">A1</option>
+			<option value="A2">A2</option>
+			<option value="A3">A3</option>
+			<option value="B1">B1</option>
+			<option value="B2">B2</option>
+			<option value="D">D</option>
+			<option value="E">E</option>
+			<option value="F">F</option>
+			<option value="M">M</option>
+			<option value="N">N</option>
+			<option value="P">P</option>
+		</select>
+	</div>
+	
+	<label class="row-label">驾驶证号</label>
+	<div class="row-input required">
+		<input type="text" name="drilicence" data-rule="required" placeholder="请输入驾驶证号">
+	</div>
+	<label class="row-label">准驾车型</label>
+	<div class="row-input required">
+		<select name="dripermitted" data-toggle="selectpicker" data-width="100%" data-rule="required">
+			<option value="">请选择</option>
+			<option value="C1">C1</option>
+			<option value="C2">C2</option>
+			<option value="C3">C3</option>
+			<option value="C4">C4</option>
+			<option value="C5">C5</option>
+			<option value="A1">A1</option>
+			<option value="A2">A2</option>
+			<option value="A3">A3</option>
+			<option value="B1">B1</option>
+			<option value="B2">B2</option>
+			<option value="D">D</option>
+			<option value="E">E</option>
+			<option value="F">F</option>
+			<option value="M">M</option>
+			<option value="N">N</option>
+			<option value="P">P</option>
+		</select>
+	</div>
+	<label class="row-label">初领日期</label>
+	<div class="row-input required">
+		<input type="text" name="fstdrilicdate" data-toggle="datepicker" readonly="readonly" data-rule="required" placeholder="点击选择日期">
+	</div>
+	<label class="row-label">有效期至</label>
+	<div class="row-input">
+		<input type="text" name="expireDate" data-toggle="datepicker" readonly="readonly" placeholder="点击选择日期">
+	</div>
+	<label class="row-label">职业资格证号</label>
+	<div class="row-input">
+		<input type="text" name="procertificate" data-rule="number" maxlength="20" placeholder="请输入职业资格证号">
+	</div>
+	<label class="row-label">职业资格等级</label>
+	<div class="row-input">
+		<select name="prolevel" data-toggle="selectpicker" data-width="100%" data-rule="required">
+			<option value="">请选择</option>
+			<option value="1">一级</option>
+			<option value="2">二级</option>
+			<option value="3">三级</option>
+			<option value="4">四级</option>
+		</select>
+	</div>
+	<br />
+	<label class="row-label">指纹图片</label>
+							<div class="row-input"><input type="hidden" name="fingerprinturl" id="assessfingerprintphoto" />
+								<input type="file" data-name="coachImg" data-toggle="webuploader" data-options="
+										{
+											pick: {label: '点击选择图片'},
+											server: config.openBasePath + 'uploadImg',
+											fileNumLimit: 1,
+											formData: {dir:'custompic'},
+											required: false,
+											uploaded: '',
+											basePath: '',
+											auto: true,
+											accept: {
+												title: '上传图片',
+												extensions: 'jpg,png',
+												mimeTypes: '.jpg,.png'
+											},
+											 type: 'img',
+											  uploadSuccess: function(data){
+												console.log(data)
+												if(data.result&&data.result.pic){
+													$.CurrentNavtab.find('#assessfingerprintphoto').val(data.result.pic);
+													$.CurrentNavtab.find('.statusBar .btns').hide()
+												}
+											  }
+										}">
+							</div>
+	</form>
+</div>

@@ -1,0 +1,97 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form"  id="formedit">
+		<input type="hidden" name="id">
+		<div class="bjui-row col-2">
+			<div class="y-comment">
+				<label class="row-label" style="width:20%">二级渠道名称：</label>
+				<div class="row-input required">
+					<input type="text" name="channel" data-rule="required" maxlength="25" placeholder="请输入二级渠道名称">
+				</div>
+			</div>
+			
+			<div class="y-comment">
+				<label class="row-label">推荐属性:</label>
+				<div class="row-input">
+					<input type="radio" name="flag" value="coachflag" data-toggle="icheck" data-label="教练推荐">
+					<input type="radio" name="flag" value="staffflag" data-toggle="icheck" data-label="员工推荐">
+				</div>
+				</div>
+		</div>
+		<input type="hidden" name="status" />
+		</form>
+</div>
+<div class="bjui-pageFooter">
+	<ul>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+		<li><button type="button" class="btn-default" data-icon="save" onclick="channel_second_edit.savejobtype()">保存</button></li>
+	</ul>
+</div>
+<script type="text/javascript">
+	
+	var channel_second_edit = {
+		init(){
+			clz.CurrentDom_init({
+				form_name: 'formedit',
+				table_name: 'datagrid-list',
+				current: 'Dialog',
+				before:function(data){
+					if(data.coachflag==1){
+						data.flag='coachflag'
+					}else if(data.staffflag==1){
+						data.flag='staffflag'
+					}
+					return data;
+				},
+				callback:function(data){
+					
+					if(typeof(channel_edit)!="undefined"){
+					channel_edit.editname = data.channel;
+					}
+					
+					if(typeof(channel_add)!="undefined"){
+						channel_add.editname = data.channel;
+					}
+					if(data && data.moretype){
+						var dom = $.CurrentDialog.find('#typeadd'),
+							html = '';
+						$.each(data.moretype,function(i,m){
+							html += '<label class="row-label">'+m.name+'</label><div class="row-input y-box-flex"><input type="text" name="moretype" data-name="'+m.name+'" value="'+m.value+'"><span>元</span></div>';
+						})
+						dom.append(html)
+					}
+				}
+			})
+		},
+		typeaddNum:1,
+		typeadd(){
+			var dom = $.CurrentDialog.find('#typeadd'),
+				text = $.CurrentDialog.find('input[name="newtype"]').val(),
+				html;
+			if(text == ''){return}
+			$.CurrentDialog.find('input[name="newtype"]').val('');
+			html = '<label class="row-label">'+text+'</label><div class="row-input y-box-flex"><input type="text" name="moretype" data-name="'+text+'"><span>元</span></div>';
+			dom.append(html)
+			this.typeaddNum++;
+			dom.trigger(BJUI.eventType.initUI)//重新渲染BJUI
+		},
+		savejobtype(){
+			if($.CurrentDialog.find('#formedit').isValid()){
+			var data = clz.parseForm($.CurrentDialog.find('#formedit'))
+			data.moretype = [];
+			$.each($.CurrentDialog.find('input[name="moretype"]'),function(i){
+				data.moretype.push({
+					name:$(this).data('name'),
+					value:$(this).val()
+				})
+			})
+			if($.CurrentDialog.find('input[name="flag"]:checked').val()){
+						data[$.CurrentDialog.find('input[name="flag"]:checked').val()]=1
+			}
+			console.log(data)
+			clz.setWindowJson(data)
+			BJUI.dialog('closeCurrent')
+			}
+		}
+	}
+	channel_second_edit.init();
+</script>

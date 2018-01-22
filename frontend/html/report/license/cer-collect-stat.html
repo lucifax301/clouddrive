@@ -1,0 +1,185 @@
+<div class="widget-box">
+	<div class="widget-title">
+		<span class="icon"> <i class="fa fa-th"></i> </span>
+		<h5>牌证业务汇总搜索</h5>
+	</div>
+	<div class="widget-content nopadding">
+		<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}" id="search-form">
+			<div class="bjui-row col-4">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" data-width="100%" data-nextselect="#storeid" data-dataurl="/httpaccess/area/list" data-optiontype="id,name" data-refurl="/httpaccess/store/listInJson?areaid={value}">
+					</select>
+				</div>
+				<label class="row-label">门店：</label>
+				<div class="row-input">
+					<select name="storeid" id="storeid" data-toggle="selectpicker" data-width="100%" data-rule="">
+						<option value="">请选择</option>
+					</select>
+				</div>
+				<label class="row-label">学车进度：</label>
+				<div class="row-input">
+					<select name="applyexam" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="applyexam" data-optiontype="val,name" data-refdata="subject,{value},applyexam" data-nextselect="#subject" data-keys="{'label':'name','value':'val'}">
+					</select>
+				</div>
+				<label class="row-label">办证科目：</label>
+				<div class="row-input">
+					<select name="subject" id="subject" data-toggle="selectpicker" size="15" data-width="100%">
+						<option value="">请选择</option>
+					</select>
+				</div>
+				<label class="row-label">班别：</label>
+				<div class="row-input">
+					<select name="classid" data-toggle="selectpicker" data-width="100%" data-rule="" data-dataurl="/httpaccess/class/list?pageNo=-1" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">营销渠道：</label>
+				<div class="row-input">
+					<select name="channel" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="channellist" data-optiontype="id,channel">
+					</select>
+					
+				</div>
+				<label class="row-label">报名日期：</label>
+				<div class="row-input fill-2">
+					<div class="fl w-45">
+						<input type="text" name="applydatelow" data-toggle="datepicker" data-rule="date">
+					</div>
+					<div class="fl w-10 text-center">-</div>
+					<div class="fl w-45">
+						<input type="text" name="applydatetop" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+				<label class="row-label">办证日期：</label>
+				<div class="row-input fill-2">
+					<div class="fl w-45">
+						<input type="text" name="ctimelow" data-toggle="datepicker" data-rule="date">
+					</div>
+					<div class="fl w-10 text-center">-</div>
+					<div class="fl w-45">
+						<input type="text" name="ctimetop" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<table class="table table-bordered notablebg" id="datagrid-list"></table>
+<script>
+	var report_license_cercollect = {
+		init() {
+			var table = $.CurrentNavtab.find('#datagrid-list').datagrid({
+				height: '75%',
+				gridTitle: '牌证业务汇总查询',
+				showToolbar: false,
+				filterThead: false,
+				toolbarItem: '',
+				toolbarCustom: report_license_cercollect.toolbarCustom(),
+				paging: false,
+				dataUrl: config.openBasePath + 'report/getCertificateCollectStat',
+				columns: [{
+						name: 'datetime',
+						label: '日期',
+						align: 'center',
+						render: function(value) {return value.substr(0, 11)}
+					},
+					{
+						name: 'subject',
+						label: '办证科目',
+						align: 'center',
+						render:function(vlaue,data){return clz.configRender({name:'subject',val:vlaue})}
+					},
+					{
+						name: 'areaid',
+						label: '片区',
+						align: 'center',
+						render: function(vlaue,data){return clz.configRender({name:'arealist',val:vlaue,key:'id'})}
+					},
+					{
+						name: 'storeid',
+						label: '门店',
+						align: 'center',
+						render: function(vlaue,data){return clz.configRender({name:'storelist',val:vlaue,key:'id'})}
+					},
+					{
+						name: 'channel',
+						label: '营销渠道',
+						align: 'center',
+						render: function(vlaue,data){return clz.configRender({name:'channellist',val:vlaue,dataname:'channel',key:'id'})}
+					},
+					{
+						name: 'classid',
+						label: '班别',
+						align: 'center',
+						render: function(vlaue,data){return clz.configRender({name:'classlist',val:vlaue,key:'id'})}
+					},
+					{
+						name: 'traintype',
+						label: '车型',
+						align: 'center',
+					},
+					{
+						name: 'stucount',
+						label: '数量',
+						align: 'center',
+						render:function(val,data){
+							var ids = data.ids.replace(',','|')
+							return '<a href="javascript:" onclick="report_license_cercollect.show(\''+ids+'\','+data.subject+')">'+val+'</a>'
+						}
+					}
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#datagrid-list'),
+						cols: [1,2],
+						keybg: '合计'
+					})
+				}
+			})
+		},
+		toolbarCustom() {
+			return "<button type='button' class='btn btn-blue ml5' data-icon='' onclick='report_license_cercollect.importExcel(1)'>银联商务导入</button> " + 
+			"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='report_license_cercollect.importExcel(2)'>北京技术导入</button> " + 
+			"<button type='button' class='btn btn-blue ml5' data-icon='' onclick='report_license_cercollect.importExcel(3)'>银盛导入</button>";
+		},
+		importExcel(value) {
+			var text = '';
+			if (value == 1) text = '银联商务';
+			else if (value == 2) text = '北京技术';
+			else if (value == 3) text = '银盛';
+			clz.setWindowJson(value);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'finance_Posstat_upload',
+				url: 'html/finance/stat/upload.html',
+				title: '导入Pos流水（' + text +'）',
+				mask: true,
+				onClose: function() {
+					table.datagrid('reload', true);
+				}
+			})
+		},
+		show(ids,subject,datetime){
+			ids = ids.replace('|',',')
+			clz.setWindowJson({
+				ids:ids,
+				subject:subject,
+				datetime:datetime
+			})
+			BJUI.dialog({
+			    id:'cer_collect_stat_show',
+			    url:'html/report/license/cer-collect-stat-show.html',
+			    title:'牌证业务汇总查询详情',
+			    mask:true,
+			    width:'1000',
+			    height:'500'
+			})
+		}
+	}
+	report_license_cercollect.init()
+</script>

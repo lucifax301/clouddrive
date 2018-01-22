@@ -1,0 +1,73 @@
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var data = clz.getNavtab_more();
+	var finance_query_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
+		gridTitle: '片区主营业务收入列表',
+		toolbarItem: '',
+		paging: {
+			pageSize: 15,
+			selectPageSize: '15,50,100,500'
+		},
+		height: '80%',
+		fieldSortable: false,
+		showToolbar: false,
+		dataUrl: config.openBasePath + 'financeReceipt/list',
+		postData : data,
+		columns: [{
+			name: 'batchnum',
+			label: '批次号',
+			align: 'center'
+		},{
+			name: 'storeid',
+			label: '门店',
+			align: 'center',
+			render : formatStoreCell
+		},{
+			name: 'stuname',
+			label: '学员姓名',
+			align: 'center'
+		},{
+			label: '证件号码',
+			name : 'stuidcard',
+			align: 'center'
+		}, {
+			label: '金额',
+			name : 'receiptmoney',
+			align: 'center',
+            render : function(val) {
+                return clz.filter.returnFloat(val);
+            }
+		},{
+			label: '科目',
+			name : 'type',
+			align: 'center',
+			render: formatSubjectCell
+		},{
+			label: '开票日期',
+			name : 'receiptdate',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }	
+			
+		},{
+			label: '发票号',
+			name : 'invoicenum',
+			align: 'center'
+			
+		},{
+			label: '班型',
+			name : 'classinfo',
+			align: 'center'
+			
+		},{
+			label: '审核日期',
+			name : 'ctime',
+			align: 'center',
+			render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) }	
+		},{
+			label: '备注',
+			name : 'remark',
+			align: 'center'
+			
+		},]
+	});
+</script>

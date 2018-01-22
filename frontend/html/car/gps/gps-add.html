@@ -1,0 +1,157 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="ajaxform" id="add-form">
+        <div class="bjui-row col-1">
+            <label class="row-label">资产编号:</label>
+            <div class="row-input required">
+                <input type="text" name="name" data-rule="required;length[1~20]">
+            </div>
+            <label class="row-label">设备型号:</label>
+            <div class="row-input required">
+                <select name="sex" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </div>
+            <label class="row-label">设备号码:</label>
+            <div class="row-input required">
+                <input type="text" name="phone" data-rule="required,mobile">
+            </div>
+            <label class="row-label">车牌号码:</label>
+            <div class="row-input">
+                <input type="text" name="carNo" value="" data-toggle="findgrid" data-options="{
+                    include: 'carNo',
+                    dialogOptions: {
+                        title:'查找车牌号',
+                        maxable : false
+                    },
+                    empty : false,
+                    gridOptions: {
+                        tableWidth:'80%',
+                        filterThead : true,
+                        dataUrl: config.openBasePath + 'car/getCarList',
+                        columns: [
+                            {name:'carNo', label:'车牌号码', width : '25%', align:'center'},
+                            {name:'area', label:'所属片区', width : '30%', align:'center'},
+                            {name:'carOwner', label:'所属教练', width : '30%', align:'center'},
+                        ]
+                    },
+                }" placeholder="点放大镜按钮查找">
+            </div>
+            <label class="row-label">SIM卡号:</label>
+            <div class="row-input">
+                <input type="text" name="qq" data-rule="digits">
+            </div>
+            <label class="row-label">备注:</label>
+            <div class="row-input">
+                <textarea name="remark" rows="3"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="save()">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+    </div>
+</div>
+<script type="text/javascript">
+    clz.CurrentDom_init({
+		current:'Navtab',
+        url: config.openBasePath + 'student/edit',
+        form_name : 'add-form',
+        before:function(data){
+            var formdata;
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'loginInfo',
+                type : "GET",
+                async : false,
+                loadingmask: true,
+                okCallback: function(json, options) {
+                    data.applydate = clz.filter.time({date:new Date(),type:'yyyy-MM-dd'});
+                    data.username = json.result.realname;
+                    data.storename = json.result.storename;
+                    data.storenum = json.result.storenum;
+                    formdata = data;
+                }
+            });
+            return formdata;
+        }
+    })
+
+
+  
+　　$('#islocal').change(function(){  
+        var val = $(this).children('option:selected').val();
+　　　　　 if (val == 0) {
+            $("#residence_div").css("display","inline");
+        } else {
+            $("#residence_div").css("display","none");
+            $("#residencedate_div").css("display","none");
+        }
+　　})  
+
+　　$('#residence').change(function(){  
+        var val = $(this).children('option:selected').val();
+　　　　　 if (val == 1) {
+            $("#residencedate_div").css("display","inline");
+        } else {
+            $("#residencedate_div").css("display","none");
+        }
+　　})
+
+　　$('#busitype').change(function(){  
+        var val = $(this).children('option:selected').val();
+　　　　　 if (val == 1) {
+            $("#carddate_div").css("display","inline");
+        } else {
+            $("#carddate_div").css("display","none");
+        }
+　　})
+
+    function checkidcard(obj) {
+        var idcard = $(obj).val();
+        $("#birthday").val('');
+        if (!isCardNo(idcard)) {
+            BJUI.alertmsg('error','该证件号码格式错误!');
+            return;
+        }
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'student/get',
+            type : "GET",
+            data : {idcard :idcard},
+            loadingmask: true,
+            okCallback: function(json, options) {
+                if (json.result != undefined && json.result.name != null) {
+                    BJUI.alertmsg('error','该证件号码在系统中已存在!');
+                } else {
+                    var birthday = idcard.substr(6,8).replace(/(.{4})(.{2})/,"$1-$2-");   
+                    $("#birthday").val(birthday);
+                }
+            }
+        });
+    }
+
+    function save() {
+        BJUI.alertmsg('confirm', '确认保存用户？', {
+            okCall: function() {
+                BJUI.ajax('ajaxform', {
+                    url: config.openBasePath + 'student/edit',
+                    loadingmask: true,
+                    form :  $.CurrentNavtab.find('#add-form'),
+                    okCallback: function(json, options) {
+                        if (json.result.code) {
+                            BJUI.alertmsg('correct','您在今日23:59:59之前依然可以对学员信息进行编辑，之后学员信息更改需要申请变更!');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function showRedColor(name) {
+        $('input[name="'+name+'"],select[name="'+name+'"],textarea[name="'+name+'"]')
+            .parent("div").prev("label").css("color","red"); 
+    }
+
+
+</script>

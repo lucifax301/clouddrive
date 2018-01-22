@@ -1,0 +1,50 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+        <input type="hidden" name="id">
+        <div class="bjui-row col-1">
+            <label class="row-label">班别名称</label>
+            <div class="row-input required">
+                <input type="text" name="name" data-rule="required;length[1~60]">
+            </div>
+            <label class="row-label">开班时间</label>
+            <div class="row-input required">
+                 <input type="text" name="opentime" data-toggle="datepicker">
+            </div>
+            <label class="row-label">培训方式</label>
+            <div class="row-input required">
+                <select name="type" data-toggle="selectpicker" data-width="100%" data-rule="required">
+                    <option value="">请选择</option>
+                    <option value="0">服务全包</option>
+                    <option value="1">先学后付</option>
+                    <option value="2">先付后学</option>
+                </select>
+            </div>
+            <label class="row-label">报名金额</label>
+            <div class="row-input required">
+                <input type="text" name="amount" data-rule="required;number">
+            </div>
+            <label class="row-label">单次服务金额</label>
+            <div class="row-input required">
+                <input type="text" name="singleamount" data-rule="required;number">
+            </div>
+            <label class="row-label">班别描述</label>
+            <div class="row-input">
+                <textarea name="classdesc" rows="4"></textarea>
+            </div> 
+        </div>
+    </form>
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+        <li><button type="submit" class="btn-blue" data-icon="save">保存</button></li>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li> 
+    </div>
+</div>
+<script type="text/javascript">
+    clz.CurrentDom_init({
+		current:'Dialog',
+        url : config.openBasePath + 'class/edit',
+        form_name : 'edit-form',
+        table_name : 'datagrid-list'
+    })   
+</script>

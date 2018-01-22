@@ -1,0 +1,403 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i>
+                </span>
+				<h5>学员信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<input type="hidden" name="id">
+					<label class="row-label">学员姓名:</label>
+					<div class="row-input required">
+						<input type="text" name="name" data-rule="required;length[1~20]">
+					</div>
+					<label class="row-label">性别:</label>
+					<div class="row-input required">
+						<select name="sex" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="1">男</option>
+							<option value="2">女</option>
+						</select>
+					</div>
+					<label class="row-label">移动电话:</label>
+					<div class="row-input required">
+						<input type="text" name="phone" data-rule="required,mobile">
+					</div>
+					<label class="row-label">QQ号码:</label>
+					<div class="row-input">
+						<input type="text" name="qq" data-rule="digits">
+					</div>
+					<label class="row-label">户籍类别:</label>
+					<div class="row-input required">
+						<select name="nationality" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="1">中国居民</option>
+							<option value="2">外籍人士</option>
+							<option value="3">港澳台</option>
+						</select>
+					</div>
+					<label class="row-label">证件类型:</label>
+					<div class="row-input required">
+						<select name="cardtype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="1">证件号</option>
+							<option value="2">护照</option>
+							<option value="3">军官证</option>
+							<option value="4">其他</option>
+						</select>
+					</div>
+					<label class="row-label">证件号码:</label>
+					<div class="row-input required">
+						<input type="text" name="idcard" data-rule="required,length[1~20]">
+					</div>
+					<label class="row-label">出生年月:</label>
+					<div class="row-input required">
+						<input type="text" name="birthday" data-toggle="datepicker" data-rule="required">
+					</div>
+					<label class="row-label">是否本地:</label>
+					<div class="row-input required">
+						<select name="islocal" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="">请选择</option>
+							<option value="1">是</option>
+							<option value="0">否</option>
+						</select>
+					</div>
+					<label class="row-label">有无居住证:</label>
+					<div class="row-input">
+						<select name="residence" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="">请选择</option>
+							<option value="1">有</option>
+							<option value="0">无</option>
+						</select>
+					</div>
+					<label class="row-label">居住证有效期:</label>
+					<div class="row-input">
+						<input type="text" name="residencedate" data-toggle="datepicker">
+					</div>
+					<label class="row-label">报名日期:</label>
+					<div class="row-input required">
+						<input type="text" name="applydate" data-toggle="datepicker" data-rule="required">
+					</div>
+					<label class="row-label">现居住地址:</label>
+					<div class="row-input fill-2 required">
+						<input type="text" name="address" data-rule="required,length[1~120]">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i>
+                </span>
+				<h5>报名信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">学车类型:</label>
+					<div class="row-input required">
+						<select name="busitype" disabled="true" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="0">初领</option>
+							<option value="1">增驾</option>
+							<option value="2">转校</option>
+							<option value="9">其他</option>
+						</select>
+					</div>
+					<label class="row-label">原证有效期:</label>
+					<div class="row-input">
+						<input type="text" name="carddate" data-toggle="datepicker">
+					</div>
+					<label class="row-label">准驾车型:</label>
+					<div class="row-input required">
+						<select name="traintype" disabled="true" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="C1">C1</option>
+							<option value="C2">C2</option>
+						</select>
+					</div>
+					<label class="row-label">营销渠道:</label>
+					<div class="row-input required">
+						<select id="channel" name="channel" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/saleschannel/list?parentid=0" data-optiontype="id,channel" data-rule="required">
+						</select>
+					</div>
+					<label class="row-label">信息来源:</label>
+					<div class="row-input">
+						<select name="infosource" data-toggle="selectpicker" data-width="100%">
+							<option value="">请选择</option>
+							<option value="0">别人介绍</option>
+							<option value="1">广告媒体</option>
+							<option value="2">视频媒体</option>
+							<option value="3">广播电台</option>
+							<option value="4">网络搜索</option>
+							<option value="5">报刊杂志</option>
+							<option value="6">市场活动</option>
+							<option value="7">其他</option>
+						</select>
+					</div>
+					<label class="row-label">推荐员工:</label>
+					<input type="hidden" name="recuid">
+					<div id="recname_label" class="row-input">
+						<input id="recname" type="text" readonly="true" name="recname" data-toggle="findgrid" data-options="{
+							include: 'recname:name,recuid:id',
+							dialogOptions: {
+								title:'查找员工',
+								maxable : false
+							},
+							empty : false,
+							gridOptions: {
+								filterThead : true,
+								height : '90%',
+								tableWidth : '90%',
+								dataUrl: config.openBasePath + 'staff/list?job=1&isdel=0',
+								columns: [
+									{name:'name', label:'员工名称', width : '25%', align:'center'},
+									{name:'idcard', label:'证件号码', width : '30%', align:'center'},
+									{name:'mobile', label:'手机号码', width : '30%', align:'center'},
+								]
+							}
+						}" placeholder="点放大镜按钮查找">
+					</div>
+					<label class="row-label">推荐教练:</label>
+					<input type="hidden" name="reccoachid">
+					<div class="row-input">
+						<input type="text" readonly="" name="reccoachname" data-toggle="findgrid" data-options="{
+		                    include: 'reccoachname:name,reccoachid:coachid',
+		                    dialogOptions: {
+		                        title:'查找教练',
+		                        maxable : false
+		                    },
+		                    empty : false,
+		                    gridOptions: {
+		                        tableWidth:'80%',
+		                        tableWidth : '90%',
+		                        filterThead : true,
+		                        dataUrl: config.openBasePath + 'coach/list?employstatus=0',
+		                        columns: [
+		                            {name:'name', label:'教练名称', width : '25%', align:'center'},
+		                            {name:'idcard', label:'证件号码', width : '30%', align:'center'},
+		                            {name:'mobile', label:'手机号码', width : '30%', align:'center'},
+		                        ]
+		                    },
+		            }" placeholder="点放大镜按钮查找">
+					</div>
+					<label class="row-label">合同编号:</label>
+					<div class="row-input required">
+						<input type="text" disabled="true" name="contract" data-rule="required">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i>
+                </span>
+				<h5>优惠活动</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">班别名称:</label>
+					<div class="row-input required">
+						<select id="class" disabled="true" name="classid" 
+							data-toggle="selectpicker" data-width="100%" data-rule="required"
+								data-dataurl="/httpaccess/class/list?pageNo=-1" data-optiontype="id,name">
+						</select>
+					</div>
+					<label class="row-label">营销活动:</label>
+					<div class="row-input">
+						<select disabled="true" name="activityid" data-toggle="selectpicker" 
+								data-dataurl="/httpaccess/sales/list?pageNo=-1" data-width="100%"
+								data-optiontype="id,activityname">
+						</select>
+					</div>
+					<label class="row-label">现金优惠(元):</label>
+					<div class="row-input">
+						<input disabled="true" type="text" id="submoney" name="submoney" value="0" data-rule="plusnumber;range[0~20000]">
+					</div>
+					<label class="row-label">代金券优惠(元):</label>
+					<div class="row-input">
+						<input disabled="true" type="text" id="couponmoney" name="couponmoney" value="0" data-rule="plusnumber;range[0~20000]">
+					</div>
+					<label class="row-label">代金券码:</label>
+					<div class="row-input">
+						<input disabled="true" type="text" id="couponnum" name="couponnum">
+					</div>
+					<label class="row-label">合同金额(元):</label>
+					<div class="row-input">
+						<input disabled="true" type="text" id="money" name="money" value="0" data-rule="plusnumber;range[0~20000]">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i>
+                </span>
+				<h5>付款信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">现金支付:</label>
+					<div class="row-input required">
+						<input disabled="true" type="text" name="cashmoney" data-rule="plusnumber" value="0" data-rule="required">
+					</div>
+					<label class="row-label">POS机号:</label>
+					<div class="row-input">
+						<select disabled="true" name="posid" data-toggle="selectpicker" data-width="100%"
+								data-dataurl="/httpaccess/pos/financePosALL" data-optiontype="id,posnum">
+						</select>
+					</div>
+					<label class="row-label">刷卡金额:</label>
+					<div class="row-input required">
+						<input disabled="true" type="text" name="posmoney" data-rule="plusnumber" value="0" data-rule="required">
+					</div>
+					<label class="row-label">缴费日期:</label>
+					<div class="row-input required">
+						<input disabled="true" type="text" name="paydate" data-toggle="datepicker" data-rule="required">
+					</div>
+					<label class="row-label">合同编号:</label>
+					<div class="row-input required">
+						<input disabled="true" type="text" name="contract" data-rule="required">
+					</div>
+					<label class="row-label">备注:</label>
+					<div class="row-input fill-2">
+						<input type="text" name="payremark">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i>
+                </span>
+				<h5>发票信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">开票种类:</label>
+					<div class="row-input required">
+						<select disabled="true" name="billtype" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="1">专用发票</option>
+							<option value="2">普通发票</option>
+						</select>
+					</div>
+					<label class="row-label">票据编号:</label>
+					<div class="row-input required">
+						<input disabled="true" type="text" name="billnum" data-rule="required">
+					</div>
+					<label class="row-label">发票名称:</label>
+					<div class="row-input fill-2 required">
+						<input disabled="true" type="text" name="billname" data-rule="required">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i>
+                </span>
+				<h5>备注信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">备注:</label>
+					<div class="row-input fill-2">
+						<textarea name="remark" rows="3"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>门店信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">报名门店:</label>
+					<div class="row-input">
+						<input type="text" name="storename" readonly="">
+					</div>
+					<label class="row-label">门店编号:</label>
+					<div class="row-input">
+						<input type="text" name="storenum" readonly="">
+					</div>
+					<label class="row-label">门店客服:</label>
+					<div class="row-input">
+						<input type="text" name="username" readonly="">
+					</div>
+					<label class="row-label">录入时间:</label>
+					<div class="row-input">
+						<input type="text" name="ctime" readonly="">
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li>
+			<button type="button" class="btn-blue" data-icon="save" onclick="save()">保存</button>
+		</li>
+		<li>
+			<button type="button" class="btn-close" data-icon="close">取消</button>
+		</li>
+	</div>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current: 'Navtab',
+		url: config.openBasePath + 'student/edit',
+		form_name: 'edit-form',
+		table_name: 'datagrid-list',
+		data: window.student_object,
+		timetype: [{
+			name: "birthday",
+			type: "yyyy-MM-dd"
+		}, {
+			name: "applydate",
+			type: "yyyy-MM-dd"
+		}, {
+			name: "residencedate",
+			type: "yyyy-MM-dd"
+		}, {
+			name: "carddate",
+			type: "yyyy-MM-dd"
+		}, {
+			name: "paydate",
+			type: "yyyy-MM-dd"
+		}],
+        returnFloat : 'submoney,posmoney,couponmoney,cashmoney',
+		before:function(data){
+            var formdata;
+            BJUI.ajax('doajax', {
+                url: config.openBasePath + 'loginInfo',
+                type : "GET",
+                async : false,
+                loadingmask: true,
+                okCallback: function(json, options) {
+                    data.applydate = clz.filter.time({date:new Date(),type:'yyyy-MM-dd'});
+                    data.paydate = clz.filter.time({date:new Date(),type:'yyyy-MM-dd'});
+                    data.ctime = clz.filter.time({date:new Date(),type:'yyyy-MM-dd'});
+                    data.username = json.result.username;
+                    data.storename = json.result.storename;
+                    data.storenum = json.result.storenum;
+                    formdata = data;
+                }
+            });
+            return formdata;
+	    }
+	})
+
+	function save() {
+		BJUI.alertmsg('confirm',
+			'确认修改用户信息?', {
+				okCall: function() {
+					BJUI.ajax('ajaxform', {
+						url: config.openBasePath + 'student/edit',
+						loadingmask: true,
+						form: $.CurrentNavtab.find('#edit-form'),
+						okCallback: function(json, options) {
+						}
+					});
+				}
+			});
+	}
+</script>

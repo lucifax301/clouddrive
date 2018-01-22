@@ -1,0 +1,756 @@
+<div class="bjui-pageHeader" style="background-color:#fefefe; border-bottom:none;">
+	<div class="c-tabs-header">
+		<li class="active statli" data-tabs='id1'>按片区统计</li>
+		<li class="statli" data-tabs='id2'>按教练统计</li>
+		<li class="statli" data-tabs='id3'>按带教类型统计</li>
+		<li class="statli" data-tabs='id4'>按教学组长统计</li>
+	</div>
+	<div class="stat" id="stat_id1">
+		<form data-toggle="ajaxsearch" id="statform1">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-4">
+						<label class="row-label">片区：</label>
+						<div class="row-input">
+							<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">带教车型：</label>
+						<div class="row-input">
+							<select name="teachcartype" id="teachcartype" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="cartypelist" data-optiontype="type,type">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">带教类型：</label>
+						<div class="row-input">
+							<select name="teachtypeid" id="teachtype" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="teachtypelist" data-optiontype="id,type">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id1()">搜索</button>
+								<button type="reset" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id1_export()">导出</button>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="stat" id="stat_id2" style="display:none">
+		<form data-toggle="ajaxsearch" id="statform2">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-4">
+						<label class="row-label">片区：</label>
+						<div class="row-input">
+							<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist" data-refdata="storelist,{value},areaid" data-nextselect="#store" data-keys="{'label':'name','value':'id'}" data-optiontype="id,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">门店：</label>
+						<div class="row-input">
+							<select name="storeid" id="store" data-toggle="selectpicker" size="15" data-width="100%" >
+								<option value="">请选择</option>
+							</select>
+						</div>
+
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id2()">搜索</button>
+								<button type="reset" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id2_export()">导出</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="stat" id="stat_id3" style="display:none">
+		<form data-toggle="ajaxsearch" id="statform3">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-4">
+						<label class="row-label">片区：</label>
+						<div class="row-input">
+							<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist" data-optiontype="id,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">带教车型：</label>
+						<div class="row-input">
+							<select name="teachcartype" id="teachcartype" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="cartypelist" data-optiontype="type,type">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">带教类型：</label>
+						<div class="row-input">
+							<select name="teachtypeid" id="teachtype" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="teachtypelist" data-optiontype="id,type">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id3()">搜索</button>
+								<button type="reset" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id3_export()">导出</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="stat" id="stat_id4" style="display:none">
+		<form data-toggle="ajaxsearch" id="statform4">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5></h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-4">
+						<label class="row-label">片区：</label>
+						<div class="row-input">
+							<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist" data-optiontype="id,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<label class="row-label">教学组长：</label>
+						<div class="row-input">
+							<select name="headcoachid" id="coachid" data-toggle="selectpicker" size="15" data-width="100%" data-dataurl="/httpaccess/coach/listhead" data-optiontype="coachid,name">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+						<div class="mt10">
+							<label class="row-label"></label>
+							<div class="row-input fill-2">
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id4()">搜索</button>
+								<button type="reset" class="btn-blue" data-icon="times">重置</button>
+								<button type="button" class="btn-blue" data-icon="search" onclick="stat_id4_export()">导出</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="bjui-pageContent pr20" id="statinfo">
+	<!--
+		<table>
+			<tr><td>片区</td><td>车型</td><td>类型</td></tr>
+			
+			<tr>
+			<td rowspan="4">片区1</td><td rowspan="2">c1</td><td>类型1</td>
+			</tr>
+			<tr>
+			<td>类型2</td>
+			</tr>
+	
+			<tr>
+			<td rowspan="2">c2</td><td>类型3</td>
+			</tr>
+			<tr>
+			<td>类型4</td>
+			</tr>
+		</table>-->
+</div>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	$.CurrentNavtab.find(".statli").each(
+		function() {
+			$(this).bind("click", function() {
+				//alert($(this).attr("data-tabs"))
+				var idvalue = $(this).attr("data-tabs");
+				$.CurrentNavtab.find(".stat").each(
+					function() { $(this).css("display", "none") }
+				)
+				$.CurrentNavtab.find("#stat_" + idvalue).css("display", "");
+				eval("stat_" + idvalue).apply(this);;
+			})
+		}
+	);
+
+	eval("stat_id1").apply(this);;
+	
+	
+	
+	var coach_load_stat = {
+		init() {
+			var table = $.CurrentNavtab.find('#datagrid-list').datagrid({
+				height: '75%',
+				tableWidth: '90%',
+				gridTitle: '现金存款统计',
+				showToolbar: false,
+				filterThead: false,
+				paging: false,
+				dataUrl: config.openBasePath + '/coachreport/areastat',
+				columns: [{
+						name: 'bank',
+						label: '片区',
+						align: 'center',
+					},
+					{
+						name: 'area',
+						label: '带教车型',
+						align: 'center',
+					},
+					{
+						name: 'store',
+						label: '带教类型',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '学员数量',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '学员数量',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '学员数量',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '学员数量',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '学员数量',
+						align: 'center',
+					},
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#datagrid-list'),
+						cols: [1,2],
+						keybg: '合计'
+					})
+				}
+			})
+			
+		}
+	}
+	
+	
+	
+	
+	
+
+	function stat_id1() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/coachreport/areastat",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform1').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+				$.CurrentNavtab.find("#statinfo").html(renderStatTable(json.result, ['片区', '带教车型', '带教类型', '学员数量', '教练数量', '车辆数量', '人均负荷', '单车负荷'], ['area', 'cartype', 'teachtype', 'studentcount', 'coachcount', 'carcount', 'avgcoachstudentcount', 'avgcarstudentcount'],'area'));
+			}
+		})
+	}
+	
+	function stat_id1_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/coachreport/areastat/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform1').serializeArray(),
+			
+		})
+	}
+
+	function stat_id2() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/coachreport/coachstat",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform2').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+				$.CurrentNavtab.find("#statinfo").html(renderStatCoachTable(json.result, ['片区', '门店', '教练姓名', ' 科目一', '科目二', '科目三', '科目四', '合计'], ['area', 'storename', 'coachname', 'step1', 'step2', 'step3', 'step4', 'sum'],'coach'));
+			}
+		})
+	}
+	
+	function stat_id2_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/coachreport/coachstat/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform2').serializeArray(),
+			
+		})
+	}
+
+	function stat_id3() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/coachreport/teachtypestat",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform3').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+				$.CurrentNavtab.find("#statinfo").html(renderStatTable(json.result, ['带教类型', '带教车型', '片区', '学员数量', '教练数量', '车辆数量', '人均负荷', '单车负荷'], ['teachtype', 'cartype', 'area', 'studentcount', 'coachcount', 'carcount', 'avgcoachstudentcount', 'avgcarstudentcount'],'teachtype'));
+			}
+		})
+	}
+	
+	function stat_id3_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/coachreport/teachtypestat/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform3').serializeArray(),
+			
+		})
+	}
+
+	function stat_id4() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/coachreport/headcoachstat",
+			loadingmask: true,
+			data: $.CurrentNavtab.find('#statform4').serializeArray(),
+			okCallback: function(json, options) {
+				console.log(json.result)
+				//console.log(renderStatTable(json.result,['片区','带教车型','带教类型','学员数量','教练数量','车辆数量','人均负荷','单车负荷']))
+				$.CurrentNavtab.find("#statinfo").html(renderStatCoachTable(json.result, ['片区', '教学组长', '教练姓名', '科目一', '科目二', '科目三', '科目四', '合计'], ['area', 'coachname', 'coachname', 'step1', 'step2', 'step3', 'step4', 'sum'],'head'));
+			}
+		})
+	}
+	
+	function stat_id4_export() {
+		
+		BJUI.ajax('ajaxdownload', {
+			url: config.openBasePath + "/coachreport/headcoachstat/export",
+			loadingmask: false,
+			data: $.CurrentNavtab.find('#statform4').serializeArray(),
+			
+		})
+	}
+
+	function renderStatTable(json, columns, dataname,table) {
+		var header = '<thead><tr>';
+		for(var i = 0; i < columns.length; i++) {
+			header = header + '<th align="center">' + columns[i] + "</th>"
+		}
+		header = header + "</tr></thead>"
+
+		var tablecontent = '';
+		for(var i = 0; i < json.length; i++) {
+			var trcontent = "<tr>";
+			var area = json[i][dataname[0]];
+			if(!area)area="其他";
+			var l1data = json[i]['data'];
+			var l1row = 0;
+			var l2row = 0;
+			for(var j = 0; j < l1data.length; j++) {
+				var l2data = l1data[j]['data'];
+				l1row = l1row + l2data.length;
+			}
+
+			trcontent = trcontent + "<td align='center' rowspan=" + l1row + ">" + area + "</td>";
+			for(var j = 0; j < l1data.length; j++) {
+				var cartype = l1data[j][dataname[1]];
+				var l2data = l1data[j]['data'];
+
+				trcontent = trcontent + "<td align='center' rowspan=" + l2data.length + ">" + cartype + "</td>";
+
+				for(var e = 0; e < l2data.length; e++) {
+					var last=(j==l1data.length-1);
+					//console.log('last',l1data.length-1)
+					if(e == 0) {
+						if(table=='area'){
+							trcontent = trcontent + generatel3data_area(l2data[e], dataname,last);
+						}else if(table=='coach'){
+							trcontent = trcontent + generatel3data_coach(l2data[e], dataname,last);
+						}else if(table=='teachtype'){
+							trcontent = trcontent + generatel3data_teachtype(l2data[e], dataname,last);
+						}else if(table=='head'){
+							trcontent = trcontent + generatel3data_head(l2data[e], dataname,last);
+						}
+						trcontent = trcontent + "</tr>"
+					} else {
+						if(table=='area'){
+							trcontent = trcontent + "<tr>" + generatel3data_area(l2data[e], dataname,last) + "</tr>";
+						}else if(table=='coach'){
+							trcontent = trcontent + "<tr>" + generatel3data_coach(l2data[e], dataname,last) + "</tr>";
+						}else if(table=='teachtype'){
+							trcontent = trcontent + "<tr>" + generatel3data_teachtype(l2data[e], dataname,last) + "</tr>";
+						}else if(table=='head'){
+							trcontent = trcontent + "<tr>" + generatel3data_head(l2data[e], dataname,last) + "</tr>";
+						}
+					}
+				}
+
+			}
+			tablecontent = tablecontent + trcontent;
+
+		}
+		return "<table class='table table-bordered'>" + header + tablecontent + "</table>";
+	}
+	
+	function renderStatCoachTable(json, columns, dataname,table) {
+		var header = '<thead><tr>';
+		for(var i = 0; i < columns.length; i++) {
+			header = header + '<th align="center">' + columns[i] + "</th>"
+		}
+		header = header + "</tr></thead>"
+
+		var tablecontent = '';
+		for(var i = 0; i < json.length; i++) {
+			var trcontent = "<tr>";
+			var area = json[i][dataname[0]];
+			if(!area)area="其他";
+			var l1data = json[i]['data'];
+			var l1row = 0;
+			var l2row = 0;
+			for(var j = 0; j < l1data.length; j++) {
+				var l2data = l1data[j]['data'];
+				l1row = l1row + l2data.length;
+			}
+
+			trcontent = trcontent + "<td align='center' rowspan=" + l1row + ">" + area + "</td>";
+			for(var j = 0; j < l1data.length; j++) {
+				var cartype = l1data[j][dataname[1]];
+				var l2data = l1data[j]['data'];
+
+				trcontent = trcontent + "<td align='center' rowspan=" + l2data.length + ">" + cartype + "</td>";
+
+				for(var e = 0; e < l2data.length; e++) {
+					var last=(e==l2data.length-1);
+					console.log('last',last)
+					if(e == 0) {
+						if(table=='area'){
+							trcontent = trcontent + generatel3data_area(l2data[e], dataname,last);
+						}else if(table=='coach'){
+							trcontent = trcontent + generatel3data_coach(l2data[e], dataname,last);
+						}else if(table=='teachtype'){
+							trcontent = trcontent + generatel3data_teachtype(l2data[e], dataname,last);
+						}else if(table=='head'){
+							trcontent = trcontent + generatel3data_head(l2data[e], dataname,last);
+						}
+						trcontent = trcontent + "</tr>"
+					} else {
+						if(table=='area'){
+							trcontent = trcontent + "<tr>" + generatel3data_area(l2data[e], dataname,last) + "</tr>";
+						}else if(table=='coach'){
+							trcontent = trcontent + "<tr>" + generatel3data_coach(l2data[e], dataname,last) + "</tr>";
+						}else if(table=='teachtype'){
+							trcontent = trcontent + "<tr>" + generatel3data_teachtype(l2data[e], dataname,last) + "</tr>";
+						}else if(table=='head'){
+							trcontent = trcontent + "<tr>" + generatel3data_head(l2data[e], dataname,last) + "</tr>";
+						}
+					}
+				}
+
+			}
+			tablecontent = tablecontent + trcontent;
+
+		}
+		return "<table class='table table-bordered'>" + header + tablecontent + "</table>";
+	}
+
+	function generatel3data_area(json, dataname,last) {
+		var v = "<td align='center'>" + json[dataname[2]] + "</td>";
+		for(var i = 3; i < dataname.length; i++) {
+			console.log(dataname[0]+' '+json[dataname[0]]+" "+dataname[1]+" "+json[dataname[1]]+" "+dataname[2]+json[dataname[2]])
+			if(dataname[i]=='studentcount'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['cartype']='all';
+					if(last)json['teachtypeid']='-1';
+				v = v + "<td align='center'><a href='##' onclick='showstudent("+json['areaid']+","+json['teachtypeid']+",\""+json['cartype']+"\")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='coachcount'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['cartype']='all';
+					if(last)json['teachtypeid']='-1';
+					v = v + "<td align='center'><a href='##' onclick='showcoach("+json['areaid']+","+json['teachtypeid']+",\""+json['cartype']+"\")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='carcount'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['cartype']='all';
+					if(last)json['teachtypeid']='-1';
+					v = v + "<td align='center'><a href='##' onclick='showcar("+json['areaid']+","+json['teachtypeid']+",\""+json['cartype']+"\")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else{
+				v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+			}
+		}
+		return v;
+		//return +"<td>"+json['studentcount']+"</td>"+"<td>"+json['coachcount']+"</td>"+"<td>"+json['carcount']+"</td>"+"<td>"+json['avgcoachstudentcount']+"</td>"+"<td>"+json['avgcarstudentcount']+"</td>"
+	}
+	
+	function showstudent(areaid,teachtypeid,cartype){
+		if(!teachtypeid){
+			console.log('aaa')
+		}
+		var pdata={areaid:areaid,teachtypeid:teachtypeid,cartype:cartype};
+		clz.setWindowJson(pdata)
+		BJUI.dialog({
+			id: 'coach-load-student',
+			width: 840,
+			height: 800,
+			url: 'html/coach/coach-load-student-list.html',
+			title: '学员列表',
+			onClose: function() {
+				
+			}
+
+		})
+	}
+	
+	function showcoach(areaid,teachtypeid,cartype){
+		if(!teachtypeid){
+			console.log('aaa')
+		}
+		var pdata={areaid:areaid,teachtypeid:teachtypeid,cartype:cartype};
+		clz.setWindowJson(pdata)
+		BJUI.dialog({
+			id: 'coach-load-coach',
+			width: 840,
+			height: 800,
+			url: 'html/coach/coach-load-coach-list.html',
+			title: '教练列表',
+			onClose: function() {
+				
+			}
+
+		})
+	}
+	
+	function showcar(areaid,teachtypeid,cartype){
+		if(!teachtypeid){
+			console.log('aaa')
+		}
+		var pdata={areaid:areaid,teachtypeid:teachtypeid,cartype:cartype};
+		clz.setWindowJson(pdata)
+		BJUI.dialog({
+			id: 'coach-load-car',
+			width: 840,
+			height: 800,
+			url: 'html/coach/coach-load-car-list.html',
+			title: '教练列表',
+			onClose: function() {
+				
+			}
+
+		})
+	}
+	
+	function generatel3data_coach(json, dataname,last) {
+		var v = "<td align='center'>" + json[dataname[2]] + "</td>";
+		for(var i = 3; i < dataname.length; i++) {
+			console.log(dataname[0]+' '+json[dataname[0]]+" "+dataname[1]+" "+json[dataname[1]]+" "+dataname[2]+json[dataname[2]])
+			
+			if(dataname[i]=='step1'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['coachid']='0';
+					json['applyexam']='1'
+					v = v + "<td align='center'><a href='##' onclick='showstudent2("+json['areaid']+","+json['storeid']+","+json['coachid']+  ","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='step2'){
+				if(last)json['coachid']='0';
+				json['applyexam']='2'
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent2("+json['areaid']+","+json['storeid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='step3'){
+				if(last)json['coachid']='0';
+				json['applyexam']='3'
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent2("+json['areaid']+","+json['storeid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='step4'){
+				if(last)json['coachid']='0';
+				json['applyexam']='4'
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent2("+json['areaid']+","+json['storeid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='sum'){
+				if(last){json['applyexam']='-1';
+				json['coachid']='0';
+				}
+				else{ json['applyexam']='-1';
+				}
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent2("+json['areaid']+","+json['storeid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}
+		}
+		return v;
+		//return +"<td>"+json['studentcount']+"</td>"+"<td>"+json['coachcount']+"</td>"+"<td>"+json['carcount']+"</td>"+"<td>"+json['avgcoachstudentcount']+"</td>"+"<td>"+json['avgcarstudentcount']+"</td>"
+	}
+	
+	function showstudent2(areaid,storeid,coachid,applyexam){
+		
+		var pdata={areaid:areaid,storeid:storeid,applyexam:applyexam,coachid:coachid};
+		clz.setWindowJson(pdata)
+		BJUI.dialog({
+			id: 'coach-load-student2',
+			width: 840,
+			height: 800,
+			url: 'html/coach/coach-load-student-list2.html',
+			title: '学员列表',
+			onClose: function() {
+				
+			}
+
+		})
+	}
+	
+	function generatel3data_teachtype(json, dataname,last) {
+		var v = "<td align='center'>" + json[dataname[2]] + "</td>";
+		for(var i = 3; i < dataname.length; i++) {
+			console.log(dataname[0]+' '+json[dataname[0]]+" "+dataname[1]+" "+json[dataname[1]]+" "+dataname[2]+json[dataname[2]])
+			if(dataname[i]=='studentcount'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['teachcartype']='all';
+					if(last)json['teachtypeid']='-1';
+				v = v + "<td align='center'><a href='##' onclick='showstudent("+json['areaid']+","+json['teachtypeid']+",\""+json['teachcartype']+"\")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='coachcount'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['teachcartype']='all';
+					if(last)json['teachtypeid']='-1';
+					v = v + "<td align='center'><a href='##' onclick='showcoach("+json['areaid']+","+json['teachtypeid']+",\""+json['teachcartype']+"\")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='carcount'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['teachcartype']='all';
+					if(last)json['teachtypeid']='-1';
+					v = v + "<td align='center'><a href='##' onclick='showcar("+json['areaid']+","+json['teachtypeid']+",\""+json['teachcartype']+"\")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else{
+				v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+			}
+		}
+		return v;
+		//return +"<td>"+json['studentcount']+"</td>"+"<td>"+json['coachcount']+"</td>"+"<td>"+json['carcount']+"</td>"+"<td>"+json['avgcoachstudentcount']+"</td>"+"<td>"+json['avgcarstudentcount']+"</td>"
+	}
+	
+	function generatel3data_head(json, dataname,last) {
+		var v = "<td align='center'>" + json[dataname[2]] + "</td>";
+		for(var i = 3; i < dataname.length; i++) {
+			console.log(dataname[0]+' '+json[dataname[0]]+" "+dataname[1]+" "+json[dataname[1]]+" "+dataname[2]+json[dataname[2]])
+			
+			if(dataname[i]=='step1'){
+				if(json[dataname[i]]>0){//数据大于0
+					if(last)json['coachid']='0';
+					json['applyexam']='1'
+					v = v + "<td align='center'><a href='##' onclick='showstudent4("+json['areaid']+","+json['headcoachid']+","+json['coachid']+  ","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='step2'){
+				if(last)json['coachid']='0';
+				json['applyexam']='2'
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent4("+json['areaid']+","+json['headcoachid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='step3'){
+				if(last)json['coachid']='0';
+				json['applyexam']='3'
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent4("+json['areaid']+","+json['headcoachid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='step4'){
+				if(last)json['coachid']='0';
+				json['applyexam']='4'
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent4("+json['areaid']+","+json['headcoachid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}else if(dataname[i]=='sum'){
+				if(last){json['applyexam']='-1';
+				json['coachid']='0';
+				}
+				else{ json['applyexam']='-1';
+				}
+				if(json[dataname[i]]>0){//数据大于0
+					v = v + "<td align='center'><a href='##' onclick='showstudent4("+json['areaid']+","+json['headcoachid']+","+json['coachid']+","+json['applyexam']+")'>" +  json[dataname[i]] + "</a></td>";
+				}else{
+					v = v + "<td align='center'>" + json[dataname[i]] + "</td>";
+				}
+			}
+		}
+		return v;
+		//return +"<td>"+json['studentcount']+"</td>"+"<td>"+json['coachcount']+"</td>"+"<td>"+json['carcount']+"</td>"+"<td>"+json['avgcoachstudentcount']+"</td>"+"<td>"+json['avgcarstudentcount']+"</td>"
+	}
+	
+	
+	function showstudent4(areaid,headcoachid,coachid,applyexam){
+		
+		var pdata={areaid:areaid,headcoachid:headcoachid,applyexam:applyexam,coachid:coachid};
+		clz.setWindowJson(pdata)
+		BJUI.dialog({
+			id: 'coach-load-student2',
+			width: 840,
+			height: 800,
+			url: 'html/coach/coach-load-student-list4.html',
+			title: '学员列表',
+			onClose: function() {
+				
+			}
+
+		})
+	}
+	
+</script>

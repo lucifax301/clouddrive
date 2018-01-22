@@ -1,0 +1,147 @@
+<section id="thispage" privilege = "040501"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>更换配件记录搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+				 	<label class="row-label">车牌号码：</label>
+		            <div class="row-input">
+		                <input type="text" name="carno">
+		            </div>
+		            <label class="row-label">片区：</label>
+		            <div class="row-input">
+		                <select name="areaid" data-toggle="selectpicker" data-width="100%" 
+		                    data-datajson="arealist_filter" data-optiontype = "id,name">
+		                </select>
+		            </div>
+		            <label class="row-label">配件名称：</label>
+		            <div class="row-input">
+		                <select name="partstype" data-toggle="selectpicker" data-width="100%">
+		                	<option value="">全部</option>
+		                	<option value="1">轮胎</option>
+		                	<option value="2">机油</option>
+		                	<option value="3">时规带</option>
+		                	<option value="4">二保</option>
+		                	<option value="5">电池</option>
+		                </select>
+		            </div>
+		            <label class="row-label">更换日期：</label>
+		            <div class="row-input fill-2">
+		            	<div class="w-40 fl">
+							<input name="handletimelow" type="text" data-toggle="datepicker" readonly="readonly">
+						</div>
+						<span class="fl text-center pl10 pr10">-</span>
+						<div class="w-40 fl">
+							<input name="handletimetop" type="text" data-toggle="datepicker" readonly="readonly">
+						</div>
+		            </div>
+		            
+		      	</div>
+		            <div class="text-center">
+		                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		       		</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var maintenance_parts_list = {
+		init: function() {
+			var parts_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					toolbarItem: '',
+					//toolbarItem: 'add',
+					toolbarCustom: maintenance_parts_list.toolbarCustom(),
+					gridTitle: '更换配件记录',
+					height: '75%',
+					showCheckboxcol: true,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'carbiz/getCarPartsList',
+					columns: [
+						{ name: 'carno', label: '车牌号', align: 'center'},
+						{ name: 'partstype', label: '配件名称', align: 'center', render: maintenance_parts_list.formattPartsType},
+						{ name: 'handletime', label: '更换日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'mileage', label: '更换时里程', align: 'center' },
+						{ name: 'cname', label: '操作者', align: 'center' },
+						{ name: 'iscurrent', label: '是否当前记录', align: 'center', render: function(value) { return value==1?'是':'否'}}
+					],
+					editMode: { dialog: { id: 'maintenance_car_add', title: '新增更换配件记录', height : 400, mask:true, onClose: function() { parts_list.datagrid('refresh', true); } } },
+					add_url: "html/car/maintenance/parts-add.html",
+				});
+		},
+		toolbarCustom: function() {
+			return "<button type='button' data-privilege='040501_datagrid-list_06' class='btn btn-blue' data-icon='sign-out' onclick='maintenance_parts_list.exportdata()'>导出</button> " +
+			 //	   "<button type='button' data-privilege='040501_datagrid-list_02' class='btn btn-blue ml5' data-icon='edit' onclick='maintenance_parts_list.editrecord()'>编辑</button>" +
+				"<button type='button' class='btn btn-blue ml5' data-icon='search' onclick='maintenance_parts_list.viewrecord()'>查看</button>";
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + 'carbiz/getCarPartsExport',
+				data: $.CurrentNavtab.find('#search-form').serializeArray()
+			});
+		},
+		viewrecord: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+				return;
+			}
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'maintenance_car_view',
+				url: 'html/car/maintenance/parts-view.html',
+				title: '查看更换配件记录',
+				mask: true,
+				height: "400",
+				onClose: function() {
+					table.datagrid('refresh', true);
+				}
+			})
+		},
+		editrecord:function(){
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} else if(data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+				return;
+			}
+			clz.setWindowJson(data[0]);
+			var table = $.CurrentNavtab.find('#datagrid-list');
+			BJUI.dialog({
+				id: 'maintenance_car_edit',
+				url: 'html/car/maintenance/parts-edit.html',
+				title: '编辑更换配件记录',
+				mask: true,
+				height: "400",
+				onClose: function() {
+					table.datagrid('refresh', true);
+				}
+			})
+			
+		},
+		formattPartsType: function(value) {
+			switch(value) {
+				case 1: return '轮胎';
+				case 2: return '机油';
+				case 3: return '时规带';
+				case 4: return '二保';
+				case 5: return '电池';
+				default: return '';
+			}
+		}
+	}
+	maintenance_parts_list.init();
+</script>

@@ -1,0 +1,61 @@
+<div class="bjui-pageContent">
+	<form id="view-form">
+		<div class="bjui-row col-3">
+			<label class="row-label">学车进度：</label>
+			<div class="row-input">
+				<select id="applyexam" name="applyexam" data-toggle="selectpicker" data-width="100%" disabled="true">
+					<option value="">请选择</option>
+					<option value="1">科目一</option>
+					<option value="2">科目二</option>
+					<option value="3">科目三</option>
+					<option value="4">科目四</option>
+				</select>
+			</div>
+			<label class="row-label">二级科目：</label>
+			<div class="row-input">
+				<select id="subject2" name="subject2" data-toggle="selectpicker" data-width="100%"
+	                    data-dataurl="/httpaccess/financeSubject/list?level=2" data-optiontype="id,subject" disabled="true">
+	            </select>
+			</div>
+		   	<label class="row-label">单人缴费额：</label>
+			<div class="row-input">
+				<input id="money" type="text" name="money" readonly="true">
+			</div>  
+		</div>
+	</form>
+	<table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+	var data = clz.getWindowJson();
+	clz.CurrentDom_init({
+		current: 'Dialog',
+		form_name: 'view-form',
+		data: data,
+        returnFloat: 'money'
+	});
+	
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: '',
+        height: '80%',
+        paging : false,
+        showToolbar: false,
+        dataUrl : config.openBasePath + 'financefee/listitem',
+        postData : {tableid : data.tableid},
+        showLinenumber : true,
+        columns: [
+        	{name:'name',label:'姓名',align:'center'},
+            {name:'idcard',label:'证件号码',align:'center'},
+            {name:'status',label:'状态',align:'center',render:function(value){
+            	switch (value) {
+				case 0:
+					return "待缴费";
+				case 1:
+					return "已交费";
+			}
+            }},
+            {name:'billnum',label:'缴费单号',align:'center'},
+            {name:'ctime',label:'录入时间',align:'center'},
+            {name:'cname',label:'录入人',align:'center'}
+        ]
+    });
+</script>

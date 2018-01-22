@@ -1,0 +1,63 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form 
+            class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			
+			<div class="bjui-row">
+                <label class="row-label">带教类型:</label>
+                <div class="row-input required">
+                    <input type="text" name="type" data-rule="required">
+                </div>
+				<label class="row-label">带教科目:</label>
+                <div class="row-input required">
+                    <input type="checkbox" name="subject" value="2">科目二<input type="checkbox" name="subject" value="3">科目三
+                </div>
+                <label class="row-label">备注:</label>
+                <div class="row-input">
+                    <input type="text" name="remark" data-rule="">
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="saveteachtype()">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+
+	function saveteachtype(){
+		var hassubject=false;
+		$.CurrentDialog.find('input[name=subject]').each(function(){
+			//console.log($(this).is(':checked'))
+			if($(this).is(':checked')){
+				hassubject=true;
+			}
+		})
+		
+		if(!hassubject){
+			BJUI.alertmsg('error', '至少选择一个科目！')
+				return
+		}
+		
+	if($.CurrentDialog.find('#add-form').isValid())
+	BJUI.alertmsg('confirm', '确认新增带教类型吗？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + 'coachSetting/addTeachType',
+                    loadingmask: true,
+					//data: clz.parseForm($.CurrentDialog.find("#add-form")),
+					data: $.CurrentDialog.find('#add-form').serializeArray(),
+                    okCallback: function(json, options) {
+						BJUI.alertmsg('ok', '新增带教类型成功！', {})
+						BJUI.navtab('refresh')
+						BJUI.dialog('closeCurrent')
+					}
+                });
+            }
+        });
+	}
+</script>

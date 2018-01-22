@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.school.mapper.CoachAccountMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.school.model.CoachAccount" >
+  	<result column="coachnum" property="coachNum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,coachid,isLimit,limitQuantity,status,auth
+  </sql>
+  
+  
+  <select id="selectAllAccount"  parameterType="cn.com.liliyun.school.model.CoachAccount" resultMap="BaseResultMap">
+	select c.coachid, c.name,c.mobile,c.workType,c.employstatus,ca.limitQuantity,ca.status,ca.auth
+	from t_coachaccount ca left join t_coach c on ca.coachid = c.coachid
+	 where 1=1
+	 <trim suffixOverrides=",">
+	    <if test="condition != null and condition!=''">
+			and (c.name like concat(concat('%',#{condition}),'%')
+			or c.mobile like concat(concat('%',#{condition}),'%'))
+		</if>
+		<if test="workType != null and workType != ''">
+			and c.workType = #{workType}
+		</if>
+		<if test="status != null and status != ''">
+			and ca.status = #{status}
+		</if>
+	</trim>
+  </select>
+  
+  <!-- 教练列表(过滤已经添加交易账号的) -->
+  <resultMap id="AccountResultMap" type="cn.com.liliyun.school.model.CoachAccountDTO" >
+  	<result column="coachSum" property="coachSum" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="selectNotAccountCoach" parameterType="cn.com.liliyun.school.model.CoachAccountDTO" resultMap="AccountResultMap">
+  	select (select count(*) from t_coach where coachid not in (select coachid from t_coachaccount) ) as coachSum,
+  	coachid,name,mobile,employstatus,idcard,workType
+  	from t_coach where coachid not in (select coachid from t_coachaccount)
+	<if test="coachid != null and coachid!=''">
+		and coachid = #{coachid}
+	</if>		
+	<if test="condition != null and condition!=''">
+		and (name like concat(concat('%',#{condition}),'%')
+		or mobile like concat(concat('%',#{condition}),'%'))
+	</if>
+	<if test="employstatus != null and employstatus!=''">
+		and employstatus = #{employstatus}
+	</if>	
+	<if test="idcard != null and idcard !=''">
+		and idcard = #{idcard}
+	</if>
+	<if test="workType != null and workType !=''">
+		and workType = #{workType}
+	</if>
+	order by mtime desc
+  
+  </select>
+  
+  <insert id="insertAccount"  >
+    insert into t_coachaccount (coachid,isLimit,limitQuantity,status)   
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.coachid},#{item.isLimit},#{item.limitQuantity},#{item.status})  
+    </foreach>
+  </insert>
+  
+  <update id="updateAccount" parameterType="cn.com.liliyun.school.model.CoachAccount" >
+    update  t_coachaccount
+    <set >
+      <if test="isLimit != null and isLimit !='' " >
+        isLimit = #{isLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="limitQuantity != null and limitQuantity !='' " >
+        limitQuantity = #{limitQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="auth != null and auth !='' " >
+        auth = #{auth,jdbcType=VARCHAR},
+      </if>
+      
+    </set>
+    where coachid = #{coachid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 充值部分 -->
+    <!-- 新增充值记录 -->
+    <insert id="insertRecharge" parameterType="cn.com.liliyun.school.model.Recharge" useGeneratedKeys="true" keyProperty="coachid">
+    insert into t_recharge
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNumber != null" >
+        serialNumber,
+      </if>
+      <if test="rtime != null" >
+        rtime,
+      </if>
+      <if test="rtype != null" >
+        rtype,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="rstatus != null" >
+        rstatus,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="rtime != null" >
+        #{rtime,jdbcType=VARCHAR},
+      </if>
+       <if test="rtype != null" >
+        #{rtype,jdbcType=VARCHAR},
+      </if>
+       <if test="amount != null" >
+        #{amount,jdbcType=VARCHAR},
+      </if>
+       <if test="balance != null" >
+        #{balance,jdbcType=VARCHAR},
+      </if>
+       <if test="rstatus != null" >
+        #{rstatus,jdbcType=VARCHAR},
+      </if>
+       <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+     
+    </trim>
+  </insert>
+  <!-- 充值记录查询 -->
+  <select id="selectAllRecord"  parameterType="cn.com.liliyun.school.model.Recharge" resultType="cn.com.liliyun.school.model.Recharge">
+  	 select * from t_recharge
+     where 1=1 
+    <trim suffixOverrides=",">
+	    <if test="serialNumber != null and serialNumber != ''">
+			and serialNumber = #{serialNumber}
+		</if>
+		<if test="stime != null and stime != '' and etime != null and etime != ''">
+			and rtime BETWEEN #{stime} and #{etime}
+		</if>
+		<if test="rstatus != null and rstatus != '' ">
+			and rstatus = #{rstatus}
+		</if>
+	</trim>
+  </select>
+  
+</mapper>

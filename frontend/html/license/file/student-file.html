@@ -1,0 +1,43 @@
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    $.CurrentDialog.find('#datagrid-list').datagrid({
+        toolbarItem: 'add,del,save',
+        height: '95%',
+        paging: false,
+        showCheckboxcol: true,
+        showToolbar: true,
+        data: [],
+        inlineEditMult: true,
+        editCallback: function (json) {
+            tableid = json.result;
+            $.CurrentDialog.find('#datagrid-list').datagrid('reload', {
+                showToolbar: false,
+                data: null,
+                showCheckboxcol: false,
+                showLinenumber: true,
+                dataUrl: config.openBasePath + 'file/itemlist',
+                postData: {tableid: tableid},
+                columns: [
+                    {name: 'idcard', label: '证件号码', align: 'center'},
+                    {name: 'name', label: '姓名', align: 'center'},
+                    {name: 'filenum', label: '档案编号', align: 'center'}
+                ]
+            });
+            license_file_list.datagrid('refresh', true);
+        },
+        saveAll: true,
+        showLinenumber: false,
+        editUrl: config.openBasePath + 'file/stufile',
+        columns: [
+            {name: 'name', label: '姓名', align: 'center'},
+            {name: 'idcard', label: '证件号码', align: 'center', attrs: {readonly: 'readonly'}}
+        ]
+    });
+
+    $(document).on("change", "[name='name']", function () {
+        clz.getStudentIdcard($(this),ApplySubjectEnum.GRADUATE_GRADUATE_FILE);
+    })
+</script>
+    

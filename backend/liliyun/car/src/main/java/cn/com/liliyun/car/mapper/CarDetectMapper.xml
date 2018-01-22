@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarDetectMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarDetect" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="car_id" property="carId" jdbcType="INTEGER" />
+    <result column="detect_type" property="detectType" jdbcType="TINYINT" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="BIGINT" />
+    <result column="detect_year" property="detectYear" jdbcType="VARCHAR" />
+    <result column="detect_date" property="detectDate" jdbcType="TIMESTAMP" />
+    <result column="next_detect" property="nextDetect" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, car_id, detect_type, cname, cuid, detect_year, detect_date, next_detect, remark, 
+    is_del
+  </sql>
+  
+   <select id="queryCarDetectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarDetect" >
+    select 
+    	<include refid="Base_Column_List" />
+    from t_car_detect
+    where is_del=0
+    	<trim suffixOverrides=",">
+			<if test="carId != null and carId != ''">
+				and car_id= #{carId}
+			</if>
+		</trim>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_detect
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteCarDetectList" parameterType="cn.com.liliyun.car.model.CarDetect" >
+    delete from t_car_detect
+    where id  in (${ids})
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_car_detect
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarDetect" >
+    insert into t_car_detect (id, car_id, detect_type, 
+      cname, cuid, detect_year, 
+      detect_date, next_detect, remark, 
+      is_del)
+    values (#{id,jdbcType=INTEGER}, #{carId,jdbcType=INTEGER}, #{detectType,jdbcType=TINYINT}, 
+      #{cname,jdbcType=VARCHAR}, #{cuid,jdbcType=BIGINT}, #{detectYear,jdbcType=VARCHAR}, 
+      #{detectDate,jdbcType=TIMESTAMP}, #{nextDetect,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=TINYINT})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarDetect" >
+    insert into t_car_detect
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carId != null" >
+        car_id,
+      </if>
+      <if test="detectType != null" >
+        detect_type,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="detectYear != null" >
+        detect_year,
+      </if>
+      <if test="detectDate != null" >
+        detect_date,
+      </if>
+      <if test="nextDetect != null" >
+        next_detect,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null" >
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="detectType != null" >
+        #{detectType,jdbcType=TINYINT},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="detectYear != null" >
+        #{detectYear,jdbcType=VARCHAR},
+      </if>
+      <if test="detectDate != null" >
+        #{detectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextDetect != null" >
+        #{nextDetect,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarDetect" >
+    update t_car_detect
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="detectType != null" >
+        detect_type = #{detectType,jdbcType=TINYINT},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="detectYear != null" >
+        detect_year = #{detectYear,jdbcType=VARCHAR},
+      </if>
+      <if test="detectDate != null" >
+        detect_date = #{detectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextDetect != null" >
+        next_detect = #{nextDetect,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateCarDetectList" parameterType="cn.com.liliyun.car.model.CarDetect" >
+    update t_car_detect
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="detectType != null" >
+        detect_type = #{detectType,jdbcType=TINYINT},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="detectYear != null" >
+        detect_year = #{detectYear,jdbcType=VARCHAR},
+      </if>
+      <if test="detectDate != null" >
+        detect_date = #{detectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextDetect != null" >
+        next_detect = #{nextDetect,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id in (${ids})
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarDetect" >
+    update t_car_detect
+    set car_id = #{carId,jdbcType=INTEGER},
+      detect_type = #{detectType,jdbcType=TINYINT},
+      cname = #{cname,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=BIGINT},
+      detect_year = #{detectYear,jdbcType=VARCHAR},
+      detect_date = #{detectDate,jdbcType=TIMESTAMP},
+      next_detect = #{nextDetect,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

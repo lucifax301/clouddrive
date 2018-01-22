@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/task 
+	http://www.springframework.org/schema/task/spring-task-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+    <dubbo:application name="trainorg-dubbo-server"  />
+    <dubbo:registry address="${zookeeper.addr}"/> 
+    <dubbo:protocol name="dubbo" port="32010" threadpool="fixed" threads="100"/>
+    <dubbo:consumer timeout="${dubbo.timeout}" />
+    
+    <dubbo:service id="trainOrgService" interface="cn.com.liliyun.trainorg.service.TrainOrgService" ref="trainOrgServiceImpl" />
+    <dubbo:service id="storeService" interface="cn.com.liliyun.trainorg.service.StoreService" ref="storeServiceImpl" />
+    <dubbo:service id="trainareaService" interface="cn.com.liliyun.trainorg.service.TrainareaService" ref="trainareaServiceImpl" />
+    <dubbo:service id="marketingService" interface="cn.com.liliyun.trainorg.service.MarketingService" ref="marketingServiceImpl" />
+    <dubbo:service id="complainService" interface="cn.com.liliyun.trainorg.service.ComplainService" ref="complainServiceImpl" />
+	<dubbo:service id="coachAccountService" interface="cn.com.liliyun.school.service.CoachAccountService" ref="coachAccountServiceImpl" />
+	<dubbo:service id="proxyDealerService" interface="cn.com.liliyun.trainorg.service.ProxyDealerService" ref="proxyDealerServiceImpl" />
+	<dubbo:service id="areaService" interface="cn.com.liliyun.trainorg.service.AreaService" ref="areaServiceImpl" />
+	<dubbo:service id="classinfoService" interface="cn.com.liliyun.trainorg.service.ClassinfoService" ref="classinfoServiceImpl" />
+	<dubbo:service id="orderExamService" interface="cn.com.liliyun.trainorg.service.OrderExamService" ref="orderExamServiceImpl" />
+	<dubbo:service id="trainExamService" interface="cn.com.liliyun.trainorg.service.TrainExamService" ref="trainExamServiceImpl" />
+	<dubbo:service id="resultExamService" interface="cn.com.liliyun.trainorg.service.ResultExamService" ref="resultExamServiceImpl" />
+	<dubbo:service id="examareaService" interface="cn.com.liliyun.trainorg.service.ExamareaService" ref="examareaServiceImpl" />
+</beans>

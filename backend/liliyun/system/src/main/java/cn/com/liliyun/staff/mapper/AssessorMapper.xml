@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.staff.mapper.AssessorMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.staff.model.Assessor" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="employstatus" property="employstatus" jdbcType="INTEGER" />
+    <result column="hiredate" property="hiredate" jdbcType="VARCHAR" />
+    <result column="leavedate" property="leavedate" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="fingerprint" property="fingerprint" jdbcType="VARCHAR" />
+    <result column="drilicence" property="drilicence" jdbcType="VARCHAR" />
+    <result column="fstdrilicdate" property="fstdrilicdate" jdbcType="VARCHAR" />
+    <result column="dripermitted" property="dripermitted" jdbcType="VARCHAR" />
+    <result column="teachpermitted" property="teachpermitted" jdbcType="VARCHAR" />
+    <result column="procertificate" property="procertificate" jdbcType="VARCHAR" />
+    <result column="prolevel" property="prolevel" jdbcType="INTEGER" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,  name, sex, idcard, mobile, address, photo, employstatus,hiredate,leavedate,fingerprint,drilicence,fstdrilicdate,dripermitted,teachpermitted,
+    procertificate,prolevel,
+    cuid,muid,ctime,mtime
+    
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.staff.model.Assessor" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_assessor
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByStaffid" resultMap="BaseResultMap" parameterType="cn.com.liliyun.staff.model.Assessor" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_assessor
+    where staffid = #{staffid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="cn.com.liliyun.staff.model.Assessor" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_assessor
+    where 1=1 
+	<if test="id != null ">
+		and id = #{id}
+	</if>
+	<if test="name != null and name!=''">
+		and name like concat(concat('%',#{name}),'%')
+	</if>		
+	<if test="mobile != null and mobile!=''">
+		and mobile like concat(#{mobile},'%')
+	</if>
+	<if test="idcard != null and idcard !=''">
+		and idcard = #{idcard}
+	</if>
+	<if test="employstatus != null and employstatus!=''">
+		and employstatus = #{employstatus}
+	</if>
+	<if test="isdel != null ">
+		and isdel = #{isdel}
+	</if>
+	order by id desc
+  </select>
+  
+  <update id="delete" parameterType="cn.com.liliyun.staff.model.Assessor" >
+  	update t_assessor set isdel=1 where id=#{id}
+  </update>
+  
+  
+  <insert id="insert" parameterType="cn.com.liliyun.staff.model.Assessor" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_assessor (name, sex, 
+      idcard, mobile, address, 
+      photo,  fingerprint, drilicence,fstdrilicdate,expiredate,dripermitted,teachpermitted,
+      staffid,cuid,ctime,procertificate,prolevel,
+      employstatus, hiredate, leavedate 
+      )
+    values (#{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{photo,jdbcType=VARCHAR},  #{fingerprint,jdbcType=VARCHAR}, #{drilicence},#{fstdrilicdate},#{expiredate},#{dripermitted},#{teachpermitted},
+      #{staffid},#{cuid},now(),#{procertificate},#{prolevel},
+      #{employstatus,jdbcType=INTEGER}, #{hiredate,jdbcType=VARCHAR}, #{leavedate,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="cn.com.liliyun.staff.model.Assessor" >
+    update t_assessor
+    set 
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      employstatus = #{employstatus,jdbcType=INTEGER},
+      hiredate = #{hiredate,jdbcType=VARCHAR},
+      leavedate = #{leavedate,jdbcType=VARCHAR},
+      fingerprint = #{fingerprint},
+      drilicence = #{drilicence},
+      fstdrilicdate = #{fstdrilicdate},
+      expiredate = #{expiredate},
+      dripermitted = #{dripermitted},
+      teachpermitted = #{teachpermitted},
+      procertificate=#{procertificate},
+      prolevel=#{prolevel},
+      muid=#{muid}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  	
+</mapper>

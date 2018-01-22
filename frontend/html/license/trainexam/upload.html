@@ -1,0 +1,38 @@
+<div class="row-input">
+    <input type="file" data-name="file" data-toggle="webuploader" data-options="
+        {
+            pick: {label: '点击选择文件',multiple:false},
+            server: config.openBasePath + 'trainexam/import',
+            fileNumLimit: 1,
+            formData: {dir:'custompic'},
+            required: true,
+            uploaded: '',
+            basePath: '',
+            fileNumLimit :1,
+            disableGlobalDnd  :false,
+            accept: {
+                title: '文件',
+                extensions: 'xls,xlsx',
+                mimeTypes: '.xls,.xlsx'
+            },
+            uploadSuccess : function(response) {
+                if (response.code != 0) {
+                    BJUI.alertmsg('error', response.msg);
+                    return; 
+                }
+                license_trainexam_list.datagrid('reload',true);
+                BJUI.dialog('close', 'dialog-trainexam-upload-excel');
+                var html = '<p>合计 ' + response.result.total + ' 条数据</p><p>成功导入 ' + response.result.success + ' 条数据</p>';
+                if(response.result.error == 0){
+                    html += '<p>共错误 <span class=&quot;red&quot;>' + response.result.error + '</span> 条数据'
+                } else {
+                    html += '<p>共错误 <span class=&quot;red&quot;>' + response.result.error + '</span> 条数据,<a target = &quot;_blank&quot; href=' + window.config.openBasePath + 'excel/download/' + response.result.filename + '>下载错误数据</a></p>'
+                }
+                BJUI.alertmsg('correct', html, {
+                  	autoClose:false,
+                  	displayPosition:'middlecenter',
+                  	mask : true,
+                }) 
+            }
+    }">
+</div>

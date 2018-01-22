@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.liliyun.student.mapper.StudentStatusLogMapper">
+    <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.StudentStatusLog">
+        <result column="studentid" jdbcType="INTEGER" property="studentid"/>
+        <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
+        <result column="tableid" jdbcType="VARCHAR" property="tableid"/>
+        <result column="presubject" jdbcType="INTEGER" property="presubject"/>
+        <result column="presubjectname" jdbcType="VARCHAR" property="presubjectname"/>
+        <result column="subject" jdbcType="INTEGER" property="subject"/>
+        <result column="subjectname" jdbcType="VARCHAR" property="subjectname"/>
+        <result column="cuid" jdbcType="INTEGER" property="cuid"/>
+        <result column="cname" jdbcType="VARCHAR" property="cname"/>
+        <result column="ctime" jdbcType="TIMESTAMP" property="ctime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="storeid" jdbcType="INTEGER" property="storeid"/>
+        <result column="areaid" jdbcType="INTEGER" property="areaid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    studentid, idcard, tableid,presubject, presubjectname, subject, subjectname, cuid,  cname, ctime, remark, storeid, areaid
+  </sql>
+    <insert id="insert" parameterType="cn.com.liliyun.student.model.StudentStatusLog">
+    insert into t_student_status_log (studentid, idcard, tableid,presubject,
+        presubjectname, subject, subjectname, cuid,  cname, ctime, remark, storeid, areaid)
+    values (#{studentid,jdbcType=INTEGER}, #{idcard,jdbcType=VARCHAR}, #{tableid,jdbcType=VARCHAR}, 
+      #{presubject,jdbcType=INTEGER}, #{presubjectname,jdbcType=VARCHAR}, #{subject,jdbcType=INTEGER},
+      #{subjectname,jdbcType=VARCHAR}, #{cuid,jdbcType=INTEGER},
+      #{cname,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{storeid,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.liliyun.student.model.StudentStatusLog">
+        insert into t_student_status_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentid != null">
+                studentid,
+            </if>
+            <if test="idcard != null">
+                idcard,
+            </if>
+            <if test="tableid != null">
+                tableid,
+            </if>
+            <if test="presubject != null">
+                presubject,
+            </if>
+            <if test="presubjectname != null">
+                presubjectname,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="subjectname != null">
+                subjectname,
+            </if>
+            <if test="cuid != null">
+                cuid,
+            </if>
+            <if test="cname != null">
+                cname,
+            </if>
+            <if test="ctime != null">
+                ctime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="storeid != null">
+                storeid,
+            </if>
+            <if test="areaid != null">
+                areaid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentid != null">
+                #{studentid,jdbcType=INTEGER},
+            </if>
+            <if test="idcard != null">
+                #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="tableid != null">
+                #{tableid,jdbcType=VARCHAR},
+            </if>
+            <if test="presubject != null">
+                #{presubject,jdbcType=INTEGER},
+            </if>
+            <if test="presubjectname != null">
+                #{presubjectname,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null">
+                #{subject,jdbcType=INTEGER},
+            </if>
+            <if test="subjectname != null">
+                #{subjectname,jdbcType=VARCHAR},
+            </if>
+            <if test="cuid != null">
+                #{cuid,jdbcType=INTEGER},
+            </if>
+            <if test="cname != null">
+                #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="ctime != null">
+                #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="storeid != null">
+                #{storeid,jdbcType=INTEGER},
+            </if>
+            <if test="areaid != null">
+                #{areaid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByPrimaryKey" parameterType="cn.com.liliyun.student.model.StudentStatusLog"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_student_status_log
+        where studentid = #{studentid,jdbcType=INTEGER}
+    </select>
+    <select id="selectList" parameterType="cn.com.liliyun.student.model.StudentStatusLog" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_student_status_log
+        <where>
+            <if test="studentid != null">
+                studentid = #{studentid,jdbcType=INTEGER}
+            </if>
+            <if test="idcard != null and idcard !=''">
+                idcard = #{idcard,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.student.model.StudentStatusLog">
+    delete from t_student_status_log
+    where studentid = #{studentid,jdbcType=INTEGER}
+  </delete>
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into t_student_status_log (studentid, idcard, tableid,
+        presubject, presubjectname, subject, subjectname , cuid, cname, ctime, remark, storeid, areaid)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+            #{item.studentid,jdbcType=INTEGER}, #{item.idcard,jdbcType=VARCHAR}, #{item.tableid,jdbcType=VARCHAR},
+            #{item.presubject,jdbcType=INTEGER}, #{item.presubjectname,jdbcType=VARCHAR}, #{item.subject,jdbcType=INTEGER},
+            #{item.subjectname,jdbcType=VARCHAR}, #{item.cuid,jdbcType=INTEGER},
+            #{item.cname,jdbcType=VARCHAR}, #{item.ctime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR},
+            #{item.storeid,jdbcType=INTEGER}, #{item.areaid,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.student.model.StudentStatusLog">
+        update t_student_status_log
+        <set>
+            <if test="cid != null">
+                cid = #{cid,jdbcType=INTEGER},
+            </if>
+            <if test="cname != null">
+                cname = #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="ctime != null">
+                ctime = #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where studentid = #{studentid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.student.model.StudentStatusLog">
+    update t_student_status_log
+    set presubject = #{presubject,jdbcType=INTEGER},
+      presubjectname = #{presubjectname,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=INTEGER},
+      subjectname = #{subjectname,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      cid = #{cid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where studentid = #{studentid,jdbcType=INTEGER}
+  </update>
+</mapper>

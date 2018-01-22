@@ -1,0 +1,71 @@
+<section id="thispage" privilege = "060401"></section>
+<table id="menu-datagrid" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var finance_subject_list = {
+		list: function() { 
+			menu_list_table = $.CurrentNavtab.find('#menu-datagrid').datagrid({
+				paging: { pageSize: 200, selectPageSize: '200,500' },
+				columns: [
+					{ name: 'subject', label: '科目名称', align: 'center',rule:'required' },
+					{ name: 'disable', label: '状态', align: 'center', render: function(value) { return value==0?'正常':'禁用'}, type: 'select', items: finance_subject_list.enable_type }
+				],
+				editUrl: config.openBasePath + 'financeSubject/add',
+				editType: 'POST',
+				inlineEditMult: false,
+				fieldSortable: false,
+				columnShowhide: false,
+				columnMenu: false,
+				contextMenuH: false,
+				height: '98%',
+				showToolbar: true,
+				toolbarItem: 'add,|, save',
+				toolbarCustom: finance_subject_list.toolbarCustom(),
+				dataUrl: config.openBasePath + 'financeSubject/listAll',
+				afterSave: function() {
+					$.CurrentNavtab.find('#menu-datagrid').datagrid('refresh', true)
+				}
+			})
+		},
+		toolbarCustom: function() {
+			return "<button type='button' data-privilege='060401_datagrid-list_11' class='btn btn-red' data-icon='times' onclick='finance_subject_list.disable()'>禁用</button> "
+					+ "<button type='button' data-privilege='060401_datagrid-list_12'class='btn btn-blue ml5' data-icon='legal' onclick='finance_subject_list.enable()'>启用</button>";
+		},
+		disable: function() {
+			var data = $.CurrentNavtab.find('#menu-datagrid').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {})
+				return;
+			}
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + 'financeSubject/del',
+				loadingmask: true,
+				data: "id=" + data[0].id,
+				okCallback: function(json, options) {
+					$.CurrentNavtab.find('#menu-datagrid').datagrid('refresh', true);
+				}
+			})
+		},
+		enable: function() {
+			var data = $.CurrentNavtab.find('#menu-datagrid').data('selectedDatas');
+			if(data == null || data.length == 0) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {})
+				return;
+			}
+			BJUI.ajax('doajax', {
+				url: config.openBasePath + 'financeSubject/del',
+				loadingmask: true,
+				data: {
+					id: data[0].id,
+					disable: 0
+				},
+				okCallback: function(json, options) {
+					$.CurrentNavtab.find('#menu-datagrid').datagrid('refresh', true);
+				}
+			})
+		},
+		enable_type() {
+			return [{ '0': '正常' }, { '1': '禁用' }]
+		}
+	}
+	finance_subject_list.list();
+</script>

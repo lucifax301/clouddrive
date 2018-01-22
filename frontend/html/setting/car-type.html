@@ -1,0 +1,135 @@
+<section id="thispage" privilege = "070202"></section>
+<div class="bjui-pageContent">
+	<div class="">
+		<form id="cartypeForm" data-toggle="ajaxform">
+			<input type="hidden" name="custom.id" value="edce142bc2ed4ec6b623aacaf602a4de">
+			<div class="widget-box">
+				<div class="widget-title">
+					<span class="icon"> <i class="fa fa-th"></i> </span>
+					<h5>带教车型设置</h5>
+				</div>
+				<div class="widget-content nopadding">
+					<div class="bjui-row col-3">
+
+						<br>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_A1" data-toggle="icheck" value="A1" data-label="A1">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_A2" data-toggle="icheck" value="A2" data-label="A2">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_A3" data-toggle="icheck" value="A3" data-label="A3">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_B1" data-toggle="icheck" value="B1" data-label="B1">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_B2" data-toggle="icheck" value="B2" data-label="B2">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_C1" data-toggle="icheck" value="C1" data-label="C1">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_C2" data-toggle="icheck" value="C2" data-label="C2">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_C3" data-toggle="icheck" value="C3" data-label="C3">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_C4" data-toggle="icheck" value="C4" data-label="C4">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_C5" data-toggle="icheck" value="C5" data-label="C5">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_D" data-toggle="icheck" value="D" data-label="D">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_E" data-toggle="icheck" value="E" data-label="E">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_F" data-toggle="icheck" value="F" data-label="F">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_M" data-toggle="icheck" value="M" data-label="M">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_N" data-toggle="icheck" value="N" data-label="N">
+						</div>
+						<label class="row-label"></label>
+						<div class="row-input">
+							<input type="checkbox" name="type" id="type_P" data-toggle="icheck" value="P" data-label="P">
+						</div>
+						<br>
+
+					</div>
+				</div>
+				
+			</div>
+			<div>温馨提示：请勾选本驾校当前招生的授课车型即可。勾选的车型，将会在设置教练信息的带教车型时可以选择，没有勾选则不能选择。</div>
+		</form>
+	</div>
+
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+	<ul>
+		<li><button type="button" data-privilege='070202_11' class="btn-blue vhide" data-icon="save" onclick="savecartype()">保存</button></li>
+	</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	var beforecartype;
+
+	function loadcartype() {
+		BJUI.ajax('doajax', {
+			url: config.openBasePath + "/coachSetting/listCarType",
+			loadingmask: true,
+			okCallback: function(json, options) {
+				//console.log(json.result.list)
+				if(json.result && json.result.list) {
+					beforecartype = json.result.list;
+					for(var i = 0; i < json.result.list.length; i++) {
+						$("#type_" + json.result.list[i].type).parent().addClass("checked")
+						$("#type_" + json.result.list[i].type).attr("checked", true)
+					}
+				}
+			}
+		})
+	}
+	loadcartype();
+
+	function savecartype() {
+		BJUI.alertmsg('confirm', '确认修改带教车型吗？', {
+			okCall: function() {
+				BJUI.ajax('doajax', {
+					url: config.openBasePath + 'coachSetting/saveCarType',
+					loadingmask: true,
+					//data: clz.parseForm($.CurrentNavtab.find("#cartypeForm")),
+					data: $.CurrentNavtab.find("#cartypeForm").serializeArray(),
+					okCallback: function(json, options) {
+						BJUI.alertmsg('ok', '修改带教车型成功！', {})
+
+					}
+				});
+			}
+		});
+
+	}
+</script>

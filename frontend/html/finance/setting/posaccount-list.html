@@ -1,0 +1,54 @@
+<section id="thispage" privilege = "060403"></section>
+<div class="bjui-pageHeader">
+	<form id='search-form'>
+	</form>
+</div>
+<table id="datagrid-list" data-tabprivilege="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var finance_posaccount_list = {
+		init: function() {
+			var posaccount_list =
+				$.CurrentNavtab.find('#datagrid-list').datagrid({
+					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+					toolbarItem: 'add',
+					toolbarCustom: finance_posaccount_list.toolbarCustom(),
+					gridTitle: null,
+					height: '100%',
+					showCheckboxcol: true,
+					showToolbar: true,
+					dataUrl: config.openBasePath + 'pos/posAccountList',
+					columns: [
+						{ name: 'account', label: '帐号', align: 'center'},
+						{ name: 'bankname', label: '银行', align: 'center'},
+						{ name: 'poscompany', label: 'Pos公司', align: 'center'},
+						{ name: 'ctime', label: '录入时间', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'cname', label: '录入人', align: 'center' }
+					],
+					editMode: { dialog: { id: 'finance_posaccount_add', title: '新增Pos帐号', height : 240, mask:true, onClose: function() { posaccount_list.datagrid('reload', true); } } },
+					add_url: "html/finance/setting/posaccount-add.html",
+				});
+		},
+		toolbarCustom: function() {
+			return "<button type='button' data-privilege='060403_datagrid-list_11' class='btn btn-red' data-icon='times' onclick='finance_posaccount_list.delete()'>删除</button> ";
+		},
+		delete: function() {
+			var data = $.CurrentNavtab.find('#datagrid-list').data('selectedDatas');
+			var ids = '';
+			for(var i = 0; i < data.length; i++) {
+				ids = ids + ',' + data[i].id;
+			}
+			ids = ids.substr(1);
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'pos/delPosAccount',
+			    data: {
+			    	ids: ids
+			    },
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        $.CurrentNavtab.find('#datagrid-list').datagrid('reload', true);
+			    }
+			})
+		}
+	}
+	finance_posaccount_list.init();
+</script>

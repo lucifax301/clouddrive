@@ -1,0 +1,227 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="edit-form">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>查看片区招生指标</h5>
+			</div>
+			<div class="widget-content nopadding">
+        <div class="bjui-row col-4">
+			
+			<div class="bjui-row col-4">
+	            <label class="row-label">片区</label>
+	            <div class="row-input ">
+	                <select name="areaid" data-toggle="selectpicker" data-width="100%" disabled="disabled" data-rule="required" data-datajson="arealist" data-optiontype="id,name" >
+	                    <option value="0">请选择</option>
+	                </select>
+	            </div>
+            
+	            <label class="row-label">月份</label>
+	            <div class="row-input fill-2">
+	            	<div class="fl w-40">
+	                <select name="year" id="year" disabled="disabled" data-width="100%" data-rule="required" >
+	                </select>
+	               </div>
+	               <div class="fl w-40 ml10">
+	                <select name="month" id="month" disabled="disabled" data-width="100%" data-rule="required" >
+	                </select>
+	               </div>
+	            </div>
+			</div>
+			
+			<div class="bjui-row col-4">
+	            <label class="row-label">招生指标</label>
+	            <div class="row-input ">
+	                <input type="text"  name="enrolindex" data-width="100%" readonly="readonly" class="clear-style"
+                >
+	            </div>
+            
+	            <label class="row-label">高端班比例</label>
+	            <div class="row-input ">
+	                <input type="text"  name="highrate" data-width="100%" readonly="readonly" class="clear-style" 
+                >
+	            </div>
+			</div>
+			
+			<div class="bjui-row col-4">
+				<div class="datagrid-wrap-b">
+				<table class="table table-bordered w800" style="font-size:15px" id="storetable">
+					<tr>
+						<td>门店</td><td>招生指标</td><td>高端班比例</td>
+					</tr>
+					
+				</table>
+				</div>
+			</div>
+        </div>
+		</div></div>
+		<input type="hidden" name="id" >
+    </form>
+     
+</div>
+<div class="bjui-pageFooter">
+    <div class="c-bottom-button">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		
+    </ul>
+    </div>
+</div>
+<script>
+
+var enrolinfo = clz.getNavtab_more();
+console.log(enrolinfo)
+var enroll_view = {
+	init(){
+		clz.CurrentDom_init({
+			current:'Navtab',
+			form_name:'edit-form',
+			url : config.openBasePath + 'student/assignCoach',
+			data : enrolinfo,
+			before:function(data){
+				data.highrate=data.highrate+"%";
+				return data;
+			},
+			callback:function(data){
+				$.CurrentNavtab.find('#areaid').bind("change",function(){
+					enroll_view.showstore(enrolinfo.areaid)
+				});
+				
+				enroll_view.showstore(enrolinfo.areaid);
+				
+			}
+		})
+	},
+	
+	saveindex(){
+		if($.CurrentNavtab.find('#edit-form').isValid())
+		BJUI.alertmsg('confirm', '确认提交吗？', {
+			displayPosition:'middlecenter' ,
+            okCall: function() {
+				BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/enrolindex/updatearea",
+                    loadingmask: true,
+					data: $("#edit-form").serializeArray(),
+                    okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						BJUI.alertmsg('ok', '提交成功！', {})
+						BJUI.navtab('closeCurrentTab');
+                    }
+                })
+			}
+		})
+		
+	},
+	showstore(areaid){
+		
+		BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/store/list?areaid="+areaid,
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+						if(json.result&&json.result.list){
+							var sdata=json.result.list;
+							var text="";
+//							for(var i=0;i<sdata.length;i++){
+//								text=text+"<tr><td>"+formatStoreCell(sdata[i].id)+"<input type='hidden'  name='storeid_"+sdata[i].id+"' value='"+sdata[i].id+"'/>" +"</td><td>"+ "<input type='text' id='enrolindex_"+sdata[i].id +"' name='enrolindex_"+sdata[i].id+"' data-rule='required;number' class="clear-style"/>"+  "</td><td>" +"<input type='text' id='highrate_"+sdata[i].id+ "' name='highrate_"+sdata[i].id+"' data-rule='required;number' class="clear-style"/>"+ "</td></tr>"
+//							}
+//							
+//							var trl= $.CurrentNavtab.find("#storetable tr").length;
+//							for (var i = trl-1; i >0; i--) {
+//								console.log(i)
+//								$.CurrentNavtab.find("#storetable tr").eq(i).remove();
+//							}
+							
+							enroll_view.loadindexinfo(sdata);
+							//$.CurrentNavtab.find("#storetable").append($(text));
+						}
+                    }
+                })
+	},
+	loadindexinfo(sdata){
+		 
+		 BJUI.ajax('doajax', {
+						url: config.openBasePath + "/enrolindex/getarea",
+						loadingmask: true,
+						async:false,
+						data:{id:enrolinfo.id},
+						okCallback: function(json, options) {
+							//console.log(json.result.list)
+							console.log(json);
+							if(json.result.data){
+								var storeindex=json.result.data;
+								var text="";
+								var sumhighrate=0;
+								var sumindex=0;
+								var count=0;
+								for(var i=0;i<sdata.length;i++){
+									var find=false;
+									for(var j=0;j<storeindex.length;j++){
+										if(sdata[i].id==storeindex[j].storeid){
+											find=true;
+											sumhighrate=sumhighrate+storeindex[j].highrate;
+											sumindex=sumindex+storeindex[j].enrolindex;
+											count=count+1;
+											text=text+"<tr><td>"+formatStoreCell(sdata[i].id)+"<input type='hidden'  name='storeid_"+sdata[i].id+"' value='"+sdata[i].id+"'/>" +"</td><td>"+ "<input type='text' id='enrolindex_"+sdata[i].id +"' name='enrolindex_"+sdata[i].id+"' value='"+storeindex[j].enrolindex+"'  readonly='readonly' class='clear-style'/>"+  "</td><td>" +"<input type='text' id='highrate_"+sdata[i].id+ "' name='highrate_"+sdata[i].id+"' value='"+storeindex[j].highrate+"%'  readonly='readonly' class='clear-style'/>"+ "</td></tr>"
+										}
+									
+									//console.log("#enrolindex_"+storeindex[i].storeid)
+									
+									}
+//									if(!find){
+//										text=text+"<tr><td>"+formatStoreCell(sdata[i].id)+"<input type='hidden'  name='storeid_"+sdata[i].id+"' value='"+sdata[i].id+"'/>" +"</td><td>"+ "<input type='text' id='enrolindex_"+sdata[i].id +"' name='enrolindex_"+sdata[i].id+"' data-rule='required;number'/>"+  "</td><td>" +"<input type='text' id='highrate_"+sdata[i].id+ "' name='highrate_"+sdata[i].id+"'  data-rule='required;number'/>"+ "</td></tr>"
+//									}
+									
+								}
+								
+								text=text+"<tr><td>合计</td><td>"+(sumindex)+"</td><td>"+"</td></tr>"
+								
+								var trl= $.CurrentNavtab.find("#storetable tr").length;
+								for (var i = trl-1; i >0; i--) {
+									console.log(i)
+									$.CurrentNavtab.find("#storetable tr").eq(i).remove();
+								}
+								$.CurrentNavtab.find("#storetable").append($(text));
+//								for(var i=0;i<storeindex.length;i++){
+//									$.CurrentNavtab.find("#enrolindex_"+storeindex[i].storeid).trigger(BJUI.eventType.initUI);
+//									$.CurrentNavtab.find("#highrate_"+storeindex[i].storeid).trigger(BJUI.eventType.initUI)
+//									$.CurrentNavtab.find("#enrolindex_"+storeindex[i].storeid).val(storeindex[i].enrolindex);
+//									$.CurrentNavtab.find("#highrate_"+storeindex[i].storeid).val(storeindex[i].highrate)
+//									//console.log("#enrolindex_"+storeindex[i].storeid)
+//									
+//								}
+							}
+							//console.log($("#enrolindex_140"))
+							
+							//data = json.result
+						}
+					})
+				
+	}
+}
+
+renderyear($.CurrentNavtab.find('#year'))
+rendermonth($.CurrentNavtab.find('#month'))	
+
+enroll_view.init();     
+
+    
+    
+function renderyear(dom){
+	var now=new Date();
+	year=now.getFullYear();
+	month=now.getMonth()+1;
+	$(dom).append("<option value="+year+">"+year+"</option>")
+	for(var i=1;i<=12;i++){	
+		$(dom).append("<option value="+(year+i)+">"+(year+i)+"</option>")
+	}
+}
+function rendermonth(dom){
+	for(var i=1;i<=12;i++){	
+		$(dom).append("<option value="+i+">"+i+"</option>")
+	}
+}
+
+
+	
+</script>
+    

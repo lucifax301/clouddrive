@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.TrainareaMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Trainarea" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inscode" property="inscode" jdbcType="VARCHAR" />
+    <result column="seq" property="seq" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="INTEGER" />
+    <result column="vehicletype" property="vehicletype" jdbcType="VARCHAR" />
+    <result column="polygon" property="polygon" jdbcType="VARCHAR" />
+    <result column="totalvehnum" property="totalvehnum" jdbcType="INTEGER" />
+    <result column="recordarea" property="recordarea" jdbcType="DOUBLE" />
+    <result column="recordstatus" property="recordstatus" jdbcType="VARCHAR" />
+    <result column="recordcarnum" property="recordcarnum" jdbcType="INTEGER" />
+    <result column="starttime" property="starttime" jdbcType="VARCHAR" />
+    <result column="endtime" property="endtime" jdbcType="VARCHAR" />
+    <result column="ownerphone" property="ownerphone" jdbcType="VARCHAR" />
+    <result column="owner" property="owner" jdbcType="VARCHAR" />
+    <result column="deposit" property="deposit" jdbcType="DOUBLE" />
+    <result column="rent" property="rent" jdbcType="DOUBLE" />
+    <result column="nature" property="nature" jdbcType="VARCHAR" />
+    <result column="curvehnum" property="curvehnum" jdbcType="INTEGER" />
+    <result column="operate" property="operate" jdbcType="TINYINT" />
+    <result column="errorcode" property="errorcode" jdbcType="INTEGER" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="utime" property="utime" jdbcType="TIMESTAMP" />
+    <result column="ltime" property="ltime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, inscode, seq, name, address, area, vehicletype, polygon, totalvehnum, recordarea, 
+    recordstatus, recordcarnum, starttime, endtime, ownerphone, owner, deposit, rent, 
+    nature, curvehnum, operate, errorcode, message, utime, ltime, cuid, muid, ctime, 
+    mtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_trainarea
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_trainarea
+    <where>
+	    <if test="name != null and name != ''">
+		  and name LIKE concat(concat('%',#{name}),'%')
+		</if>
+	</where>
+    order by mtime desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    delete from t_trainarea
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    insert into t_trainarea (id, inscode, seq, 
+      name, address, area, 
+      vehicletype, polygon, totalvehnum, 
+      recordarea, recordstatus, recordcarnum, 
+      starttime, endtime, ownerphone, 
+      owner, deposit, rent, 
+      nature, curvehnum, operate, 
+      errorcode, message, utime, 
+      ltime, cuid, muid, 
+      ctime, mtime)
+    values (#{id,jdbcType=INTEGER}, #{inscode,jdbcType=VARCHAR}, #{seq,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{area,jdbcType=INTEGER}, 
+      #{vehicletype,jdbcType=VARCHAR}, #{polygon,jdbcType=VARCHAR}, #{totalvehnum,jdbcType=INTEGER}, 
+      #{recordarea,jdbcType=DOUBLE}, #{recordstatus,jdbcType=VARCHAR}, #{recordcarnum,jdbcType=INTEGER}, 
+      #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{ownerphone,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{deposit,jdbcType=DOUBLE}, #{rent,jdbcType=DOUBLE}, 
+      #{nature,jdbcType=VARCHAR}, #{curvehnum,jdbcType=INTEGER}, #{operate,jdbcType=TINYINT}, 
+      #{errorcode,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR}, #{utime,jdbcType=TIMESTAMP}, 
+      #{ltime,jdbcType=TIMESTAMP}, #{cuid,jdbcType=INTEGER}, #{muid,jdbcType=INTEGER}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    insert into t_trainarea
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="inscode != null" >
+        inscode,
+      </if>
+      <if test="seq != null" >
+        seq,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="vehicletype != null" >
+        vehicletype,
+      </if>
+      <if test="polygon != null" >
+        polygon,
+      </if>
+      <if test="totalvehnum != null" >
+        totalvehnum,
+      </if>
+      <if test="recordarea != null" >
+        recordarea,
+      </if>
+      <if test="recordstatus != null" >
+        recordstatus,
+      </if>
+      <if test="recordcarnum != null" >
+        recordcarnum,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="ownerphone != null" >
+        ownerphone,
+      </if>
+      <if test="owner != null" >
+        owner,
+      </if>
+      <if test="deposit != null" >
+        deposit,
+      </if>
+      <if test="rent != null" >
+        rent,
+      </if>
+      <if test="nature != null" >
+        nature,
+      </if>
+      <if test="curvehnum != null" >
+        curvehnum,
+      </if>
+      <if test="operate != null" >
+        operate,
+      </if>
+      <if test="errorcode != null" >
+        errorcode,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="utime != null" >
+        utime,
+      </if>
+      <if test="ltime != null" >
+        ltime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="inscode != null" >
+        #{inscode,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="vehicletype != null" >
+        #{vehicletype,jdbcType=VARCHAR},
+      </if>
+      <if test="polygon != null" >
+        #{polygon,jdbcType=VARCHAR},
+      </if>
+      <if test="totalvehnum != null" >
+        #{totalvehnum,jdbcType=INTEGER},
+      </if>
+      <if test="recordarea != null" >
+        #{recordarea,jdbcType=DOUBLE},
+      </if>
+      <if test="recordstatus != null" >
+        #{recordstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recordcarnum != null" >
+        #{recordcarnum,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerphone != null" >
+        #{ownerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null" >
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="deposit != null" >
+        #{deposit,jdbcType=DOUBLE},
+      </if>
+      <if test="rent != null" >
+        #{rent,jdbcType=DOUBLE},
+      </if>
+      <if test="nature != null" >
+        #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="curvehnum != null" >
+        #{curvehnum,jdbcType=INTEGER},
+      </if>
+      <if test="operate != null" >
+        #{operate,jdbcType=TINYINT},
+      </if>
+      <if test="errorcode != null" >
+        #{errorcode,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ltime != null" >
+        #{ltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    update t_trainarea
+    <set >
+      <if test="inscode != null" >
+        inscode = #{inscode,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        seq = #{seq,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="vehicletype != null" >
+        vehicletype = #{vehicletype,jdbcType=VARCHAR},
+      </if>
+      <if test="polygon != null" >
+        polygon = #{polygon,jdbcType=VARCHAR},
+      </if>
+      <if test="totalvehnum != null" >
+        totalvehnum = #{totalvehnum,jdbcType=INTEGER},
+      </if>
+      <if test="recordarea != null" >
+        recordarea = #{recordarea,jdbcType=DOUBLE},
+      </if>
+      <if test="recordstatus != null" >
+        recordstatus = #{recordstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recordcarnum != null" >
+        recordcarnum = #{recordcarnum,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerphone != null" >
+        ownerphone = #{ownerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null" >
+        owner = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="deposit != null" >
+        deposit = #{deposit,jdbcType=DOUBLE},
+      </if>
+      <if test="rent != null" >
+        rent = #{rent,jdbcType=DOUBLE},
+      </if>
+      <if test="nature != null" >
+        nature = #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="curvehnum != null" >
+        curvehnum = #{curvehnum,jdbcType=INTEGER},
+      </if>
+      <if test="operate != null" >
+        operate = #{operate,jdbcType=TINYINT},
+      </if>
+      <if test="errorcode != null" >
+        errorcode = #{errorcode,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        utime = #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ltime != null" >
+        ltime = #{ltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    update t_trainarea
+    set inscode = #{inscode,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      area = #{area,jdbcType=INTEGER},
+      vehicletype = #{vehicletype,jdbcType=VARCHAR},
+      polygon = #{polygon,jdbcType=VARCHAR},
+      totalvehnum = #{totalvehnum,jdbcType=INTEGER},
+      recordarea = #{recordarea,jdbcType=DOUBLE},
+      recordstatus = #{recordstatus,jdbcType=VARCHAR},
+      recordcarnum = #{recordcarnum,jdbcType=INTEGER},
+      starttime = #{starttime,jdbcType=VARCHAR},
+      endtime = #{endtime,jdbcType=VARCHAR},
+      ownerphone = #{ownerphone,jdbcType=VARCHAR},
+      owner = #{owner,jdbcType=VARCHAR},
+      deposit = #{deposit,jdbcType=DOUBLE},
+      rent = #{rent,jdbcType=DOUBLE},
+      nature = #{nature,jdbcType=VARCHAR},
+      curvehnum = #{curvehnum,jdbcType=INTEGER},
+      operate = #{operate,jdbcType=TINYINT},
+      errorcode = #{errorcode,jdbcType=INTEGER},
+      message = #{message,jdbcType=VARCHAR},
+      utime = #{utime,jdbcType=TIMESTAMP},
+      ltime = #{ltime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      muid = #{muid,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getCount" resultType="int" parameterType="cn.com.liliyun.trainorg.model.Trainarea" >
+    select count(1) from t_trainarea
+  </select>
+</mapper>

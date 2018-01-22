@@ -1,0 +1,83 @@
+<section id="thispage" privilege = "070402"></section>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var dept_list = {
+        list:$.CurrentNavtab.find('#datagrid-list').datagrid({ 
+            gridTitle : '部门列表',
+            toolbarItem: 'add',
+            paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+            height: '95%',
+            showCheckboxcol: false,
+            showToolbar: true,
+            dataUrl: config.openBasePath + 'dept/list',
+            columns: [
+                {name:'name',label:'部门',align:'center'},
+                {name:'remark',label:'备注',align:'center'},
+                {name:'remark',label:'操作',align:'center',render:function(value,data){
+                	var html="<button type='button' class='btn-blue' onclick='dept_list.edit("+JSON.stringify(data)+")'>编辑</button>";
+        
+        				html=html+'<button type="button" class="btn-red" onclick="dept_list.del('+data.id+')">删除</button>';
+        				return html
+                }}
+            ],
+            keys : {
+                ctime : 'ctime',
+                mtime : 'mtime'
+            },
+            editMode: {
+				dialog: {
+					id: 'dept-dialog',
+					title: '新增部门',
+					onClose: function() {
+						
+						dept_list.list.datagrid('refresh', true);
+						
+					}
+				}
+			},
+			
+            addLocation : 'first',
+            editUrl : config.openBasePath + 'dept/edit',
+            delUrl : config.openBasePath + 'dept/delete',
+    		delPK : 'id',
+    		add_url: "html/system/dept/dept-add.html",
+    		afterSave:function(){
+    			dept_list.list.datagrid('refresh',true);
+    		},
+    		afterDelete:function(){
+    			dept_list.list.datagrid('refresh',true);
+    		}
+        }),
+        edit: function(deptinfo) {
+        	clz.setWindowJson(deptinfo);
+			BJUI.dialog({
+				id: 'dept-edit-' + deptinfo.id,
+				
+				url: 'html/system/dept/dept-edit.html',
+				title: '修改部门',
+				onClose: function() {
+					dept_list.list.datagrid('refresh', true);
+					
+				}
+
+			})
+			
+		},
+		del: function(id){
+			BJUI.alertmsg('confirm', '确认删除部门吗！', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "dept/del?id=" + id,
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                    	BJUI.alertmsg('ok', '删除部门成功！', {})
+                        //BJUI.navtab('refresh')
+                        dept_list.list.datagrid('refresh', true);
+                    }
+                })
+            }
+        })
+		},
+	}
+    
+</script>

@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.finance.mapper.FinanceReceiptMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.finance.model.FinanceReceipt" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="studentid" property="studentid" jdbcType="INTEGER" />
+    <result column="stuname" property="stuname" jdbcType="VARCHAR" />
+    <result column="stuidcard" property="stuidcard" jdbcType="VARCHAR" />
+    <result column="classinfo" property="classinfo" jdbcType="VARCHAR" />
+    <result column="traintype" property="traintype" jdbcType="VARCHAR" />
+    <result column="signupdate" property="signupdate" jdbcType="TIMESTAMP" />
+    <result column="signupcost" property="signupcost" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="receiptnum" property="receiptnum" jdbcType="VARCHAR" />
+    <result column="receiptdate" property="receiptdate" jdbcType="TIMESTAMP" />
+    <result column="receiptmoney" property="receiptmoney" jdbcType="DECIMAL" />
+    <result column="cashmoney" property="cashmoney" jdbcType="DECIMAL" />
+    <result column="posid" property="posid" jdbcType="INTEGER" />
+    <result column="posnum" property="posnum" jdbcType="VARCHAR" />
+    <result column="poscompany" property="poscompany" jdbcType="VARCHAR" />
+    <result column="posmoney" property="posmoney" jdbcType="DECIMAL" />
+    <result column="invoicetype" property="invoicetype" jdbcType="TINYINT" />
+    <result column="invoicename" property="invoicename" jdbcType="VARCHAR" />
+    <result column="invoicenum" property="invoicenum" jdbcType="VARCHAR" />
+    <result column="invoicemoney" property="invoicemoney" jdbcType="DECIMAL" />
+    <result column="invoicedate" property="invoicedate" jdbcType="TIMESTAMP" />
+    <result column="isinvoice" property="isinvoice" jdbcType="TINYINT" />
+    <result column="invoicestate" property="invoicestate" jdbcType="TINYINT" />
+    <result column="state1uid" property="state1uid" jdbcType="INTEGER" />
+    <result column="state1date" property="state1date" jdbcType="TIMESTAMP" />
+    <result column="state1name" property="state1name" jdbcType="VARCHAR" />
+    <result column="state2uid" property="state2uid" jdbcType="INTEGER" />
+    <result column="state2date" property="state2date" jdbcType="TIMESTAMP" />
+    <result column="state2name" property="state2name" jdbcType="VARCHAR" />
+    <result column="state3uid" property="state3uid" jdbcType="INTEGER" />
+    <result column="state3date" property="state3date" jdbcType="TIMESTAMP" />
+    <result column="state3name" property="state3name" jdbcType="VARCHAR" />
+    <result column="state4uid" property="state4uid" jdbcType="INTEGER" />
+    <result column="state4date" property="state4date" jdbcType="TIMESTAMP" />
+    <result column="state4name" property="state4name" jdbcType="VARCHAR" />
+    <result column="batchnum" property="batchnum" jdbcType="VARCHAR" />
+    <result column="modifystate" property="modifystate" jdbcType="TINYINT" />
+    <result column="applierid" property="applierid" jdbcType="INTEGER" />
+    <result column="applier" property="applier" jdbcType="VARCHAR" />
+    <result column="applydate" property="applydate" jdbcType="TIMESTAMP" />
+    <result column="applyreason" property="applyreason" jdbcType="VARCHAR" />
+    <result column="reviewerid" property="reviewerid" jdbcType="INTEGER" />
+    <result column="reviewer" property="reviewer" jdbcType="VARCHAR" />
+    <result column="reviewdate" property="reviewdate" jdbcType="TIMESTAMP" />
+    <result column="reviewremark" property="reviewremark" jdbcType="VARCHAR" />
+    <result column="isconfirm" property="isconfirm" jdbcType="TINYINT" />
+    <result column="confirmdate" property="confirmdate" jdbcType="TIMESTAMP" />
+    <result column="confirmuid" property="confirmuid" jdbcType="INTEGER" />
+    <result column="confirmname" property="confirmname" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+    <result column="businessid" property="businessid" jdbcType="VARCHAR" />
+    <result column="transactionid" property="transactionid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, areaid, storeid, studentid, stuname, stuidcard, classinfo, traintype, signupdate, 
+    signupcost, type, receiptnum, receiptdate, receiptmoney, cashmoney, posid, posnum, 
+    poscompany, posmoney, invoicetype, invoicename, invoicenum, invoicemoney, invoicedate, 
+    isinvoice, invoicestate, state1uid, state1date, state1name, state2uid, state2date, 
+    state2name, state3uid, state3date, state3name, state4uid, state4date, state4name, 
+    batchnum, modifystate, applierid, applier, applydate, applyreason, reviewerid, reviewer, 
+    reviewdate, reviewremark, isconfirm, confirmdate, confirmuid, confirmname, remark, 
+    ctime, cuid, cname, mtime, muid, mname, businessid, transactionid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_receipt
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    delete from t_finance_receipt
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    insert into t_finance_receipt (id, areaid, storeid, 
+      studentid, stuname, stuidcard, 
+      classinfo, traintype, signupdate, 
+      signupcost, type, receiptnum, 
+      receiptdate, receiptmoney, cashmoney, 
+      posid, posnum, poscompany, 
+      posmoney, invoicetype, invoicename, 
+      invoicenum, invoicemoney, invoicedate, 
+      isinvoice, invoicestate, state1uid, 
+      state1date, state1name, state2uid, 
+      state2date, state2name, state3uid, 
+      state3date, state3name, state4uid, 
+      state4date, state4name, batchnum, 
+      modifystate, applierid, applier, 
+      applydate, applyreason, reviewerid, 
+      reviewer, reviewdate, reviewremark, 
+      isconfirm, confirmdate, confirmuid, 
+      confirmname, remark, ctime, 
+      cuid, cname, mtime, 
+      muid, mname, businessid, 
+      transactionid)
+    values (#{id,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{studentid,jdbcType=INTEGER}, #{stuname,jdbcType=VARCHAR}, #{stuidcard,jdbcType=VARCHAR}, 
+      #{classinfo,jdbcType=VARCHAR}, #{traintype,jdbcType=VARCHAR}, #{signupdate,jdbcType=TIMESTAMP}, 
+      #{signupcost,jdbcType=DECIMAL}, #{type,jdbcType=INTEGER}, #{receiptnum,jdbcType=VARCHAR}, 
+      #{receiptdate,jdbcType=TIMESTAMP}, #{receiptmoney,jdbcType=DECIMAL}, #{cashmoney,jdbcType=DECIMAL}, 
+      #{posid,jdbcType=INTEGER}, #{posnum,jdbcType=VARCHAR}, #{poscompany,jdbcType=VARCHAR}, 
+      #{posmoney,jdbcType=DECIMAL}, #{invoicetype,jdbcType=TINYINT}, #{invoicename,jdbcType=VARCHAR}, 
+      #{invoicenum,jdbcType=VARCHAR}, #{invoicemoney,jdbcType=DECIMAL}, #{invoicedate,jdbcType=TIMESTAMP}, 
+      #{isinvoice,jdbcType=TINYINT}, #{invoicestate,jdbcType=TINYINT}, #{state1uid,jdbcType=INTEGER}, 
+      #{state1date,jdbcType=TIMESTAMP}, #{state1name,jdbcType=VARCHAR}, #{state2uid,jdbcType=INTEGER}, 
+      #{state2date,jdbcType=TIMESTAMP}, #{state2name,jdbcType=VARCHAR}, #{state3uid,jdbcType=INTEGER}, 
+      #{state3date,jdbcType=TIMESTAMP}, #{state3name,jdbcType=VARCHAR}, #{state4uid,jdbcType=INTEGER}, 
+      #{state4date,jdbcType=TIMESTAMP}, #{state4name,jdbcType=VARCHAR}, #{batchnum,jdbcType=VARCHAR}, 
+      #{modifystate,jdbcType=TINYINT}, #{applierid,jdbcType=INTEGER}, #{applier,jdbcType=VARCHAR}, 
+      #{applydate,jdbcType=TIMESTAMP}, #{applyreason,jdbcType=VARCHAR}, #{reviewerid,jdbcType=INTEGER}, 
+      #{reviewer,jdbcType=VARCHAR}, #{reviewdate,jdbcType=TIMESTAMP}, #{reviewremark,jdbcType=VARCHAR}, 
+      #{isconfirm,jdbcType=TINYINT}, #{confirmdate,jdbcType=TIMESTAMP}, #{confirmuid,jdbcType=INTEGER}, 
+      #{confirmname,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{cuid,jdbcType=INTEGER}, #{cname,jdbcType=VARCHAR}, #{mtime,jdbcType=TIMESTAMP}, 
+      #{muid,jdbcType=INTEGER}, #{mname,jdbcType=VARCHAR}, #{businessid,jdbcType=VARCHAR}, 
+      #{transactionid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    insert into t_finance_receipt
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="studentid != null" >
+        studentid,
+      </if>
+      <if test="stuname != null" >
+        stuname,
+      </if>
+      <if test="stuidcard != null" >
+        stuidcard,
+      </if>
+      <if test="classinfo != null" >
+        classinfo,
+      </if>
+      <if test="traintype != null" >
+        traintype,
+      </if>
+      <if test="signupdate != null" >
+        signupdate,
+      </if>
+      <if test="signupcost != null" >
+        signupcost,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="receiptnum != null" >
+        receiptnum,
+      </if>
+      <if test="receiptdate != null" >
+        receiptdate,
+      </if>
+      <if test="receiptmoney != null" >
+        receiptmoney,
+      </if>
+      <if test="cashmoney != null" >
+        cashmoney,
+      </if>
+      <if test="posid != null" >
+        posid,
+      </if>
+      <if test="posnum != null" >
+        posnum,
+      </if>
+      <if test="poscompany != null" >
+        poscompany,
+      </if>
+      <if test="posmoney != null" >
+        posmoney,
+      </if>
+      <if test="invoicetype != null" >
+        invoicetype,
+      </if>
+      <if test="invoicename != null" >
+        invoicename,
+      </if>
+      <if test="invoicenum != null" >
+        invoicenum,
+      </if>
+      <if test="invoicemoney != null" >
+        invoicemoney,
+      </if>
+      <if test="invoicedate != null" >
+        invoicedate,
+      </if>
+      <if test="isinvoice != null" >
+        isinvoice,
+      </if>
+      <if test="invoicestate != null" >
+        invoicestate,
+      </if>
+      <if test="state1uid != null" >
+        state1uid,
+      </if>
+      <if test="state1date != null" >
+        state1date,
+      </if>
+      <if test="state1name != null" >
+        state1name,
+      </if>
+      <if test="state2uid != null" >
+        state2uid,
+      </if>
+      <if test="state2date != null" >
+        state2date,
+      </if>
+      <if test="state2name != null" >
+        state2name,
+      </if>
+      <if test="state3uid != null" >
+        state3uid,
+      </if>
+      <if test="state3date != null" >
+        state3date,
+      </if>
+      <if test="state3name != null" >
+        state3name,
+      </if>
+      <if test="state4uid != null" >
+        state4uid,
+      </if>
+      <if test="state4date != null" >
+        state4date,
+      </if>
+      <if test="state4name != null" >
+        state4name,
+      </if>
+      <if test="batchnum != null" >
+        batchnum,
+      </if>
+      <if test="modifystate != null" >
+        modifystate,
+      </if>
+      <if test="applierid != null" >
+        applierid,
+      </if>
+      <if test="applier != null" >
+        applier,
+      </if>
+      <if test="applydate != null" >
+        applydate,
+      </if>
+      <if test="applyreason != null" >
+        applyreason,
+      </if>
+      <if test="reviewerid != null" >
+        reviewerid,
+      </if>
+      <if test="reviewer != null" >
+        reviewer,
+      </if>
+      <if test="reviewdate != null" >
+        reviewdate,
+      </if>
+      <if test="reviewremark != null" >
+        reviewremark,
+      </if>
+      <if test="isconfirm != null" >
+        isconfirm,
+      </if>
+      <if test="confirmdate != null" >
+        confirmdate,
+      </if>
+      <if test="confirmuid != null" >
+        confirmuid,
+      </if>
+      <if test="confirmname != null" >
+        confirmname,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="mname != null" >
+        mname,
+      </if>
+      <if test="businessid != null" >
+        businessid,
+      </if>
+      <if test="transactionid != null" >
+        transactionid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="studentid != null" >
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="stuname != null" >
+        #{stuname,jdbcType=VARCHAR},
+      </if>
+      <if test="stuidcard != null" >
+        #{stuidcard,jdbcType=VARCHAR},
+      </if>
+      <if test="classinfo != null" >
+        #{classinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="traintype != null" >
+        #{traintype,jdbcType=VARCHAR},
+      </if>
+      <if test="signupdate != null" >
+        #{signupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signupcost != null" >
+        #{signupcost,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="receiptnum != null" >
+        #{receiptnum,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptdate != null" >
+        #{receiptdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiptmoney != null" >
+        #{receiptmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="cashmoney != null" >
+        #{cashmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="posid != null" >
+        #{posid,jdbcType=INTEGER},
+      </if>
+      <if test="posnum != null" >
+        #{posnum,jdbcType=VARCHAR},
+      </if>
+      <if test="poscompany != null" >
+        #{poscompany,jdbcType=VARCHAR},
+      </if>
+      <if test="posmoney != null" >
+        #{posmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="invoicetype != null" >
+        #{invoicetype,jdbcType=TINYINT},
+      </if>
+      <if test="invoicename != null" >
+        #{invoicename,jdbcType=VARCHAR},
+      </if>
+      <if test="invoicenum != null" >
+        #{invoicenum,jdbcType=VARCHAR},
+      </if>
+      <if test="invoicemoney != null" >
+        #{invoicemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="invoicedate != null" >
+        #{invoicedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isinvoice != null" >
+        #{isinvoice,jdbcType=TINYINT},
+      </if>
+      <if test="invoicestate != null" >
+        #{invoicestate,jdbcType=TINYINT},
+      </if>
+      <if test="state1uid != null" >
+        #{state1uid,jdbcType=INTEGER},
+      </if>
+      <if test="state1date != null" >
+        #{state1date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state1name != null" >
+        #{state1name,jdbcType=VARCHAR},
+      </if>
+      <if test="state2uid != null" >
+        #{state2uid,jdbcType=INTEGER},
+      </if>
+      <if test="state2date != null" >
+        #{state2date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state2name != null" >
+        #{state2name,jdbcType=VARCHAR},
+      </if>
+      <if test="state3uid != null" >
+        #{state3uid,jdbcType=INTEGER},
+      </if>
+      <if test="state3date != null" >
+        #{state3date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state3name != null" >
+        #{state3name,jdbcType=VARCHAR},
+      </if>
+      <if test="state4uid != null" >
+        #{state4uid,jdbcType=INTEGER},
+      </if>
+      <if test="state4date != null" >
+        #{state4date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state4name != null" >
+        #{state4name,jdbcType=VARCHAR},
+      </if>
+      <if test="batchnum != null" >
+        #{batchnum,jdbcType=VARCHAR},
+      </if>
+      <if test="modifystate != null" >
+        #{modifystate,jdbcType=TINYINT},
+      </if>
+      <if test="applierid != null" >
+        #{applierid,jdbcType=INTEGER},
+      </if>
+      <if test="applier != null" >
+        #{applier,jdbcType=VARCHAR},
+      </if>
+      <if test="applydate != null" >
+        #{applydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyreason != null" >
+        #{applyreason,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewerid != null" >
+        #{reviewerid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewer != null" >
+        #{reviewer,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewdate != null" >
+        #{reviewdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewremark != null" >
+        #{reviewremark,jdbcType=VARCHAR},
+      </if>
+      <if test="isconfirm != null" >
+        #{isconfirm,jdbcType=TINYINT},
+      </if>
+      <if test="confirmdate != null" >
+        #{confirmdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmuid != null" >
+        #{confirmuid,jdbcType=INTEGER},
+      </if>
+      <if test="confirmname != null" >
+        #{confirmname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="businessid != null" >
+        #{businessid,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        #{transactionid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    update t_finance_receipt
+    <set >
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="studentid != null" >
+        studentid = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="stuname != null" >
+        stuname = #{stuname,jdbcType=VARCHAR},
+      </if>
+      <if test="stuidcard != null" >
+        stuidcard = #{stuidcard,jdbcType=VARCHAR},
+      </if>
+      <if test="classinfo != null" >
+        classinfo = #{classinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="traintype != null" >
+        traintype = #{traintype,jdbcType=VARCHAR},
+      </if>
+      <if test="signupdate != null" >
+        signupdate = #{signupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signupcost != null" >
+        signupcost = #{signupcost,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="receiptnum != null" >
+        receiptnum = #{receiptnum,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptdate != null" >
+        receiptdate = #{receiptdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiptmoney != null" >
+        receiptmoney = #{receiptmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="cashmoney != null" >
+        cashmoney = #{cashmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="posid != null" >
+        posid = #{posid,jdbcType=INTEGER},
+      </if>
+      <if test="posnum != null" >
+        posnum = #{posnum,jdbcType=VARCHAR},
+      </if>
+      <if test="poscompany != null" >
+        poscompany = #{poscompany,jdbcType=VARCHAR},
+      </if>
+      <if test="posmoney != null" >
+        posmoney = #{posmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="invoicetype != null" >
+        invoicetype = #{invoicetype,jdbcType=TINYINT},
+      </if>
+      <if test="invoicename != null" >
+        invoicename = #{invoicename,jdbcType=VARCHAR},
+      </if>
+      <if test="invoicenum != null" >
+        invoicenum = #{invoicenum,jdbcType=VARCHAR},
+      </if>
+      <if test="invoicemoney != null" >
+        invoicemoney = #{invoicemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="invoicedate != null" >
+        invoicedate = #{invoicedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isinvoice != null" >
+        isinvoice = #{isinvoice,jdbcType=TINYINT},
+      </if>
+      <if test="invoicestate != null" >
+        invoicestate = #{invoicestate,jdbcType=TINYINT},
+      </if>
+      <if test="state1uid != null" >
+        state1uid = #{state1uid,jdbcType=INTEGER},
+      </if>
+      <if test="state1date != null" >
+        state1date = #{state1date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state1name != null" >
+        state1name = #{state1name,jdbcType=VARCHAR},
+      </if>
+      <if test="state2uid != null" >
+        state2uid = #{state2uid,jdbcType=INTEGER},
+      </if>
+      <if test="state2date != null" >
+        state2date = #{state2date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state2name != null" >
+        state2name = #{state2name,jdbcType=VARCHAR},
+      </if>
+      <if test="state3uid != null" >
+        state3uid = #{state3uid,jdbcType=INTEGER},
+      </if>
+      <if test="state3date != null" >
+        state3date = #{state3date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state3name != null" >
+        state3name = #{state3name,jdbcType=VARCHAR},
+      </if>
+      <if test="state4uid != null" >
+        state4uid = #{state4uid,jdbcType=INTEGER},
+      </if>
+      <if test="state4date != null" >
+        state4date = #{state4date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state4name != null" >
+        state4name = #{state4name,jdbcType=VARCHAR},
+      </if>
+      <if test="batchnum != null" >
+        batchnum = #{batchnum,jdbcType=VARCHAR},
+      </if>
+      <if test="modifystate != null" >
+        modifystate = #{modifystate,jdbcType=TINYINT},
+      </if>
+      <if test="applierid != null" >
+        applierid = #{applierid,jdbcType=INTEGER},
+      </if>
+      <if test="applier != null" >
+        applier = #{applier,jdbcType=VARCHAR},
+      </if>
+      <if test="applydate != null" >
+        applydate = #{applydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyreason != null" >
+        applyreason = #{applyreason,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewerid != null" >
+        reviewerid = #{reviewerid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewer != null" >
+        reviewer = #{reviewer,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewdate != null" >
+        reviewdate = #{reviewdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewremark != null" >
+        reviewremark = #{reviewremark,jdbcType=VARCHAR},
+      </if>
+      <if test="isconfirm != null" >
+        isconfirm = #{isconfirm,jdbcType=TINYINT},
+      </if>
+      <if test="confirmdate != null" >
+        confirmdate = #{confirmdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmuid != null" >
+        confirmuid = #{confirmuid,jdbcType=INTEGER},
+      </if>
+      <if test="confirmname != null" >
+        confirmname = #{confirmname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="businessid != null" >
+        businessid = #{businessid,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionid != null" >
+        transactionid = #{transactionid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    update t_finance_receipt
+    set areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      studentid = #{studentid,jdbcType=INTEGER},
+      stuname = #{stuname,jdbcType=VARCHAR},
+      stuidcard = #{stuidcard,jdbcType=VARCHAR},
+      classinfo = #{classinfo,jdbcType=VARCHAR},
+      traintype = #{traintype,jdbcType=VARCHAR},
+      signupdate = #{signupdate,jdbcType=TIMESTAMP},
+      signupcost = #{signupcost,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      receiptnum = #{receiptnum,jdbcType=VARCHAR},
+      receiptdate = #{receiptdate,jdbcType=TIMESTAMP},
+      receiptmoney = #{receiptmoney,jdbcType=DECIMAL},
+      cashmoney = #{cashmoney,jdbcType=DECIMAL},
+      posid = #{posid,jdbcType=INTEGER},
+      posnum = #{posnum,jdbcType=VARCHAR},
+      poscompany = #{poscompany,jdbcType=VARCHAR},
+      posmoney = #{posmoney,jdbcType=DECIMAL},
+      invoicetype = #{invoicetype,jdbcType=TINYINT},
+      invoicename = #{invoicename,jdbcType=VARCHAR},
+      invoicenum = #{invoicenum,jdbcType=VARCHAR},
+      invoicemoney = #{invoicemoney,jdbcType=DECIMAL},
+      invoicedate = #{invoicedate,jdbcType=TIMESTAMP},
+      isinvoice = #{isinvoice,jdbcType=TINYINT},
+      invoicestate = #{invoicestate,jdbcType=TINYINT},
+      state1uid = #{state1uid,jdbcType=INTEGER},
+      state1date = #{state1date,jdbcType=TIMESTAMP},
+      state1name = #{state1name,jdbcType=VARCHAR},
+      state2uid = #{state2uid,jdbcType=INTEGER},
+      state2date = #{state2date,jdbcType=TIMESTAMP},
+      state2name = #{state2name,jdbcType=VARCHAR},
+      state3uid = #{state3uid,jdbcType=INTEGER},
+      state3date = #{state3date,jdbcType=TIMESTAMP},
+      state3name = #{state3name,jdbcType=VARCHAR},
+      state4uid = #{state4uid,jdbcType=INTEGER},
+      state4date = #{state4date,jdbcType=TIMESTAMP},
+      state4name = #{state4name,jdbcType=VARCHAR},
+      batchnum = #{batchnum,jdbcType=VARCHAR},
+      modifystate = #{modifystate,jdbcType=TINYINT},
+      applierid = #{applierid,jdbcType=INTEGER},
+      applier = #{applier,jdbcType=VARCHAR},
+      applydate = #{applydate,jdbcType=TIMESTAMP},
+      applyreason = #{applyreason,jdbcType=VARCHAR},
+      reviewerid = #{reviewerid,jdbcType=INTEGER},
+      reviewer = #{reviewer,jdbcType=VARCHAR},
+      reviewdate = #{reviewdate,jdbcType=TIMESTAMP},
+      reviewremark = #{reviewremark,jdbcType=VARCHAR},
+      isconfirm = #{isconfirm,jdbcType=TINYINT},
+      confirmdate = #{confirmdate,jdbcType=TIMESTAMP},
+      confirmuid = #{confirmuid,jdbcType=INTEGER},
+      confirmname = #{confirmname,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      muid = #{muid,jdbcType=INTEGER},
+      mname = #{mname,jdbcType=VARCHAR},
+      businessid = #{businessid,jdbcType=VARCHAR},
+      transactionid = #{transactionid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_receipt
+    <where>
+    	<if test="id != null">
+    		and id = #{id,jdbcType=INTEGER}
+    	</if>
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="type != null">
+    		and type = #{type,jdbcType=INTEGER}
+    	</if>
+    	<if test="modifystate != null">
+    		and modifystate = #{modifystate,jdbcType=TINYINT}
+    	</if>
+    	<if test="isconfirm != null">
+    		and isconfirm = #{isconfirm,jdbcType=TINYINT}
+    	</if>
+    	<if test="isinvoice != null">
+    		and isinvoice = #{isinvoice,jdbcType=TINYINT}
+    	</if>
+    	<if test="invoicetype != null">
+    		and invoicetype = #{invoicetype,jdbcType=TINYINT}
+    	</if>
+    	<if test="invoicestate != null">
+    		and invoicestate = #{invoicestate,jdbcType=TINYINT}
+    	</if>
+    	<if test="receiptnum != null and receiptnum != ''">
+    		and receiptnum like concat('%',#{receiptnum,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="stuname != null and stuname != ''">
+    		and stuname like concat('%',#{stuname,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="stuidcard != null and stuidcard != ''">
+    		and stuidcard like concat('%',#{stuidcard,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="batchnum != null and batchnum != ''">
+    		and batchnum like concat('%',#{batchnum,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="receiptdatetop != null">
+    		and #{receiptdatetop,jdbcType=TIMESTAMP} >= receiptdate
+    	</if>
+    	<if test="receiptdatelow != null">
+    		and receiptdate >= #{receiptdatelow,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="poscompany != null and poscompany != ''">
+    		and poscompany = #{poscompany,jdbcType=VARCHAR}
+    	</if>
+    	<if test="ids != null and ids != ''">
+    		and id in (${ids})
+    	</if>
+    	<if test="transactionid != null and transactionid != ''">
+    		and transactionid = #{transactionid,jdbcType=VARCHAR}
+    	</if>
+    </where>
+    order by id desc
+  </select>
+  <select id="selectInvoiceExport" resultType="cn.com.liliyun.finance.model.FinanceInvoiceDTO" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    select 
+    	batchnum, invoicename, type, receiptmoney, areaid, storeid, stuname, stuidcard, classinfo, traintype, receiptnum, confirmname checker, cname payee
+    from t_finance_receipt
+    <where>
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="type != null">
+    		and type = #{type,jdbcType=INTEGER}
+    	</if>
+    	<if test="modifystate != null">
+    		and modifystate = #{modifystate,jdbcType=TINYINT}
+    	</if>
+    	<if test="isconfirm != null">
+    		and isconfirm = #{isconfirm,jdbcType=TINYINT}
+    	</if>
+    	<if test="isinvoice != null">
+    		and isinvoice = #{isinvoice,jdbcType=TINYINT}
+    	</if>
+    	<if test="invoicetype != null">
+    		and invoicetype = #{invoicetype,jdbcType=TINYINT}
+    	</if>
+    	<if test="invoicestate != null">
+    		and invoicestate = #{invoicestate,jdbcType=TINYINT}
+    	</if>
+    	<if test="receiptnum != null and receiptnum != ''">
+    		and receiptnum like concat('%',#{receiptnum,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="stuname != null and stuname != ''">
+    		and stuname like concat('%',#{stuname,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="stuidcard != null and stuidcard != ''">
+    		and stuidcard like concat('%',#{stuidcard,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="batchnum != null and batchnum != ''">
+    		and batchnum like concat('%',#{batchnum,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="receiptdatetop != null">
+    		and #{receiptdatetop,jdbcType=TIMESTAMP} >= receiptdate
+    	</if>
+    	<if test="receiptdatelow != null">
+    		and receiptdate >= #{receiptdatelow,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="ids != null and ids != ''">
+    		and id in (${ids})
+    	</if>
+    </where>
+  </select>
+  <select id="selectMaxBatchnum" resultType="java.lang.String">
+  	select MAX(batchnum) from t_finance_receipt
+  </select>
+  <update id="updateBatchnum" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+  	update t_finance_receipt
+     set batchnum = #{newbatchnum,jdbcType=VARCHAR} 
+    <where>
+    	batchnum is null 
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="type != null">
+    		and type = #{type,jdbcType=INTEGER}
+    	</if>
+    	<if test="modifystate != null">
+    		and modifystate = #{modifystate,jdbcType=TINYINT}
+    	</if>
+    	<if test="isconfirm != null">
+    		and isconfirm = #{isconfirm,jdbcType=TINYINT}
+    	</if>
+    	<if test="isinvoice != null">
+    		and isinvoice = #{isinvoice,jdbcType=TINYINT}
+    	</if>
+    	<if test="invoicetype != null">
+    		and invoicetype = #{invoicetype,jdbcType=TINYINT}
+    	</if>
+    	<if test="invoicestate != null">
+    		and invoicestate = #{invoicestate,jdbcType=TINYINT}
+    	</if>
+    	<if test="receiptnum != null and receiptnum != ''">
+    		and receiptnum like concat('%',#{receiptnum,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="stuname != null and stuname != ''">
+    		and stuname like concat('%',#{stuname,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="stuidcard != null and stuidcard != ''">
+    		and stuidcard like concat('%',#{stuidcard,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="batchnum != null and batchnum != ''">
+    		and batchnum like concat('%',#{batchnum,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="receiptdatetop != null">
+    		and #{receiptdatetop,jdbcType=TIMESTAMP} >= receiptdate
+    	</if>
+    	<if test="receiptdatelow != null">
+    		and receiptdate >= #{receiptdatelow,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="ids != null and ids != ''">
+    		and id in (${ids})
+    	</if>
+    </where>
+  </update>
+  <update id="updateByReceiptnumBatch" parameterType="java.util.List">
+  	<foreach item="item" collection="list" separator=";">
+  		update t_finance_receipt 
+  		<set>
+  			<if test="item.invoicenum != null and item.invoicenum != ''">
+  				invoicenum = #{item.invoicenum,jdbcType=VARCHAR},
+  			</if>
+  			<if test="item.invoicemoney != null">
+  				invoicemoney = #{item.invoicemoney,jdbcType=INTEGER},
+  			</if>
+  			<if test="item.invoicedate != null">
+  				invoicedate = #{item.invoicedate,jdbcType=TIMESTAMP},
+  			</if>
+  			isinvoice = 1,
+  		</set>
+  		where receiptnum = #{item.receiptnum,jdbcType=VARCHAR} and isinvoice != 1
+  	</foreach>
+  </update>
+  <update id="updateConfirmByIds" parameterType="cn.com.liliyun.finance.model.FinanceReceipt" >
+    update t_finance_receipt
+    <set >
+      <if test="isconfirm != null" >
+        isconfirm = #{isconfirm,jdbcType=TINYINT},
+      </if>
+      <if test="confirmdate != null" >
+        confirmdate = #{confirmdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmuid != null" >
+        confirmuid = #{confirmuid,jdbcType=INTEGER},
+      </if>
+      <if test="confirmname != null" >
+        confirmname = #{confirmname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id in (${ids}) and isconfirm = 0
+  </update>
+  <select id="selectIncome" resultType="cn.com.liliyun.finance.model.FinanceIncome" parameterType="cn.com.liliyun.finance.model.FinanceIncome" >
+    SELECT
+    batchnum,
+    count(1) AS count,
+    sum(receiptmoney) as receiptmoney,
+    receiptdate
+    FROM
+    t_finance_receipt
+    WHERE
+    isconfirm = 1
+    <if test="stime != null and stime !=''" >
+      and receiptdate >= #{stime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="etime != null and etime !=''" >
+      and date_add(#{etime,jdbcType=TIMESTAMP},interval 1 day) > receiptdate
+    </if>
+    GROUP BY
+    batchnum
+    HAVING count(1) > 0
+  </select>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.PersonnelMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Personnel" >
+    <id column="instid" property="instid" jdbcType="BIGINT" />
+    <result column="inscode" property="inscode" jdbcType="VARCHAR" />
+    <result column="examnum" property="examnum" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="BIGINT" />
+    <result column="photo_url" property="photo_url" jdbcType="VARCHAR" />
+    <result column="fingerprint_url" property="fingerprint_url" jdbcType="VARCHAR" />
+    <result column="fingerprint" property="fingerprint" jdbcType="BIGINT" />
+    <result column="drilicence" property="drilicence" jdbcType="VARCHAR" />
+    <result column="fstdrilicdate" property="fstdrilicdate" jdbcType="VARCHAR" />
+    <result column="occupationno" property="occupationno" jdbcType="VARCHAR" />
+    <result column="occupationlevel" property="occupationlevel" jdbcType="VARCHAR" />
+    <result column="dripermitted" property="dripermitted" jdbcType="VARCHAR" />
+    <result column="teachpermitted" property="teachpermitted" jdbcType="VARCHAR" />
+    <result column="employstatus" property="employstatus" jdbcType="VARCHAR" />
+    <result column="hiredate" property="hiredate" jdbcType="VARCHAR" />
+    <result column="leavedate" property="leavedate" jdbcType="VARCHAR" />
+    <result column="recordType" property="recordType" jdbcType="VARCHAR" />
+    
+  
+     
+  </resultMap>
+  <sql id="Base_Column_List" >
+    inscode,examnum, name,sex,hiredate,address,photo_url,mobile,idcard,post,fstdrilicdate,drilicence,recordType
+  </sql>
+  
+  <sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="examnum != null and examnum != ''">
+				and examnum = #{examnum}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="idcard != null and idcard != ''">
+				and idcard = #{idcard}
+			</if>
+			
+		</trim>
+	</sql>
+  
+  <!--  查询 -->
+  <select id="getAllPersonnel" parameterType="cn.com.liliyun.trainorg.model.Personnel"  resultType="cn.com.liliyun.trainorg.model.Personnel" >
+        select 
+        <include refid="Base_Column_List" /> 
+        from t_personnel
+        where 1=1
+		<trim suffixOverrides=",">
+			<if test="name != null and name != ''">
+				and name like "%"#{name}"%"
+			</if>
+			<if test="mobile != null and mobile != ''">
+				or mobile like "%"#{mobile}"%"
+			</if>
+		</trim>
+		order by mtime desc
+  </select>
+    <!-- 根据id查询 -->
+  <select id="getPersonnelById" parameterType="cn.com.liliyun.trainorg.model.Personnel" resultType="cn.com.liliyun.trainorg.model.Personnel">
+        select <include refid="Base_Column_List" />
+        from t_personnel where idcard = #{idcard}
+  </select>
+    <!-- 根据多条件 -->
+  <select id="getPersonnelbyers" parameterType="cn.com.liliyun.trainorg.model.Personnel" resultType="cn.com.liliyun.trainorg.model.Personnel">
+		select <include refid="Base_Column_List" /> from t_personnel where examnum = #{examnum}
+		UNION 
+		select <include refid="Base_Column_List" /> from t_personnel where name = #{name}
+		UNION 
+		select <include refid="Base_Column_List" /> from t_personnel where idcard = #{idcard}
+  </select>
+  <!-- 根据id删除 -->
+   <delete id="deletePersonnel" parameterType="cn.com.liliyun.trainorg.model.Personnel">    
+        delete from t_personnel where idcard=#{idcard}    
+   </delete> 
+   <!-- 修改 -->
+   <update id="updatePersonnel" parameterType="cn.com.liliyun.trainorg.model.Personnel">    
+        update t_personnel
+        set name=#{name},sex=#{sex},mobile=#{mobile},hiredate=#{hiredate},address=#{address},post=#{post},fstdrilicdate=#{fstdrilicdate},drilicence=#{drilicence},recordType=#{recordType},photo_url=#{photo_url}
+        where idcard=#{idcard}
+    </update>  
+   <!-- 新增 -->
+    <insert id="savePersonnel" parameterType="cn.com.liliyun.trainorg.model.Personnel">  
+        insert into t_personnel
+        (name,sex,mobile,address,idcard,post,fstdrilicdate,drilicence,hiredate,recordType,photo_url) 
+        values
+        (#{name},#{sex},#{mobile},#{address},#{idcard},#{post},#{fstdrilicdate},#{drilicence},#{hiredate},#{recordType},#{photo_url})  
+    </insert> 
+</mapper>

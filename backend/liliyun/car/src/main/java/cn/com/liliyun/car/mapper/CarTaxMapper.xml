@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarTaxMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarTax" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="car_id" property="carId" jdbcType="INTEGER" />
+    <result column="tax" property="tax" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="BIGINT" />
+    <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+    <result column="next_test" property="nextTest" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, car_id, tax, cname, cuid, pay_date, next_test, remark, is_del
+  </sql>
+  
+   <select id="queryCarTaxList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarTax" >
+     select 
+    	<include refid="Base_Column_List" />
+     from t_car_tax
+     where is_del=0
+    	<trim suffixOverrides=",">
+			<if test="carId != null and carId != ''">
+				and car_id= #{carId}
+			</if>
+		</trim>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_tax
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteCarTaxList" parameterType="cn.com.liliyun.car.model.CarTax" >
+    delete from t_car_tax
+    where id in (${ids})
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_car_tax
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarTax" >
+    insert into t_car_tax (id, car_id, tax, 
+      cname, cuid, pay_date, 
+      next_test, remark, is_del
+      )
+    values (#{id,jdbcType=INTEGER}, #{carId,jdbcType=INTEGER}, #{tax,jdbcType=INTEGER}, 
+      #{cname,jdbcType=VARCHAR}, #{cuid,jdbcType=BIGINT}, #{payDate,jdbcType=TIMESTAMP}, 
+      #{nextTest,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=TINYINT}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarTax" >
+    insert into t_car_tax
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carId != null" >
+        car_id,
+      </if>
+      <if test="tax != null" >
+        tax,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="payDate != null" >
+        pay_date,
+      </if>
+      <if test="nextTest != null" >
+        next_test,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null" >
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="tax != null" >
+        #{tax,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="payDate != null" >
+        #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextTest != null" >
+        #{nextTest,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarTax" >
+    update t_car_tax
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="tax != null" >
+        tax = #{tax,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextTest != null" >
+        next_test = #{nextTest,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateCarTaxList" parameterType="cn.com.liliyun.car.model.CarTax" >
+    update t_car_tax
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="tax != null" >
+        tax = #{tax,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextTest != null" >
+        next_test = #{nextTest,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id  in (${ids})
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarTax" >
+    update t_car_tax
+    set car_id = #{carId,jdbcType=INTEGER},
+      tax = #{tax,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=BIGINT},
+      pay_date = #{payDate,jdbcType=TIMESTAMP},
+      next_test = #{nextTest,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

@@ -1,0 +1,132 @@
+<div class="bjui-pageContent">
+	<div class="">
+		<form class="datagrid-edit-form" data-toggle="validate" id="show-form">
+			<input type="hidden" name="id">
+			<div style="background-color:#eee; padding:1px;"></div>
+			<div class="bjui-row col-3">
+				<label class="row-label">维修原因</label>
+				<div class="row-input ">
+					<textarea type="text" rows="2" name="reason" maxlength="300"disabled="disabled"></textarea>
+				</div>
+				<label class="row-label">维修状态</label>
+				<div class="row-input ">
+					<select name="state" id="state" data-toggle="selectpicker" data-width="100%" disabled="true" data-rule="">
+						<option value="0">二保</option>
+						<option value="1">大修</option>
+						<option value="2">中修</option>
+						<option value="3">小修</option>
+						<option value="4">自费维修</option>
+						<option value="5">外单位维修</option>
+						<option value="6">事故车</option>
+						<option value="7">柴油添加剂</option>
+						<option value="8">四轮保修</option>
+						<option value="9">一保</option>
+					</select>
+				</div>
+				<label class="row-label">维修项目数</label>
+				<div class="row-input ">
+					<input type="text" name="itemNum" id="itemNum" disabled="true" data-rule="digits">
+				</div>
+				<label class="row-label">维修单位</label>
+				<div class="row-input ">
+					<input type="text" name="hwu" id="hwu" disabled="true" data-rule="">
+				</div>
+				<label class="row-label">开始日期</label>
+				<div class="row-input">
+					<input type="text" name="stime" id="stime" data-toggle="datepicker" disabled="true" data-rule="">
+				</div>
+				<label class="row-label">结束日期</label>
+				<div class="row-input ">
+					<input type="text" name="etime" id="etime" data-toggle="datepicker" disabled="true" data-rule="">
+				</div>
+				<div id='adddom' class="hidden">
+					<label class="row-label">配件</label>
+					<div class="row-input ">
+						<input type="text" name="parts" id="parts" disabled="true" data-rule="">
+					</div>
+					<label class="row-label">金额(元)</label>
+					<div class="row-input ">
+						<input type="text" name="pmoney" id="pmoney" disabled="true" data-rule="">
+					</div>
+				</div>
+				<label class="row-label">修理工</label>
+				<div class="row-input ">
+					<input type="text" name="repairman" id="repairman" disabled="true" data-rule="">
+				</div>
+				<label class="row-label">经办人</label>
+				<div class="row-input ">
+					<input type="text" name="cname" id="cname" disabled="true" data-rule="">
+				</div>
+			</div>
+			<div class="bjui-row col-4">
+				<label class="row-label">备注</label>
+				<div class="row-input fill-2 ">
+					<input type="text" name="remark" class="form-control" disabled="true" data-rule="">
+				</div>
+			</div>
+	</div>
+	</form>
+</div>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<ul>
+			<li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	BJUI.ajax('doajax', {
+		url: config.openBasePath + 'car/getCarRepair?id=' + clz.getNavtab_more().id,
+		type: 'GET',
+		loadingmask: true,
+		okCallback: function(json, options) {
+			console.log(json);
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				form_name: 'show-form',
+				data: json.result,
+				timetype: [{
+					name: 'stime',
+					type: 'yyyy-MM-dd'
+				}, {
+					name: 'etime',
+					type: 'yyyy-MM-dd'
+				}],
+				callback: function(data) {
+					$.CurrentNavtab.find('[name="parts"]').val('')
+					var d=JSON.parse(data.parts);
+					console.log(JSON.parse(data.parts).length)
+					var d2=new Array();
+					
+					var pd=new Array();
+					var md=new Array();
+					for(var i=0;i<d.length;i++){
+						
+						pd.push(d[i].parts);
+						md.push(d[i].pmoney);
+					}
+					var po=[
+						{
+							name:'parts',
+							data:pd,
+						},
+						{
+							name:'pmoney',
+							data:md
+						}
+					];
+					
+					console.log(po)
+					clz.pushaddom({
+						domid: 'adddom',
+						current: 'navtab',
+						btn_name: '增加配件',
+						data:po,
+						edit:'none'
+					})
+				}
+			});
+		}
+	});
+</script>

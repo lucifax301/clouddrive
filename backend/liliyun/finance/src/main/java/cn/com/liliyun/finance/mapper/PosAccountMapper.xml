@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.finance.mapper.PosAccountMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.finance.model.PosAccount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="bankname" property="bankname" jdbcType="VARCHAR" />
+    <result column="poscompany" property="poscompany" jdbcType="VARCHAR" />
+    <result column="isdel" property="isdel" jdbcType="TINYINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, areaid, storeid, account, bankname, poscompany, isdel, ctime, cuid, cname, mtime, 
+    muid, mname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_posaccount
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    delete from t_finance_posaccount
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    insert into t_finance_posaccount (id, areaid, storeid, 
+      account, bankname, poscompany, 
+      isdel, ctime, cuid, 
+      cname, mtime, muid, 
+      mname)
+    values (#{id,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{account,jdbcType=VARCHAR}, #{bankname,jdbcType=VARCHAR}, #{poscompany,jdbcType=VARCHAR}, 
+      #{isdel,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, #{cuid,jdbcType=INTEGER}, 
+      #{cname,jdbcType=VARCHAR}, #{mtime,jdbcType=TIMESTAMP}, #{muid,jdbcType=INTEGER}, 
+      #{mname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    insert into t_finance_posaccount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="bankname != null" >
+        bankname,
+      </if>
+      <if test="poscompany != null" >
+        poscompany,
+      </if>
+      <if test="isdel != null" >
+        isdel,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="mname != null" >
+        mname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="poscompany != null" >
+        #{poscompany,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    update t_finance_posaccount
+    <set >
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        bankname = #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="poscompany != null" >
+        poscompany = #{poscompany,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null" >
+        isdel = #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    update t_finance_posaccount
+    set areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      account = #{account,jdbcType=VARCHAR},
+      bankname = #{bankname,jdbcType=VARCHAR},
+      poscompany = #{poscompany,jdbcType=VARCHAR},
+      isdel = #{isdel,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      muid = #{muid,jdbcType=INTEGER},
+      mname = #{mname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_posaccount
+    <where>
+   		and isdel = 0
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="storeid != null">
+    		and storeid = #{storeid,jdbcType=INTEGER}
+    	</if>
+    	<if test="isdel != null">
+    		and isdel = #{isdel,jdbcType=TINYINT}
+    	</if>
+    </where>
+  </select>
+  <select id="selectByAccount" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_posaccount
+    where isdel = 0 and account = #{account,jdbcType=VARCHAR}
+  </select>
+  <update id="deleteByIds" parameterType="cn.com.liliyun.finance.model.PosAccount" >
+    update t_finance_posaccount
+    <set>
+    	isdel = 1,
+		<if test="mtime != null" >
+		  mtime = #{mtime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="muid != null" >
+		  muid = #{muid,jdbcType=INTEGER},
+		</if>
+		<if test="mname != null" >
+		  mname = #{mname,jdbcType=VARCHAR},
+		</if>
+	</set>
+    where id in (${ids})
+  </update>
+</mapper>

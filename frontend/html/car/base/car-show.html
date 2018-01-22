@@ -1,0 +1,1578 @@
+<section id="thispage" privilege = "040101_v"></section>
+<div class="c-tabs-box h-100">
+	<div class="c-tabs-header">
+		<li class="active" data-tabs='carInfo'>车辆基础信息</li>
+		<li data-tabs='modify' onclick="modifyClick()">变更记录</li>
+		<li data-tabs='annual' onclick="annualClick()">年审记录</li>
+	<!--<li data-tabs='tax' onclick="taxClick()">车船税记录</li> -->
+		<li data-tabs='repair' onclick="repairClick()">维修记录</li>
+	<!--<li data-tabs='detect' onclick="detectClick()">黄绿标检测</li>-->		
+		<li data-tabs='oilwear' onclick="oilwearClick()">油耗记录</li>
+		<li data-tabs='insurance' onclick="insuranceClick()">保险记录</li>
+		<li data-tabs='retire' onclick="retireClick()">报废管理</li>
+		<li data-tabs='parts' onclick="partsClick()">更换配件记录</li>
+		<li data-tabs='accident' onclick="accidentClick()">事故记录</li>
+	</div>
+	<div class="c-tabs-body active" id="carInfo">
+		<form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+			<div style="background-color:#eee; padding:1px;"></div>
+			<div class="bjui-row col-3">
+				<label class="row-label">车牌号</label>
+				<div class="row-input required">
+					<input  type="hidden" name="carId" id="carId" >
+					<input readonly="true" type="text" name="carNo" id="carNo" data-rule="required;length[6~16]">
+				</div>
+				<label class="row-label">车牌颜色</label>
+				<div class="row-input">
+					<select disabled="true" name="carnoColor" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="1">蓝色</option>
+						<option value="2">黄色</option>
+						<option value="3">黑色</option>
+						<option value="4">白色</option>
+						<option value="5">绿色</option>
+						<option value="9">其他</option>
+					</select>
+				</div>
+				<label class="row-label">原车牌号</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="formerCarno" data-rule="length[6~16]">
+				</div>
+				<label class="row-label">所有权</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="carOwner" data-rule="required">
+				</div>
+				<label class="row-label">片区</label>
+				<div class="row-input required">
+					<select disabled="true" name="areaId" id="areaId" data-toggle="selectpicker" id="areaId" data-width="100%" data-dataurl="/httpaccess/area/list" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">使用机构</label>
+				<div class="row-input">
+					<select disabled="true" name="org" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/store/list" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">训练场</label>
+				<div class="row-input">
+					<select disabled="true" name="trainareaId" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/trainarea/list" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">使用人</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="coachName" value="" >
+				</div>
+				<label class="row-label">使用状态</label>
+				<div class="row-input ">
+					<select disabled="true" name="status" data-toggle="selectpicker" data-width="100%">
+						<option value="0">在用</option>
+						<option value="1">停放</option>
+						<option value="2">待出售</option>
+						<option value="3">待报废</option>
+						<option value="4">已出售</option>
+						<option value="5">已报废</option>
+						<option value="6">捐赠</option>
+						<option value="7">被盗</option>
+					</select>
+				</div>
+				<label class="row-label">使用性质</label>
+				<div class="row-input">
+					<select disabled="true" name="property" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="0">专职教练车</option>
+						<option value="1">强化教练车</option>
+						<option value="2">测试车</option>
+						<option value="3">组长车</option>
+					</select>
+				</div>
+				<label class="row-label">培训车型</label>
+				<div class="row-input required">
+					<select disabled="true" name="carType" data-toggle="selectpicker" data-width="100%" data-rule="required">
+						<option value="C1">C1</option>
+						<option value="C2">C2</option>
+					</select>
+				</div>
+				<label class="row-label">带教科目</label>
+				<div class="row-input">
+					<select disabled="true" name="teachSubject" data-toggle="selectpicker" data-width="100%">
+						<option value="0">科目二</option>
+						<option value="1">科目三</option>
+						<option value="2">长训</option>
+						<option value="3">全程</option>
+					</select>
+				</div>
+				<label class="row-label">油卡卡号</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="oilCard">
+				</div>
+				<label class="row-label">燃料种类</label>
+				<div class="row-input required">
+					<select disabled="true" name="fuel" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/fuel/list" data-optiontype="id,name" >
+						<option value="">请选择</option>
+						<!--<option value="0">0#</option>
+						<option value="1">90#</option>
+						<option value="2">92#</option>
+						<option value="3">93#</option>
+						<option value="4">95#</option>
+						<option value="5">97#</option>
+						<option value="6">98#</option>-->
+					</select>
+				</div>
+				<div>
+					<label class="row-label">停放地点</label>
+					<div class="row-input fill-2">
+						<input readonly="true" type="text" name="parkAddr">
+					</div>
+				</div>
+				<label class="row-label">发动机号</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="engineNum" data-rule="required">
+				</div>
+				<label class="row-label">发动机型号</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="engineModel" data-rule="required">
+				</div>
+				<label class="row-label">车架号</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="frameNum" data-rule="required">
+				</div>
+				<label class="row-label">证书编号</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="motorCode" data-rule="required">
+				</div>
+				<label class="row-label">资产编号</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="assetNum">
+				</div>
+				<label class="row-label">登记机关</label>
+				<div class="row-input required">
+					<select disabled="true" name="regOffice" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/regoffice/list" data-optiontype="id,name">
+						<option value="">请选择</option>
+						<!--<option value="0">深圳市公安局交通警察支队车辆管理所</option>
+						<option value="1">东莞市公安局交通警察支队车辆管理所</option>
+						<option value="2">广州市公安局交通警察支队车辆管理所</option>
+						<option value="3">肇庆市公安局交通警察支队车辆管理所</option>
+						<option value="4">肇庆市公安局交通局管理所</option>-->
+					</select>
+				</div>
+				<label class="row-label">档案编号</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="fileNo">
+				</div>
+				<label class="row-label">登记证书发放日期</label>
+				<div class="row-input">
+					<input type="text" name="motorDate" readonly="readonly" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+				</div>
+				<label class="row-label">报废日期</label>
+				<div class="row-input">
+					<input type="text" name="retireDate" readonly="readonly" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+				</div>
+				<label class="row-label">报废办理日期</label>
+				<div class="row-input">
+					<input type="text" name="acceptDate" readonly="readonly" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+				</div>	
+			</div>
+			<div class="bjui-row col-3 y-comment">
+				<label class="row-label">生产厂家</label>
+				<div class="row-input required">
+					<select disabled="true" name="manufacturer" data-toggle="selectpicker" data-width="100%" data-rule="required">
+						<option value="1">上海大众</option>
+						<option value="2">一汽奥迪</option>
+						<option value="3">一汽丰田</option>
+					</select>
+				</div>
+				<label class="row-label">品牌</label>
+				<div class="row-input ">
+					<select disabled="true" name="brandId" data-toggle="selectpicker" data-width="100%" data-rule="" clz-change='select' clz-options='{"inputname":"brandName","current":"dialog","father":"add-form"}'>
+						<option value="">请选择车辆</option>
+						<option value="1">捷达</option>
+						<option value="2">神行者</option>
+						<option value="3">迈腾</option>
+					</select>
+				</div>
+				<label class="row-label">车辆型号</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="carModel" data-rule="required">
+				</div>
+				<label class="row-label">车身颜色</label>
+				<div class="row-input required">
+					<select disabled="true" name="carColor" data-toggle="selectpicker" data-width="100%" data-rule="required"  data-dataurl="/httpaccess/carcolor/list" data-optiontype="id,name">
+						<!--<option value="1">蓝色</option>
+						<option value="2">黄色</option>
+						<option value="3">黑色</option>
+						<option value="4">白色</option>
+						<option value="5">绿色</option>
+						<option value="9">其他</option>-->
+					</select>
+				</div>
+				<label class="row-label">登记日期</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="regDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+				</div>
+				<label class="row-label">购买日期</label>
+				<div class="row-input ">
+					<input readonly="true" type="text" name="buyDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+				</div>
+				<label class="row-label">出厂日期</label>
+				<div class="row-input ">
+					<input readonly="true" type="text" name="leaveDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+				</div>
+				<label class="row-label">购买价格(元)</label>
+				<div class="row-input ">
+					<input readonly="true" type="text" name="buyFee" data-rule="length[1~11]" onchange="checkValue(this)" data-rule="number">
+				</div>
+				<label class="row-label">报废日期</label>
+				<div class="row-input required">
+					<input readonly="true" type="text" name="retireDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)" data-rule="required">
+				</div>
+				<label class="row-label">强制报废日期</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="scrapDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+				</div>
+				<label class="row-label">报废办理日期</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="acceptDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+				</div>
+				<label class="row-label">排量/功率</label>
+				<div class="row-input">
+					<input readonly="true" type="text" name="displacement" size="10" placeholder="排量(ML)" data-rule="number"> /
+					<input readonly="true" type="text" name="power" size="10" placeholder="功率(KW)" data-rule="number">
+				</div>
+				<label class="row-label">轮距(MM)</label>
+				<div class="row-input ">
+					<input readonly="true" type="text" name="wheelFront" size="10" placeholder="前轮距" data-rule="number"> /
+					<input readonly="true" type="text" name="wheelRear" size="10" placeholder="后轮距" data-rule="number">
+				</div>
+				<label class="row-label">轮胎数/规格</label>
+				<div class="row-input ">
+					<input readonly="true" type="text" name="tyreNum" size="10" placeholder="轮胎数" data-rule="number"> /
+					<input readonly="true" type="text" name="tyreSpec" size="10" placeholder="规格" data-rule="number">
+				</div>
+				<label class="row-label">轴距(MM)</label>
+				<div class="row-input ">
+					<input readonly="true" type="text" name="wheelbase" data-rule="number">
+				</div>
+				<label class="row-label">外轮廓</label>
+				<div class="row-input ">
+					<input readonly="true" type="text" name="length" size="7" placeholder="长(M)" data-rule="number">
+					<input readonly="true" type="text" name="width" size="7" placeholder="宽(M)" data-rule="number">
+					<input readonly="true" type="text" name="height" size="7" placeholder="高(M)" data-rule="number">
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!--<div class="bjui-pageFooter">
+				    <ul>
+				    		<li><button type="submit" class="btn-default" data-icon="save">保存</button></li>
+				    		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>			       
+				    </ul>
+				</div> -->
+	<script>
+		var data = clz.getNavtab_more();
+		console.log(data);
+		clz.CurrentDom_init({
+			current: 'Navtab',
+			form_name: 'view-form',
+			data: data.car,
+			timetype: [{
+				name: 'leaveDate',
+				type: 'yyyy-MM-dd'
+			}, {
+				name: 'buyDate',
+				type: 'yyyy-MM-dd'
+			}, {
+				name: 'regDate',
+				type: 'yyyy-MM-dd'
+			}, {
+				name: 'retireDate',
+				type: 'yyyy-MM-dd'
+			}, {
+				name: 'scrapDate',
+				type: 'yyyy-MM-dd'
+			}, {
+				name: 'acceptDate',
+				type: 'yyyy-MM-dd'
+			},{
+				name: 'motorDate',
+				type: 'yyyy-MM-dd'
+			}]
+		})
+	</script>
+
+<div class="c-tabs-body h-100" id="modify">
+	<table id="modify-datagrid" class="table table-bordered" data-tabprivilege="modify-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="annual">
+	<table id="annual-datagrid" class="table table-bordered" data-tabprivilege="annual-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="tax">
+	<table id="tax-datagrid" class="table table-bordered" data-tabprivilege="tax-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="repair">
+	<table id="repair-datagrid" class="table table-bordered" data-tabprivilege="repair-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="detect">
+	<table id="detect-datagrid" class="table table-bordered" data-tabprivilege="detect-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="oilwear">
+	<table id="oilwear-datagrid" class="table table-bordered" data-tabprivilege="oilwear-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="insurance">
+	<table id="insurance-datagrid" class="table table-bordered" data-tabprivilege="insurance-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="retire">
+	<table id="retire-datagrid" class="table table-bordered" data-tabprivilege="retire-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="parts">
+	<table id="parts-datagrid" class="table table-bordered" data-tabprivilege="parts-datagrid"></table>
+</div>
+
+<div class="c-tabs-body h-100" id="accident">
+	<table id="accident-datagrid" class="table table-bordered" data-tabprivilege="accident-datagrid"></table>
+</div>
+</div>
+
+<script type="text/javascript">
+	var thisdata = clz.getNavtab_more();
+	console.log(thisdata)
+
+	function annualClick() {
+		var grid = $.CurrentNavtab.find('#annual-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: 'add,|,edit,|,del,|,refresh',
+			toolbarCustom: "",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/car/getCarAnnualList',
+			postData: {
+				carId: thisdata.car.carId
+			},
+			columns: [{
+				name: 'annualIndate',
+				label: '行驶证有效期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'ygSign',
+				label: '环保分类标志',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '1' ? '黄标' : '绿标'
+				}
+			}, {
+				name: 'rohsDate',
+				label: '环保有效期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'annualCost',
+				label: '年检费用',
+				align: 'center'
+			}, {
+				name: 'reimDate',
+				label: '年检报销年月',
+				align: 'center',
+				render: function(value) {
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy-MM'
+					})
+				}
+			}, {
+				name: 'ygCost',
+				label: '黄绿标费用',
+				align: 'center'
+			}, {
+				name: 'dcostDate',
+				label: '综检报销年月',
+				align: 'center',
+				render: function(value) {
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy-MM'
+					})
+				}
+			}, {
+				name: 'detectAddress',
+				label: '综检检测地点',
+				align: 'center',
+				render: function(value) {
+					var text = '';
+					if (value == '0') text = '未知';
+					if (value == '1') text = '华隆达';
+					if (value == '2') text = '恒顺通';
+					return text
+				}
+			}, {
+				name: 'detectCost',
+				label: '综检费用',
+				align: 'center'
+			}, {
+				name: 'assertDate',
+				label: '二级维护日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'op',
+				label: '操作',
+				width: 150,
+				align: 'center',
+				render: annualOperation
+			}],
+			editMode: {
+				dialog: {
+					width: '780',
+					height: '500',
+					title: '年审',
+					mask: true
+				}
+			},
+			add_url: 'html/car/base/annual/annual-add.html',
+			edit_url: 'html/car/base/annual/annual-edit.html',
+			delUrl: config.openBasePath + '/car/deleteCarAnnual',
+			delPK: 'id',
+			beforeEdit: function() {
+				var carId = thisdata.car.carId;
+				clz.setWindowJson(carId);
+				return true;
+			},
+			onSelect: function() {
+				//alert(111);
+			},
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				grid.datagrid('refresh', true);
+			},
+		});
+	}
+
+	function modifyClick() {
+		var grid = $.CurrentNavtab.find('#modify-datagrid').datagrid({
+			gridTitle: '',
+			//toolbarItem: 'add,|,edit,|,del,|,refresh',
+			toolbarCustom: "",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: false,
+			showToolbar: false,
+			dataUrl: config.openBasePath + 'carbiz/listlog',
+			postData: {
+				carid: thisdata.car.carId
+			},
+			columns: [
+				{name:'carno',label:'车牌号码',align:'center'},
+	            {name:'type',label:'变更类型',align:'center',render:formatCarChangeType},
+	            {name:'name',label:'现使用人',align:'center'},
+	            {name:'prename',label:'原使用人',align:'center'},
+	            {name:'status',label:'状态',align:'center',render:formatCarStatus},
+	            {name:'cname',label:'操作人',align:'center'},
+	            {name:'ctime',label:'操作时间',align:'center'}
+			]
+		});
+	}
+	
+	function formatCarStatus(value) {
+		switch(value) {
+			case 0:
+				return "在用";
+			case 1:
+				return "停放";
+			case 2:
+				return "待出售";
+			case 3:
+				return "待报废";
+			case 4:
+				return "已出售";
+			case 5:
+				return "已报废";
+			case 6:
+				return "捐赠";
+			case 7:
+				return "被盗";
+			case 8:
+				return "其他";
+		}
+	}
+
+	function formatCarChangeType(value) {
+		switch(value) {
+			case 0:
+				return "迁入";
+			case 1:
+				return "出售";
+			case 2:
+				return "报废";
+			case 3:
+				return "领用";
+			case 4:
+				return "调动";
+			case 5:
+				return "跨区调动";
+			case 6:
+				return "捐赠";
+			case 7:
+				return "被盗";
+			case 8:
+				return "其他";
+		}
+	}
+	
+	function annualOperation(value, data) {
+		var morejson = {
+			id: data.id
+		}
+		morejson = JSON.stringify(morejson);
+		return "<button onclick='navtabLookup(" + data.id + "," + morejson + "," + 1 + ")' type='button' class='btn-green'>查看</button>";
+	}
+
+	function navtabLookup(id, morejson, type) {
+		var urlstr;
+		var titlestr;
+		switch (type) {
+			case 1:
+				urlstr = 'html/car/base/annual/annual-show.html';
+				titlestr = '年审详情';
+				break;
+			case 2:
+				urlstr = 'html/car/base/tax/tax-show.html';
+				titlestr = '车船税记录';
+				break;
+			case 3:
+				urlstr = 'html/car/base/repair/repair-show.html';
+				titlestr = '维修详情';
+				break;
+			case 4:
+				urlstr = 'html/car/base/detect/detect-show.html';
+				titlestr = '黄绿标详情';
+				break;
+			case 5:
+				urlstr = 'html/car/base/oilwear/oilwear-show.html';
+				titlestr = '油耗详情';
+				break;
+			case 6:
+				urlstr = 'html/car/base/insurance/insurance-show.html';
+				titlestr = '保险详情';
+				break;
+			default:
+				urlstr = '';
+				titlestr = '';
+				break;
+		}
+		BJUI.navtab({
+			id: 'annual-lookup-' + id,
+			url: urlstr,
+			title: titlestr,
+			onClose: function() {
+				grid.datagrid('refresh', true);
+			},
+			more: morejson
+		})
+	}
+
+	function taxClick() {
+		var grid = $.CurrentNavtab.find('#tax-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: 'add,|,edit,|,del,|,refresh',
+			toolbarCustom: "",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/car/getCarTaxList',
+			postData: {
+				carId: thisdata.car.carId
+			},
+			columns: [{
+				name: 'tax',
+				label: '车船税',
+				align: 'center'
+			}, {
+				name: 'cname',
+				label: '经办人',
+				align: 'center'
+			}, {
+				name: 'payDate',
+				label: '缴费日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'nextTest',
+				label: '下次缴费日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'op',
+				label: '操作',
+				width: 150,
+				align: 'center',
+				render: taxOperation
+			}],
+			editMode: {
+				dialog: {
+					width: '1000',
+					height: '200',
+					title: '车船税',
+					mask: true
+				}
+			},
+			add_url: 'html/car/base/tax/tax-add.html',
+			edit_url: 'html/car/base/tax/tax-edit.html',
+			delUrl: config.openBasePath + '/car/deleteCarTax',
+			delPK: 'id',
+			beforeEdit: function() {
+				var carId = thisdata.car.carId;
+				clz.setWindowJson(carId);
+				return true;
+			},
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				grid.datagrid('refresh', true);
+			},
+		});
+	}
+
+	function taxOperation(value, data) {
+		var morejson = {
+			id: data.id
+		}
+		morejson = JSON.stringify(morejson);
+		return "<button onclick='navtabLookup(" + data.id + "," + morejson + "," + 2 + ")' type='button' class='btn-green'>查看</button>";
+	}
+
+	function repairClick() {
+		var grid = $.CurrentNavtab.find('#repair-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: 'add,|,edit,|,del,|,refresh',
+			toolbarCustom: "",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/car/getCarRepairList',
+			postData: {
+				carId: thisdata.car.carId
+			},
+			columns: [{
+				name: 'reason',
+				label: '维修原因',
+				align: 'center'
+			}, {
+				name: 'itemNum',
+				label: '项目数',
+				align: 'center'
+			}, {
+				name: 'money',
+				label: '金额',
+				align: 'center'
+			}, {
+				name: 'hwu',
+				label: '维修单位',
+				align: 'center'
+			}, {
+				name: 'cname',
+				label: '经办人',
+				align: 'center'
+			}, {
+				name: 'state',
+				label: '状态',
+				align: 'center',
+				render: function(value) {
+					var text = '';
+					if (value == '0') text = '二保';
+					if (value == '1') text = '大修';
+					if (value == '2') text = '中修';
+					if (value == '3') text = '小修';
+					if (value == '4') text = '自费维修';
+					if (value == '5') text = '外单位维修';
+					if (value == '6') text = '事故车';
+					if (value == '7') text = '柴油添加剂';
+					if (value == '8') text = '四轮保修';
+					if (value == '9') text = '一保';
+					return text
+				}
+			}, {
+				name: 'stime',
+				label: '开始日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'etime',
+				label: '结束日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'op',
+				label: '操作',
+				width: 150,
+				align: 'center',
+				render: repairOperation
+			}],
+			editMode: {
+				dialog: {
+					width: '900',
+					height: '500',
+					title: '维修记录',
+					mask: true
+				}
+			},
+			add_url: 'html/car/base/repair/repair-add.html',
+			edit_url: 'html/car/base/repair/repair-edit.html',
+			delUrl: config.openBasePath + '/car/deleteCarRepair',
+			delPK: 'id',
+			beforeEdit: function() {
+				var carId = thisdata.car.carId;
+				clz.setWindowJson(carId);
+				return true;
+			},
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				grid.datagrid('refresh', true);
+			},
+		});
+	}
+
+	function repairOperation(value, data) {
+		var morejson = {
+			id: data.id
+		}
+		morejson = JSON.stringify(morejson);
+		return "<button onclick='navtabLookup(" + data.id + "," + morejson + "," + 3 + ")' type='button' class='btn-green'>查看</button>";
+	}
+
+	function detectClick() {
+		var grid = $.CurrentNavtab.find('#detect-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: 'add,|,edit,|,del,|,refresh',
+			toolbarCustom: "",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/car/getCarDetectList',
+			postData: {
+				carId: thisdata.car.carId
+			},
+			columns: [{
+				name: 'detectType',
+				label: '检测项目',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '1' ? '黄标' : '绿标'
+				}
+			}, {
+				name: 'detectDate',
+				label: '检测日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'nextDetect',
+				label: '下次检测日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'detectYear',
+				label: '检测年份',
+				align: 'center',
+				render: function(value) {
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy'
+					})
+				}
+			}, {
+				name: 'cname',
+				label: '经办人',
+				align: 'center'
+			}, {
+				name: 'remark',
+				label: '备注',
+				align: 'center'
+			}, {
+				name: 'op',
+				label: '操作',
+				width: 150,
+				align: 'center',
+				render: detectOperation
+			}],
+			editMode: {
+				dialog: {
+					width: '780',
+					height: '300',
+					title: '黄绿标检测',
+					mask: true
+				}
+			},
+			add_url: 'html/car/base/detect/detect-add.html',
+			edit_url: 'html/car/base/detect/detect-edit.html',
+			delUrl: config.openBasePath + '/car/deleteCarDetect',
+			delPK: 'id',
+			beforeEdit: function() {
+				var carId = thisdata.car.carId;
+				clz.setWindowJson(carId);
+				return true;
+			},
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				grid.datagrid('refresh', true);
+			},
+		});
+	}
+
+	function detectOperation(value, data) {
+		var morejson = {
+			id: data.id
+		}
+		morejson = JSON.stringify(morejson);
+		return "<button onclick='navtabLookup(" + data.id + "," + morejson + "," + 4 + ")' type='button' class='btn-green'>查看</button>";
+	}
+
+	function oilwearClick() {
+		var grid = $.CurrentNavtab.find('#oilwear-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: 'add,|,edit,|,del,|,refresh',
+			toolbarCustom: "",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/car/getCarOilwearList',
+			postData: {
+				carId: thisdata.car.carId
+			},
+			columns: [{
+				name: 'oilSupplier',
+				label: '加油人',
+				align: 'center'
+			}, {
+				name: 'oilType',
+				label: '油品',
+				align: 'center',
+				render: function(value) {
+					var text = '';
+					if (value == '0') text = '0#';
+					if (value == '1') text = '90#';
+					if (value == '2') text = '92#';
+					if (value == '3') text = '93#';
+					if (value == '4') text = '95#';
+					if (value == '5') text = '97#';
+					if (value == '6') text = '98#';
+					if (value == '7') text = '电';
+					return text
+				}
+			}, {
+				name: 'oilMl',
+				label: '加油升数',
+				align: 'center'
+			}, {
+				name: 'cost',
+				label: '单价',
+				align: 'center'
+			}, {
+				name: 'sumCost',
+				label: '加油金额',
+				align: 'center'
+			}, {
+				name: 'costType',
+				label: '付款方式',
+				align: 'center',
+				render: function(value) {
+					var text = '';
+					if (value == '1') text = '油卡';
+					if (value == '2') text = '现金';
+					return text
+				}
+			}, {
+				name: 'oilDate',
+				label: '加油日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'op',
+				label: '操作',
+				width: 150,
+				align: 'center',
+				render: oilwearOperation
+			}],
+			editMode: {
+				dialog: {
+					width: '900',
+					height: '300',
+					title: '油耗记录',
+					mask: true
+				}
+			},
+			add_url: 'html/car/base/oilwear/oilwear-add.html',
+			edit_url: 'html/car/base/oilwear/oilwear-edit.html',
+			delUrl: config.openBasePath + '/car/deleteCarOilwear',
+			delPK: 'id',
+			beforeEdit: function() {
+				clz.setWindowJson(thisdata.car);
+				return true;
+			},
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				grid.datagrid('refresh', true);
+			},
+		})
+		
+	}
+
+	function oilwearOperation(value, data) {
+		var morejson = {
+			id: data.id
+		}
+		morejson = JSON.stringify(morejson);
+		return "<button onclick='navtabLookup(" + data.id + "," + morejson + "," + 5 + ")' type='button' class='btn-green'>查看</button>";
+	}
+
+	function insuranceClick() {
+		var grid = $.CurrentNavtab.find('#insurance-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: 'add,|,edit,|,del,|,refresh',
+			//toolbarCustom: "<button class='btn-blue'  style=''  onclick='showaddins()'>新增</button>",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + '/car/getCarInsuranceList',
+			postData: {
+				carId: thisdata.car.carId
+			},
+			columns: [{
+				name: 'cname',
+				label: '负责人',
+				align: 'center'
+			}, {
+				name: 'paid',
+				label: '险种',
+				align: 'center',
+				render: function(value) {
+					var paid = '';
+					var paidval = value.toString().split(',');
+					$.each(paidval, function(i, m) {
+						paid += paidvalue(m)
+							//console.log(paidval.length)
+						if ((i + 1) < paidval.length) {
+							//console.log(i)									    		
+							paid += ","
+						}
+					})
+					return paid
+				}
+			}, {
+				name: 'busrisksNo',
+				label: '商业保单号',
+				align: 'center'
+			}, {
+				name: 'busrisksFee',
+				label: '商业险保费',
+				align: 'center'
+			}, {
+				name: 'insureCompanyid',
+				label: '保险公司',
+				align: 'center',
+				render: function(value) {
+					var text = '';
+					if (value == '1') text = '鼎和保险公司';
+					if (value == '2') text = '平安保险公司';
+					if (value == '3') text = '人保保险公司';
+					if (value == '4') text = '永城保险公司';
+					return text
+				}
+			}, {
+				name: 'cname',
+				label: '当前记录',
+				align: 'center'
+			}, {
+				name: 'busrisksStime',
+				label: '开始日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'busrisksEtime',
+				label: '结束日期',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '' ? '' : clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'op',
+				label: '操作',
+				width: 150,
+				align: 'center',
+				render: insuranceOperation
+			}],
+			editMode: {
+				dialog: {
+					width: '1000',
+					height: '720',
+					title: '保险信息',
+					mask: true,
+					onClose: function() {
+						grid.datagrid('refresh', true);
+					}
+				}
+			},
+			add_url: 'html/car/base/insurance/insurance-add.html',
+			edit_url: 'html/car/base/insurance/insurance-edit.html',
+			delUrl: config.openBasePath + '/car/deleteCarInsurance',
+			delPK: 'id',
+			beforeEdit: function() {
+				var carId = thisdata.car.carId;
+				clz.setWindowJson(carId);
+				return true;
+			},
+			afterSave: function() {
+				grid.datagrid('refresh', true);
+			},
+			afterDelete: function() {
+				grid.datagrid('refresh', true);
+			},
+		});
+	}
+	
+	function showaddins(){
+		BJUI.dialog({
+			id: 'insurance-add',
+			width: 1000,
+			height: 720,
+			url: 'html/car/base/insurance/insurance-add.html',
+			title: '保险信息',
+			onClose: function() {
+				
+			}
+
+		})
+	}
+
+	function insuranceOperation(value, data) {
+		var morejson = {
+			id: data.id
+		}
+		morejson = JSON.stringify(morejson);
+		return "<button onclick='navtabLookup(" + data.id + "," + morejson + "," + 6 + ")' type='button' class='btn-green'>查看</button>";
+	}
+
+	function retireClick() {
+		var grid = $.CurrentNavtab.find('#retire-datagrid').datagrid({
+			gridTitle: '',
+			toolbarItem: '',
+			toolbarCustom: 
+				//"<button type='button' class='btn btn-blue ml5' data-icon='spinner' onclick='retireOperation(1)'>延期</button> " +
+				"<button type='button' class='btn btn-blue ml5' data-privilege='040101_v_retire-datagrid_12' data-icon='legal' onclick='retireOperation(2)'>报废</button> ", 
+				//"<button type='button' class='btn btn-blue ml5' data-icon='edit' onclick='retireOperation(3)'>延期编辑</button> ",
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '95%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'carbiz/listscrap',
+			postData : {carid: thisdata.car.carId},
+			columns: [{
+				name: 'type',
+				label: '业务类型',
+				align: 'center',
+				render: function(value) {
+					return String(value) == '0' ? '延期' : '报废'
+				}
+			}, {
+				name: 'delay',
+				label: '延期年数',
+				align: 'center',
+				render:function(value,data){
+					if(data.type!=0) return "/"
+					else return value
+				}
+			}, {
+				name: 'delaydate',
+				label: '延期报废日期',
+				align: 'center',
+				render: function(value,data) {
+					if(data.type!=0) return "/"
+					else
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'acceptdate',
+				label: '报废办理日期',
+				align: 'center',
+				render: function(value) {
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			}, {
+				name: 'ctime',
+				label: '操作日期',
+				align: 'center',
+				render: function(value) {
+					return clz.filter.time({
+						date: value,
+						type: 'yyyy-MM-dd'
+					})
+				}
+			},{
+				name: 'cname',
+				label: '操作人',
+				align: 'center'
+			}, {
+				name: 'remark',
+				label: '备注',
+				align: 'center',
+				width : '150',
+                finalWidth : 'true'
+			}]
+		});
+	}
+
+	function retireOperation(value) {
+		var dialogid, dialogurl, dialogtitle;
+		if (value == 1) {
+			var data = {};
+			data.carid = thisdata.car.carId;
+			data.carno = thisdata.car.carNo;
+			data.delayscrap = thisdata.car.delayScrap;
+			clz.setWindowJson(data);
+			dialogid = "delay";
+			dialogurl = "html/car/base/retire/retire-delay.html";
+			dialogtitle = "延期报废";
+		} else if (value == 2) {
+			var data = {};
+			data.carid = thisdata.car.carId;
+			data.carno = thisdata.car.carNo;
+			data.scrapdate = thisdata.car.scrapDate;
+			clz.setWindowJson(data);
+			dialogid = "add";
+			dialogurl = "html/car/base/retire/retire-add.html";
+			dialogtitle = "报废";
+		} else if (value == 3) {
+			var data = $.CurrentNavtab.find('#retire-datagrid').data('selectedDatas');
+			
+			if (!clz.check_table_checked($.CurrentNavtab.find('#retire-datagrid'))) {
+				BJUI.alertmsg('warn', '请选择一条记录！', {});
+				return;
+			} 
+			if (data.length != 1) {
+				BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+				return;
+			} 
+			if (data[0].type != 0) {
+				BJUI.alertmsg('error', '只能编辑延期报废记录！', {});
+				return;
+			}
+			var datas = data[0];
+			datas.delayscrap = thisdata.car.delayScrap;
+			clz.setWindowJson(datas);			
+			dialogid = "delayedit";
+			dialogurl = "html/car/base/retire/retire-delayedit.html";
+			dialogtitle = "编辑延期报废";
+		}
+		BJUI.dialog({
+			id: 'retire-' + dialogid,
+			url: dialogurl,
+			title: dialogtitle,
+			mask: true,
+			height: '400',
+			onClose: function() {
+				$.CurrentNavtab.find('#retire-datagrid').datagrid('refresh', true);
+			}
+		})
+	}
+	var maintenance_parts_list;
+	function partsClick() {
+//		var grid = $.CurrentNavtab.find('#parts-datagrid').datagrid({
+//			gridTitle: '',
+//			toolbarItem: 'add',
+//			paging: {
+//				pageSize: 15,
+//				selectPageSize: '15,50,100,500'
+//			},
+//			height: '95%',
+//			showCheckboxcol: false,
+//			showToolbar: true,
+//			dataUrl: config.openBasePath + '/carbiz/getCarPartsList',
+//			add_url: "html/car/maintenance/parts-add.html",
+//			postData: {
+//				carid: thisdata.car.carId
+//			},
+//			columns: [
+//				{ name: 'carno', label: '车牌号', align: 'center'},
+//				{ name: 'partstype', label: '配件名称', align: 'center', render: formattPartsType},
+//				{ name: 'handletime', label: '更换日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+//				{ name: 'mileage', label: '更换时里程', align: 'center' },
+//				{ name: 'cname', label: '操作者', align: 'center' },
+//				{ name: 'iscurrent', label: '是否当前记录', align: 'center', render: function(value) { return value==1?'是':'否'}}
+//			]
+//		});
+		
+//		var grid =
+//				$.CurrentNavtab.find('#parts-datagrid').datagrid({
+//					paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+//					toolbarItem: 'add',
+//					//toolbarCustom: maintenance_parts_list.toolbarCustom(),
+//					gridTitle: '更换配件记录',
+//					height: '75%',
+//					showCheckboxcol: true,
+//					showToolbar: true,
+//					dataUrl: config.openBasePath + 'carbiz/getCarPartsList',
+//					columns: [
+//						{ name: 'carno', label: '车牌号', align: 'center'},
+//						{ name: 'partstype', label: '配件名称', align: 'center', },
+//						{ name: 'handletime', label: '更换日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+//						{ name: 'mileage', label: '更换时里程', align: 'center' },
+//						{ name: 'cname', label: '操作者', align: 'center' },
+//						{ name: 'iscurrent', label: '是否当前记录', align: 'center', render: function(value) { return value==1?'是':'否'}}
+//					],
+//					postData: {
+//						carid: thisdata.car.carId
+//					},
+//					editMode: { dialog: { id: 'maintenance_car_add', title: '新增更换配件记录', height : 400, mask:true, onClose: function() { grid.datagrid('refresh', true); } } },
+//					add_url: "html/car/maintenance/parts-add.html",
+//				});
+
+			maintenance_parts_list = {
+				init: function() {
+					var parts_list =
+						$.CurrentNavtab.find('#parts-datagrid').datagrid({
+							paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+							toolbarItem: 'add,|,del',
+							toolbarCustom: maintenance_parts_list.toolbarCustom(),
+							gridTitle: '更换配件记录',
+							height: '90%',
+							showCheckboxcol: true,
+							showToolbar: true,
+							dataUrl: config.openBasePath + 'carbiz/getCarPartsList',
+							columns: [
+								{ name: 'carno', label: '车牌号', align: 'center'},
+								{ name: 'partstype', label: '配件名称', align: 'center', render: maintenance_parts_list.formattPartsType},
+								{ name: 'handletime', label: '更换日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+								{ name: 'mileage', label: '更换时里程', align: 'center' },
+								{ name: 'cname', label: '操作者', align: 'center' },
+								{ name: 'iscurrent', label: '是否当前记录', align: 'center', render: function(value) { return value==1?'是':'否'}}
+							],
+							editMode: { dialog: { id: 'maintenance_car_add', title: '新增更换配件记录', height : 400, mask:true, onClose: function() { parts_list.datagrid('refresh', true); } } },
+							add_url: "html/car/maintenance/parts-add.html",
+							postData: {
+					         carid: thisdata.car.carId
+				            },
+				            delUrl : config.openBasePath + '/carbiz/deleteCarPartsList',
+							delPK :'id',
+						});
+				},
+				toolbarCustom: function() {
+					return "<button type='button' data-privilege='040101_v_parts-datagrid_02' class='btn btn-blue ml5' data-icon='edit' onclick='maintenance_parts_list.editrecord()'>编辑</button>" +
+						"<button type='button' class='btn btn-blue ml5' data-icon='search' onclick='maintenance_parts_list.viewrecord()'>查看</button>";
+				},
+				viewrecord: function() {
+					var data = $.CurrentNavtab.find('#parts-datagrid').data('selectedDatas');
+					if(!clz.check_table_checked($.CurrentNavtab.find('#parts-datagrid'))) {
+						BJUI.alertmsg('warn', '请选择一条记录！', {});
+						return;
+					} else if(data.length != 1) {
+						BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+						return;
+					}
+					clz.setWindowJson(data[0]);
+					var table = $.CurrentNavtab.find('#parts-datagrid');
+					BJUI.dialog({
+						id: 'maintenance_car_view',
+						url: 'html/car/maintenance/parts-view.html',
+						title: '查看更换配件记录',
+						mask: true,
+						height: "400",
+						onClose: function() {
+							table.datagrid('refresh', true);
+						}
+					})
+				},
+				editrecord:function(){
+					var data = $.CurrentNavtab.find('#parts-datagrid').data('selectedDatas');
+					if(data == null || data.length == 0) {
+						BJUI.alertmsg('warn', '请选择一条记录！', {});
+						return;
+					} else if(data.length != 1) {
+						BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+						return;
+					}
+					clz.setWindowJson(data[0]);
+					var table = $.CurrentNavtab.find('#parts-datagrid');
+					BJUI.dialog({
+						id: 'maintenance_car_edit',
+						url: 'html/car/maintenance/parts-edit.html',
+						title: '编辑更换配件记录',
+						mask: true,
+						height: "400",
+						onClose: function() {
+							table.datagrid('refresh', true);
+						}
+					})
+					
+				},
+				add:function(){
+					var table = $.CurrentNavtab.find('#accident-datagrid');
+					var data={
+						carNo:$.CurrentNavtab.find("#carNo").val(),
+						carId:$.CurrentNavtab.find("#carId").val(),
+						areaId:$.CurrentNavtab.find("#areaId").val()
+					}
+					BJUI.navtab({
+						id: 'add_car_accident',
+						url: 'html/car/maintenance/parts-add.html',
+						title: '新增更换配件记录',
+						onClose: function() {
+							table.datagrid('refresh', true);
+						},
+						more: data
+					})
+				},
+				formattPartsType: function(value) {
+					switch(value) {
+						case 1: return '轮胎';
+						case 2: return '机油';
+						case 3: return '时规带';
+						case 4: return '二保';
+						case 5: return '电池';
+						default: return '';
+					}
+				}
+			}
+			maintenance_parts_list.init();
+	}
+	
+	function formattPartsType(value) {
+			switch(value) {
+				case 1: return '轮胎';
+				case 2: return '机油';
+				case 3: return '时规带';
+				case 4: return '二保';
+				case 5: return '电池';
+				default: return '';
+			}
+	}
+	
+	var accident_list;
+	function accidentClick() {
+		accident_list = {
+			init:function(){
+				var grid = $.CurrentNavtab.find('#accident-datagrid').datagrid({
+					gridTitle: '',
+					toolbarItem: '',
+					toolbarCustom: accident_list.toolbarCustom(),
+					paging: {
+						pageSize: 15,
+						selectPageSize: '15,50,100,500'
+					},
+					height: '95%',
+					showCheckboxcol: true,
+					showToolbar: true,
+					dataUrl: config.openBasePath + '/car/getCarAccidentList',
+					editMode: { navtab: { id: 'add_car_accident', title: '新增事故理赔记录', onClose: function() { grid.datagrid('refresh', true); } } },
+					postData: {
+						carid: thisdata.car.carId
+					},
+					columns: [
+						{ name: 'carno', label: '车牌号', align: 'center'},
+						{ name: 'areaid', label: '片区', align: 'center', render: formatAreaCell},
+						{ name: 'accidentnum', label: '事故编号', align: 'center' },
+						{ name: 'accidentdate', label: '事故日期', align: 'center', render: function(value) { return clz.filter.time({ date: value, type: 'yyyy-MM-dd' }) } },
+						{ name: 'accidenttype', label: '类型', align: 'center', render: formattAccidentType},
+						{ name: 'liabletype', label: '责任', align: 'center', render: formattLiableType},
+						{ name: 'totalcost', label: '总损失', align: 'center' },
+						{ name: 'insurancetotalcost', label: '保险总金额', align: 'center' },
+						{ name: 'thirdindemnity', label: '第三者赔款', align: 'center' },
+						{ name: 'personalindemnity', label: '个人扣款', align: 'center' },
+						{ name: 'handlestate', label: '状态', align: 'center', render: function(value) { return value==1?'已处理':'未处理'}}
+					],
+				});
+			},
+			toolbarCustom: function() {
+					return "<button type='button' data-privilege='040101_v_accident-datagrid_01' class='btn btn-blue ml5' data-icon='add' onclick='accident_list.add()'>添加</button> " +	
+							"<button type='button' data-privilege='040101_v_accident-datagrid_02' class='btn btn-blue ml5' data-icon='edit' onclick='accident_list.editrecord()'>编辑</button> " +
+				            "<button type='button' class='btn btn-blue ml5' data-icon='search' onclick='accident_list.viewrecord()'>查看</button>";
+			},
+			editrecord: function() {
+				var data = $.CurrentNavtab.find('#accident-datagrid').data('selectedDatas');
+				if(!clz.check_table_checked($.CurrentNavtab.find('#accident-datagrid'))) {
+					BJUI.alertmsg('warn', '请选择一条记录！', {});
+					return;
+				} else if(data.length != 1) {
+					BJUI.alertmsg('error', '只能选中一项进行编辑操作！', {});
+					return;
+				}
+				var table = $.CurrentNavtab.find('#accident-datagrid');
+				BJUI.navtab({
+					id: 'service-edit-' + data[0].id,
+					url: 'html/car/accident/accident-edit.html',
+					title: '编辑事故理赔记录',
+					onClose: function() {
+						table.datagrid('refresh', true);
+					},
+					more: data[0]
+				})
+			},		
+			viewrecord: function() {
+				var data = $.CurrentNavtab.find('#accident-datagrid').data('selectedDatas');
+				if(data == null || data.length == 0) {
+					BJUI.alertmsg('warn', '请选择一条记录！', {});
+					return;
+				} else if(data.length != 1) {
+					BJUI.alertmsg('error', '只能选中一项进行查看操作！', {});
+					return;
+				}
+				var table = $.CurrentNavtab.find('#accident-datagrid');
+				BJUI.navtab({
+					id: 'service-view-' + data[0].id,
+					url: 'html/car/accident/accident-view.html',
+					title: '查看事故理赔记录',
+					onClose: function() {
+						table.datagrid('refresh', true);
+					},
+					more: data[0]
+				})
+			},
+			add:function(){
+				var table = $.CurrentNavtab.find('#accident-datagrid');
+				var data={
+					carNo:$.CurrentNavtab.find("#carNo").val(),
+					carId:$.CurrentNavtab.find("#carId").val(),
+					areaId:$.CurrentNavtab.find("#areaId").val()
+				}
+				BJUI.navtab({
+					id: 'add_car_accident',
+					url: 'html/car/accident/accident-add.html',
+					title: '新增事故理赔记录',
+					onClose: function() {
+						table.datagrid('refresh', true);
+					},
+					more: data
+				})
+			}
+		}
+		accident_list.init();
+	}
+	
+	function formattAccidentType(value) {
+			switch(value) {
+				case 1: return '违章';
+				case 2: return '机械事故';
+				case 3: return '交通事故';
+				case 4: return '人伤事故';
+				case 5: return '财产损失事故';
+				default: return '';
+			}
+		}
+		function formattLiableType(value) {
+			switch(value) {
+				case 1: return '主责';
+				case 2: return '同责';
+				case 3: return '次责';
+				case 4: return '无责';
+				default: return '';
+			}
+		}
+</script>

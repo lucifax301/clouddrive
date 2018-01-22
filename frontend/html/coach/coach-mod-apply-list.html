@@ -1,0 +1,208 @@
+<section id="thispage" privilege = "030102"></section>
+<div class="bjui-pageHeader" >
+    <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+       <div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教练搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+            <div class="bjui-row col-4">
+            <label class="row-label">片区：</label>
+			<div class="row-input">
+            <select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+                        <option value="">请选择</option>
+            </select>
+            </div>
+            <label class="row-label">状态：</label>
+            <div class="row-input">
+            <select name="status" id="status" data-toggle="selectpicker" size="15" data-width="100%" >
+                        <option value="">请选择</option>
+                        <option value="0">等待审核</option>
+                        <option value="1">审核通过</option>
+						<option value="2">审核不通过</option>
+						<option value="3">已撤回</option>
+            </select>
+			</div>
+			<label class="row-label">申请日期：</label>
+			<div class="row-input fill-2">
+				<div class="fl w-40"><input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" data-width="100%" placeholder="点击选择日期"></div>
+				<div class="w-10 fl text-center">-</div>
+				<div class="fl w-40"><input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" data-width="100%" placeholder="点击选择日期"></div>
+            </div>
+			<label class="row-label">教练姓名：</label>
+			<div class="row-input">
+            <input type="text" name="name" class="form-control" data-width="100%" placeholder="请输入教练姓名查询">
+            </div>
+            
+           
+            
+           </div>
+           <div class="text-center">
+            <div class="btn-group">
+	        	<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+               	<button type="reset" class="btn-blue" data-icon="times">重置</button>
+	        </div>
+           </div>
+           </div>
+           </div>
+    </form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+    var coach_mod_apply_list = {
+        list:$.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '教练修改审批',
+        toolbarItem: 'none',
+		toolbarCustom : "<button class='btn-blue' id='modifyBtn' style='' data-privilege='030102_datagrid-list_11' onclick='coach_mod_apply_list.audit(1)'>审核通过</button> <button class='btn-blue' data-privilege='030102_datagrid-list_11' onclick='coach_mod_apply_list.audit(2)' >审核不通过</button>",
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '85%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'coach/modApplyList',
+
+        columns: [
+            {name:'area',label:'片区',align:'center'},
+            {name:'coachname',label:'教练姓名',align:'center'},
+            {name:'createdate',label:'申请时间',align:'center'},
+            {name:'status',label:'状态',align:'center',render:apply_status},
+            {name:'applyuser',label:'申请人',align:'center'},
+			{name:'audituser',label:'处理人',align:'center'},
+			{name:'audituser',label:'操作',align:'center',render:function(value, data){
+				if(data.status==0){
+					if(data.modapplystat==2){
+                return "<a href='html/coach/coach-mod-apply-view.html' class='btn-blue btn' data-toggle='navtab' data-options='{id:\"apply-view-table"+data.id+"\" , title:\"查看申请\"}' data-more='" + JSON.stringify(data) + "'>" + "查看" + "</a>"+
+				"&nbsp;&nbsp;<a href='html/coach/coach-mod-apply-edit.html' data-privilege='030102_datagrid-list_02' class='btn-blue btn vhide' data-toggle='navtab' data-options='{id:\"apply-edit-table"+data.id+"\" , title:\"编辑申请\"}' data-more='" + JSON.stringify(data) + "'>" + "编辑" + "</a>"+
+				"&nbsp;&nbsp;<a href='###' class='btn-blue btn vhide' data-privilege='030102_datagrid-list_12' onclick='coach_mod_apply_list.cancelapply("+data.id+")'>撤回</a>"
+				}else{
+					return "<a href='html/coach/coach-mod-apply-view.html' class='btn-blue btn' data-toggle='navtab' data-options='{id:\"apply-view-table"+data.id+"\" , title:\"查看申请\"}' data-more='" + JSON.stringify(data) + "'>" + "查看" + "</a>"
+				}
+				}else{
+					return "<a href='html/coach/coach-mod-apply-view.html' class='btn-blue btn' data-toggle='navtab' data-options='{id:\"apply-view-table"+data.id+"\" , title:\"查看申请\"}' data-more='" + JSON.stringify(data) + "'>" + "查看" + "</a>"
+				}
+			}}	
+        ],
+        
+
+    }),
+	
+
+	
+	applymodifyedit:function (){
+		var data = coach_mod_apply_list.list.data('selectedDatas');
+		clz.setWindowJson(data[0].coachid);
+		BJUI.dialog({
+			id:'apply_dialog',
+			width:800,
+			height:800,
+			url:'html/coach/coach-mod-apply-edit.html',
+			title:'教练信息申请修改',
+			onClose:function(){
+				//coach_mod_apply_list.list.datagrid('refresh',true);
+				BJUI.navtab('refresh');
+			}
+
+		})
+	},
+	
+	applymodifyview:function (){
+		var data = coach_mod_apply_list.list.data('selectedDatas');
+		clz.setWindowJson(data[0].coachid);
+		BJUI.dialog({
+			id:'apply_dialog',
+			width:800,
+			height:800,
+			url:'html/coach/coach-mod-apply-view.html',
+			title:'教练信息申请修改',
+			onClose:function(){
+				coach_mod_apply_list.list.datagrid('refresh',true);
+			}
+
+		})
+	},
+
+	
+	audit:function (state){
+		var data = coach_mod_apply_list.list.data('selectedDatas');
+		if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+			 BJUI.alertmsg('error', '没有选中数据！', {})
+			 return
+		}
+		
+		for(var i=0;i<data.length;i++){
+			if(data[i].status==3){
+				BJUI.alertmsg('info', '所选数据中有申请不能被审核！', {})
+				return
+			}else if(data[i].status==1||data[i].status==2){
+				BJUI.alertmsg('info', '所选数据中有已经审核过的申请！', {})
+				return
+			}
+		}
+		
+		if(state==1)
+		BJUI.alertmsg('confirm', '确认审核通过？', {
+			displayPosition:'middlecenter' ,
+            okCall: function() {
+				coach_mod_apply_list.doaudit(1)
+			}
+		})
+		if(state==2)
+		BJUI.alertmsg('confirm', '确认审核不通过？', {
+			displayPosition:'middlecenter' ,
+            okCall: function() {
+				coach_mod_apply_list.doaudit(2)
+			}
+		})
+	},
+
+	doaudit:function (state){
+		var data = coach_mod_apply_list.list.data('selectedDatas');
+		var ids="";
+		for(var i=0;i<data.length;i++){
+			ids+=data[i].id
+			if(i<data.length-1)
+			ids+=","
+		}
+		
+		BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/coach/batchAuditModApply",
+                    loadingmask: true,
+					data:{applyids:ids,state:state},
+                    okCallback: function(json, options) {
+						BJUI.navtab('refresh')
+					}
+		})
+	},
+
+	cancelapply:function (applyid){
+		BJUI.alertmsg('confirm', '确认撤回申请吗？', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/coach/auditModApply?applyid="+applyid+"&state=3",
+                    loadingmask: true,
+					okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						//coach_mod_apply_list.list.datagrid('refresh',true);
+						BJUI.navtab('refresh')
+                    }
+                })
+            }
+        });
+		
+	}
+	}
+
+	function apply_status(value) { 
+        switch (value) {
+			case 0 :
+            return "等待审核";
+            case 1 :
+            return "审核通过";
+            case 2 :
+            return "审核不通过";
+            case 3 :
+            return "已撤回";
+        }
+    }
+
+</script>

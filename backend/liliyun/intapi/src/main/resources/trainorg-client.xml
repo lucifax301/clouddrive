@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+    <dubbo:reference id="trainOrgService" interface="cn.com.liliyun.trainorg.service.TrainOrgService" check="false" />
+	<dubbo:reference id="storeService" interface="cn.com.liliyun.trainorg.service.StoreService" check="false" />
+	<dubbo:reference id="trainareaService" interface="cn.com.liliyun.trainorg.service.TrainareaService" check="false" />
+	<dubbo:reference id="marketingService" interface="cn.com.liliyun.trainorg.service.MarketingService" check="false" />
+	<dubbo:reference id="complainService" interface="cn.com.liliyun.trainorg.service.ComplainService" check="false" />	
+	<dubbo:reference id="coachAccountService" interface="cn.com.liliyun.school.service.CoachAccountService" check="false" />
+	<dubbo:reference id="proxyDealerService" interface="cn.com.liliyun.trainorg.service.ProxyDealerService" check="false" />
+	<dubbo:reference id="areaService" interface="cn.com.liliyun.trainorg.service.AreaService" check="false" />
+	<dubbo:reference id="classinfoService" interface="cn.com.liliyun.trainorg.service.ClassinfoService" check="false"/>
+	<dubbo:reference id="orderExamService" interface="cn.com.liliyun.trainorg.service.OrderExamService" check="false"/>
+	<dubbo:reference id="trainExamService" interface="cn.com.liliyun.trainorg.service.TrainExamService" check="false"/>
+	<dubbo:reference id="resultExamService" interface="cn.com.liliyun.trainorg.service.ResultExamService" check="false"/>
+
+	<dubbo:reference id="examareaService" interface="cn.com.liliyun.trainorg.service.ExamareaService" check="false"/>
+</beans>

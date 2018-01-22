@@ -1,0 +1,73 @@
+
+<div class="bjui-pageContent">
+    <table id="waitcaseshow" class="table table-bordered"></table>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	var report_license_cercollect_show = {
+		init() {
+			clz.CurrentDom_init({
+				url : config.openBasePath + 'user/add',
+				form_name : 'formedit',
+				table_name : 'datagrid-list',
+				current:'Dialog',
+				callback(data){
+					var tabledata = clz.getWindowJson();
+					console.log(tabledata)
+					$.CurrentDialog.find('#waitcaseshow').datagrid({
+						gridTitle: '学员汇总列表',
+						toolbarItem: false,
+						paging: false,
+						height: '95%',
+						showCheckboxcol: false,
+						showToolbar: false,
+						dataUrl: config.openBasePath + 'report/getCertificateCollectStat',
+						postData:{
+							ids :tabledata.ids,
+							subject: tabledata.subject
+						},
+						columns: [
+							{ name: 'subject', label: '办证状态', align: 'center',render:function(vlaue,data){return clz.configRender({name:'subject',val:vlaue,data:data})}},
+							{ name: 'storeid', label: '门店', align: 'center',render: function(vlaue,data){return clz.configRender({name:'storelist',val:vlaue,key:'id'})}},
+							{ name: 'name', label: '学员姓名', align: 'center',},
+							{ name: 'idcard', label: '身份证号', align: 'center',},
+							{ name: 'flownum', label: '流水号', align: 'center',},
+							{ name: 'phone', label: '联系电话', align: 'center', },
+							{ name: 'classid', label: '班别', align: 'center',render: function(vlaue,data){return clz.configRender({name:'classlist',val:vlaue,key:'id'})}},
+							{ name: 'traintype', label: '车型', align: 'center',},
+							{ name: 'coachName', label: '教练', align: 'center',},
+							{ name: 'subject1date', label: '学科合格日期', align: 'center',render: function(value){return value.substring(0,11)}},
+							{ name: 'subject1count', label: '学科考试次数', align: 'center',},
+							{ name: 'subject2count', label: '科二考试成绩', align: 'center',render: function(value,data){
+								return report_license_cercollect_show.examresult(value, data.subject2date)}
+							},
+							{ name: 'subject2count', label: '科二考试次数', align: 'center',},
+							{ name: 'subject3count', label: '科三考试成绩', align: 'center',render: function(value,data){
+								return report_license_cercollect_show.examresult(value, data.subject3date)}
+							},
+							{ name: 'subject3count', label: '科三考试次数', align: 'center',},
+							{ name: 'subject4count', label: '科四考试成绩', align: 'center',render: function(value,data){
+								return report_license_cercollect_show.examresult(value, data.subject4date)}
+							},
+							{ name: 'subject4count', label: '科四考试次数', align: 'center',},
+						]
+					});
+				}
+			})
+		},
+		examresult(count, datetime) {
+			if (datetime) {
+				return "合格";
+			} else if (count > 0) {
+				return "不及格";
+			} else {
+				return "未考"
+			}
+		}
+	}
+	report_license_cercollect_show.init();
+</script>

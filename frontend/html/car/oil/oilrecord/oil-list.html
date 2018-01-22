@@ -1,0 +1,126 @@
+<section id="thispage" privilege = "040505"></section>
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" id="search-form" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>加油记录信息搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+				 	<label class="row-label">车牌号码：</label>
+		            <div class="row-input">
+		                <input type="text" name="carNo">
+		            </div>
+		            <label class="row-label">油卡卡号：</label>
+		            <div class="row-input">
+		                <input type="text" name="oilCard">
+		            </div>
+		            <label class="row-label">油品：</label>
+		            <div class="row-input">
+		                <select name="oilType" data-toggle="selectpicker" data-width="100%">
+		                    <option value="" selected>全部</option>
+		                    <option value="0">0#</option>
+		                    <option value="1">90#</option>
+		                    <option value="2">92#</option>
+		                    <option value="3">93#</option>
+		                    <option value="4">95#</option>
+		                    <option value="5">97#</option>
+		                    <option value="6">98#</option>
+		                    <option value="7">电</option>
+		                </select>
+		            </div>
+		            <label class="row-label">加油时间：</label>
+		            <div class="row-input">
+		               	<input type="text" name="stime" data-toggle="datepicker" placeholder="加油起始时间"> 
+		            </div>
+		            <label class="row-label">加油时间：</label>
+		            <div class="row-input">
+		                <input type="text" name="etime" data-toggle="datepicker" placeholder="加油截止时间"> 
+		            </div>
+		            <label class="row-label">片区：</label>
+		            <div class="row-input">
+		                <select name="areaId" data-toggle="selectpicker" data-width="100%" 
+		                    data-dataurl="/httpaccess/area/list" data-optiontype = "id,name">
+		                </select>
+		            </div>
+		            
+		      	</div>
+		            <div class="text-center">
+		                <button type="submit" class="btn-blue" data-icon="search">搜索</button>
+		                <button type="reset" class="btn-blue" data-icon="times">重置</button>
+		       		</div>
+      		</div>
+      	</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var car_oil_oilrecord_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '加油记录列表',
+       // toolbarItem: 'add,|,edit,|,del,|,refresh,|,import',
+        toolbarItem: 'refresh,|,import',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + '/car/getCarOilwearList',
+        columns: [		           
+        	{name:'carNo',label:'车牌号码',align:'center'},
+            {name:'oilSupplier',label:'加油人',align:'center'},
+            {name:'oilType',label:'油品',align:'center',render:function(value){
+            	var text = '';
+            	if(value=='0')text = '0#';
+            	if(value=='1')text = '90#';
+            	if(value=='2')text = '92#';
+            	if(value=='3')text = '93#';
+            	if(value=='4')text = '95#';
+            	if(value=='5')text = '97#';
+            	if(value=='6')text = '98#';
+            	if(value=='7')text = '电';
+            	return text
+            	}
+            },
+            {name:'oilCard',label:'油卡',align:'center'},
+            {name:'oilMl',label:'加油升数',align:'center'},
+            {name:'cost',label:'单价(元)',align:'center'},
+            {name:'sumCost',label:'加油金额(元)',align:'center'},
+            {name:'realCost',label:'实付金额(元)',align:'center'},
+            {name:'costType',label:'付款方式',align:'center',render:function(value){
+            	var text = '';
+            	if(value=='1')text = '油卡';
+            	if(value=='2')text = '现金';
+            	return text
+            	}
+            },
+            {name:'oilDate',label:'加油日期',align:'center',render:function(value){return String(value)==''?'': clz.filter.time({date:value,type:'yyyy-MM-dd'})}}
+        ],
+        editMode: {dialog:{width:'800',height:'420',title:'加油记录',mask:true}},       
+        add_url :  'html/car/oil/oilrecord/oil-add.html',
+        edit_url: 'html/car/oil/oilrecord/oil-edit.html',
+        delUrl : config.openBasePath + '/car/deleteCarOilwear',
+		delPK : 'id',
+		afterSave:function(){
+			BJUI.dialog('closeCurrent');
+			car_oil_oilrecord_list.datagrid('refresh',true);
+		},
+		afterEdit:function(){
+			BJUI.dialog('closeCurrent');
+			car_oil_oilrecord_list.datagrid('refresh',true);
+		},
+		afterDelete:function(){
+			car_oil_oilrecord_list.datagrid('refresh',true);
+		},
+		importOption: {
+			type: "navtab",
+			options: {
+				id: 'importOil',
+				url: 'html/car/oil/oilrecord/upload.html',
+				title: '上传文件',
+				width: 400,
+				height: 250,
+				mask: true
+			}
+		},
+  });	
+</script>

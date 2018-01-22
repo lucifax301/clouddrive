@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.finance.mapper.FinanceSubchargeMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="chargetype" property="chargetype" jdbcType="TINYINT" />
+    <result column="charger" property="charger" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="DECIMAL" />
+    <result column="chargedate" property="chargedate" jdbcType="TIMESTAMP" />
+    <result column="cashmoney" property="cashmoney" jdbcType="DECIMAL" />
+    <result column="cardmoney" property="cardmoney" jdbcType="DECIMAL" />
+    <result column="posid" property="posid" jdbcType="INTEGER" />
+    <result column="posnum" property="posnum" jdbcType="VARCHAR" />
+    <result column="bankname" property="bankname" jdbcType="VARCHAR" />
+    <result column="studentid" property="studentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="classinfo" property="classinfo" jdbcType="VARCHAR" />
+    <result column="traintype" property="traintype" jdbcType="VARCHAR" />
+    <result column="classhour" property="classhour" jdbcType="DECIMAL" />
+    <result column="receipttype" property="receipttype" jdbcType="TINYINT" />
+    <result column="receiptname" property="receiptname" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="isdel" property="isdel" jdbcType="TINYINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, areaid, storeid, chargetype, charger, total, chargedate, cashmoney, cardmoney, 
+    posid, posnum, bankname, studentid, name, idcard, classinfo, traintype, classhour, 
+    receipttype, receiptname, remark, isdel, ctime, cuid, cname, mtime, muid, mname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_subcharge
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    delete from t_finance_subcharge
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    insert into t_finance_subcharge (id, areaid, storeid, 
+      chargetype, charger, total, 
+      chargedate, cashmoney, cardmoney, 
+      posid, posnum, bankname, 
+      studentid, name, idcard, 
+      classinfo, traintype, classhour, 
+      receipttype, receiptname, remark, 
+      isdel, ctime, cuid, 
+      cname, mtime, muid, 
+      mname)
+    values (#{id,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{chargetype,jdbcType=TINYINT}, #{charger,jdbcType=VARCHAR}, #{total,jdbcType=DECIMAL}, 
+      #{chargedate,jdbcType=TIMESTAMP}, #{cashmoney,jdbcType=DECIMAL}, #{cardmoney,jdbcType=DECIMAL}, 
+      #{posid,jdbcType=INTEGER}, #{posnum,jdbcType=VARCHAR}, #{bankname,jdbcType=VARCHAR}, 
+      #{studentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, 
+      #{classinfo,jdbcType=VARCHAR}, #{traintype,jdbcType=VARCHAR}, #{classhour,jdbcType=DECIMAL}, 
+      #{receipttype,jdbcType=TINYINT}, #{receiptname,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{isdel,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, #{cuid,jdbcType=INTEGER}, 
+      #{cname,jdbcType=VARCHAR}, #{mtime,jdbcType=TIMESTAMP}, #{muid,jdbcType=INTEGER}, 
+      #{mname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    insert into t_finance_subcharge
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="chargetype != null" >
+        chargetype,
+      </if>
+      <if test="charger != null" >
+        charger,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="chargedate != null" >
+        chargedate,
+      </if>
+      <if test="cashmoney != null" >
+        cashmoney,
+      </if>
+      <if test="cardmoney != null" >
+        cardmoney,
+      </if>
+      <if test="posid != null" >
+        posid,
+      </if>
+      <if test="posnum != null" >
+        posnum,
+      </if>
+      <if test="bankname != null" >
+        bankname,
+      </if>
+      <if test="studentid != null" >
+        studentid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="classinfo != null" >
+        classinfo,
+      </if>
+      <if test="traintype != null" >
+        traintype,
+      </if>
+      <if test="classhour != null" >
+        classhour,
+      </if>
+      <if test="receipttype != null" >
+        receipttype,
+      </if>
+      <if test="receiptname != null" >
+        receiptname,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isdel != null" >
+        isdel,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="mname != null" >
+        mname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="chargetype != null" >
+        #{chargetype,jdbcType=TINYINT},
+      </if>
+      <if test="charger != null" >
+        #{charger,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=DECIMAL},
+      </if>
+      <if test="chargedate != null" >
+        #{chargedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cashmoney != null" >
+        #{cashmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="cardmoney != null" >
+        #{cardmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="posid != null" >
+        #{posid,jdbcType=INTEGER},
+      </if>
+      <if test="posnum != null" >
+        #{posnum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="studentid != null" >
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="classinfo != null" >
+        #{classinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="traintype != null" >
+        #{traintype,jdbcType=VARCHAR},
+      </if>
+      <if test="classhour != null" >
+        #{classhour,jdbcType=DECIMAL},
+      </if>
+      <if test="receipttype != null" >
+        #{receipttype,jdbcType=TINYINT},
+      </if>
+      <if test="receiptname != null" >
+        #{receiptname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    update t_finance_subcharge
+    <set >
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="chargetype != null" >
+        chargetype = #{chargetype,jdbcType=TINYINT},
+      </if>
+      <if test="charger != null" >
+        charger = #{charger,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=DECIMAL},
+      </if>
+      <if test="chargedate != null" >
+        chargedate = #{chargedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cashmoney != null" >
+        cashmoney = #{cashmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="cardmoney != null" >
+        cardmoney = #{cardmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="posid != null" >
+        posid = #{posid,jdbcType=INTEGER},
+      </if>
+      <if test="posnum != null" >
+        posnum = #{posnum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        bankname = #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="studentid != null" >
+        studentid = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="classinfo != null" >
+        classinfo = #{classinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="traintype != null" >
+        traintype = #{traintype,jdbcType=VARCHAR},
+      </if>
+      <if test="classhour != null" >
+        classhour = #{classhour,jdbcType=DECIMAL},
+      </if>
+      <if test="receipttype != null" >
+        receipttype = #{receipttype,jdbcType=TINYINT},
+      </if>
+      <if test="receiptname != null" >
+        receiptname = #{receiptname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null" >
+        isdel = #{isdel,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    update t_finance_subcharge
+    set areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      chargetype = #{chargetype,jdbcType=TINYINT},
+      charger = #{charger,jdbcType=VARCHAR},
+      total = #{total,jdbcType=DECIMAL},
+      chargedate = #{chargedate,jdbcType=TIMESTAMP},
+      cashmoney = #{cashmoney,jdbcType=DECIMAL},
+      cardmoney = #{cardmoney,jdbcType=DECIMAL},
+      posid = #{posid,jdbcType=INTEGER},
+      posnum = #{posnum,jdbcType=VARCHAR},
+      bankname = #{bankname,jdbcType=VARCHAR},
+      studentid = #{studentid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      classinfo = #{classinfo,jdbcType=VARCHAR},
+      traintype = #{traintype,jdbcType=VARCHAR},
+      classhour = #{classhour,jdbcType=DECIMAL},
+      receipttype = #{receipttype,jdbcType=TINYINT},
+      receiptname = #{receiptname,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      isdel = #{isdel,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      cuid = #{cuid,jdbcType=INTEGER},
+      cname = #{cname,jdbcType=VARCHAR},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      muid = #{muid,jdbcType=INTEGER},
+      mname = #{mname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_subcharge
+    <where>
+    	isdel = 0
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="storeid != null">
+    		and storeid = #{storeid,jdbcType=INTEGER}
+    	</if>
+    	<if test="chargetype != null">
+    		and chargetype = #{chargetype,jdbcType=TINYINT}
+    	</if>
+    	<if test="bankname != null and bankname != ''">
+    		and bankname like concat('%',#{bankname,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="posnum != null and posnum != ''">
+    		and posnum like concat('%',#{posnum,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="chargedatetop != null">
+    		and #{chargedatetop,jdbcType=TIMESTAMP} >= chargedate
+    	</if>
+    	<if test="chargedatelow != null">
+    		and chargedate >= #{chargedatelow,jdbcType=TIMESTAMP}
+    	</if>
+    </where>
+    order by id desc
+  </select>
+  <update id="deleteByIds" parameterType="cn.com.liliyun.finance.model.FinanceSubcharge" >
+    update t_finance_subcharge
+    <set >
+      isdel = 1,
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id in (${ids})
+  </update>
+</mapper>

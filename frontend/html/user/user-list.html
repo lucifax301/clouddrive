@@ -1,0 +1,155 @@
+<section id="thispage" privilege = "070501"></section>
+<div class="bjui-pageHeader" >
+    <form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+        <div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>用户搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">登录手机号：</label>
+					<div class="row-input">
+						<input type="text" name="username" class="form-control">
+					</div>
+					<label class="row-label">用户名称：</label>
+					<div class="row-input">
+						<input type="text" name="realname" class="form-control">
+					</div>
+					<label class="row-label">用户状态：</label>
+					<div class="row-input">
+						<select name="status" data-toggle="selectpicker" >
+							<option value="">全部</option>
+							<option value="0">正常</option>
+							<option value="1">停用</option>
+						</select>
+					</div>
+					<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search" style="margin-left:10px;">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times" style="margin-left:10px;">重置</button>
+					</div>
+				</div>
+			</div>
+		</div>
+    </form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	console.log(clz.getNavtab_privilege());
+	var user_user_list = {
+		curtab: clz.getNavtab_privilege(),
+		list : $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+	        gridTitle : '用户管理列表',
+	        toolbarItem: 'add,edit,del,refresh',
+	        //toolbarCustom : "<button class='btn-blue' id='openBtn'>启用账户</button><button class='btn-blue' id='stopBtn' style='margin-left:10px;'>停用账户</button>",
+	        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+	        height: '85%',
+	        showCheckboxcol: true,
+	        showToolbar: true,
+	        columns: [
+	            {name:'username',label:'登录手机号',align:'center'},
+	            {name:'realname',label:'用户名称',align:'center'},
+	            {name:'status',label:'账号状态',align:'center',render:function(value){return String(value)=='0'?'正常':'停用'}},
+	            {name:'issuper',label:'账号类型',align:'center',render:function(value){return String(value)=='0'?'子账号':'根账号'}},
+	            {name:'rolename',label:'用户角色',align:'center',render:function(value){return String(value)?value:'无角色'}},
+	            {name:'ctime',label:'创建时间',align:'center'},
+	            {name:'mtime',label:'创建时间',align:'center'},
+	            {name:'op',label:'操作',align:'center',render:userOperation},
+	        ],
+	        //editMode: {dialog:{width:'640',height:'600',title:'用户信息',mask:true}},
+	        editMode: {
+	        navtab: {
+					id: 'coach-navtab',
+					title: '用户信息',
+					onClose: function() {
+						
+						user_user_list.list.datagrid('refresh', true);
+						BJUI.navtab('switchTab', user_user_list.curtab);
+					}
+				}
+	        },
+	        beforeEdit: function($tr,data,type) {
+	        	console.log($tr,data,type)
+	        	if(user_user_list.list.data('selectedDatas')!=null && user_user_list.list.data('selectedDatas').length>0 && user_user_list.list.data('selectedDatas')[0].issuper==1 && !type){BJUI.alertmsg('info', '管理员不能编辑！', {}); return}
+				window.user_object = user_user_list.list.data('selectedDatas') == null ? null : user_user_list.list.data('selectedDatas')[0];
+				return true;
+			},
+	        add_url :  'html/user/user-add.html',
+	        edit_url: 'html/user/user-edit.html',
+	        delUrl : config.openBasePath + '/user/delete',
+			delPK : 'id',
+			afterSave:function(){
+				user_user_list.list.datagrid('refresh',true);
+			},
+			afterDelete:function(){
+				user_user_list.list.datagrid('refresh',true);
+			},
+	        dataUrl: config.openBasePath + '/user/listWithRole',
+			delPK : 'id',
+	        importOption : {type:"navtab", options:{id:'importUser',url:'html/user/upload.html', title:'上传文件' ,width:400, height:250,mask:true}},
+	        exportOption : {type:"file", options:{url:config.openBasePath + "user/download"}},
+	    }),
+	    
+    	handleUser : function(id,status) {
+	        var title = status == 1 ? "启用" : "停用";
+	        BJUI.alertmsg('confirm', '确认' + title +'该用户？', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + "/user/status",
+	                    data : {id : id, status : status},
+	                    loadingmask: true,
+	                    okCallback: function(json, options) {
+	                        user_user_list.list.datagrid('refresh',true);
+	                    }
+	                })
+	            }
+	        })
+	    },
+	    changerole : function(userid){
+	    	BJUI.findgrid({
+		        group: 'obj',
+		        dialogOptions: {title:'改变该用户角色'},
+		        gridOptions: {
+		            local: 'local',
+		            toolbarItem:null,
+		            filterThead:true,
+		            dataUrl: config.openBasePath + '/privilege/listRole?isPage=0',
+		            columns: [
+		                {name:'rolename',align:'center', label:'角色名称', width:100},
+		                {name:'remark',align:'center', label:'描述'},
+		                {name:'userCount',align:'center', label:'当前角色人数'}
+		            ],
+		            paging: false,
+		        },
+		        afterSelect:function(data){
+		        	BJUI.ajax('doajax', {
+			            url: config.openBasePath + 'user/update',
+			            type: 'get',
+			            data:{
+			            	id:userid,
+			            	roleid:data.id
+			            },
+			            loadingmask: true,
+			            okCallback: function() {
+			               user_user_list.list.datagrid('reload')//刷新
+			            }
+			    	});
+			        return true
+		        }
+		    })
+	    }
+	}
+	
+	function userOperation(value,data) {
+        var html;
+        if(data.issuper!=1){
+        if (data.status == 0) {
+            html = '<button type="button" data-privilege="070501_datagrid-list_11" class="btn-red vhide" onclick="user_user_list.handleUser('+data.id+','+data.status+')">停用账户</button>'
+        } else {
+            html = '<button type="button" data-privilege="070501_datagrid-list_11" class="btn-green vhide" onclick="user_user_list.handleUser('+data.id+','+data.status+')">启用账户</button>'
+        }
+        }
+        //html += '<button type="button" class="btn-green" onclick="user_user_list.changerole('+data.id+')">分配角色</button>'
+        return html
+    }
+</script>

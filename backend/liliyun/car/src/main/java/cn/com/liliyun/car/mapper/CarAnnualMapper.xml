@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarAnnualMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarAnnual" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="car_id" property="carId" jdbcType="INTEGER" />
+    <result column="annual_indate" property="annualIndate" jdbcType="TIMESTAMP" />
+    <result column="annual_cost" property="annualCost" jdbcType="INTEGER" />
+    <result column="reim_date" property="reimDate" jdbcType="TIMESTAMP" />
+    <result column="yg_sign" property="ygSign" jdbcType="TINYINT" />
+    <result column="yg_cost" property="ygCost" jdbcType="INTEGER" />
+    <result column="detect_address" property="detectAddress" jdbcType="TINYINT" />
+    <result column="rohs_date" property="rohsDate" jdbcType="TIMESTAMP" />
+    <result column="detect_cost" property="detectCost" jdbcType="INTEGER" />
+    <result column="dcost_date" property="dcostDate" jdbcType="TIMESTAMP" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="BIGINT" />
+    <result column="assert_date" property="assertDate" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, car_id, annual_indate, annual_cost, reim_date, yg_sign, yg_cost, detect_address, 
+    rohs_date, detect_cost, dcost_date, cname, cuid, assert_date, remark, is_del
+  </sql>
+  
+  <select id="queryCarAnnualList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarAnnual" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_annual
+    where is_del=0
+    	<trim suffixOverrides=",">
+			<if test="carId != null and carId != ''">
+				and car_id= #{carId}
+			</if>
+		</trim>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_annual
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_car_annual
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteCarAnnualList" parameterType="cn.com.liliyun.car.model.CarAnnual" >
+    delete from t_car_annual
+    where id  in (${ids})
+  </delete>
+  
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarAnnual" >
+    insert into t_car_annual (id, car_id, annual_indate, 
+      annual_cost, reim_date, yg_sign, 
+      yg_cost, detect_address, rohs_date, 
+      detect_cost, dcost_date, cname, 
+      cuid, assert_date, remark, 
+      is_del)
+    values (#{id,jdbcType=INTEGER}, #{carId,jdbcType=INTEGER}, #{annualIndate,jdbcType=TIMESTAMP}, 
+      #{annualCost,jdbcType=INTEGER}, #{reimDate,jdbcType=TIMESTAMP}, #{ygSign,jdbcType=TINYINT}, 
+      #{ygCost,jdbcType=INTEGER}, #{detectAddress,jdbcType=TINYINT}, #{rohsDate,jdbcType=TIMESTAMP}, 
+      #{detectCost,jdbcType=INTEGER}, #{dcostDate,jdbcType=TIMESTAMP}, #{cname,jdbcType=VARCHAR}, 
+      #{cuid,jdbcType=BIGINT}, #{assertDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=TINYINT})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarAnnual" >
+    insert into t_car_annual
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carId != null" >
+        car_id,
+      </if>
+      <if test="annualIndate != null" >
+        annual_indate,
+      </if>
+      <if test="annualCost != null" >
+        annual_cost,
+      </if>
+      <if test="reimDate != null" >
+        reim_date,
+      </if>
+      <if test="ygSign != null" >
+        yg_sign,
+      </if>
+      <if test="ygCost != null" >
+        yg_cost,
+      </if>
+      <if test="detectAddress != null" >
+        detect_address,
+      </if>
+      <if test="rohsDate != null" >
+        rohs_date,
+      </if>
+      <if test="detectCost != null" >
+        detect_cost,
+      </if>
+      <if test="dcostDate != null" >
+        dcost_date,
+      </if>
+      <if test="cname != null" >
+        cname,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="assertDate != null" >
+        assert_date,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null" >
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="annualIndate != null" >
+        #{annualIndate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="annualCost != null" >
+        #{annualCost,jdbcType=INTEGER},
+      </if>
+      <if test="reimDate != null" >
+        #{reimDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ygSign != null" >
+        #{ygSign,jdbcType=TINYINT},
+      </if>
+      <if test="ygCost != null" >
+        #{ygCost,jdbcType=INTEGER},
+      </if>
+      <if test="detectAddress != null" >
+        #{detectAddress,jdbcType=TINYINT},
+      </if>
+      <if test="rohsDate != null" >
+        #{rohsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detectCost != null" >
+        #{detectCost,jdbcType=INTEGER},
+      </if>
+      <if test="dcostDate != null" >
+        #{dcostDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="assertDate != null" >
+        #{assertDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateCarAnnualList" parameterType="cn.com.liliyun.car.model.CarAnnual" >
+    update t_car_annual
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="annualIndate != null" >
+        annual_indate = #{annualIndate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="annualCost != null" >
+        annual_cost = #{annualCost,jdbcType=INTEGER},
+      </if>
+      <if test="reimDate != null" >
+        reim_date = #{reimDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ygSign != null" >
+        yg_sign = #{ygSign,jdbcType=TINYINT},
+      </if>
+      <if test="ygCost != null" >
+        yg_cost = #{ygCost,jdbcType=INTEGER},
+      </if>
+      <if test="detectAddress != null" >
+        detect_address = #{detectAddress,jdbcType=TINYINT},
+      </if>
+      <if test="rohsDate != null" >
+        rohs_date = #{rohsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detectCost != null" >
+        detect_cost = #{detectCost,jdbcType=INTEGER},
+      </if>
+      <if test="dcostDate != null" >
+        dcost_date = #{dcostDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="assertDate != null" >
+        assert_date = #{assertDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id  in (${ids})
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarAnnual" >
+    update t_car_annual
+    <set >
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="annualIndate != null" >
+        annual_indate = #{annualIndate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="annualCost != null" >
+        annual_cost = #{annualCost,jdbcType=INTEGER},
+      </if>
+      <if test="reimDate != null" >
+        reim_date = #{reimDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ygSign != null" >
+        yg_sign = #{ygSign,jdbcType=TINYINT},
+      </if>
+      <if test="ygCost != null" >
+        yg_cost = #{ygCost,jdbcType=INTEGER},
+      </if>
+      <if test="detectAddress != null" >
+        detect_address = #{detectAddress,jdbcType=TINYINT},
+      </if>
+      <if test="rohsDate != null" >
+        rohs_date = #{rohsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detectCost != null" >
+        detect_cost = #{detectCost,jdbcType=INTEGER},
+      </if>
+      <if test="dcostDate != null" >
+        dcost_date = #{dcostDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cname != null" >
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=BIGINT},
+      </if>
+      <if test="assertDate != null" >
+        assert_date = #{assertDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarAnnual" >
+    update t_car_annual
+    set car_id = #{carId,jdbcType=INTEGER},
+      annual_indate = #{annualIndate,jdbcType=TIMESTAMP},
+      annual_cost = #{annualCost,jdbcType=INTEGER},
+      reim_date = #{reimDate,jdbcType=TIMESTAMP},
+      yg_sign = #{ygSign,jdbcType=TINYINT},
+      yg_cost = #{ygCost,jdbcType=INTEGER},
+      detect_address = #{detectAddress,jdbcType=TINYINT},
+      rohs_date = #{rohsDate,jdbcType=TIMESTAMP},
+      detect_cost = #{detectCost,jdbcType=INTEGER},
+      dcost_date = #{dcostDate,jdbcType=TIMESTAMP},
+      cname = #{cname,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=BIGINT},
+      assert_date = #{assertDate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

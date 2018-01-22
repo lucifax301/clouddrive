@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.CarAccidentMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.CarAccident" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="carid" property="carid" jdbcType="INTEGER" />
+    <result column="carno" property="carno" jdbcType="VARCHAR" />
+    <result column="brandid" property="brandid" jdbcType="INTEGER" />
+    <result column="areaid" property="areaid" jdbcType="INTEGER" />
+    <result column="storeid" property="storeid" jdbcType="INTEGER" />
+    <result column="accidentnum" property="accidentnum" jdbcType="VARCHAR" />
+    <result column="accidenttype" property="accidenttype" jdbcType="TINYINT" />
+    <result column="accidentdate" property="accidentdate" jdbcType="TIMESTAMP" />
+    <result column="accidentaddr" property="accidentaddr" jdbcType="VARCHAR" />
+    <result column="caruser" property="caruser" jdbcType="VARCHAR" />
+    <result column="liabletype" property="liabletype" jdbcType="TINYINT" />
+    <result column="personliable" property="personliable" jdbcType="VARCHAR" />
+    <result column="personliableid" property="personliableid" jdbcType="INTEGER" />
+    <result column="thirdpersonliable" property="thirdpersonliable" jdbcType="VARCHAR" />
+    <result column="medicalcost" property="medicalcost" jdbcType="DECIMAL" />
+    <result column="repaircost" property="repaircost" jdbcType="DECIMAL" />
+    <result column="othercost" property="othercost" jdbcType="DECIMAL" />
+    <result column="financecost" property="financecost" jdbcType="DECIMAL" />
+    <result column="totalcost" property="totalcost" jdbcType="DECIMAL" />
+    <result column="insuranceothercost" property="insuranceothercost" jdbcType="DECIMAL" />
+    <result column="thirdcarcost" property="thirdcarcost" jdbcType="DECIMAL" />
+    <result column="insuranceassesscost" property="insuranceassesscost" jdbcType="DECIMAL" />
+    <result column="repairinsuranceassesscost" property="repairinsuranceassesscost" jdbcType="DECIMAL" />
+    <result column="insurancetotalcost" property="insurancetotalcost" jdbcType="DECIMAL" />
+    <result column="submitinsurancetotalcost" property="submitinsurancetotalcost" jdbcType="DECIMAL" />
+    <result column="submitclaiminfodate" property="submitclaiminfodate" jdbcType="TIMESTAMP" />
+    <result column="claimtotal" property="claimtotal" jdbcType="DECIMAL" />
+    <result column="claimdate" property="claimdate" jdbcType="TIMESTAMP" />
+    <result column="thirdindemnity" property="thirdindemnity" jdbcType="DECIMAL" />
+    <result column="personalindemnity" property="personalindemnity" jdbcType="DECIMAL" />
+    <result column="returnfinancecost" property="returnfinancecost" jdbcType="DECIMAL" />
+    <result column="handlestate" property="handlestate" jdbcType="TINYINT" />
+    <result column="handledate" property="handledate" jdbcType="TIMESTAMP" />
+    <result column="reamrk" property="reamrk" jdbcType="VARCHAR" />
+    <result column="images" property="images" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, carid, carno, brandid, areaid, storeid, accidentnum, accidenttype, accidentdate, 
+    accidentaddr, caruser, liabletype, personliable, personliableid, thirdpersonliable, 
+    medicalcost, repaircost, othercost, financecost, totalcost, insuranceothercost, thirdcarcost, 
+    insuranceassesscost, repairinsuranceassesscost, insurancetotalcost, submitinsurancetotalcost, 
+    submitclaiminfodate, claimtotal, claimdate, thirdindemnity, personalindemnity, returnfinancecost, 
+    handlestate, handledate, reamrk, images, cuid, ctime, muid, mtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarAccident" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_accident
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarAccident" >
+    delete from t_car_accident
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.CarAccident" >
+    insert into t_car_accident (id, carid, carno, 
+      brandid, areaid, storeid, 
+      accidentnum, accidenttype, accidentdate, 
+      accidentaddr, caruser, liabletype, 
+      personliable, personliableid, thirdpersonliable, 
+      medicalcost, repaircost, othercost, 
+      financecost, totalcost, insuranceothercost, 
+      thirdcarcost, insuranceassesscost, repairinsuranceassesscost, 
+      insurancetotalcost, submitinsurancetotalcost, 
+      submitclaiminfodate, claimtotal, claimdate, 
+      thirdindemnity, personalindemnity, returnfinancecost, 
+      handlestate, handledate, reamrk, 
+      images, cuid, ctime, 
+      muid, mtime)
+    values (#{id,jdbcType=INTEGER}, #{carid,jdbcType=INTEGER}, #{carno,jdbcType=VARCHAR}, 
+      #{brandid,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{accidentnum,jdbcType=VARCHAR}, #{accidenttype,jdbcType=TINYINT}, #{accidentdate,jdbcType=TIMESTAMP}, 
+      #{accidentaddr,jdbcType=VARCHAR}, #{caruser,jdbcType=VARCHAR}, #{liabletype,jdbcType=TINYINT}, 
+      #{personliable,jdbcType=VARCHAR}, #{personliableid,jdbcType=INTEGER}, #{thirdpersonliable,jdbcType=VARCHAR}, 
+      #{medicalcost,jdbcType=DECIMAL}, #{repaircost,jdbcType=DECIMAL}, #{othercost,jdbcType=DECIMAL}, 
+      #{financecost,jdbcType=DECIMAL}, #{totalcost,jdbcType=DECIMAL}, #{insuranceothercost,jdbcType=DECIMAL}, 
+      #{thirdcarcost,jdbcType=DECIMAL}, #{insuranceassesscost,jdbcType=DECIMAL}, #{repairinsuranceassesscost,jdbcType=DECIMAL}, 
+      #{insurancetotalcost,jdbcType=DECIMAL}, #{submitinsurancetotalcost,jdbcType=DECIMAL}, 
+      #{submitclaiminfodate,jdbcType=TIMESTAMP}, #{claimtotal,jdbcType=DECIMAL}, #{claimdate,jdbcType=TIMESTAMP}, 
+      #{thirdindemnity,jdbcType=DECIMAL}, #{personalindemnity,jdbcType=DECIMAL}, #{returnfinancecost,jdbcType=DECIMAL}, 
+      #{handlestate,jdbcType=TINYINT}, #{handledate,jdbcType=TIMESTAMP}, #{reamrk,jdbcType=VARCHAR}, 
+      #{images,jdbcType=VARCHAR}, #{cuid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{muid,jdbcType=INTEGER}, #{mtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.car.model.CarAccident" >
+    insert into t_car_accident
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carid != null" >
+        carid,
+      </if>
+      <if test="carno != null" >
+        carno,
+      </if>
+      <if test="brandid != null" >
+        brandid,
+      </if>
+      <if test="areaid != null" >
+        areaid,
+      </if>
+      <if test="storeid != null" >
+        storeid,
+      </if>
+      <if test="accidentnum != null" >
+        accidentnum,
+      </if>
+      <if test="accidenttype != null" >
+        accidenttype,
+      </if>
+      <if test="accidentdate != null" >
+        accidentdate,
+      </if>
+      <if test="accidentaddr != null" >
+        accidentaddr,
+      </if>
+      <if test="caruser != null" >
+        caruser,
+      </if>
+      <if test="liabletype != null" >
+        liabletype,
+      </if>
+      <if test="personliable != null" >
+        personliable,
+      </if>
+      <if test="personliableid != null" >
+        personliableid,
+      </if>
+      <if test="thirdpersonliable != null" >
+        thirdpersonliable,
+      </if>
+      <if test="medicalcost != null" >
+        medicalcost,
+      </if>
+      <if test="repaircost != null" >
+        repaircost,
+      </if>
+      <if test="othercost != null" >
+        othercost,
+      </if>
+      <if test="financecost != null" >
+        financecost,
+      </if>
+      <if test="totalcost != null" >
+        totalcost,
+      </if>
+      <if test="insuranceothercost != null" >
+        insuranceothercost,
+      </if>
+      <if test="thirdcarcost != null" >
+        thirdcarcost,
+      </if>
+      <if test="insuranceassesscost != null" >
+        insuranceassesscost,
+      </if>
+      <if test="repairinsuranceassesscost != null" >
+        repairinsuranceassesscost,
+      </if>
+      <if test="insurancetotalcost != null" >
+        insurancetotalcost,
+      </if>
+      <if test="submitinsurancetotalcost != null" >
+        submitinsurancetotalcost,
+      </if>
+      <if test="submitclaiminfodate != null" >
+        submitclaiminfodate,
+      </if>
+      <if test="claimtotal != null" >
+        claimtotal,
+      </if>
+      <if test="claimdate != null" >
+        claimdate,
+      </if>
+      <if test="thirdindemnity != null" >
+        thirdindemnity,
+      </if>
+      <if test="personalindemnity != null" >
+        personalindemnity,
+      </if>
+      <if test="returnfinancecost != null" >
+        returnfinancecost,
+      </if>
+      <if test="handlestate != null" >
+        handlestate,
+      </if>
+      <if test="handledate != null" >
+        handledate,
+      </if>
+      <if test="reamrk != null" >
+        reamrk,
+      </if>
+      <if test="images != null" >
+        images,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null" >
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="brandid != null" >
+        #{brandid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="accidentnum != null" >
+        #{accidentnum,jdbcType=VARCHAR},
+      </if>
+      <if test="accidenttype != null" >
+        #{accidenttype,jdbcType=TINYINT},
+      </if>
+      <if test="accidentdate != null" >
+        #{accidentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accidentaddr != null" >
+        #{accidentaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="caruser != null" >
+        #{caruser,jdbcType=VARCHAR},
+      </if>
+      <if test="liabletype != null" >
+        #{liabletype,jdbcType=TINYINT},
+      </if>
+      <if test="personliable != null" >
+        #{personliable,jdbcType=VARCHAR},
+      </if>
+      <if test="personliableid != null" >
+        #{personliableid,jdbcType=INTEGER},
+      </if>
+      <if test="thirdpersonliable != null" >
+        #{thirdpersonliable,jdbcType=VARCHAR},
+      </if>
+      <if test="medicalcost != null" >
+        #{medicalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="repaircost != null" >
+        #{repaircost,jdbcType=DECIMAL},
+      </if>
+      <if test="othercost != null" >
+        #{othercost,jdbcType=DECIMAL},
+      </if>
+      <if test="financecost != null" >
+        #{financecost,jdbcType=DECIMAL},
+      </if>
+      <if test="totalcost != null" >
+        #{totalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="insuranceothercost != null" >
+        #{insuranceothercost,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdcarcost != null" >
+        #{thirdcarcost,jdbcType=DECIMAL},
+      </if>
+      <if test="insuranceassesscost != null" >
+        #{insuranceassesscost,jdbcType=DECIMAL},
+      </if>
+      <if test="repairinsuranceassesscost != null" >
+        #{repairinsuranceassesscost,jdbcType=DECIMAL},
+      </if>
+      <if test="insurancetotalcost != null" >
+        #{insurancetotalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="submitinsurancetotalcost != null" >
+        #{submitinsurancetotalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="submitclaiminfodate != null" >
+        #{submitclaiminfodate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="claimtotal != null" >
+        #{claimtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="claimdate != null" >
+        #{claimdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdindemnity != null" >
+        #{thirdindemnity,jdbcType=DECIMAL},
+      </if>
+      <if test="personalindemnity != null" >
+        #{personalindemnity,jdbcType=DECIMAL},
+      </if>
+      <if test="returnfinancecost != null" >
+        #{returnfinancecost,jdbcType=DECIMAL},
+      </if>
+      <if test="handlestate != null" >
+        #{handlestate,jdbcType=TINYINT},
+      </if>
+      <if test="handledate != null" >
+        #{handledate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reamrk != null" >
+        #{reamrk,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null" >
+        #{images,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.car.model.CarAccident" >
+    update t_car_accident
+    <set >
+      <if test="carid != null" >
+        carid = #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="carno != null" >
+        carno = #{carno,jdbcType=VARCHAR},
+      </if>
+      <if test="brandid != null" >
+        brandid = #{brandid,jdbcType=INTEGER},
+      </if>
+      <if test="areaid != null" >
+        areaid = #{areaid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeid = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="accidentnum != null" >
+        accidentnum = #{accidentnum,jdbcType=VARCHAR},
+      </if>
+      <if test="accidenttype != null" >
+        accidenttype = #{accidenttype,jdbcType=TINYINT},
+      </if>
+      <if test="accidentdate != null" >
+        accidentdate = #{accidentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accidentaddr != null" >
+        accidentaddr = #{accidentaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="caruser != null" >
+        caruser = #{caruser,jdbcType=VARCHAR},
+      </if>
+      <if test="liabletype != null" >
+        liabletype = #{liabletype,jdbcType=TINYINT},
+      </if>
+      <if test="personliable != null" >
+        personliable = #{personliable,jdbcType=VARCHAR},
+      </if>
+      <if test="personliableid != null" >
+        personliableid = #{personliableid,jdbcType=INTEGER},
+      </if>
+      <if test="thirdpersonliable != null" >
+        thirdpersonliable = #{thirdpersonliable,jdbcType=VARCHAR},
+      </if>
+      <if test="medicalcost != null" >
+        medicalcost = #{medicalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="repaircost != null" >
+        repaircost = #{repaircost,jdbcType=DECIMAL},
+      </if>
+      <if test="othercost != null" >
+        othercost = #{othercost,jdbcType=DECIMAL},
+      </if>
+      <if test="financecost != null" >
+        financecost = #{financecost,jdbcType=DECIMAL},
+      </if>
+      <if test="totalcost != null" >
+        totalcost = #{totalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="insuranceothercost != null" >
+        insuranceothercost = #{insuranceothercost,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdcarcost != null" >
+        thirdcarcost = #{thirdcarcost,jdbcType=DECIMAL},
+      </if>
+      <if test="insuranceassesscost != null" >
+        insuranceassesscost = #{insuranceassesscost,jdbcType=DECIMAL},
+      </if>
+      <if test="repairinsuranceassesscost != null" >
+        repairinsuranceassesscost = #{repairinsuranceassesscost,jdbcType=DECIMAL},
+      </if>
+      <if test="insurancetotalcost != null" >
+        insurancetotalcost = #{insurancetotalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="submitinsurancetotalcost != null" >
+        submitinsurancetotalcost = #{submitinsurancetotalcost,jdbcType=DECIMAL},
+      </if>
+      <if test="submitclaiminfodate != null" >
+        submitclaiminfodate = #{submitclaiminfodate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="claimtotal != null" >
+        claimtotal = #{claimtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="claimdate != null" >
+        claimdate = #{claimdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdindemnity != null" >
+        thirdindemnity = #{thirdindemnity,jdbcType=DECIMAL},
+      </if>
+      <if test="personalindemnity != null" >
+        personalindemnity = #{personalindemnity,jdbcType=DECIMAL},
+      </if>
+      <if test="returnfinancecost != null" >
+        returnfinancecost = #{returnfinancecost,jdbcType=DECIMAL},
+      </if>
+      <if test="handlestate != null" >
+        handlestate = #{handlestate,jdbcType=TINYINT},
+      </if>
+      <if test="handledate != null" >
+        handledate = #{handledate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reamrk != null" >
+        reamrk = #{reamrk,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null" >
+        images = #{images,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.car.model.CarAccident" >
+    update t_car_accident
+    set carid = #{carid,jdbcType=INTEGER},
+      carno = #{carno,jdbcType=VARCHAR},
+      brandid = #{brandid,jdbcType=INTEGER},
+      areaid = #{areaid,jdbcType=INTEGER},
+      storeid = #{storeid,jdbcType=INTEGER},
+      accidentnum = #{accidentnum,jdbcType=VARCHAR},
+      accidenttype = #{accidenttype,jdbcType=TINYINT},
+      accidentdate = #{accidentdate,jdbcType=TIMESTAMP},
+      accidentaddr = #{accidentaddr,jdbcType=VARCHAR},
+      caruser = #{caruser,jdbcType=VARCHAR},
+      liabletype = #{liabletype,jdbcType=TINYINT},
+      personliable = #{personliable,jdbcType=VARCHAR},
+      personliableid = #{personliableid,jdbcType=INTEGER},
+      thirdpersonliable = #{thirdpersonliable,jdbcType=VARCHAR},
+      medicalcost = #{medicalcost,jdbcType=DECIMAL},
+      repaircost = #{repaircost,jdbcType=DECIMAL},
+      othercost = #{othercost,jdbcType=DECIMAL},
+      financecost = #{financecost,jdbcType=DECIMAL},
+      totalcost = #{totalcost,jdbcType=DECIMAL},
+      insuranceothercost = #{insuranceothercost,jdbcType=DECIMAL},
+      thirdcarcost = #{thirdcarcost,jdbcType=DECIMAL},
+      insuranceassesscost = #{insuranceassesscost,jdbcType=DECIMAL},
+      repairinsuranceassesscost = #{repairinsuranceassesscost,jdbcType=DECIMAL},
+      insurancetotalcost = #{insurancetotalcost,jdbcType=DECIMAL},
+      submitinsurancetotalcost = #{submitinsurancetotalcost,jdbcType=DECIMAL},
+      submitclaiminfodate = #{submitclaiminfodate,jdbcType=TIMESTAMP},
+      claimtotal = #{claimtotal,jdbcType=DECIMAL},
+      claimdate = #{claimdate,jdbcType=TIMESTAMP},
+      thirdindemnity = #{thirdindemnity,jdbcType=DECIMAL},
+      personalindemnity = #{personalindemnity,jdbcType=DECIMAL},
+      returnfinancecost = #{returnfinancecost,jdbcType=DECIMAL},
+      handlestate = #{handlestate,jdbcType=TINYINT},
+      handledate = #{handledate,jdbcType=TIMESTAMP},
+      reamrk = #{reamrk,jdbcType=VARCHAR},
+      images = #{images,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      muid = #{muid,jdbcType=INTEGER},
+      mtime = #{mtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.CarAccident" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_car_accident
+    <where>
+    	<if test="carid != null">
+    		and carid = #{carid,jdbcType=INTEGER}
+    	</if>
+    	<if test="carno != null and carno != ''">
+    		and carno like concat('%',#{carno,jdbcType=VARCHAR},'%')
+    	</if>
+    	<if test="areaid != null">
+    		and areaid = #{areaid,jdbcType=INTEGER}
+    	</if>
+    	<if test="brandid != null">
+    		and brandid = #{brandid,jdbcType=INTEGER}
+    	</if>
+    	<if test="liabletype != null">
+    		and liabletype = #{liabletype,jdbcType=TINYINT}
+    	</if>
+    	<if test="accidentnum != null and accidentnum != ''">
+    		and accidentnum = #{accidentnum,jdbcType=VARCHAR}
+    	</if>
+    	<if test="accidentdatetop != null">
+    		and #{accidentdatetop,jdbcType=TIMESTAMP} > accidentdate
+    	</if>
+    	<if test="accidentdatelow != null">
+    		and accidentdate >= #{accidentdatelow,jdbcType=TIMESTAMP}
+    	</if>
+    </where>
+  </select>
+</mapper>

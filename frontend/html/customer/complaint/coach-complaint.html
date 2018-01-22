@@ -1,0 +1,200 @@
+<section id="thispage" privilege = "050305"></section>
+<div class="bjui-pageHeader">
+	<form id="search-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教练投诉</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-4">
+					<label class="row-label">片区：</label>
+					<div class="row-input">
+
+						<select name="areaid" id="area" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-refdata="storelist,{value},areaid" data-nextselect="#store" data-keys="{'label':'name','value':'id'}" data-optiontype="id,name">
+							<option value="">全部</option>
+						</select>
+					</div>
+					<label class="row-label">门店：</label>
+					<div class="row-input">
+
+						<select name="storeid" id="store" data-toggle="selectpicker" size="15" data-width="100%" >
+							<option value="">全部</option>
+						</select>
+					</div>
+					<label class="row-label">班别：</label>
+					<div class="row-input">
+						<select name="classid"  data-toggle="selectpicker" size="15" data-width="100%" data-datajson="classlist" data-optiontype="id,name">
+							<option value="">全部</option>
+						</select>
+					</div>
+					
+					<label class="row-label">手机号码：</label>
+					<div class="row-input">
+						<input type="text" name="studentphone" class="form-control" data-width="100%" placeholder="请输入手机号码查询">
+					</div>
+					<label class="row-label">教练名称：</label>
+					<div class="row-input">
+						<input type="text" name="coachname" class="form-control" data-width="100%" placeholder="请输入教练姓名查询">
+					</div>
+					<label class="row-label">学员姓名：</label>
+					<div class="row-input">
+						<input type="text" name="studentname" class="form-control" data-width="100%" placeholder="请输入学员姓名查询">
+					</div>
+					
+					<label class="row-label">时间：</label>
+					<div class="row-input">
+						<input type="text" name="begindate" readonly="readonly" data-toggle="datepicker" placeholder="起始时间">
+					</div>
+	
+					<label class="row-label">到：</label>
+					<div class="row-input">
+						<input type="text" name="enddate" readonly="readonly" data-toggle="datepicker" placeholder="结束时间">
+					</div>
+				</div>
+				<div class="text-center">
+<div class="btn-group">
+						<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+						<button type="reset" class="btn-blue" data-icon="times">重置</button>
+						<button type="button" class="btn-blue" data-privilege='050305_datagrid-list_06' data-icon="sign-out" onclick="coach_complaint_list.export()">导出</button>
+					</div>
+					</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	
+	var coach_complaint_list = {
+		curtab: clz.getNavtab_privilege(),
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
+			gridTitle: '教练投诉列表',
+			toolbarItem: 'add',
+			
+			paging: {
+				pageSize: 15,
+				selectPageSize: '15,50,100,500'
+			},
+			height: '85%',
+			showCheckboxcol: true,
+			showToolbar: true,
+			dataUrl: config.openBasePath + 'complaint/coach/list',
+			columns: [{
+					name: 'studentname',
+					label: '学员姓名',
+					align: 'center'
+					
+				},
+				{
+					name: 'studentphone',
+					label: '手机号码',
+					align: 'center'
+				}, {
+					name: 'classid',
+					label: '班别',
+					align: 'center',
+					render:function(value){
+						return clz.configRender({name:'classlist',val:value,key:'id'})
+					}
+				}, {
+					name: 'areaid',
+					label: '片区',
+					align: 'center',
+					render: formatAreaCell
+				},{
+					name: 'storeid',
+					label: '门店',
+					align: 'center',
+					render: formatStoreCell
+				}, {
+					name: 'coachname',
+					label: '被投诉教练',
+					align: 'center'
+				}, {
+					name: 'ctime',
+					label: '投诉时间',
+					align: 'center'
+				}, {
+					name: 'cuser',
+					label: '提交人',
+					align: 'center'
+				}, {
+				name: 'op',
+				label: '操作',
+				align: 'center',
+				render: function(value,data){
+					var html="<button class='btn btn-blue vhide' data-icon='search' data-privilege='' onclick='coach_complaint_list.view("+JSON.stringify(data)+")'>查看</button>"
+					return html
+				}
+				}
+				
+			],
+			keys: {
+				ctime: 'ctime',
+				mtime: 'mtime'
+			},
+			
+			add_url: "html/customer/complaint/coach-complaint-add.html",
+
+			editMode: {
+				navtab: {
+					id: 'coach-complaint-navtab',
+					title: '教练投诉',
+					onClose: function() {
+						window.coach_object = null;
+						coach_complaint_list.list.datagrid('refresh', true);
+						BJUI.navtab('switchTab', coach_complaint_list.curtab);
+					}
+				}
+			},
+			
+			delPK: 'id',
+			beforeEdit: function() {
+				window.coach_list_tab = clz.getNavtab_privilege();
+				//window.coach_object = coach_list.list.data('selectedDatas') == null ? null : coach_list.list.data('selectedDatas')[0];
+				return true;
+			},
+			afterSave: function() {
+				coach_complaint_list.list.datagrid('refresh', true);
+				
+			},
+			
+			exportOption: {
+				type: "file",
+				options: {
+					url: config.openBasePath + "complaint/coach/export",
+					data: $.CurrentNavtab.find("#search-form").serializeArray()
+				}
+			}
+		}),
+		
+
+		view: function(info) {
+			console.log(info)
+			BJUI.navtab({
+				id: 'coach-evaluation-view' + info.id,
+				
+				url: 'html/customer/complaint/coach-complaint-view.html',
+				title: '投诉详情',
+				more: JSON.stringify(info),
+				onClose: function() {
+					//coach_list.list.datagrid('refresh', true);
+					BJUI.navtab('switchTab', coach_complaint_list.curtab)
+				}
+
+			})
+		},
+		export:function(){
+			console.log($.CurrentNavtab.find('#search-form').serializeArray())
+			BJUI.ajax('ajaxdownload', {
+                    url: config.openBasePath + "complaint/coach/export",
+                    loadingmask: false,
+					data : $.CurrentNavtab.find('#search-form').serializeArray()
+                    
+                })
+		}
+	}
+
+	
+</script>

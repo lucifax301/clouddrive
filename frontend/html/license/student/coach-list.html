@@ -1,0 +1,81 @@
+<div class="bjui-pageHeader">
+	<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentDialog.find('#datagrid-list2')}">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-th"></i> </span>
+				<h5>教练搜索</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<span>姓名：</span>
+				<input type="text" name="name" class="form-control" size="15">
+				
+				<div class="btn-group">
+					<button type="submit" class="btn-green" data-icon="search">搜索</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<table id="datagrid-list2" class="table table-bordered"></table>
+<div class="bjui-pageFooter">
+	<ul>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="save()">确定</button></li>
+	</ul>
+</div>
+<script type="text/javascript">
+	var dialog = $.CurrentDialog.find('#datagrid-list2')
+	$.CurrentDialog.find('#datagrid-list2').datagrid({
+		toolbarItem: 'none',
+		paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+		height: '80%',
+		showToolbar: false,
+		dataUrl: config.openBasePath + 'coach/assignList?employstatus=0&studentid=' + clz.getWindowJson(),
+		columns: [
+			
+			{ name: 'name', label: '教练姓名', align: 'center' },
+			{ name: 'sex', label: '性别', align: 'center', render: function(value) { return value == 1 ? '男' : '女' } },
+			{ name: 'idcard', label: '证件号码', align: 'center' },
+			{ name: 'mobile', label: '手机号', align: 'center' },
+			{ name: 'areaid', label: '片区', align: 'center', render: formatAreaCell },
+			{ name: 'coachclasses', label: '所带班别', align: 'center' },
+			{ name: 'curstudentload', label: '负荷学员', align: 'center' }
+		],
+		keys: {
+			ctime: 'ctime',
+			mtime: 'mtime'
+		}
+
+	});
+
+	function employstatus_status(value) {
+		switch(value) {
+			case '0':
+				return "在职";
+			case '1':
+				return "离职";
+			default:
+				return "error";
+		}
+	}
+
+	function teachstate_status(value) {
+		switch(value) {
+			case 1:
+				return "正常分配";
+			case 2:
+				return "暂停分配";
+			default:
+				return "error";
+		}
+	}
+
+	function save() {
+		var data = dialog.data('selectedDatas');
+		if(!clz.check_table_checked($.CurrentDialog.find('#datagrid-list2'))) {
+			BJUI.alertmsg('error', '没有选中数据！', {})
+			return
+		}
+		clz.setWindowJson(data);
+		BJUI.dialog('closeCurrent')
+	}
+</script>

@@ -1,0 +1,200 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form"  id="formedit">
+		<input type="hidden" name="id">
+		<div class="bjui-row col-2">
+			<div class="y-comment">
+				<label class="row-label">班别名称：</label>
+				<div class="row-input required">
+					<input type="text" name="name" data-rule="required;length[1~12]" placeholder="请输入班别名称">
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">班别班型：</label>
+				<div class="row-input fill-2">
+					<div class="y-comment" >
+						<div class="fl mr20 mt1">
+							<input type="checkbox" name="c1flag" value="1"  data-toggle="icheck" data-label="C1车型" checked>
+						</div>
+						<b class="fl mt2">价格：</b>
+						<div class="fl">
+							<input type="text" name="c1amount" id="c1amount" maxlength="5" data-rule="required;plusdigits" class="w200" placeholder="请输入价格">
+						</div>
+						<i class="fl mt2">元</i>
+					</div>
+					<div class="y-comment mt10">
+						<div class="fl mr20 mt1">
+							<input type="checkbox" name="c2flag" value="1"  data-toggle="icheck" data-label="C2车型" checked >
+						</div>
+						<b class="fl mt2">价格：</b>
+						<div class="fl">
+						<input type="text" name="c2amount" id="c2amount" maxlength="5" data-rule="required;plusdigits" class="w200" placeholder="请输入价格">
+						</div>
+						<i class="fl mt2">元</i>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="y-comment">
+				<label class="row-label">学车形式：</label>
+				<div class="row-input required">
+					<select name="type" data-toggle="selectpicker" data-width="100%" data-rule="required">
+								<option value="0">服务全包</option>
+								<option value="1">计时收费</option>
+					</select>
+				</div>
+			</div>
+			<!--
+			<div class="y-comment">
+				<label class="row-label">价格组成：</label>
+				<div class="row-input fill-2 ">
+					<div class="bjui-row col-2 pt0">
+						<div class="row-input">
+							<input type="text" name="newtype" data-rule="length[0~12]" placeholder="新增费用类型名称">
+						</div>
+						<div class="row-input">
+							<a href="javascript:" class="btn-blue btn" onclick="class_type_add_class.typeadd()"><i class="fa fa-plus"></i>新增</a>
+						</div>
+						<div class="border-all" id="typeadd">
+							<label class="row-label">受理费</label>
+							<div class="row-input y-box-flex">
+								<input type="text" name="hahaha1"><span>元</span>
+							</div>
+							<label class="row-label">工本费</label>
+							<div class="row-input">
+								<input type="text" name="hahaha2"><span>元</span>
+							</div>
+							<label class="row-label">考试费</label>
+							<div class="row-input">
+								<input type="text" name="hahaha3"><span>元</span>
+							</div>
+							<label class="row-label">长训费</label>
+							<div class="row-input">
+								<input type="text" name="hahaha4"><span>元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			-->
+			<div class="y-comment">
+				<label class="row-label">高端班属性：</label>
+				<div class="row-input  fill-2">
+					<input type="radio" name="highflag" value="0" data-toggle="icheck" data-label="非高端班" checked>
+					<input type="radio" name="highflag" value="1" data-toggle="icheck" data-label="高端班" >
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">外地班属性：</label>
+				<div class="row-input  fill-2">
+					<input type="radio" name="localflag" value="0" data-toggle="icheck" data-label="非外地班" checked>
+					<input type="radio" name="localflag" value="1" data-toggle="icheck" data-label="外地班" >
+
+				</div>
+			</div>
+			<div class="y-comment">
+				<label class="row-label">备注：</label>
+				<div class="row-input required">
+					<input type="text" name="remark" data-rule="required;length[0~200]" placeholder="请输入备注">
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="status" value="0" />
+		</form>
+</div>
+<div class="bjui-pageFooter">
+	<ul>
+		<li><button type="button" class="btn-red" data-icon="close" onclick="class_type_add_class.leaveaddclass()">取消</button></li>
+		<li><button type="button" class="btn-blue" data-icon="save" onclick="class_type_add_class.savejobtype()">保存</button></li>
+	</ul>
+</div>
+<script type="text/javascript">
+	
+	var class_type_add_class = {
+		
+		typeaddNum:1,
+		typeadd(){
+			var dom = $.CurrentDialog.find('#typeadd'),
+				text = $.CurrentDialog.find('input[name="newtype"]').val(),
+				html;
+			if(text == ''){return}
+			$.CurrentDialog.find('input[name="newtype"]').val('');
+			html = '<label class="row-label">'+text+'</label><div class="row-input y-box-flex"><input type="text" name="moretype" data-name="'+text+'"><span>元</span></div>';
+			dom.append(html)
+			this.typeaddNum++;
+			dom.trigger(BJUI.eventType.initUI)//重新渲染BJUI
+		},
+		savejobtype(){
+			var checkboxnum = 0;
+			if($.CurrentDialog.find('input[name="c1flag"]').is(':checked')){checkboxnum++}
+			if($.CurrentDialog.find('input[name="c2flag"]').is(':checked')){checkboxnum++}
+			if(checkboxnum==0){
+				 BJUI.alertmsg('error', '至少选择一个车型！')
+				return
+			}
+			if(!$.CurrentDialog.find('#formedit').isValid()){return}
+			var data = clz.parseForm($.CurrentDialog.find('#formedit'))
+			//判断重复
+			var alldata = $.CurrentNavtab.find('#datagrid-list').data('allData'),
+				erro = 0;
+			if(alldata){
+				$.each(alldata,function(i,m){
+					if(data.name == m.name){
+						 BJUI.alertmsg('error', '班级名称已存在！')
+						 erro++
+						 return
+					}
+				})
+			}
+			if(erro>0){return}
+			//data.moretype = [];
+			//$.each($.CurrentDialog.find('input[name="moretype"]'),function(i){
+			//	data.moretype.push({
+			//		name:$(this).data('name'),
+			//		value:$(this).val()
+			//	})
+			//})
+			console.log(data)
+			clz.setWindowJson(data)
+			BJUI.dialog('closeCurrent')
+		},
+		enablec1(value){
+			console.log(value)
+		},
+		leaveaddclass(){
+			
+			if($.CurrentDialog.find("#formedit").find("input[name=name]").val()!=''){
+			BJUI.alertmsg('confirm', '离开本页面后，编辑的内容将不会保存，是否离开？', {
+				okCall: function() {
+					BJUI.dialog('closeCurrent')
+				}
+			})
+			}else{
+				BJUI.dialog('closeCurrent')
+			}
+		},
+	}
+//	$.CurrentDialog.find('input[name="c1flag"]').on('ifChanged', function(event){
+//		alert($(this).attr("checked"));
+//	});
+	
+	$.CurrentDialog.find('input[name="c1flag"]').on('ifUnchecked', function(event){
+  		$.CurrentDialog.find('#c1amount').attr("disabled",true);
+  		$.CurrentDialog.find('#c1amount').val("");
+  		$.CurrentDialog.find('#c1amount').parents('.y-comment').find('.n-invalid').removeClass('n-invalid')
+  		$.CurrentDialog.find('#c1amount').parents('.y-comment').find('.n-bottom').remove()
+  		 
+	});
+	$.CurrentDialog.find('input[name="c1flag"]').on('ifChecked', function(event){
+  		$.CurrentDialog.find('#c1amount').removeAttr("disabled")
+	});
+	$.CurrentDialog.find('input[name="c2flag"]').on('ifUnchecked', function(event){
+  		$.CurrentDialog.find('#c2amount').attr("disabled",true);
+  		$.CurrentDialog.find('#c2amount').val("");
+  		$.CurrentDialog.find('#c2amount').parents('.y-comment').find('.n-invalid').removeClass('n-invalid')
+  		$.CurrentDialog.find('#c2amount').parents('.y-comment').find('.n-bottom').remove()
+	});
+	$.CurrentDialog.find('input[name="c2flag"]').on('ifChecked', function(event){
+  		$.CurrentDialog.find('#c2amount').removeAttr("disabled")
+	});
+</script>

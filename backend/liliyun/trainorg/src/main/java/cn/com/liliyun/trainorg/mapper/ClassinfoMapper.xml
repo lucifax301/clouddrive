@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.ClassinfoMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Classinfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    
+    <result column="c1amount" property="c1amount" jdbcType="INTEGER" />
+    <result column="c2amount" property="c2amount" jdbcType="INTEGER" />
+    <result column="c1houramount" property="c1houramount" jdbcType="INTEGER" />
+    <result column="c2houramount" property="c2houramount" jdbcType="INTEGER" />
+    <result column="c1flag" property="c1flag" jdbcType="INTEGER" />
+    <result column="c2flag" property="c2flag" jdbcType="INTEGER" />
+    <result column="highflag" property="highflag" jdbcType="INTEGER" />
+    <result column="localflag" property="localflag" jdbcType="INTEGER" />
+    <result column="classtypeid" property="classtypeid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <!--  
+    <result column="singleamount" property="singleamount" jdbcType="INTEGER" />
+    <result column="personnum" property="personnum" jdbcType="INTEGER" />
+    <result column="gradnum" property="gradnum" jdbcType="INTEGER" />
+    <result column="passrate" property="passrate" jdbcType="VARCHAR" />
+    <result column="period" property="period" jdbcType="VARCHAR" />
+    -->
+    <result column="classdesc" property="classdesc" jdbcType="VARCHAR" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="muid" property="muid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, c1amount,c2amount,c2flag,c1flag,type, highflag,localflag, classtypeid,
+    classdesc, cuid, muid, ctime, mtime, status,c1houramount,c2houramount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_classinfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMap" resultType="cn.com.liliyun.common.dto.MapDTO">
+    select id , name from t_classinfo where status = 1
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_classinfo
+    <where>
+	    <if test="name != null and name != ''">
+		  and name LIKE concat(concat('%',#{name}),'%')
+		</if>
+	    <if test="status != null " >
+	      and status = #{status,jdbcType=TINYINT}
+	    </if>
+	    <if test="classtypeid != null " >
+	      and classtypeid = #{classtypeid}
+	    </if>
+	</where>
+    order by mtime desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    delete from t_classinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByClassType" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    delete from t_classinfo
+    where classtypeid = #{classtypeid,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    insert into t_classinfo (id, name, highflag, 
+      localflag, amount,  classdesc, cuid, 
+      muid, ctime, mtime, 
+      status)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{highflag,jdbcType=VARCHAR}, 
+      #{localflag,jdbcType=TINYINT}, #{amount,jdbcType=INTEGER}, #{classdesc,jdbcType=VARCHAR}, 
+      #{cuid,jdbcType=INTEGER}, 
+      #{muid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{mtime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT})
+  </insert>
+  
+  <insert id="batchinsert" parameterType="java.util.List" >
+  	
+    insert into t_classinfo (name,classtypeid, highflag, 
+      localflag, c1amount,c2amount, c1flag,c2flag,type,  classdesc, cuid, 
+      muid, ctime, mtime, 
+      status)
+    values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+    (#{item.name,jdbcType=VARCHAR},#{item.classtypeid}, #{item.highflag,jdbcType=VARCHAR}, 
+      #{item.localflag,jdbcType=TINYINT}, #{item.c1amount,jdbcType=INTEGER},#{item.c2amount,jdbcType=INTEGER}, 
+      #{item.c1flag,jdbcType=INTEGER},#{item.c2flag,jdbcType=INTEGER},#{item.type,jdbcType=INTEGER}, #{item.classdesc,jdbcType=VARCHAR}, 
+      #{item.cuid,jdbcType=INTEGER}, 
+      #{item.muid,jdbcType=INTEGER}, #{item.ctime,jdbcType=TIMESTAMP}, #{item.mtime,jdbcType=TIMESTAMP}, 
+      #{item.status,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+  
+  <delete id="batchdel" parameterType="java.util.List" >
+    delete from t_classinfo
+    where id in
+    <foreach collection="list" item = "item" open="(" separator="," close=")">
+    #{item.id}  
+    </foreach>  
+  </delete>
+  
+  <insert id="insertSelective" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    insert into t_classinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="classtypeid != null" >
+        classtypeid,
+      </if>
+      
+      <if test="c1amount != null" >
+        c1amount,
+      </if>
+      <if test="c2amount != null" >
+        c2amount,
+      </if>
+      <if test="c1houramount != null" >
+        c1houramount,
+      </if>
+      <if test="c2houramount != null" >
+        c2houramount,
+      </if>
+      <if test="c1flag != null" >
+        c1flag,
+      </if>
+      <if test="c2flag != null" >
+        c2flag,
+      </if>
+      <if test="classdesc != null" >
+        classdesc,
+      </if>
+      <if test="cuid != null" >
+        cuid,
+      </if>
+      <if test="muid != null" >
+        muid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="classtypeid != null" >
+        #{classtypeid,jdbcType=INTEGER},
+      </if>
+      
+      <if test="c1amount != null" >
+        #{c1amount,jdbcType=INTEGER},
+      </if>
+      <if test="c2amount != null" >
+        #{c2amount,jdbcType=INTEGER},
+      </if>
+      <if test="c1houramount != null" >
+        #{c1houramount,jdbcType=INTEGER},
+      </if>
+      <if test="c2houramount != null" >
+        #{c2houramount,jdbcType=INTEGER},
+      </if>
+      <if test="c1flag != null" >
+        #{c1flag,jdbcType=INTEGER},
+      </if>
+      <if test="c2flag != null" >
+        #{c2flag,jdbcType=INTEGER},
+      </if>
+      
+      <if test="classdesc != null" >
+        #{classdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="muid != null" >
+        #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    update t_classinfo
+    <set >
+    	c1flag = #{c1flag,jdbcType=INTEGER},
+      
+        c2flag = #{c2flag,jdbcType=INTEGER},
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      
+      
+      <if test="c1amount != null" >
+        c1amount = #{c1amount,jdbcType=INTEGER},
+      </if>
+      <if test="c2amount != null" >
+        c2amount = #{c2amount,jdbcType=INTEGER},
+      </if>
+      <if test="c1houramount != null" >
+        c1houramount = #{c1houramount,jdbcType=INTEGER},
+      </if>
+      <if test="c2houramount != null" >
+        c2houramount = #{c2houramount,jdbcType=INTEGER},
+      </if>
+      
+      <if test="classtypeid != null" >
+        classtypeid = #{classtypeid,jdbcType=INTEGER},
+      </if>
+        
+      
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="highflag != null" >
+        highflag = #{highflag,jdbcType=INTEGER},
+      </if>
+      <if test="localflag != null" >
+        localflag = #{localflag,jdbcType=INTEGER},
+      </if>
+      <if test="classdesc != null" >
+        classdesc = #{classdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="cuid != null" >
+        cuid = #{cuid,jdbcType=INTEGER},
+      </if>
+      <if test="muid != null" >
+        muid = #{muid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateStatus" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    update t_classinfo
+    <set >
+    	
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.Classinfo" >
+    update t_classinfo
+    set name = #{name,jdbcType=VARCHAR},
+      c1amount = #{c1amount,jdbcType=INTEGER},
+      c2amount = #{c2amount,jdbcType=INTEGER},
+      c1flag = #{c1flag,jdbcType=INTEGER},
+      c2flag = #{c2flag,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      highflag = #{highflag,jdbcType=INTEGER},
+      localflag = #{localflag,jdbcType=INTEGER},
+      classdesc = #{classdesc,jdbcType=VARCHAR},
+      cuid = #{cuid,jdbcType=INTEGER},
+      muid = #{muid,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

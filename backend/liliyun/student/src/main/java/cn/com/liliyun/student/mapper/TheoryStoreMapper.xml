@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.student.mapper.TheoryStoreMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.theory.model.TheoryStore" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="theoryId" property="theoryid" jdbcType="INTEGER" />
+    <result column="storeId" property="storeid" jdbcType="INTEGER" />
+    <result column="recomNum" property="recomnum" jdbcType="INTEGER" />
+    <result column="arrangeNum" property="arrangenum" jdbcType="INTEGER" />
+    <result column="extra" property="extra" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, theoryId, storeId, recomNum, arrangeNum, extra
+  </sql>
+  <sql id="TheoryStore_Column_List" >
+    t1.id, t1.theoryId, t1.storeId, t1.recomNum, t1.arrangeNum, t1.extra, t2.storenum, t2.areaid, t2.name, t2.tel, ifnull(t3.acceptedStu,0) acceptedStu
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.com.liliyun.theory.model.TheoryStoreExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_theory_store
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_theory_store
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_theory_store
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.com.liliyun.theory.model.TheoryStoreExample" >
+    delete from t_theory_store
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.com.liliyun.theory.model.TheoryStore" >
+    insert into t_theory_store (id, theoryId, storeId, 
+      recomNum, arrangeNum, extra
+      )
+    values (#{id,jdbcType=INTEGER}, #{theoryid,jdbcType=INTEGER}, #{storeid,jdbcType=INTEGER}, 
+      #{recomnum,jdbcType=INTEGER}, #{arrangenum,jdbcType=INTEGER}, #{extra,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.liliyun.theory.model.TheoryStore" >
+    insert into t_theory_store
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="theoryid != null" >
+        theoryId,
+      </if>
+      <if test="storeid != null" >
+        storeId,
+      </if>
+      <if test="recomnum != null" >
+        recomNum,
+      </if>
+      <if test="arrangenum != null" >
+        arrangeNum,
+      </if>
+      <if test="extra != null" >
+        extra,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="theoryid != null" >
+        #{theoryid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="recomnum != null" >
+        #{recomnum,jdbcType=INTEGER},
+      </if>
+      <if test="arrangenum != null" >
+        #{arrangenum,jdbcType=INTEGER},
+      </if>
+      <if test="extra != null" >
+        #{extra,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.com.liliyun.theory.model.TheoryStoreExample" resultType="java.lang.Integer" >
+    select count(*) from t_theory_store
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_theory_store
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.theoryid != null" >
+        theoryId = #{record.theoryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.storeid != null" >
+        storeId = #{record.storeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.recomnum != null" >
+        recomNum = #{record.recomnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.arrangenum != null" >
+        arrangeNum = #{record.arrangenum,jdbcType=INTEGER},
+      </if>
+      <if test="record.extra != null" >
+        extra = #{record.extra,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_theory_store
+    set id = #{record.id,jdbcType=INTEGER},
+      theoryId = #{record.theoryid,jdbcType=INTEGER},
+      storeId = #{record.storeid,jdbcType=INTEGER},
+      recomNum = #{record.recomnum,jdbcType=INTEGER},
+      arrangeNum = #{record.arrangenum,jdbcType=INTEGER},
+      extra = #{record.extra,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.liliyun.theory.model.TheoryStore" >
+    update t_theory_store
+    <set >
+      <if test="theoryid != null" >
+        theoryId = #{theoryid,jdbcType=INTEGER},
+      </if>
+      <if test="storeid != null" >
+        storeId = #{storeid,jdbcType=INTEGER},
+      </if>
+      <if test="recomnum != null" >
+        recomNum = #{recomnum,jdbcType=INTEGER},
+      </if>
+      <if test="arrangenum != null" >
+        arrangeNum = #{arrangenum,jdbcType=INTEGER},
+      </if>
+      <if test="extra != null" >
+        extra = #{extra,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.liliyun.theory.model.TheoryStore" >
+    update t_theory_store
+    set theoryId = #{theoryid,jdbcType=INTEGER},
+      storeId = #{storeid,jdbcType=INTEGER},
+      recomNum = #{recomnum,jdbcType=INTEGER},
+      arrangeNum = #{arrangenum,jdbcType=INTEGER},
+      extra = #{extra,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectTheoryStore" parameterType="cn.com.liliyun.theory.model.TheoryStore" resultType="cn.com.liliyun.theory.dto.TheoryStoreDto">
+  	select 
+  		<include refid="TheoryStore_Column_List" />
+  	from t_theory_store as t1 join t_store as t2 on t1.storeId = t2.id
+  	left join (select storeid, count(*) acceptedStu from t_student where applyexam = 1 group by storeid) as t3 on t1.storeId = t3.storeid
+  	where 1 = 1
+  		<if test="id != null">
+  			and t1.id = #{id}
+  		</if>
+  		<if test="theoryid != null">
+  			and t1.theoryId = #{theoryid}
+  		</if>
+  		<if test="storeid != null">
+  			and t1.storeId = #{storeid}
+  		</if>
+  </select>
+  
+  <select id="selectStoreByAreaId" resultType="cn.com.liliyun.theory.dto.TheoryStoreDto">
+  	select 
+  		t1.id, t1.storenum, t1.areaid, t1.name, t1.tel, t2.acceptedStu
+  	<!-- applyexam = 1 已受理状态，确定后修改为正确的值 -->
+  	from t_store as t1 left join (select storeid, count(*) acceptedStu from t_student where applyexam = 1 group by storeid) as t2 on t1.id = t2.storeid
+  	where t1.areaid = #{areaid}
+  </select>
+  
+  <update id="updateStoreArrangedNum" parameterType="cn.com.liliyun.theory.model.TheoryStore">
+  	update t_theory_store 
+  		set arrangeNum = (
+  			select ifnull(count(*),0) from t_theory_student where theoryId = #{theoryid} and storeId = #{storeid}
+  		)
+  	where theoryId = #{theoryid} and storeId = #{storeid}
+  </update>
+</mapper>

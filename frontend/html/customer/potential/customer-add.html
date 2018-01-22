@@ -1,0 +1,423 @@
+<div class="bjui-pageContent">
+	<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+		<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>跟踪人</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+					<label class="row-label">跟踪人：</label>
+					<div class="row-input required ">
+						<input type="hidden" name="followerid">
+						<input type="text" name="followername" data-rule="required;length[1~60]" data-toggle="findgrid" data-options="{
+					    dialogOptions: {
+					    	title:'选择跟踪人',
+					    	width: '800',
+					    	height: '500'
+					    },
+					    empty: '',
+					    gridOptions: {
+					    	showToolbar : false,
+					        local: 'remote',
+					        filterThead : true,
+		    				include: 'name, description:desc',
+					        dataUrl: config.openBasePath + '/staff/list',
+					        columns: [
+					            {name:'name',label:'姓名',align:'center'},
+					            {name:'mobile',label:'手机号码',align:'center'},
+					            {name:'idcard',label:'身份证号',align:'center'},
+					            {name:'job',label:'职务',align:'center',render:potential_customer_add.jobname,type:'select',items: potential_customer_add.job_type}
+					        ]
+					    },
+					    onSelect: function(data) {
+					    	$.CurrentNavtab.find('*[name=\'followerid\']').val(data.id);
+					    	$.CurrentNavtab.find('*[name=\'followername\']').val(data.name);
+					    	BJUI.dialog('closeCurrent');
+					    }
+					}">
+					</div>
+					<div>
+						<label class="row-label">来源渠道：</label>
+						<div class="row-input required">
+							<select name="saleschannel" data-toggle="selectpicker" data-width="100%" data-rule="required" data-dataurl="/httpaccess/saleschannel/list?pageNo=-1&parentid=-1" data-optiontype="id,channel">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>潜在客户信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+					<label class="row-label">客户姓名：</label>
+					<div class="row-input required">
+						<input type="text" name="name" data-rule="required">
+					</div>
+					<label class="row-label">性别：</label>
+					<div class="row-input required">
+						<select name="sex" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value>请选择</option>
+							<option value="1">男</option>
+							<option value="2">女</option>
+						</select>
+					</div>
+					<br>
+					<label class="row-label">联系电话：</label>
+					<div class="row-input required">
+						<input type="text" name="phone" data-rule="required;mobile">
+					</div>
+					<label class="row-label">身份证号：</label>
+					<div class="row-input">
+						<input type="text" name="idcard" data-rule="IDcard">
+					</div>
+					<br>
+					<label class="row-label">意向班别：</label>
+					<div class="row-input required">
+						<select name="targetclassid" data-toggle="selectpicker" data-width="100%" data-rule="required" data-datajson="classlist" data-optiontype="id,name">
+						</select>
+					</div>
+					<label class="row-label">意向区域：</label>
+					<div class="row-input">
+						<select name="targetarea" data-toggle="selectpicker" data-width="100%" data-nextselect="#targetstore" data-dataurl="/httpaccess/area/list" data-optiontype="id,name" data-refurl="/httpaccess/store/listInJson?areaid={value}">
+						</select>
+					</div>
+					<div class="row-input required">
+						<select name="targetstore" id="targetstore" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="">请选择</option>
+						</select>
+					</div>
+					<br>
+					<label class="row-label">信息来源：</label>
+					<div class="row-input required">
+						<select name="infosource" data-toggle="selectpicker" data-width="100%" data-rule="required">
+							<option value="">请选择</option>
+							<option value="1">上门咨询</option>
+							<option value="2">来电咨询</option>
+							<option value="3">呼叫中心</option>
+							<option value="4">市场活动</option>
+							<option value="5">官方网站</option>
+							<option value="6">在线咨询</option>
+							<option value="7">员工介绍</option>
+							<option value="0">其他</option>
+						</select>
+					</div>
+					<label class="row-label">接触印象：</label>
+					<div class="row-input">
+						<select name="impression" data-toggle="selectpicker" data-width="100%" data-rule="">
+							<option value>请选择</option>
+							<option value="1">容易接触</option>
+							<option value="2">一般</option>
+							<option value="3">很难接触</option>
+						</select>
+					</div>
+					<br>
+					<label class="row-label">优惠额度：</label>
+					<div class="row-input">
+						<input type="text" name="discount" data-rule="number">
+					</div>
+
+					<br>
+					<label class="row-label">关注信息：</label>
+					<div class="row-input fill-2" id='gzinfo'>
+
+					</div>
+					<br>
+					<label class="row-label">备注：</label>
+					<div class="row-input fill-2">
+						<input type="text" name="remark" data-rule="">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="widget-box ">
+			<div class="widget-title">
+				<span class="icon"> <i class="fa fa-tag"></i> </span>
+				<h5>介绍人信息</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<div class="bjui-row col-3">
+					<label class="row-label">介绍人类型：</label>
+					<div class="row-input fill-2">
+						<input type="radio" name="introducetype" value="1" data-toggle="icheck" data-label="内部员工">
+						<input type="radio" name="introducetype" value="2" data-toggle="icheck" data-label="学员">
+						<input type="radio" name="introducetype" value="3" data-toggle="icheck" data-label="其他">
+						<input type="radio" name="introducetype" value="4" data-toggle="icheck" data-label="无介绍人" checked>
+						<input type="hidden" name="introducerid">
+					</div>
+					<div class="introducetype_html"></div>
+				</div>	
+			</div>
+		</div>
+	</form>
+</div>
+<div class="bjui-pageFooter">
+	<div class="c-bottom-button">
+		<li><button type="submit" class="btn-blue" data-icon="save">保存</button></li>
+		<li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+	</div>
+</div>
+
+	<div class="introducetype_box" style="display: none;">
+		<label class="row-label">员工姓名：</label>
+		<div class="row-input required">
+			<input type="text" id="empname" data-rule="required" data-toggle="findgrid" data-options="{
+				    dialogOptions: {
+				    	title:'选择员工',
+				    	width: '800',
+				    	height: '500'
+				    },
+				    
+				    empty: '',
+				    gridOptions: {
+				    	showToolbar : false,
+				        local: 'remote',
+				        filterThead : true,
+	    				include: 'name, description:desc',
+				        dataUrl: config.openBasePath + '/staff/list',
+				        columns: [
+				            {name:'name',label:'姓名',align:'center'},
+				            {name:'mobile',label:'手机号码',align:'center'},
+				            {name:'idcard',label:'身份证号',align:'center'},
+				            {name:'job',label:'职务',align:'center',render:potential_customer_add.jobname,type:'select',items: potential_customer_add.job_type}
+				        ]
+				    },
+				    onSelect: function(data) {
+				    	console.log(data)
+				    	$.CurrentNavtab.find('*[name=\'introducerid\']').val(data.id);
+				    	$.CurrentNavtab.find('#empname').val(data.name);
+				    	$.CurrentNavtab.find('#empphone').val(data.mobile);
+				    	$.CurrentNavtab.find('#empidcard').val(data.idcard);
+				    	$.CurrentNavtab.find('#empframework').val(potential_customer_add.jobname(data.job));
+				    	BJUI.dialog('closeCurrent');
+				    }
+				}">
+		</div>
+		<br>
+		<label class="row-label">手机号码：</label>
+		<div class="row-input">
+			<input type="text" id="empphone" data-rule="" readonly>
+		</div>
+		<label class="row-label">身份证号：</label>
+		<div class="row-input">
+			<input type="text" id="empidcard" data-rule="" readonly>
+		</div>
+		<label class="row-label">职务：</label>
+		<div class="row-input">
+			<input type="text" id="empframework" data-rule="" readonly>
+		</div>
+	</div>
+	<div class="introducetype_box" style="display: none;">
+		<label class="row-label">学员姓名：</label>
+		<div class="row-input required ">
+			<input type="text" id="stuname" data-rule="required" data-toggle="findgrid" data-options="{
+				    dialogOptions: {
+				    	title:'选择学员',
+				    	width: '1000',
+				    	height: '600'
+				    },
+				    empty: '',
+				    gridOptions: {
+				    	showToolbar : false,
+				        local: 'remote',
+				        filterThead : true,
+	    				include: 'name, description:desc',
+				        dataUrl: config.openBasePath + '/student/listWithNoCheck',
+				        columns: [
+				        	{name:'storeid',label:'门店',align:'center',render:formatStoreCell,type:'select',items: potential_customer_add.store_menu_type},
+				            {name:'name',label:'姓名',align:'center'},
+				            {name:'classid',label:'报考班别',align:'center',render:formatClassCell, type:'select',items: potential_customer_add.class_menu_type},
+				            {name:'idcard',label:'身份证',align:'center'},
+				            {name:'flownum',label:'受理号',align:'center'}
+				        ]
+				    },
+				    onSelect: function(data) {
+				    	$.CurrentNavtab.find('*[name=\'introducerid\']').val(data.id);
+				    	$.CurrentNavtab.find('#stuname').val(data.name);
+				    	$.CurrentNavtab.find('#stuphone').val(data.phone);
+				    	$.CurrentNavtab.find('#stuidcard').val(data.idcard);
+				    	$.CurrentNavtab.find('#stusex').val(data.sex==1?'男':'女');
+				    	$.CurrentNavtab.find('#applypay').val(parseFloat(data.cashmoney) + parseFloat(data.posmoney));
+				    	$.CurrentNavtab.find('#classname').val(formatClassCell(data.classid));
+				    	$.CurrentNavtab.find('#applydate').val(clz.filter.time({ date: data.applydate, type: 'yyyy-MM-dd' }));
+				    	$.CurrentNavtab.find('#applyexam').val(studentStatus(data.applyexam, data.applystatus));
+				    	BJUI.dialog('closeCurrent');
+				    }
+				}">
+		</div>
+		<br>
+		<label class="row-label">手机号码：</label>
+		<div class="row-input">
+			<input type="text" id="stuphone" data-rule="" readonly>
+		</div>
+		<label class="row-label">身份证号：</label>
+		<div class="row-input">
+			<input type="text" id="stuidcard" data-rule="" readonly>
+		</div>
+		<label class="row-label">性别：</label>
+		<div class="row-input">
+			<input type="text" id="stusex" data-rule="" readonly>
+		</div>
+		<label class="row-label">学车费用：</label>
+		<div class="row-input">
+			<input type="text" id="applypay" data-rule="" readonly>
+		</div>
+		<label class="row-label">所报班别：</label>
+		<div class="row-input">
+			<input type="text" id="classname" data-rule="" readonly>
+		</div>
+		<label class="row-label">报名日期：</label>
+		<div class="row-input">
+			<input type="text" id="applydate" data-rule="" readonly>
+		</div>
+		<label class="row-label">学车状态：</label>
+		<div class="row-input">
+			<input type="text" id="applyexam" data-rule="" readonly>
+		</div>
+	</div>
+	<div class="introducetype_box" style="display: none;">
+		<label class="row-label">介绍人姓名：</label>
+		<div class="row-input required ">
+			<input type="text" name="introducername" id="introducername" data-rule="required">
+		</div>
+		<label class="row-label">性别：</label>
+		<div class="row-input">
+			<select name="introducersex" data-toggle="selectpicker" data-width="100%" data-rule="">
+				<option value>请选择</option>
+				<option value="1">男</option>
+				<option value="2">女</option>
+			</select>
+		</div>
+		<label class="row-label">手机号码：</label>
+		<div class="row-input ">
+			<input type="text" name="introducerphone" data-rule="mobile">
+		</div>
+		<label class="row-label">身份证号：</label>
+		<div class="row-input">
+			<input type="text" name="introduceridcard" data-rule="IDcard">
+		</div>
+	</div>
+				
+<script type="text/javascript">
+	var potential_customer_add = {
+		init: function() {
+			clz.CurrentDom_init({
+				current: 'Navtab',
+				url: config.openBasePath + 'customer/addPotentialCustomer',
+				form_name: 'add-form',
+				before() {
+					var gzinfo = [{
+							id: 1,
+							name: '价格',
+						},
+						{
+							id: 2,
+							name: '拿证进度',
+						},
+						{
+							id: 3,
+							name: '教学技术'
+						},
+						{
+							id: 4,
+							name: '服务质量'
+						},
+						{
+							id: 5,
+							name: '廉政'
+						},
+						{
+							id: 6,
+							name: '上课时间'
+						},
+						{
+							id: 7,
+							name: '考试难度'
+						},
+						{
+							id: 8,
+							name: '其他'
+						},
+					]
+					clz.output_checkbox({
+						data: gzinfo, //数据格式 id name
+						domid: 'gzinfo', // 输出容器id
+						name: 'focuson', //checkbox 的name属性
+						place: 'CurrentNavtab' //弹层里 CurrentDialog   标签页里 CurrentNavtab
+					})
+					$.CurrentNavtab.find('#gzinfo li:last').append('<input type="text" name="extra" class="w-60 ml5">')
+				}
+				
+			})
+			var jshtml = [
+				{
+					
+				}
+			];
+			
+			$.each($.CurrentNavtab.find('.introducetype_box'),function(i){
+				jshtml[i] = $(this).html()
+			})
+			jshtml[2] = '<label class="row-label">介绍人姓名：</label><div class="row-input required "><input type="text" name="introducername" id="introducername" data-rule="required"></div><label class="row-label">性别：</label><div class="row-input"><select name="introducersex" data-toggle="selectpicker" data-width="100%" data-rule=""><option value>请选择</option>	<option value="1">男</option><option value="2">女</option></select></div><label class="row-label">手机号码：</label><div class="row-input "><input type="text" name="introducerphone" data-rule="mobile"></div><label class="row-label">身份证号：</label><div class="row-input">	<input type="text" name="introduceridcard" data-rule="IDcard"></div>';
+			$.CurrentNavtab.find('input[name="introducetype"]').on("ifChanged", function() {
+				$.CurrentNavtab.find('.introducetype_html').html('');
+				$.CurrentNavtab.find('.introducetype_html').html(jshtml[$(this).val() - 1]);
+				$.CurrentNavtab.find('.introducetype_html select').selectpicker('refresh')
+				$.each($.CurrentNavtab.find('.introducetype_html input'),function(){
+					$(this).parent().trigger(BJUI.eventType.initUI)//
+				})
+				
+//				$.each($.CurrentNavtab.find('.introducetype_html select'),function(){
+//					$(this).selectpicker('refresh')
+//				})
+				
+				$.CurrentNavtab.find('*[name=\'introducerid\']').val('');
+			})
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'class/listInJson',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        potential_customer_add.class = json.result;
+			    }
+			})
+			BJUI.ajax('doajax', {
+			    url: config.openBasePath + 'store/listInJson?userType=1',
+			    loadingmask: true,
+			    okCallback: function(json, options) {
+			        potential_customer_add.store = json.result;
+			    }
+			})
+		},
+		class_menu_type: function(){
+			return potential_customer_add.class;
+		},
+		store_menu_type: function(){
+			return potential_customer_add.store;
+		},
+		job_type: function(){
+			return "[{ '1': '职能员工' }, { '2': '教练员' }, { '3': '片区主管' }, { '4': '考核员' }, { '5': '客服' }, { '6': '顶班客服' }]";
+		},
+		jobname: function(value){
+			if(value==1){
+				return '职能员工';
+			}else if(value==2){
+				return '教练员';
+			}else if(value==3){
+				return '片区主管';
+			}else if(value==4){
+				return '考核员';
+			}else if(value==5){
+				return '客服';
+			}else if(value==6){
+				return '顶班客服';
+			}
+		}
+	}
+	
+			
+	potential_customer_add.init();
+</script>

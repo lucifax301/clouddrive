@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.trainorg.mapper.MarketingMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.trainorg.model.Marketing" >
+  	 <result column="visitNumber" property="number" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    marketid,name,phone,address,traintype,source,remarks,trackePersonnel,progress,number,ctime,mtime
+  </sql>
+
+  <!--  列表查询 -->
+  <select id="getAllMarketing"  resultMap="BaseResultMap" >
+        select 
+        m.marketid,m.name,m.phone,m.address,m.traintype,m.source,m.remarks,m.trackePersonnel,m.progress,m.number,m.ctime,count(v.visitid) as visitNumber
+        from t_marketing m left join t_visit v on m.marketid = v.marketid
+        where 1=1
+		<trim suffixOverrides=",">
+			<if test="name != null and name != ''">
+				and m.name like "%"#{name}"%"
+			</if>
+			<if test="phone != null and phone != ''">
+				or m.phone like "%"#{phone}"%"
+			</if>
+		</trim>
+		group by m.marketid
+        order by m.ctime desc
+  </select>
+    <!-- 根据id查询 -->
+  <select id="getMarketingById" parameterType="cn.com.liliyun.trainorg.model.Marketing" resultType="cn.com.liliyun.trainorg.model.Marketing">
+        select <include refid="Base_Column_List" />
+        from t_marketing  where marketid = #{marketid}
+  </select>
+  <!-- 根据id删除 -->
+   <delete id="deleteMarketing" parameterType="cn.com.liliyun.trainorg.model.Marketing">    
+        delete from t_marketing where marketid=#{marketid}    
+   </delete> 
+   <!-- 修改 -->
+   <update id="updateMarketing" parameterType="cn.com.liliyun.trainorg.model.Marketing"> 
+    	update t_marketing
+    	 <trim prefix="set" suffixOverrides=",">
+			  <if test="name !=null and name != ''">name=#{name},</if>
+			  <if test="address !=null and address != ''">address=#{address},</if>
+			  <if test="traintype !=null and traintype != ''">traintype=#{traintype},</if>
+			  <if test="source !=null and source != ''">source=#{source},</if>
+			  <if test="remarks !=null and remarks != ''">remarks=#{remarks},</if>
+			  <if test="trackePersonnel !=null and trackePersonnel != ''">trackePersonnel=#{trackePersonnel},</if>
+			  <if test="progress !=null and progress != ''">progress=#{progress},</if>
+			  <if test="number !=null and number != ''">number=#{number},</if>
+ 		</trim>
+    	where marketid = #{marketid}
+    </update>  
+   <!-- 新增 -->
+    <insert id="saveMarketing" parameterType="cn.com.liliyun.trainorg.model.Marketing">  
+        insert into t_marketing
+        (name,phone,address,traintype,source,remarks,trackePersonnel,progress) 
+        values
+        (#{name},#{phone},#{address},#{traintype},#{source},#{remarks},#{trackePersonnel},#{progress})  
+    </insert> 
+    
+     <!-- 回访部分 -->
+     <resultMap id="BaseVisitResultMap" type="cn.com.liliyun.trainorg.model.Visit" >
+	 </resultMap>
+	  <sql id="Base_Column_VisitList" >
+	   visitid,marketid,content,visitPersonnel,operatorPersonnel,mtime
+	  </sql>
+     
+     <!--  列表查询 -->
+	  <select id="getAllVisit"  resultType="cn.com.liliyun.trainorg.model.Visit" >
+	        select 
+	        <include refid="Base_Column_VisitList" /> 
+	        from t_visit where marketid=#{marketid}
+	        order by mtime desc
+	  </select>
+     
+     
+     <!-- 新增回访 -->
+    <insert id="saveVisit" parameterType="cn.com.liliyun.trainorg.model.Visit">  
+        insert into t_visit
+        (marketid,content,visitPersonnel,operatorPersonnel) 
+        values
+        (#{marketid},#{content},#{visitPersonnel},#{operatorPersonnel})  
+    </insert> 
+      
+</mapper>

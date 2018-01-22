@@ -1,0 +1,40 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form 
+            class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
+			
+			<div class="bjui-row">
+                <label class="row-label">登记机关名称:</label>
+                <div class="row-input required">
+                    <input type="text" name="name" data-rule="required">
+                </div>
+                
+                
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="saveregoffice()">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+    function saveregoffice(){
+		if($.CurrentDialog.find('#add-form').isValid())
+		BJUI.alertmsg('confirm', '确认新增登记机关吗？', {
+				okCall: function() {
+					BJUI.ajax('doajax', {
+						url: config.openBasePath + 'regoffice/add',
+						loadingmask: true,
+						data: clz.parseForm($.CurrentDialog.find("#add-form")),
+						okCallback: function(json, options) {
+							BJUI.alertmsg('ok', '新增登记机关成功！', {})
+							BJUI.dialog('closeCurrent')
+						}
+					});
+				}
+			});
+		}
+</script>

@@ -1,0 +1,64 @@
+<div class="bjui-pageContent">
+    <div class="">
+       <form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+			<input type="hidden" name="id">
+			<div style="background-color:#eee; padding:1px;"></div>
+			<div class="bjui-row col-3">  
+           <label class="row-label">检测项目</label>
+            <div class="row-input required">
+                <input type="text" name="detectType" id="detectType" data-rule="required">
+            </div>          
+            <label class="row-label">检测日期</label>
+            <div class="row-input">
+                <input type="text" name="detectDate" id="detectDate" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+            </div>
+            <label class="row-label">下次检测日期</label>
+            <div class="row-input ">
+                <input type="text" name="nextDetect" id="nextDetect" data-toggle="datepicker" data-rule="pattern(yyyy-MM-dd)">
+            </div>  
+            <label class="row-label">检测年份</label>
+            <div class="row-input required">
+                <input type="text" name="detectYear" id="detectYear" data-toggle="datepicker" data-rule="required;pattern(yyyy)" data-pattern="yyyy">
+            </div>  
+            <label class="row-label">经办人</label>
+            <div class="row-input required">
+                <input type="text" name="cname" id="cname" data-rule="required">
+            </div>   
+       </div>
+       <div class="bjui-row col-4">             
+            <label class="row-label">备注</label>
+            <div class="row-input fill-2 ">
+                <input type="text" name="remark" id="remark"  data-rule="">
+            </div>
+       </div>
+     </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="submit" class="btn-default" data-icon="save">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	clz.CurrentDom_init({
+		current:'Dialog',
+		url : config.openBasePath + 'car/updateCarDetect',
+		form_name : 'edit-form',
+		table_name : 'detect-datagrid',
+		timetype:[
+      {
+        name:'detectDate',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'nextDetect',
+        type:'yyyy-MM-dd'
+      },
+      {
+        name:'detectYear',
+        type:'yyyy'
+      }
+    ]
+	})	
+</script>

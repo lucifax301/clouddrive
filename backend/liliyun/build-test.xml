@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="upload-all" name="liliyun" basedir="./">
+	<description>liliyun自动编译打包脚本</description>
+	<echo>Building liliyun...</echo>
+	<echo>basedir: ${basedir}</echo>
+
+	<!--发布变量设置-->
+    <property name="myhost" value="127.0.0.1" />
+    <property name="host" value="112.74.129.81" />
+    <property name="user" value="meilicat" />
+    <property name="password" value="Meilicat!@2016" />
+
+	<!--定义相关编译变量-->
+	<property name="is_debug" value="on" />
+	<property name="includeantruntime" value="false" />
+	<property name="java-version" value="1.7" />
+	<property name="app-version" value="0.1" />
+	<property name="webapp-version" value="0.1" />
+	<property name="exclude-svn" value="**/*.svn/*.*,servlet-api.jar" />
+	<property name="exclude-local" value="*.propertieslocal,terracotta-toolkit-1.6-runtime-5.5.0.jar" />
+
+	<!--输入变量定义-->
+	<property name="httpaccess" value="${basedir}/httpaccess" />
+	<property name="common" value="${basedir}/common" />
+	<property name="intapi" value="${basedir}/intapi" />
+	<property name="trainorg" value="${basedir}/trainorg" />
+	<property name="student" value="${basedir}/student" />
+	<property name="coach" value="${basedir}/coach" />
+	<property name="wuser" value="${basedir}/user" />
+	<property name="car" value="${basedir}/car" />
+	
+	<!-- 自动上传设置 -->
+	<property name="ftpserverdir" value="/liliyun" />
+	<property name="webserverdir" value="${host}:${ftpserverdir}" />
+
+	<!-- 编译项目 -->
+	<target name="compile-common">
+		<delete dir="${common}/bin" />
+		<mkdir dir="${common}/bin" />
+		<delete dir="${common}/lib" />
+		<mkdir dir="${common}/lib" />
+		<javac srcdir="${common}/src" destdir="${common}/bin" source="${java-version}" target="${java-version}" debug="${is_debug}" includeantruntime="${includeantruntime}">
+		</javac>
+		<jar basedir="${common}/bin" destfile="${common}/lib/common.jar" />
+	</target>
+
+	<target name="compile-intapi">
+		<delete dir="${intapi}/bin" />
+		<mkdir dir="${intapi}/bin" />
+		<delete dir="${intapi}/lib" />
+		<mkdir dir="${intapi}/lib" />
+		<javac srcdir="${intapi}/src" destdir="${intapi}/bin" source="${java-version}" target="${java-version}" debug="${is_debug}" includeantruntime="${includeantruntime}">
+		</javac>
+		<jar basedir="${intapi}/bin" destfile="${intapi}/lib/intapi.jar" />
+	</target>
+
+	<target name="upload-httpaccess">
+		<echo>==========================httpaccess upload==========================</echo>
+		<!-- 上传httpaccess到服务器-->
+		<scp file="${httpaccess}/target/httpaccess.war" todir="${user}:${password}@${webserverdir}/tomcat_httpaccess/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================httpaccess end upload==========================</echo>
+	</target>
+	
+	<target name="upload-trainorg">
+		<echo>==========================trainorg upload==========================</echo>
+		<!-- 上传trainorg到服务器-->
+		<scp file="${trainorg}/target/trainorg.war" todir="${user}:${password}@${webserverdir}/tomcat_trainorg/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================trainorg end upload==========================</echo>
+	</target>
+
+	<target name="upload-coach">
+		<echo>==========================coach upload==========================</echo>
+		<!-- 上传coach到服务器-->
+		<scp file="${coach}/target/coach.war" todir="${user}:${password}@${webserverdir}/tomcat_coach/webapps" trust="true" verbose="true">
+		</scp>
+		<echo>==========================coach end upload==========================</echo>
+	</target>
+
+	<target name="upload-student">
+			<echo>==========================student upload==========================</echo>
+			<!-- 上传student到服务器-->
+			<scp file="${student}/target/student.war" todir="${user}:${password}@${webserverdir}/tomcat_student/webapps" trust="true" verbose="true">
+			</scp>
+			<echo>==========================student end upload==========================</echo>
+	</target>
+	
+	<target name="upload-user">
+			<echo>==========================student upload==========================</echo>
+			<!-- 上传user到服务器-->
+			<scp file="${wuser}/target/user.war" todir="${user}:${password}@${webserverdir}/tomcat_user/webapps" trust="true" verbose="true">
+			</scp>
+			<echo>==========================student end upload==========================</echo>
+	</target>
+	
+	<target name="upload-car">
+			<echo>==========================car upload==========================</echo>
+			<!-- 上传user到服务器-->
+			<scp file="${wuser}/target/car.war" todir="${user}:${password}@${webserverdir}/tomcat_car/webapps" trust="true" verbose="true">
+			</scp>
+			<echo>==========================car end upload==========================</echo>
+	</target>
+	
+	<target name="upload-all" depends="upload-httpaccess,upload-trainorg,upload-coach,upload-student,upload-user,upload-car">
+	</target>
+</project>

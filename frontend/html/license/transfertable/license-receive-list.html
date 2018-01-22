@@ -1,0 +1,96 @@
+<div class="bjui-pageContent">
+    <table id="datagrid-list" class="table table-bordered"></table>
+</div>
+<script>
+    var data = clz.getWindowJson();
+    var ids = [];
+    for (var i = 0; i < data.length; i++) {
+        ids.push("'" + data[i].tableid + "'");
+    }
+    var license_transfer_receive_list = $.CurrentDialog.find('#datagrid-list').datagrid({
+        gridTitle : '牌证收表确认列表',
+        height: '95%',
+        paging : false,
+        toolbarItem: 'add,del,save',
+        showCheckboxcol: true,
+        showToolbar: true,
+        inlineEditMult : true,
+        saveAll : true,
+        editUrl : config.openBasePath + 'transfertable/licensereceive',
+        showLinenumber : false,
+        data : [],
+        columns: [
+            {name:'name',label:'姓名',width:'30%' ,align:'center'},
+            {name:'idcard',label:'证件号码',width:'50%',align:'center',attrs:{readonly:'readonly'}},
+            {name:'id',hide:true},
+            {name:'studentid',hide:true}
+        ],
+        beforeSave : function() {
+//            var flag = false;
+//            count = license_transfer_subgrid.data("allData").length;
+//            postcount = license_transfer_receive_list.data("allData").length;
+//            if (count != postcount) {
+//                BJUI.alertmsg('warn', '本批次!');
+//            }
+            return true;
+        },
+        afterSave : function() {
+            BJUI.dialog('closeCurrent');
+            BJUI.dialog('close', 'dialog-transfertable-receive');
+            license_transfertable_list.datagrid('refresh',true);
+        },
+    });
+
+    $(document).on("change","[name='name']",function(){
+        if ($.trim($(this).val()) == "") {
+            return;
+        }
+        var nameobj = $(this).parent().nextAll("td");
+        var idcard = nameobj.find("input[name='idcard']");
+        var itemid = nameobj.find("input[name='id']");
+        var studentid = nameobj.find("input[name='studentid']");
+        BJUI.ajax('doajax', {
+            url: config.openBasePath + 'transfertable/itemlist',
+            data : {
+                name : $(this).val(),
+                ids : ids.toString(),
+                status : 0,
+                type : 1
+            },
+            type : 'GET',
+            okCallback: function(json, options) {
+                var items = json.result.list;
+                if (items.length == 0) {
+                    idcard.val("未知学员");
+                } else {
+                    if (items.length > 1) {
+                        var data = {};
+                        data.students = items;
+                        data.idcardObj = idcard;
+                        data.itemidObj = itemid;
+                        data.studentidObj = studentid;
+                        clz.setWindowJson(data);
+                        BJUI.dialog({
+                            id:'dialog-multi-student',
+                            url:'html/license/transfertable/multi-student-list.html',
+                            title:'重名学员列表',
+                            width: 400,
+                            height: 300,
+                            mask: true,
+                            maxable : false,
+                            resizable: false
+                        });
+                    } else {
+                        idcard.val(items[0].idcard);
+                        idcard.change();
+                        itemid.val(items[0].id);
+                        itemid.change();
+                        studentid.val(items[0].studentid);
+                        studentid.change();
+                    }
+                }
+            }
+        });
+    })
+</script>
+    

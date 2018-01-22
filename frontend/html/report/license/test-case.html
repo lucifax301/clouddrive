@@ -1,0 +1,132 @@
+<form class="datagrid-edit-form" data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}" id="search-form">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i></span>
+			<h5>学员搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+				<label class="row-label">统计类型：</label>
+				<div class="row-input"> 
+					<select name="groupId" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="1">片区</option>
+						<option value="2">门店</option>
+						<option value="3">教练</option>
+						<option value="4">考试日期</option>
+						<option value="5">教学组长</option>
+					</select>
+				</div>
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+					<select name="areaId" data-toggle="selectpicker" data-width="100%" data-nextselect="#storeId" data-dataurl="/httpaccess/area/list" data-optiontype="id,name" data-refurl="/httpaccess/store/listInJson?areaid={value}">
+					</select>
+				</div>
+				<label class="row-label">门店：</label>
+				<div class="row-input">
+					<select name="storeId" id="storeId" data-toggle="selectpicker" data-width="100%">
+              			<option value="">请选择</option>
+            		</select>
+				</div>
+				<label class="row-label">车型：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" data-width="100%" >
+						<option value="">请选择</option>
+						<option value="1">C1</option>
+						<option value="2">C2</option>
+					</select>
+				</div>
+				<label class="row-label">班别：</label>
+				<div class="row-input">
+					<select name="classid" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/class/list" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">考试科目：</label>
+				<div class="row-input">
+					<select name="subject" data-toggle="selectpicker" data-width="100%">
+						<option value="">请选择</option>
+						<option value="1">科目一</option>
+						<option value="3">科目二</option>
+						<option value="5">科目三</option>
+						<option value="6">科目四</option>
+					</select>
+				</div>
+				<label class="row-label">教练员：</label>
+				<div class="row-input">
+					<input type="text" name="stime">
+				</div>
+				<label class="row-label">考试地点：</label>
+				<div class="row-input">
+					<select name="examplace" data-toggle="selectpicker" data-width="100%" data-datajson="examarealist" data-optiontype="id,name"></select>
+				</div>
+				<label class="row-label">指标类型：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" data-width="100%" >
+						<option value="">请选择</option>
+						<option value="">正常指标</option>
+						<option value="">加考指标</option>
+						<option value="">抢约指标</option>
+						<option value="">其他</option>
+						<option value="">奖励指标</option>
+					</select>
+				</div>
+				<label class="row-label">年度报表时间：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" data-width="100%" data-datajson="oldyear" data-optiontype="val,val">
+					</select>
+				</div>
+				<label class="row-label">考试日期：</label>
+				<div class="row-input y-comment fill-2">
+
+					<div class="w-45 fl">
+						<input type="text" name="stime" data-toggle="datepicker" placeholder="报名起始时间">
+					</div>
+					<div class="w-10 fl text-center">-</div>
+					<div class="w-45 fl">
+						<input type="text" name="etime" data-toggle="datepicker" placeholder="报名结束时间">
+					</div>
+				</div>
+			</div>	
+			<div class="text-center">
+				<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+				<button type="reset" class="btn-blue" data-icon="times">重置</button>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered"></table>
+<script type="text/javascript">
+	var report_license_testcase = {
+		init(){
+			$.CurrentNavtab.find('#datagrid-list').datagrid({
+				gridTitle: '学员汇总列表',
+				toolbarItem: '',
+				toolbarCustom: "<button class='btn-blue ml5' data-icon='edit' onclick='report_license_testcase.exportdata()'>导出</button>",
+				paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
+				height: '80%',
+				showCheckboxcol: true,
+				showToolbar: true,
+				dataUrl: config.openBasePath + 'report/getExamCase',
+				postData:{
+					groupId :1
+				},
+				columns: [{ name: 'examdate', label: '日期', align: 'center' },
+					{ name: 'areaName', label: '片区', align: 'center' },
+					{ name: 'storeName', label: '门店', align: 'center',},
+					{ name: 'coachName', label: '教练', align: 'center',},
+					{ name: 'subject', label: '考试科目', align: 'center' },
+					{ name: 'indexcat', label: '指标类型', align: 'center',render:formatall.indicators_type},
+					{ name: 'examplace', label: '考试地点', align: 'center' },
+					{ name: 'nnt', label: '人数', align: 'center',  },
+				]
+			});
+		},
+		exportdata: function() {
+			BJUI.ajax('ajaxdownload', {
+				url: config.openBasePath + "report/exportExamCase",
+				data: $.CurrentNavtab.find("#search-form").serializeArray()
+			});
+		}
+	}
+	report_license_testcase.init()
+</script>

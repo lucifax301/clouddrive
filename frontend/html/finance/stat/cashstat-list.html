@@ -1,0 +1,96 @@
+<section id="thispage" privilege = "060303"></section>
+<div class="widget-box">
+	<div class="widget-title">
+		<span class="icon"> <i class="fa fa-th"></i> </span>
+		<h5>现金存款统计搜索</h5>
+	</div>
+	<div class="widget-content nopadding">
+		<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}" id="search-form">
+			<div class="bjui-row col-4">
+				<label class="row-label">片区：</label>
+				<div class="row-input">
+					<select name="areaid" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="arealist_filter" data-optiontype="id,name">
+					</select>
+				</div>
+				<label class="row-label">存款银行：</label>
+				<div class="row-input">
+					<select name="bankname" data-toggle="selectpicker" size="15" data-width="100%" data-dataurl="/httpaccess/pos/cashAccountAll" data-optiontype="bankname,bankname">
+					</select>
+				</div>
+				<label class="row-label">状态：</label>
+				<div class="row-input">
+					<select name="isconfirm" data-toggle="selectpicker" size="15" data-width="100%">
+						<option value="">全部</option>
+						<option value="0">未结转</option>
+						<option value="1">已结转</option>
+					</select>
+				</div>
+				<br>
+				<label class="row-label">起始时间：</label>
+				<div class="row-input fill-2">
+					<div class="fl w-45">
+						<input type="text" name="depositdatelow" data-toggle="datepicker" data-rule="date">
+					</div>
+					<div class="fl w-10 text-center">-</div>
+					<div class="fl w-45">
+						<input type="text" name="depositdatetop" data-toggle="datepicker" data-rule="date">
+					</div>
+				</div>
+
+			</div>
+			<div class="text-center">
+				<div class="btn-group">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<table class="table table-bordered notablebg" data-tabprivilege="datagrid-list" id="datagrid-list"></table>
+<script>
+	var finace_stat_cashstatList = {
+		init() {
+			var table = $.CurrentNavtab.find('#datagrid-list').datagrid({
+				height: '75%',
+				tableWidth: '90%',
+				gridTitle: '现金存款统计',
+				showToolbar: false,
+				filterThead: false,
+				paging: false,
+				dataUrl: config.openBasePath + 'stat/getCashStat',
+				columns: [{
+						name: 'bank',
+						label: '银行',
+						align: 'center',
+					},
+					{
+						name: 'area',
+						label: '片区',
+						align: 'center',
+					},
+					{
+						name: 'store',
+						label: '门店',
+						align: 'center',
+					},
+					{
+						name: 'price',
+						label: '实存金额',
+						align: 'center',
+					},
+
+				],
+				initcallback() {
+					clz.fittable({
+						dom: $.CurrentNavtab.find('#datagrid-list'),
+						cols: [1,2],
+						keybg: '合计'
+					})
+				}
+			})
+			
+		}
+	}
+	finace_stat_cashstatList.init()
+</script>

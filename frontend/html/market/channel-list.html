@@ -1,0 +1,92 @@
+<section id="thispage" privilege = "070103"></section>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+	var channel_list = {
+		curtab: clz.getNavtab_privilege(),
+	list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '营销渠道列表',
+        toolbarItem: 'add,edit,del',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '85%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath+'/saleschannel/listall?parentid=0',
+        columns: [
+            {name:'channel',label:'一级渠道名称',align:'center'},
+            {name:'channel',label:'二级渠道名称',align:'center',render:function(value, data){
+            	var c2= data.data;
+            	var text="<table>";
+            	if(!c2){
+            		return "";
+            	}
+            	for(var i=0;i<c2.length;i++){
+            		text=text+"<tr><td>"+c2[i].channel+"</td></tr>"
+            	}
+            	text=text+"</table>"
+            	return text;
+            }},
+            {name:'createdate',label:'添加时间',align:'center'},
+            {name:'cuser',label:'添加人',align:'center'},
+            {name:'status',label:'状态',align:'center',render:function(value){return String(value)=='0'?'正常':'停用'}},
+            {name:'op',label:'操作',align:'center',render:classtypeOperation},
+        ],
+        editMode: {navtab:{width:'460',height:'300',title:'编辑营销渠道',mask:true,onClose:function(){
+        	console.log(channel_list.curtab)
+        	//BJUI.navtab('refresh',channel_list.curtab)
+        	BJUI.navtab('switchTab', channel_list.curtab);
+        	clz.getdictionary({name:'channellist',refresh:true})
+        	BJUI.navtab('refresh',channel_list.curtab)
+        	
+        }}},
+        delConfirm:'确认删除选择的渠道吗?',
+        beforeEdit : function(){
+            window.channel_object = channel_list.list.data('selectedDatas')  == null ? null : channel_list.list.data('selectedDatas')[0];
+            return true;
+		},
+        add_url :  'html/market/channel-add.html',
+        edit_url: 'html/market/channel-edit.html',
+        delUrl : config.openBasePath + '/saleschannel/delete',
+		delPK : 'id',
+		afterSave:function(){
+			//grid.datagrid('refresh',true);
+			//clz.getdictionary({name:'classlist',refresh:true})
+			BJUI.navtab('refresh')
+		},
+		afterDelete:function(){
+			//grid.datagrid('refresh',true);
+			BJUI.navtab('refresh')
+		},
+		delPK : 'id',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+
+    }),
+
+    
+
+    handleUser:function (id,status) {
+        var title = status == 1 ? "启用" : "停用";
+		var newstatus=status == 1 ? 0 : 1;
+        BJUI.alertmsg('confirm', '确认' + title +'操作该记录！', {
+            okCall: function() {
+                BJUI.ajax('doajax', {
+                    url: config.openBasePath + "/saleschannel/updateChannelStatus?id=" + id+'&status='+newstatus,
+                    loadingmask: true,
+                    okCallback: function(json, options) {
+                        BJUI.navtab('refresh')
+                    }
+                })
+            }
+        })
+    }
+	}
+
+	function classtypeOperation(value,data) {
+        var html;
+        if (data.status == 0) {
+            html = '<button type="button" data-privilege="070103_datagrid-list_09" class="btn-red vhide" onclick="channel_list.handleUser('+data.id+','+data.status+')">停用</button>'
+        } else {
+            html = '<button type="button" data-privilege="070103_datagrid-list_09" class="btn-green vhide" onclick="channel_list.handleUser('+data.id+','+data.status+')">启用</button>'
+        }
+        return html
+    }
+</script>

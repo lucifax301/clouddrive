@@ -1,0 +1,28 @@
+<div class="row-input">
+    <input type="file" data-name="file" data-toggle="webuploader" data-options="
+        {
+            pick: {label: '点击选择文件',multiple:false},
+            server: config.openBasePath + 'uploadfile',
+            fileNumLimit: 1,
+            formData: {dir:'custompic'},
+            required: true,
+            uploaded: '',
+            basePath: '',
+            fileNumLimit :1,
+            disableGlobalDnd  :false,
+            accept: {
+                title: '文件',
+                extensions: 'xls,xlsx,doc,docx',
+                mimeTypes: '.xls,.xlsx,doc,docx'
+            },
+            uploadSuccess: function(data){
+				console.log(data)
+				if(data.result&&data.result.filename){
+					$.CurrentNavtab.find('#attach').val(data.result.ofilename);
+					$.CurrentNavtab.find('#attachid').val(data.result.filename);
+					$.CurrentNavtab.find('#filediv').html(data.result.ofilename);
+					BJUI.dialog('closeCurrent');
+				}
+			}
+    }">
+</div>

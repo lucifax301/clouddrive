@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+    <dubbo:reference id="registerService" interface="cn.com.liliyun.user.service.RegisterService" check="false" />
+	<dubbo:reference id="userService" interface="cn.com.liliyun.user.service.UserService" check="false" />
+	<dubbo:reference id="privilegeService" interface="cn.com.liliyun.user.service.PrivilegeService" check="false" />
+	<dubbo:reference id="systemService" interface="cn.com.liliyun.user.service.SystemService" check="false" />
+	<dubbo:reference id="deptService" interface="cn.com.liliyun.user.service.DeptService" check="false" />
+	
+	<dubbo:reference id="appUserService" interface="cn.com.liliyun.user.service.AppUserService" check="false" />
+</beans>

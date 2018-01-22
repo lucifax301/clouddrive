@@ -1,0 +1,81 @@
+<div class="bjui-pageContent">
+    <div class="">
+        <form class="datagrid-edit-form" data-toggle="validate" method="POST" id="edit-form">
+			<input type="hidden" name="id" id="id">
+			<div class="bjui-row">
+				<label class="row-label">类型:</label>
+                <div class="row-input required">
+					<select name="type" id="type" data-toggle="selectpicker" disabled="disabled" data-width="100%" data-rule="required" onchange="onchangeType(this);" >
+						<option value="2">品牌</option>
+						<option value="1">厂家</option>
+					</select>
+                </div> 
+                <label class="row-label pid">所属厂家:</label>
+                <div class="row-input pid required">
+					<select name="pid" id="pid" data-rule="required" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/car/getAllManufacturerBrand" data-optiontype="id,name" >
+					</select>
+                </div> 
+                <label class="row-label">名称:</label>
+                <div class="row-input required">		
+                    <input type="text" name="name" data-rule="required">
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
+        <li><button type="button" class="btn-default" data-icon="save" onclick="updateManufacturerbrand()">保存</button></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	var _html=$.CurrentDialog.find('.row-input.pid').html();
+	clz.CurrentDom_init({
+		current:'Dialog',	
+		form_name : 'edit-form',
+		table_name: 'datagrid-list',
+		callback:function(data){
+			console.log(data)
+			var type=data.type;
+			if(type==1){
+				$.CurrentDialog.find('.row-label.pid').hide();
+				$.CurrentDialog.find('.row-input.pid.required').hide();
+				$.CurrentDialog.find('.row-input.pid.required').empty();
+   			 }	
+		}
+	})
+
+	function updateManufacturerbrand(){
+		$.CurrentDialog.find('#type').attr("disabled",false);
+		if($.CurrentDialog.find('#edit-form').isValid())
+		BJUI.alertmsg('confirm', '确认修改吗？', {
+	            okCall: function() {
+	                BJUI.ajax('doajax', {
+	                    url: config.openBasePath + 'car/updateManufacturerBrand',
+	                    loadingmask: true,
+						data: clz.parseForm($.CurrentDialog.find("#edit-form")),
+	                    okCallback: function(json, options) {
+							BJUI.alertmsg('ok', '修改成功！', {})
+							BJUI.dialog('closeCurrent')
+						}
+	                });
+	            }
+	     });
+	}
+
+    function onchangeType(e){
+    	var type=$(e).val();
+    	if(type==2){
+			$.CurrentDialog.find('.row-label.pid').show();
+			$.CurrentDialog.find('.row-input.pid.required').show();
+			$.CurrentDialog.find('.row-input.pid.required').html(_html);
+			$.CurrentDialog.find('.row-input.pid.required').trigger(BJUI.eventType.initUI)	
+    	}else if(type==1){
+			$.CurrentDialog.find('.row-label.pid').hide();
+			$.CurrentDialog.find('.row-input.pid.required').hide();
+			$.CurrentDialog.find('.row-input.pid.required').empty();
+    	}
+   
+    }
+</script>
