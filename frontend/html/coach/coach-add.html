@@ -1,9 +1,7 @@
 <div class="bjui-pageContent">
 	<div class="">
 		<form class="datagrid-edit-form" data-toggle="validate" method="POST" id="add-form">
-			<div class="row-input">
-				<button type="button" class="btn-blue btn" onclick="coach_add.showstaff()" data-icon="search">选择员工</button>
-			</div>
+			
 			<div class="widget-box">
 				<div class="widget-title">
 					<span class="icon"> <i class="fa fa-th"></i> </span>
@@ -14,15 +12,15 @@
 						<div class="bjui-row col-2" style="width:66.6666%;float:left">
 							<label class="row-label">姓名</label>
 							<div class="row-input required">
-								<input type="text" name="name" id="name" data-rule="required;length[1~60]" placeholder="请输入教练姓名" readonly="readonly">
+								<input type="text" name="name" id="name" data-rule="required;length[1~60]" placeholder="请输入教练姓名" >
 							</div>
 							<label class="row-label">手机号码</label>
 							<div class="row-input required">
-								<input type="text" name="mobile" id="mobile" data-rule="required,mobile" placeholder="请输入手机号码" readonly="readonly">
+								<input type="text" name="mobile" id="mobile" data-rule="required,mobile" placeholder="请输入手机号码" >
 							</div>
 							<label class="row-label">性别</label>
 							<div class="row-input required">
-								<select name="sex"  data-toggle="selectpicker" id="sex" data-width="100%" data-rule="required"  disabled="true"  >
+								<select name="sex"  data-toggle="selectpicker" id="sex" data-width="100%" data-rule="required"   >
 									<option value="">请选择</option>
 									<option value="1">男</option>
 									<option value="2">女</option>
@@ -30,11 +28,11 @@
 							</div>
 							<label class="row-label">身份证号</label>
 							<div class="row-input required">
-								<input type="text" name="idcard" id="idcard" data-rule="required" placeholder="请输入身份证号" readonly="readonly">
+								<input type="text" name="idcard" id="idcard" data-rule="required" placeholder="请输入身份证号" >
 							</div>
 							<label class="row-label">准教车型</label>
 							<div class="row-input required">
-								<select name="teachpermitted" id="teachpermitted" data-toggle="selectpicker" data-width="100%" data-rule="required"   disabled="true">
+								<select name="teachpermitted" id="teachpermitted" data-toggle="selectpicker" data-width="100%" data-rule="required"   >
 									<option value="">请选择</option>
 									<option value="C1">C1</option>
 									<option value="C2">C2</option>
@@ -136,20 +134,7 @@
 								<option value="0">请选择</option>
 							</select>
 						</div>
-						<label class="row-label">设置为组长</label>
-						<div class="row-input">
-							<select name="headcoachflag" id="headcoachflag" data-toggle="selectpicker" data-width="100%" onchange="coach_add.changehead(this)">
-								<option value="0">否</option>
-								<option value="1">是</option>
-							</select>
-						</div>
-						<label class="row-label">是否备案</label>
-						<div class="row-input">
-							<select name="recordflag" data-toggle="selectpicker" data-width="100%" disabled="true" >
-								<option value="0">否</option>
-								<option value="1">是</option>
-							</select>
-						</div>
+						
 						
 					</div>
 				</div>
@@ -165,11 +150,11 @@
 						<div class="bjui-row col-2" style="width:66.6666%;float:left">
 							<label class="row-label">驾驶证号</label>
 							<div class="row-input required">
-								<input type="text" name="drilicence" id="drilicence" data-rule="required" placeholder="请输入驾驶证号" readonly="readonly">
+								<input type="text" name="drilicence" id="drilicence" data-rule="required" placeholder="请输入驾驶证号" >
 							</div>
 							<label class="row-label">准驾车型</label>
 							<div class="row-input required">
-								<select name="dripermitted" id="dripermitted" data-toggle="selectpicker" data-width="100%" data-rule="required" disabled="disabled">
+								<select name="dripermitted" id="dripermitted" data-toggle="selectpicker" data-width="100%" data-rule="required" >
 									<option value="">请选择</option>
 									<option value="C1">C1</option>
 									<option value="C2">C2</option>
@@ -191,19 +176,19 @@
 							</div>
 							<label class="row-label">初领日期</label>
 							<div class="row-input required">
-								<input type="text" name="fstdrilicdate" id="fstdrilicdate" readonly="readonly" data-toggle="datepicker" data-rule="required" placeholder="点击选择日期" readonly="readonly">
+								<input type="text" name="fstdrilicdate" id="fstdrilicdate" readonly="readonly" data-toggle="datepicker" data-rule="required" placeholder="点击选择日期" >
 							</div>
 							<label class="row-label">有效期至</label>
 							<div class="row-input">
-								<input type="text" name="expireDate" id="expireDate" readonly="readonly" data-toggle="datepicker" placeholder="点击选择日期">
+								<input type="text" name="expireDate" id="expireDate"  data-toggle="datepicker" placeholder="点击选择日期">
 							</div>
 							<label class="row-label">职业资格证号</label>
 							<div class="row-input">
-								<input type="text" name="procertificate"  id="procertificate" maxlength="20" placeholder="请输入职业资格证号" readonly="readonly">
+								<input type="text" name="procertificate"  id="procertificate" maxlength="20" placeholder="请输入职业资格证号" >
 							</div>
 							<label class="row-label">职业资格等级</label>
 							<div class="row-input">
-								<select name="prolevel" id="prolevel" data-toggle="selectpicker" data-width="100%" disabled="disabled" >
+								<select name="prolevel" id="prolevel" data-toggle="selectpicker" data-width="100%"  >
 									<option value="">请选择</option>
 									<option value="1">一级</option>
 									<option value="2">二级</option>
@@ -258,6 +243,9 @@
 				<div class="widget-content nopadding">
 
 					<div class="bjui-row col-3">
+						<!--
+                        	：
+                        
 						<label class="row-label">教学组长</label>
 						<div class="row-input">
 							<select name="headcoachid" id="headcoachid" data-toggle="selectpicker" data-width="100%" >
@@ -265,6 +253,7 @@
 
 							</select>
 						</div>
+						-->
 						<label class="row-label">带教类型</label>
 						<div class="row-input">
 							<select name="teachtypeid" data-toggle="selectpicker" data-width="100%" data-datajson="teachtypelist" data-optiontype="id,type">
