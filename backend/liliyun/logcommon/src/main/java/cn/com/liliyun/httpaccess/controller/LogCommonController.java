@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.log.manager.impl.LogCommonManagerImpl;
 import cn.com.liliyun.log.model.LogCommon;
+import cn.com.liliyun.user.model.User;
 
 import com.github.pagehelper.PageInfo;
 
@@ -42,11 +45,14 @@ public class LogCommonController{
 	@RequestMapping(value = "/batch", method = RequestMethod.GET)
 	@ResponseBody
 	public ResultBean batch(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(ConstantUtil.USER_SESSION);
 		try {
 			String id=request.getParameter("id");
 			LogCommon lc=new LogCommon();
 			lc.setRelateid(id);
 			lc.setRelatetable("coach");
+			lc.setDblink(user.getDblink());
 			List<LogCommon> logs= LogCommonService.findLogList(lc);
 			PageInfo<LogCommon> pagedResult=new PageInfo(logs);
 			ResultBean resultBean = new ResultBean();
