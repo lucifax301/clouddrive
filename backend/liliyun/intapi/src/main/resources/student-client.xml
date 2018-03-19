@@ -13,5 +13,6 @@
     <dubbo:reference id="transfertableService" interface="cn.com.liliyun.student.service.TransfertableService" check="false" />
     <dubbo:reference id="fileService" interface="cn.com.liliyun.student.service.FileService" check="false" />
     <dubbo:reference id="materialService" interface="cn.com.liliyun.student.service.MaterialService" check="false" />
-	
+    <dubbo:reference id="studentStatusService" interface="cn.com.liliyun.student.service.StudentStatusService" check="false" />
+
 </beans>

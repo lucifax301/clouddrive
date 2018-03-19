@@ -27,5 +27,6 @@
     <dubbo:service id="transfertableService" interface="cn.com.liliyun.student.service.TransfertableService" ref="transfertableServiceImpl" />
 	<dubbo:service id="fileService" interface="cn.com.liliyun.student.service.FileService" ref="fileServiceImpl" />
 	<dubbo:service id="materialService" interface="cn.com.liliyun.student.service.MaterialService" ref="materialServiceImpl" />
+	<dubbo:service id="studentStatusService" interface="cn.com.liliyun.student.service.StudentStatusService" ref="studentStatusServiceImpl" />
 
 </beans>
