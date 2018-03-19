@@ -1,0 +1,55 @@
+<section id="thispage" privilege = "070302"></section>
+<form data-toggle="ajaxsearch" data-options="{searchDatagrid:$.CurrentNavtab.find('#datagrid-list')}">
+	<div class="widget-box">
+		<div class="widget-title">
+			<span class="icon"> <i class="fa fa-th"></i> </span>
+			<h5>学员状态搜索</h5>
+		</div>
+		<div class="widget-content nopadding">
+			<div class="bjui-row col-4">
+
+				<label class="row-label">状态名称：</label>
+				<div class="row-input">
+					<input type="text" name="name">
+				</div>
+				<label class="row-label"></label>
+				<div class="row-input fill-2">
+					<button type="submit" class="btn-blue" data-icon="search">搜索</button>
+					<button type="reset" class="btn-blue" data-icon="times">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
+<script type="text/javascript">
+    var studentstatus_list =
+        $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+        gridTitle : '学员状态管理列表',
+        toolbarItem: 'add,|,edit,|,del',
+        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+        height: '80%',
+        showCheckboxcol: true,
+        showToolbar: true,
+        dataUrl: config.openBasePath + 'studentstatus/list',
+        columns: [
+            {name:'namename',label:'学员状态名称',align:'center'},
+            {name:'address',label:'状态节点顺序',align:'center'},
+            {name:'ctime',label:'创建时间',align:'center'},
+            {name:'mtime',label:'修改时间',align:'center'}
+        ],
+        editMode: {dialog:{width:'640',height:'400',title:'考场信息',mask:true,onClose(){
+            studentstatus_list.datagrid('refresh',true);
+        }}},
+        add_url : "html/system/studentstatus/studentstatus-add.html",
+        edit_url : "html/system/studentstatus/studentstatus-edit.html",
+        delUrl : config.openBasePath + 'studentstatus/delete',
+		delPK : 'id',
+		afterSave:function(){
+            studentstatus_list.datagrid('refresh',true);
+		},
+		afterDelete:function(){
+            studentstatus_list.datagrid('refresh',true);
+		}
+    });
+</script>
