@@ -25,22 +25,6 @@ public class StudentStatus extends BaseModel implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public String getStatusName() {
-		return statusName;
-	}
-
-	public void setStatusName(String statusName) {
-		this.statusName = statusName;
-	}
-
 	public String getName() {
 		return name;
 	}

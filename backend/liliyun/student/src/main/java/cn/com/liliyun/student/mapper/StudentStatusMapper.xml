@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.com.liliyun.trainorg.mapper.StudentStatusMapper" >
+<mapper namespace="cn.com.liliyun.student.mapper.StudentStatusMapper" >
   <resultMap id="BaseResultMap" type="cn.com.liliyun.student.model.StudentStatus" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -26,7 +26,7 @@
 		  and name LIKE concat(concat('%',#{name}),'%')
 		</if>
 	</where>
-    order by mtime desc
+    order by sort asc
   </select>
   <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.student.model.StudentStatus" >
     delete from t_student_status
@@ -97,5 +97,10 @@
 
   <select id="getCount" resultType="int" parameterType="cn.com.liliyun.student.model.StudentStatus" >
     select count(1) from t_student_status
+    <where>
+      <if test="name != null and name != ''">
+        and name LIKE concat(concat('%',#{name}),'%')
+      </if>
+    </where>
   </select>
 </mapper>

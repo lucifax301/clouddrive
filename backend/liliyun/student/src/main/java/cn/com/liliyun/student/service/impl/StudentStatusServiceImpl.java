@@ -1,18 +1,14 @@
-package cn.com.liliyun.trainorg.service.impl;
+package cn.com.liliyun.student.service.impl;
 
-import java.util.List;
-
+import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.PageUtil;
+import cn.com.liliyun.student.model.StudentStatus;
+import com.github.pagehelper.PageInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.PageInfo;
-
-import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.PageUtil;
-import cn.com.liliyun.trainorg.mapper.TrainareaMapper;
-import cn.com.liliyun.trainorg.model.Trainarea;
-import cn.com.liliyun.trainorg.service.TrainareaService;
+import java.util.List;
 
 @Service
 public class StudentStatusServiceImpl implements StudentStatusService {
