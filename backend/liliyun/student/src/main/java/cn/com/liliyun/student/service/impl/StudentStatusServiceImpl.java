@@ -2,6 +2,7 @@ package cn.com.liliyun.student.service.impl;
 
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.PageUtil;
+import cn.com.liliyun.student.mapper.StudentStatusMapper;
 import cn.com.liliyun.student.model.StudentStatus;
 import com.github.pagehelper.PageInfo;
 import org.apache.log4j.Logger;
@@ -12,15 +13,15 @@ import java.util.List;
 
 @Service
 public class StudentStatusServiceImpl implements StudentStatusService {
-	
+
 	Logger logger = Logger.getLogger(StudentStatusServiceImpl.class);
-	
+
 	@Autowired
-	private StudentStatusMapper StudentStatusMapper;
+	private StudentStatusMapper studentStatusMapper;
 
 	@Override
 	public ResultBean addStudentStatus(StudentStatus StudentStatus) {
-		StudentStatusMapper.insertSelective(StudentStatus);
+		studentStatusMapper.insertSelective(StudentStatus);
 		return new ResultBean();
 	}
 
@@ -29,7 +30,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 		String [] ids = StudentStatus.getIds().split(",");
 		for (String id : ids) {
 			StudentStatus.setId(Integer.parseInt(id));
-			StudentStatusMapper.deleteByPrimaryKey(StudentStatus);
+			studentStatusMapper.deleteByPrimaryKey(StudentStatus);
 		}
 		return new ResultBean();
 	}
@@ -39,7 +40,7 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 		ResultBean rb = new ResultBean();
 		PageUtil.startPage(StudentStatus);
 		if(StudentStatus==null)StudentStatus=new StudentStatus();
-		List<StudentStatus> list = StudentStatusMapper.selectList(StudentStatus);
+		List<StudentStatus> list = studentStatusMapper.selectList(StudentStatus);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -52,12 +53,12 @@ public class StudentStatusServiceImpl implements StudentStatusService {
 
 	@Override
 	public Integer getCount(StudentStatus StudentStatus) {
-		return StudentStatusMapper.getCount(StudentStatus);
+		return studentStatusMapper.getCount(StudentStatus);
 	}
 
 	@Override
 	public ResultBean updateStudentStatus(StudentStatus StudentStatus) {
-		StudentStatusMapper.updateByPrimaryKeySelective(StudentStatus);
+		studentStatusMapper.updateByPrimaryKeySelective(StudentStatus);
 		return new ResultBean();
 	}
 

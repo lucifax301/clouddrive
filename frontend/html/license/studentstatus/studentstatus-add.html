@@ -6,43 +6,39 @@
 				<div class="bjui-row col-4">
                 <label class="row-label">状态名称</label>
                 <div class="row-input required">
-                    <input type="text" name="statusName">
+                    <input type="text" name="name">
                 </div>
                 </div>
-                
                 <div class="bjui-row col-4">
                 <label class="row-label">状态顺序</label>
                 <div class="row-input fill-2 required">
                     <input type="text" name="sort">
                 </div>
                 </div>
-
             </div>
-
-            
         </form>
     </div>
 </div>
 <div class="bjui-pageFooter">
     <div class="c-bottom-button">
-        <li><button type="button" class="btn-blue" data-icon="save" onclick="saveaddexamarea()">保存</button></li>
+        <li><button type="button" class="btn-blue" data-icon="save" onclick="saveaddstudentstatus()">保存</button></li>
         <li><button type="button" class="btn-close" data-icon="close">取消</button></li> 
     </div>
 </div>
 <script type="text/javascript">
 	
-	function saveaddexamarea(){
+	function saveaddstudentstatus(){
 
 	if($.CurrentDialog.find('#add-form').isValid())
-	BJUI.alertmsg('confirm', '确认新增考场吗？', {
+	BJUI.alertmsg('confirm', '确认新增状态吗？', {
             okCall: function() {
                 BJUI.ajax('doajax', {
-                    url: config.openBasePath + 'examarea/edit',
+                    url: config.openBasePath + 'studentstatus/edit',
                     loadingmask: true,
 					//data: clz.parseForm($.CurrentDialog.find("#editForm")),
 					data: $.CurrentDialog.find('#add-form').serializeArray(),
                     okCallback: function(json, options) {
-						BJUI.alertmsg('ok', '新增考场成功！', {})
+						BJUI.alertmsg('ok', '新增状态成功！', {})
 						BJUI.dialog('closeCurrent')
 					}
                 });
