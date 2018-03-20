@@ -52,8 +52,8 @@
             </div>
             <label class="row-label">学员状态：</label>
             <div class="row-input">
-            <select name="status" id="status" data-toggle="selectpicker" data-width="100%"
-                  data-datajson="studentstatus">
+            <select name="status" id="status" data-toggle="selectpicker" data-width="100%" data-dataurl="/httpaccess/studentstatus/list"
+                    data-optiontype = "id,name">
             </select>
             </div>
         </div>
@@ -90,7 +90,7 @@
             {name:'applyexam',label:'学车状态',align:'center',render:function(value,data) {
                 return studentStatus(data.applyexam,data.applystatus);
             }},
-            {name:'status',label:'学员状态',align:'center',render:function(value,data){return clz.configRender({name:'studentstatus',val:value})}}
+            {name:'status',label:'学员状态',align:'center',render:function(value,data){return clz.configRender({name:'studentstatuslist',val:value,key:'id',dataname:'name'})}}
         ],
         editMode: {navtab:{id:'navtab-student',title:'学员信息',onClose:function(){license_signup_list.datagrid('refresh',true)}}},
         add_url : "html/license/signup/student-add.html",
