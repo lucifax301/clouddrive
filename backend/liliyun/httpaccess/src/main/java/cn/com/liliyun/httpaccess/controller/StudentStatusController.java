@@ -1,6 +1,7 @@
 package cn.com.liliyun.httpaccess.controller;
 
 import cn.com.liliyun.student.model.StudentStatus;
+import cn.com.liliyun.student.service.StudentStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

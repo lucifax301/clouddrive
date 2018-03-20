@@ -4,6 +4,7 @@ import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.student.mapper.StudentStatusMapper;
 import cn.com.liliyun.student.model.StudentStatus;
+import cn.com.liliyun.student.service.StudentStatusService;
 import com.github.pagehelper.PageInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
