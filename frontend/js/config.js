@@ -72,7 +72,11 @@ window.config.dictionaryAPI = {
     },
     //费用类型
     financeSubject:{
-    	url:config.openBasePath + "financeSubject/listAll"
+        url:config.openBasePath + "financeSubject/listAll"
+    },
+    //学员状态
+    studentstatuslist:{
+        url:config.openBasePath + "studentstatus/list?pageNo=-1"
     },
     oldyear:{
         data:function(){
