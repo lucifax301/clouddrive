@@ -37,4 +37,6 @@
 	<bean id="devProperties" class="cn.com.liliyun.httpaccess.util.DevProperties">
 		<property name="dev" value="0" />
 	</bean>
+	<bean id="authcodeService" class="cn.com.liliyun.authcode.service.impl.AuthcodeServiceImpl"></bean>
+	<bean id="sms" class="cn.com.liliyun.authcode.service.impl.SMSMessageerviceImpl"></bean>
 </beans>
