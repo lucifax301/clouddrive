@@ -98,6 +98,7 @@
         <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+<!--  
     <select id="countTable" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.TrainExamItemVo">
         select
         t.tableid,
@@ -173,7 +174,9 @@
             </if>
         </trim>
     </select>
-
+    -->
+    
+<!--  
     <select id="countTableCase" resultMap="CountResultMap"
             parameterType="cn.com.liliyun.trainorg.model.TrainExamItemVo">
         select
@@ -246,7 +249,8 @@
             </if>
         </trim>
     </select>
-
+    -->
+<!--  
     <select id="countWaitCase" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.TrainExamItemVo">
         select
         t.areaid,
@@ -317,7 +321,7 @@
             </if>
         </trim>
     </select>
-
+-->
     <resultMap id="DetailResultMap" type="cn.com.liliyun.trainorg.model.TrainExamItemDetailVo">
         <id column="tableid" property="tableId" jdbcType="VARCHAR"/>
         <result column="schoolname" property="schoolname" jdbcType="VARCHAR"/>
@@ -346,7 +350,7 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="idcard" property="idcard" jdbcType="INTEGER"/>
     </resultMap>
-
+<!--  
     <select id="getWaitCaseDetail" resultMap="DetailResultMap"
             parameterType="cn.com.liliyun.trainorg.model.TrainExamItemDetailVo">
         select
@@ -387,14 +391,15 @@
             </if>
         </trim>
     </select>
-
+-->
     <resultMap id="YearResultMap" type="cn.com.liliyun.trainorg.model.TrainExamItemYearVo">
         <id column="month" property="month" jdbcType="VARCHAR"/>
         <id column="year" property="year" jdbcType="VARCHAR"/>
         <result column="indexcat" property="indexcat" jdbcType="INTEGER"/>
         <result column="subject" property="subject" jdbcType="INTEGER"/>
     </resultMap>
-
+	
+	<!--  
     <select id="getWaitCaseYear" resultMap="YearResultMap"
             parameterType="cn.com.liliyun.trainorg.model.TrainExamItemYearVo">
   		select
@@ -408,7 +413,8 @@
 				GROUP BY months,subject,indexcat 
 				ORDER BY months asc
   </select>
-
+	-->
+	<!--  
     <select id="countArea" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
   		 SELECT t.areaid,
 			(select name from t_area where id =t.areaid) as areaName,
@@ -416,7 +422,8 @@
 			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
 			FROM `t_resultexam_item` t GROUP BY t.areaid,t.subject,t.examcount
   </select>
-
+  -->
+<!--  
     <select id="countAreaCase" resultMap="CountResultMap" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
   		 SELECT t.areaid,
 			(select name from t_area where id =t.areaid) as areaName,
@@ -469,7 +476,7 @@
 			count(t.studentid)/(select count(i.studentid) from t_resultexam_item i where i.areaid = t.areaid) as percentage
 			FROM `t_resultexam_item` t GROUP BY t.examcount,t.subject,t.examcount
   </select>
-
+-->
     <delete id="deleteByPrimaryKey" parameterType="cn.com.liliyun.trainorg.model.ResultExamItem">
     delete from t_resultexam_item
     where tableid = #{tableid,jdbcType=VARCHAR}

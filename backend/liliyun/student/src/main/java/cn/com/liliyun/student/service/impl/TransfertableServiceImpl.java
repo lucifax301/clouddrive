@@ -1,6 +1,5 @@
 package cn.com.liliyun.student.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,12 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cn.com.liliyun.common.util.ApplyExam;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.ApplyExam;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.student.mapper.StudentMapper;
 import cn.com.liliyun.student.mapper.StudentStatusLogMapper;

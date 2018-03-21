@@ -86,7 +86,29 @@ public class TrainExamItemVo extends BaseModel implements Serializable {
     
     private Date ctime;
     
+    private Date upDay;
+    
     private String type;
+    
+    private Integer examplaceid;
+    
+    
+
+	public Integer getExamplaceid() {
+		return examplaceid;
+	}
+
+	public void setExamplaceid(Integer examplaceid) {
+		this.examplaceid = examplaceid;
+	}
+
+	public Date getUpDay() {
+		return upDay;
+	}
+
+	public void setUpDay(Date upDay) {
+		this.upDay = upDay;
+	}
 
 	public String getTableId() {
 		return tableId;

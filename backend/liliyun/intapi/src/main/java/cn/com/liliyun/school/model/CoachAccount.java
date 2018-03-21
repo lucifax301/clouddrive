@@ -1,7 +1,6 @@
 package cn.com.liliyun.school.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import cn.com.liliyun.common.model.BaseModel;
 
@@ -25,7 +24,16 @@ public class CoachAccount extends BaseModel implements Serializable{
 	private String mobile;
 	private String workType;
 	private String coachids;//新增交易账号教练id集合
+	private Integer coachNum;
 	
+	
+	
+	public Integer getCoachNum() {
+		return coachNum;
+	}
+	public void setCoachNum(Integer coachNum) {
+		this.coachNum = coachNum;
+	}
 	public String getAuth() {
 		return auth;
 	}

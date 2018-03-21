@@ -71,6 +71,18 @@ public class TrainExamItemDetailVo extends BaseModel implements Serializable {
     private String idcard;
     
     private String name;
+    
+    private Integer examplaceid;
+    
+    
+
+	public Integer getExamplaceid() {
+		return examplaceid;
+	}
+
+	public void setExamplaceid(Integer examplaceid) {
+		this.examplaceid = examplaceid;
+	}
 
 	public String getTableId() {
 		return tableId;
