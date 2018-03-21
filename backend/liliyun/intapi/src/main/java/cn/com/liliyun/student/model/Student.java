@@ -135,7 +135,7 @@ public class Student extends BaseModel implements Serializable {
 
 	private Integer storeid;
 
-	private Date chacktime;
+	private Date checktime;
 
 	private Integer checkstatus;
 
@@ -755,12 +755,14 @@ public class Student extends BaseModel implements Serializable {
 		this.storeid = storeid;
 	}
 
-	public Date getChacktime() {
-		return chacktime;
+	
+
+	public Date getChecktime() {
+		return checktime;
 	}
 
-	public void setChacktime(Date chacktime) {
-		this.chacktime = chacktime;
+	public void setChecktime(Date checktime) {
+		this.checktime = checktime;
 	}
 
 	public Integer getCheckstatus() {

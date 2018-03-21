@@ -11,11 +11,12 @@
 	<artifactId>authcode</artifactId>
 	<name>authcode</name>
 	<packaging>war</packaging>
-	<url>http://maven.apache.org</url>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		
 		<dependency>
 			<groupId>cn.com.liliyun</groupId>
 			<artifactId>common</artifactId>
@@ -44,10 +45,12 @@
 			<version>1.2</version>
 		</dependency>
 		<!-- yunlian duan xin need jars, deployed in local -->
-		<dependency>
-			<groupId>com.yuntongxun</groupId>
-			<artifactId>ccp-rest-sdk</artifactId>
-			<version>2.7.0.RELEASE</version>
+		<dependency>  
+		    <groupId>com.yuntongxun</groupId>
+			  <artifactId>ccp-rest-sdk</artifactId>
+			  <version>2.7.0.RELEASE</version> 
+			  <scope>system</scope>
+		    <systemPath>${project.basedir}/../libs/ccp-rest-sdk-2.7.0.RELEASE.jar</systemPath>  
 		</dependency>
 	</dependencies>
 	<build>

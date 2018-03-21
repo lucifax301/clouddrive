@@ -2,6 +2,7 @@ package cn.com.liliyun.httpaccess.controller;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -813,20 +814,23 @@ public class AppUserController {
 			@RequestParam(required = false) String companyId, 
 			@RequestParam String timestamp, @RequestParam String sign, @RequestHeader HttpHeaders headers) {
 		ResultBean r = new ResultBean();
-		try {
-			FinanceAppStat financeAppStat = new FinanceAppStat();
-			User user = new User();
-			List<FinanceAppStat> financeAppStatList = financeService.getIncomeStat(financeAppStat, user);
-			if (financeAppStatList != null && financeAppStatList.size() > 0) {
-				r.setResult(financeAppStatList);
-			}
-		} catch (Exception e) {
-			log.error( "***************************************** controller: user  getFinanceReceipt failed=" + e.getMessage(), e);
-			e.printStackTrace();
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-		}
-		return r;
+	    try
+	    {
+	      FinanceAppStat financeAppStat = new FinanceAppStat();
+	      User user = new User();
+	      Map<String, Object> financeAppStatList = this.financeService.getIncomeStat(financeAppStat, user);
+	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
+	        r.setResult(financeAppStatList);
+	      }
+	    }
+	    catch (Exception e)
+	    {
+	      this.log.error("***************************************** controller: user  getFinanceReceipt failed=" + e.getMessage(), e);
+	      e.printStackTrace();
+	      r.setCode(5);
+	      r.setMsg("网络连接失败");
+	    }
+	    return r;
 	}
 	
 	/**
@@ -848,20 +852,23 @@ public class AppUserController {
 			@RequestParam(required = false) String companyId, 
 			@RequestParam String timestamp, @RequestParam String sign, @RequestHeader HttpHeaders headers) {
 		ResultBean r = new ResultBean();
-		try {
-			FinanceAppStat financeAppStat = new FinanceAppStat();
-			User user = new User();
-			List<FinanceAppStat> financeAppStatList = financeService.getOutcomeStat(financeAppStat, user);
-			if (financeAppStatList != null && financeAppStatList.size() > 0) {
-				r.setResult(financeAppStatList);
-			}
-		} catch (Exception e) {
-			log.error( "***************************************** controller: user  getFinancePayOut failed=" + e.getMessage(), e);
-			e.printStackTrace();
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-		}
-		return r;
+	    try
+	    {
+	      FinanceAppStat financeAppStat = new FinanceAppStat();
+	      User user = new User();
+	      Map<String, Object> financeAppStatList = this.financeService.getOutcomeStat(financeAppStat, user);
+	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
+	        r.setResult(financeAppStatList);
+	      }
+	    }
+	    catch (Exception e)
+	    {
+	      this.log.error("***************************************** controller: user  getFinancePayOut failed=" + e.getMessage(), e);
+	      e.printStackTrace();
+	      r.setCode(5);
+	      r.setMsg("网络连接失败");
+	    }
+	    return r;
 	}
 	
 	/**
@@ -883,20 +890,23 @@ public class AppUserController {
 			@RequestParam(required = false) String companyId, 
 			@RequestParam String timestamp, @RequestParam String sign, @RequestHeader HttpHeaders headers) {
 		ResultBean r = new ResultBean();
-		try {
-			FinanceAppStat financeAppStat = new FinanceAppStat();
-			User user = new User();
-			List<FinanceAppStat> financeAppStatList = financeService.getOwemoneyStat(financeAppStat, user);
-			if (financeAppStatList != null && financeAppStatList.size() > 0) {
-				r.setResult(financeAppStatList);
-			}
-		} catch (Exception e) {
-			log.error( "***************************************** controller: user  getFinanceArrearage failed=" + e.getMessage(), e);
-			e.printStackTrace();
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-		}
-		return r;
+	    try
+	    {
+	      FinanceAppStat financeAppStat = new FinanceAppStat();
+	      User user = new User();
+	      Map<String, Object> financeAppStatList = this.financeService.getOwemoneyStat(financeAppStat, user);
+	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
+	        r.setResult(financeAppStatList);
+	      }
+	    }
+	    catch (Exception e)
+	    {
+	      this.log.error("***************************************** controller: user  getFinanceArrearage failed=" + e.getMessage(), e);
+	      e.printStackTrace();
+	      r.setCode(5);
+	      r.setMsg("网络连接失败");
+	    }
+	    return r;
 	}
 	
 	/**

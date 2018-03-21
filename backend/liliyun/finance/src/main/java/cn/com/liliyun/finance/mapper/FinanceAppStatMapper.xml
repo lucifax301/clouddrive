@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.finance.mapper.FinanceAppStatMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.finance.model.FinanceAppStat" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectIncomeStat" parameterType="cn.com.liliyun.finance.model.FinanceAppStat" 
+  	resultMap="BaseResultMap">
+  	select areaid id, DATE(receiptdate) date, SUM(receiptmoney) money
+	from t_finance_receipt where DATE(receiptdate) >= #{startdate} and #{enddate} >= DATE(receiptdate)
+	group by areaid, DATE(receiptdate)
+	order by DATE(receiptdate)
+  </select>
+  
+  <select id="selectOutcomeStat" parameterType="cn.com.liliyun.finance.model.FinanceAppStat" 
+  	resultMap="BaseResultMap">
+  	select areaid id, DATE(checktime) date, SUM(money) money
+	from t_finance_fee_item where subject2 != 0 and checkstatus = 2
+	and DATE(checktime) >= #{startdate} and #{enddate} >= DATE(checktime)
+	group by areaid, DATE(checktime)
+	order by DATE(checktime)
+  </select>
+  
+</mapper>
