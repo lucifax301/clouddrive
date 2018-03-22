@@ -28,7 +28,7 @@ public class Coach extends BaseModel implements Serializable {
 
     private String photo;
 
-    private Integer fingerprint;
+    private String fingerprint;
 
     private String photo_url;
 
@@ -394,15 +394,17 @@ public class Coach extends BaseModel implements Serializable {
 		this.photo = photo;
 	}
 
-	public Integer getFingerprint() {
-        return fingerprint;
-    }
+	
 
-    public void setFingerprint(Integer fingerprint) {
-        this.fingerprint = fingerprint;
-    }
+    public String getFingerprint() {
+		return fingerprint;
+	}
 
-    public String getPhoto_url() {
+	public void setFingerprint(String fingerprint) {
+		this.fingerprint = fingerprint;
+	}
+
+	public String getPhoto_url() {
         return photo_url;
     }
 

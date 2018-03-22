@@ -5,9 +5,7 @@
     <artifactId>liliyun</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>cn.com.liliyun</groupId>
   <artifactId>logcommon</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <dependencies>
   <dependency>

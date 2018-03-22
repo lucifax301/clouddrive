@@ -12,7 +12,7 @@
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="photo" property="photo" jdbcType="VARCHAR" />
-    <result column="fingerprint" property="fingerprint" jdbcType="INTEGER" />
+    <result column="fingerprint" property="fingerprint" jdbcType="VARCHAR" />
     <result column="photo_url" property="photo_url" jdbcType="VARCHAR" />
     <result column="fingerprint_url" property="fingerprint_url" jdbcType="VARCHAR" />
     <result column="drilicence" property="drilicence" jdbcType="VARCHAR" />
@@ -232,7 +232,7 @@
     values (#{coachid,jdbcType=INTEGER}, #{instid,jdbcType=INTEGER}, #{inscode,jdbcType=VARCHAR}, 
       #{coachnum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
       #{idcard,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{photo,jdbcType=VARCHAR}, #{fingerprint,jdbcType=INTEGER}, #{photo_url,jdbcType=VARCHAR}, 
+      #{photo,jdbcType=VARCHAR}, #{fingerprint,jdbcType=VARCHAR}, #{photo_url,jdbcType=VARCHAR}, 
       #{fingerprint_url,jdbcType=VARCHAR}, #{drilicence,jdbcType=VARCHAR}, #{fstdrilicdate,jdbcType=VARCHAR}, 
       #{occupationno,jdbcType=VARCHAR}, #{occupationlevel,jdbcType=VARCHAR}, #{dripermitted,jdbcType=VARCHAR}, 
       #{teachpermitted,jdbcType=VARCHAR}, #{employstatus,jdbcType=VARCHAR}, #{hiredate,jdbcType=VARCHAR}, 
@@ -420,7 +420,7 @@
         #{photo,jdbcType=VARCHAR},
       </if>
       <if test="fingerprint != null" >
-        #{fingerprint,jdbcType=INTEGER},
+        #{fingerprint,jdbcType=VARCHAR},
       </if>
       <if test="photo_url != null" >
         #{photo_url,jdbcType=VARCHAR},
@@ -563,7 +563,7 @@
         photo = #{photo,jdbcType=VARCHAR},
       </if>
       <if test="fingerprint != null" >
-        fingerprint = #{fingerprint,jdbcType=INTEGER},
+        fingerprint = #{fingerprint,jdbcType=VARCHAR},
       </if>
       <if test="photo_url != null" >
         photo_url = #{photo_url,jdbcType=VARCHAR},
@@ -688,7 +688,7 @@
       mobile = #{mobile,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       photo = #{photo,jdbcType=VARCHAR},
-      fingerprint = #{fingerprint,jdbcType=INTEGER},
+      fingerprint = #{fingerprint,jdbcType=VARCHAR},
       photo_url = #{photo_url,jdbcType=VARCHAR},
       fingerprint_url = #{fingerprint_url,jdbcType=VARCHAR},
       drilicence = #{drilicence,jdbcType=VARCHAR},
