@@ -60,7 +60,7 @@
         <result column="isvalid" property="isvalid" jdbcType="INTEGER"/>
         <result column="areaid" property="areaid" jdbcType="INTEGER"/>
         <result column="storeid" property="storeid" jdbcType="INTEGER"/>
-        <result column="chacktime" property="chacktime" jdbcType="TIMESTAMP"/>
+        <result column="checktime" property="checktime" jdbcType="TIMESTAMP"/>
         <result column="checkstatus" property="checkstatus" jdbcType="INTEGER"/>
         <result column="bussource" property="bussource" jdbcType="INTEGER"/>
         <result column="isinternal" property="isinternal" jdbcType="INTEGER"/>
@@ -95,7 +95,7 @@
         recordtype, applyexam, applystatus, applytype, contract, operate, errorcode, message, utime, ltime,
         cuid, muid, ctime, mtime, photourl, fingerprinturl, trainmethod, classid, payway,
         paytype, payremark, paydate, paystatus, activityid, signmoney, submoney, posmoney, cashmoney,
-        contractmoney, isvalid, areaid, storeid, chacktime, checkstatus, bussource, isinternal,
+        contractmoney, isvalid, areaid, storeid, checktime, checkstatus, bussource, isinternal,
         infosource, remark, billname, billnum, billtype, posnum, couponnum, couponmoney,
         carddate, recuid, recname, stabletime, etabletime, learnstatus, islocal, iccard,
         cname, mname, reccoachid, reccoachname, channel, learncard, xid
@@ -299,7 +299,7 @@
       paydate, paystatus, activityid,
       submoney, posmoney, cashmoney,
       contractmoney, isvalid, areaid,
-      storeid, chacktime, checkstatus,
+      storeid, checktime, checkstatus,
       bussource, isinternal, infosource,
       remark, billname, billnum,
       billtype, posnum, couponnum,
@@ -327,7 +327,7 @@
       #{paydate,jdbcType=TIMESTAMP}, #{paystatus,jdbcType=INTEGER}, #{activityid,jdbcType=INTEGER},
       #{submoney,jdbcType=DECIMAL}, #{posmoney,jdbcType=DECIMAL}, #{cashmoney,jdbcType=DECIMAL},
       #{contractmoney,jdbcType=DECIMAL}, #{isvalid,jdbcType=INTEGER}, #{areaid,jdbcType=INTEGER},
-      #{storeid,jdbcType=INTEGER}, #{chacktime,jdbcType=TIMESTAMP}, #{checkstatus,jdbcType=INTEGER},
+      #{storeid,jdbcType=INTEGER}, #{checktime,jdbcType=TIMESTAMP}, #{checkstatus,jdbcType=INTEGER},
       #{bussource,jdbcType=INTEGER}, #{isinternal,jdbcType=INTEGER}, #{infosource,jdbcType=INTEGER},
       #{remark,jdbcType=VARCHAR}, #{billname,jdbcType=VARCHAR}, #{billnum,jdbcType=VARCHAR},
       #{billtype,jdbcType=INTEGER}, #{posnum,jdbcType=VARCHAR}, #{couponnum,jdbcType=VARCHAR},
@@ -513,8 +513,8 @@
             <if test="storeid != null">
                 storeid,
             </if>
-            <if test="chacktime != null">
-                chacktime,
+            <if test="checktime != null">
+                checktime,
             </if>
             <if test="checkstatus != null">
                 checkstatus,
@@ -770,8 +770,8 @@
             <if test="storeid != null">
                 #{storeid,jdbcType=INTEGER},
             </if>
-            <if test="chacktime != null">
-                #{chacktime,jdbcType=TIMESTAMP},
+            <if test="checktime != null">
+                #{checktime,jdbcType=TIMESTAMP},
             </if>
             <if test="checkstatus != null">
                 #{checkstatus,jdbcType=INTEGER},
@@ -1030,8 +1030,8 @@
             <if test="storeid != null">
                 storeid = #{storeid,jdbcType=INTEGER},
             </if>
-            <if test="chacktime != null">
-                chacktime = #{chacktime,jdbcType=TIMESTAMP},
+            <if test="checktime != null">
+                checktime = #{checktime,jdbcType=TIMESTAMP},
             </if>
             <if test="checkstatus != null">
                 checkstatus = #{checkstatus,jdbcType=INTEGER},
@@ -1180,7 +1180,7 @@
           isvalid = #{isvalid,jdbcType=INTEGER},
           areaid = #{areaid,jdbcType=INTEGER},
           storeid = #{storeid,jdbcType=INTEGER},
-          chacktime = #{chacktime,jdbcType=TIMESTAMP},
+          checktime = #{checktime,jdbcType=TIMESTAMP},
           checkstatus = #{checkstatus,jdbcType=INTEGER},
           bussource = #{bussource,jdbcType=INTEGER},
           isinternal = #{isinternal,jdbcType=INTEGER},
@@ -1267,7 +1267,7 @@
         a.cuid,
         muid, a.ctime, a.mtime, photourl, fingerprinturl, trainmethod, classid,
         payway, paytype,
-        payremark, paydate, paystatus, contractmoney, a.isvalid, areaid, storeid, chacktime,
+        payremark, paydate, paystatus, contractmoney, a.isvalid, areaid, storeid, checktime,
         checkstatus,
         bussource, isinternal, infosource, remark, billname, billnum, billtype, posnum,
         xid,

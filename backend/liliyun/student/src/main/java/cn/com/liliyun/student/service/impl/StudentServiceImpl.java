@@ -1,11 +1,37 @@
 package cn.com.liliyun.student.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.beanutils.BeanMap;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import cn.com.liliyun.coach.model.Coach;
 import cn.com.liliyun.coach.model.CoachClassinfo;
 import cn.com.liliyun.coach.service.CoachService;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
-import cn.com.liliyun.common.util.*;
+import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
+import cn.com.liliyun.common.util.FeeSubject;
+import cn.com.liliyun.common.util.HttpConstant;
+import cn.com.liliyun.common.util.OweFee;
+import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.finance.model.FinanceFeeItem;
 import cn.com.liliyun.finance.model.FinancePos;
 import cn.com.liliyun.finance.model.FinanceReceipt;
@@ -17,14 +43,40 @@ import cn.com.liliyun.flow.service.FlowService;
 import cn.com.liliyun.importexcel.model.Flownum;
 import cn.com.liliyun.market.model.SalesActivityClassinfo;
 import cn.com.liliyun.market.service.SalesService;
-import cn.com.liliyun.student.dto.*;
-import cn.com.liliyun.student.mapper.*;
-import cn.com.liliyun.student.model.*;
+import cn.com.liliyun.student.dto.CountDTO;
+import cn.com.liliyun.student.dto.StudentApplyStat;
+import cn.com.liliyun.student.dto.StudentCalcMoneyDTO;
+import cn.com.liliyun.student.dto.StudentCoachDTO;
+import cn.com.liliyun.student.dto.StudentMoneyDTO;
+import cn.com.liliyun.student.dto.StudentUpdateDTO;
+import cn.com.liliyun.student.mapper.CoachStudentMapper;
+import cn.com.liliyun.student.mapper.FileMapper;
+import cn.com.liliyun.student.mapper.MaterialMapper;
+import cn.com.liliyun.student.mapper.StudentMapper;
+import cn.com.liliyun.student.mapper.StudentMoneyMapper;
+import cn.com.liliyun.student.mapper.StudentPauseApplyMapper;
+import cn.com.liliyun.student.mapper.StudentStatusLogMapper;
+import cn.com.liliyun.student.mapper.TheoryLessonMapper;
+import cn.com.liliyun.student.mapper.TheoryStoreMapper;
+import cn.com.liliyun.student.mapper.TheoryStudentMapper;
+import cn.com.liliyun.student.mapper.TransferStudentMapper;
+import cn.com.liliyun.student.model.CoachStudent;
+import cn.com.liliyun.student.model.Student;
+import cn.com.liliyun.student.model.StudentMoney;
+import cn.com.liliyun.student.model.StudentPauseApply;
+import cn.com.liliyun.student.model.StudentPauseApplyParam;
+import cn.com.liliyun.student.model.StudentStatusLog;
+import cn.com.liliyun.student.model.TransferStudent;
 import cn.com.liliyun.student.service.StudentService;
 import cn.com.liliyun.theory.dto.TheoryLessonStoreDto;
 import cn.com.liliyun.theory.dto.TheoryStoreDto;
 import cn.com.liliyun.theory.dto.TheoryStudentExport;
-import cn.com.liliyun.theory.model.*;
+import cn.com.liliyun.theory.model.TheoryLesson;
+import cn.com.liliyun.theory.model.TheoryLessonExample;
+import cn.com.liliyun.theory.model.TheoryStore;
+import cn.com.liliyun.theory.model.TheoryStoreExample;
+import cn.com.liliyun.theory.model.TheoryStudent;
+import cn.com.liliyun.theory.model.TheoryStudentExample;
 import cn.com.liliyun.trainorg.model.Classinfo;
 import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.trainorg.service.AreaService;
@@ -38,21 +90,6 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import org.apache.commons.beanutils.BeanMap;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -190,7 +227,7 @@ public class StudentServiceImpl implements StudentService {
 		studentMapper.insertSelective(student);
 
 		StudentMoney studentMoney = new StudentMoney();
-		Date now = new Date();
+		//Date now = new Date();
         BigDecimal discountmoney = submoney.add(couponmoney); //所有的减免费用
 
         //财务费用

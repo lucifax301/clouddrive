@@ -5,6 +5,7 @@ import java.util.Date;
 
 import cn.com.liliyun.common.model.BaseModel;
 
+@SuppressWarnings("serial")
 public class StudentStatus extends BaseModel implements Serializable {
 
 	private Integer id;

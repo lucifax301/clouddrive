@@ -9,7 +9,7 @@ import cn.com.liliyun.student.model.StudentStatus;
  * @author Administrator
  *
  */
- interface StudentStatusService {
+ public interface StudentStatusService {
 	
 	 ResultBean addStudentStatus(StudentStatus StudentStatus);
 	

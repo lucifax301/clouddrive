@@ -8,6 +8,7 @@
     <artifactId>liliyun</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
+  <groupId>cn.com.liliyun</groupId>
   <artifactId>common</artifactId>
   <dependencies>
   <dependency>
@@ -34,6 +35,13 @@
 		    <groupId>org.redisson</groupId>
 		    <artifactId>redisson</artifactId>
 		    <version>2.2.10</version>
+		</dependency>
+		<dependency>  
+		    <groupId>com.yuntongxun</groupId>
+			  <artifactId>ccp-rest-sdk</artifactId>
+			  <version>2.7.0.RELEASE</version> 
+			  <scope>system</scope>
+		    <systemPath>${project.basedir}/lib/ccp-rest-sdk-2.7.0.RELEASE.jar</systemPath>  
 		</dependency>
   </dependencies>
 </project>

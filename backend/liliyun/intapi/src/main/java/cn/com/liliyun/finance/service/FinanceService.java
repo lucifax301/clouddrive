@@ -122,26 +122,26 @@ public interface FinanceService {
 	public ResultBean getApplyStatList(StudentApplyStat studentApplyStat, User user);
 	
 	/**
-	 * 收入统计
+	 * 锟斤拷锟斤拷统锟斤拷
 	 * @param financeAppStat
 	 * @param user
 	 * @return
 	 */
-	public List<FinanceAppStat> getIncomeStat(FinanceAppStat financeAppStat, User user);
+	public Map<String, Object> getIncomeStat(FinanceAppStat financeAppStat, User user);
 	
 	/**
-	 * 支出统计
+	 * 支锟斤拷统锟斤拷
 	 * @param financeAppStat
 	 * @param user
 	 * @return
 	 */
-	public List<FinanceAppStat> getOutcomeStat(FinanceAppStat financeAppStat, User user);
+	public Map<String, Object> getOutcomeStat(FinanceAppStat financeAppStat, User user);
 	
 	/**
-	 * 欠费统计
+	 * 欠锟斤拷统锟斤拷
 	 * @param financeAppStat
 	 * @param user
 	 * @return
 	 */
-	public List<FinanceAppStat> getOwemoneyStat(FinanceAppStat financeAppStat, User user);
+	public Map<String, Object> getOwemoneyStat(FinanceAppStat financeAppStat, User user);
 }

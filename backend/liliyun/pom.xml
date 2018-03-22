@@ -10,7 +10,9 @@
 		<beanutils.version>1.7.0</beanutils.version>
 		<spring.version>4.0.8.RELEASE</spring.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<liliyundir>${project.basedir}</liliyundir>
 	</properties>
+	
 	<dependencies>
 		<!-- log -->
 		<dependency>
@@ -61,12 +63,15 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.4</version>
 		</dependency>
-		<dependency>
-			<groupId>com.yuntongxun</groupId>
-			<artifactId>ccp-rest-sdk</artifactId>
-			<version>2.7.0.RELEASE</version>
+		<!--  
+		<dependency>  
+		    <groupId>com.yuntongxun</groupId>
+			  <artifactId>ccp-rest-sdk</artifactId>
+			  <version>2.7.0.RELEASE</version> 
+			  <scope>system</scope>
+		    <systemPath>${project.basedir}/libs/ccp-rest-sdk-2.7.0.RELEASE.jar</systemPath>  
 		</dependency>
-
+		-->
 		<!-- util config -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -410,7 +415,7 @@
 		<module>student</module>
 		<module>coach</module>
 		<module>user</module>
-		<module>datasynch</module>
+		<!--  <module>datasynch</module>-->
 		<module>authcode</module>
 		<module>car</module>
 		<module>report</module>

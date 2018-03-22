@@ -33,7 +33,9 @@ public class StudentMoneyDTO extends BaseModel implements Serializable {
 
     private BigDecimal owetrainmoney;
 
-   private BigDecimal owemoney;
+    private BigDecimal owemoney;
+   
+   	private BigDecimal signmoney;
 
     private Integer owestatus;
 
@@ -46,8 +48,18 @@ public class StudentMoneyDTO extends BaseModel implements Serializable {
     private Date etime;
 
     private static final long serialVersionUID = 1L;
+    
+    
 
-    public Integer getStudentid() {
+    public BigDecimal getSignmoney() {
+		return signmoney;
+	}
+
+	public void setSignmoney(BigDecimal signmoney) {
+		this.signmoney = signmoney;
+	}
+
+	public Integer getStudentid() {
         return studentid;
     }
 

@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,8 +20,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
@@ -28,6 +27,7 @@ import cn.com.liliyun.common.util.FeeSubject;
 import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.finance.mapper.CashAccountMapper;
+import cn.com.liliyun.finance.mapper.FinanceAppStatMapper;
 import cn.com.liliyun.finance.mapper.FinanceDepositMapper;
 import cn.com.liliyun.finance.mapper.FinancePosFlowMapper;
 import cn.com.liliyun.finance.mapper.FinancePosMapper;
@@ -36,6 +36,7 @@ import cn.com.liliyun.finance.mapper.FinanceSubchargeMapper;
 import cn.com.liliyun.finance.mapper.FinanceSubjectMapper;
 import cn.com.liliyun.finance.mapper.PosAccountMapper;
 import cn.com.liliyun.finance.model.CashAccount;
+import cn.com.liliyun.finance.model.FinanceAppStat;
 import cn.com.liliyun.finance.model.FinanceDeposit;
 import cn.com.liliyun.finance.model.FinanceIncome;
 import cn.com.liliyun.finance.model.FinanceInvoiceDTO;
@@ -62,6 +63,8 @@ import cn.com.liliyun.trainorg.service.AreaService;
 import cn.com.liliyun.trainorg.service.ClassinfoService;
 import cn.com.liliyun.trainorg.service.StoreService;
 import cn.com.liliyun.user.model.User;
+
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class FinanceServiceImpl implements FinanceService {
@@ -104,6 +107,8 @@ public class FinanceServiceImpl implements FinanceService {
 	
 	@Autowired
 	private FlowService flowService;
+	@Autowired
+	private FinanceAppStatMapper financeAppStatMapper;
 	
 	@Override
 	public ResultBean getFinancePosList(FinancePos financePos, User user) {
@@ -1724,6 +1729,174 @@ public class FinanceServiceImpl implements FinanceService {
 		result.addLast(total);
 		r.setResult(new PageInfo<>(result));
 		return r;
+	}
+
+	@Override
+	public Map<String, Object> getIncomeStat(FinanceAppStat financeAppStat,
+			User user) {
+		if ((financeAppStat == null) || (financeAppStat.getStartdate() == null) || (financeAppStat.getEnddate() == null)) {
+		      return null;
+		    }
+		    financeAppStat.setDblink(user.getDblink());
+		    List<FinanceAppStat> list = this.financeAppStatMapper.selectIncomeStat(financeAppStat);
+		    Map<String, FinanceAppStat> map = new HashMap();
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		    if (list == null) {
+		      list = new ArrayList();
+		    }
+		    for (FinanceAppStat fas : list) {
+		      if ((fas.getId() != null) && (fas.getDate() != null))
+		      {
+		        String key = fas.getId().toString() + "_" + sdf.format(fas.getDate());
+		        map.put(key, fas);
+		      }
+		    }
+		    Area a = new Area();
+		    a.setDblink(user.getDblink());
+		    a.setPageNo(Integer.valueOf(-1));
+		    List<Area> areas = this.areaService.selectAllList(a);
+		    Calendar calendar = Calendar.getInstance();
+		    Date curdate = financeAppStat.getStartdate();
+		    calendar.setTime(financeAppStat.getEnddate());
+		    calendar.add(5, 1);
+		    Date enddate = calendar.getTime();
+		    
+		    Map<Integer, FinanceAppStat> resultMap = new HashMap();
+		    FinanceAppStat total = new FinanceAppStat();
+		    total.setName("总计");
+		    total.setData(new ArrayList());
+		    String key;
+		    while (curdate.before(enddate))
+		    {
+		      BigDecimal moneytotal = BigDecimal.ZERO;
+		      for (Area area : areas)
+		      {
+		        key = area.getId().toString() + "_" + sdf.format(curdate);
+		        BigDecimal money = BigDecimal.ZERO;
+		        if (map.get(key) != null) {
+		          money = ((FinanceAppStat)map.get(key)).getMoney();
+		        }
+		        FinanceAppStat resultStat = (FinanceAppStat)resultMap.get(area.getId());
+		        if (resultStat == null)
+		        {
+		          FinanceAppStat fas = new FinanceAppStat();
+		          fas.setId(area.getId());
+		          fas.setName(area.getName());
+		          fas.setData(new ArrayList());
+		          fas.setTotal(BigDecimal.ZERO);
+		          resultMap.put(area.getId(), fas);
+		          resultStat = (FinanceAppStat)resultMap.get(area.getId());
+		        }
+		        resultStat.getData().add(money);
+		        resultStat.setTotalPlus(money);
+		        moneytotal = moneytotal.add(money);
+		      }
+		      total.getData().add(moneytotal);
+		      total.setTotalPlus(moneytotal);
+		      calendar.setTime(curdate);
+		      calendar.add(5, 1);
+		      curdate = calendar.getTime();
+		    }
+		    Map<String, Object> result = new HashMap();
+		    List<FinanceAppStat> data = new ArrayList();
+		    data.add(total);
+		    for (Integer areaid : resultMap.keySet())
+		    {
+		      FinanceAppStat cs = (FinanceAppStat)resultMap.get(areaid);
+		      data.add(cs);
+		    }
+		    Object chart = new ArrayList();
+		    ((List)chart).add(total);
+		    result.put("data", data);
+		    result.put("chart", chart);
+		    return result;
+	}
+
+	@Override
+	public Map<String, Object> getOutcomeStat(FinanceAppStat financeAppStat,
+			User user) {
+		if ((financeAppStat == null) || (financeAppStat.getStartdate() == null) || (financeAppStat.getEnddate() == null)) {
+		      return null;
+		    }
+		    financeAppStat.setDblink(user.getDblink());
+		    List<FinanceAppStat> list = this.financeAppStatMapper.selectOutcomeStat(financeAppStat);
+		    Map<String, FinanceAppStat> map = new HashMap();
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		    if (list == null) {
+		      list = new ArrayList();
+		    }
+		    for (FinanceAppStat fas : list) {
+		      if ((fas.getId() != null) && (fas.getDate() != null))
+		      {
+		        String key = fas.getId().toString() + "_" + sdf.format(fas.getDate());
+		        map.put(key, fas);
+		      }
+		    }
+		    Area a = new Area();
+		    a.setDblink(user.getDblink());
+		    a.setPageNo(Integer.valueOf(-1));
+		    List<Area> areas = this.areaService.selectAllList(a);
+		    Calendar calendar = Calendar.getInstance();
+		    Date curdate = financeAppStat.getStartdate();
+		    calendar.setTime(financeAppStat.getEnddate());
+		    calendar.add(5, 1);
+		    Date enddate = calendar.getTime();
+		    
+		    Map<Integer, FinanceAppStat> resultMap = new HashMap();
+		    FinanceAppStat total = new FinanceAppStat();
+		    total.setName("总计");
+		    total.setData(new ArrayList());
+		    String key;
+		    while (curdate.before(enddate))
+		    {
+		      BigDecimal moneytotal = BigDecimal.ZERO;
+		      for (Area area : areas)
+		      {
+		        key = area.getId().toString() + "_" + sdf.format(curdate);
+		        BigDecimal money = BigDecimal.ZERO;
+		        if (map.get(key) != null) {
+		          money = ((FinanceAppStat)map.get(key)).getMoney();
+		        }
+		        FinanceAppStat resultStat = (FinanceAppStat)resultMap.get(area.getId());
+		        if (resultStat == null)
+		        {
+		          FinanceAppStat fas = new FinanceAppStat();
+		          fas.setId(area.getId());
+		          fas.setName(area.getName());
+		          fas.setData(new ArrayList());
+		          fas.setTotal(BigDecimal.ZERO);
+		          resultMap.put(area.getId(), fas);
+		          resultStat = (FinanceAppStat)resultMap.get(area.getId());
+		        }
+		        resultStat.getData().add(money);
+		        resultStat.setTotalPlus(money);
+		        moneytotal = moneytotal.add(money);
+		      }
+		      total.getData().add(moneytotal);
+		      total.setTotalPlus(moneytotal);
+		      calendar.setTime(curdate);
+		      calendar.add(5, 1);
+		      curdate = calendar.getTime();
+		    }
+		    Map<String, Object> result = new HashMap();
+		    List<FinanceAppStat> data = new ArrayList();
+		    data.add(total);
+		    for (Integer areaid : resultMap.keySet())
+		    {
+		      FinanceAppStat cs = (FinanceAppStat)resultMap.get(areaid);
+		      data.add(cs);
+		    }
+		    Object chart = new ArrayList();
+		    ((List)chart).add(total);
+		    result.put("data", data);
+		    result.put("chart", chart);
+		    return result;
+	}
+
+	@Override
+	public Map<String, Object> getOwemoneyStat(FinanceAppStat financeAppStat,
+			User user) {
+		return new HashMap();
 	}
 
 }
