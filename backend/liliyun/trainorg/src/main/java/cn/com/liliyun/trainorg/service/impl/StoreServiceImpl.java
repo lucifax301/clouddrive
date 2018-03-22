@@ -91,7 +91,7 @@ public class StoreServiceImpl implements StoreService {
 				storeids.add(s.getId());
 			}
 			if (storeids.size() > 0) {
-				Map<Integer, Integer> storeCoachMap = coachService.getStoreCoachNumBatch(storeids, user);
+				Map<Integer, Integer> storeCoachMap = coachService.getStoreCoachNumBatch(storeids);
 				for (Store s : list) {
 					Integer coachnum = storeCoachMap.get(s.getId());
 					if (coachnum == null)

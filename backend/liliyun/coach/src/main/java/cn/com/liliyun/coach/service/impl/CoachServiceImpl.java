@@ -38,6 +38,7 @@ import cn.com.liliyun.coach.model.HeadCoach;
 import cn.com.liliyun.coach.model.StudentAssign;
 import cn.com.liliyun.coach.service.CoachService;
 import cn.com.liliyun.coach.service.CoachSettingService;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
 import cn.com.liliyun.common.model.UploadImage;
@@ -158,24 +159,24 @@ public class CoachServiceImpl implements CoachService {
 		}
 
 		if (coach.getHeadcoachflag() != null && coach.getHeadcoachflag() == 1) {// 组长
-			addHeadCoach(coach.getCoachid(),user);
+			addHeadCoach(coach.getCoachid());
 		}
 
 		if (extendinfo.containsKey("storeid")) {
 			String[] newstores = (String[]) extendinfo.get("storeid");
-			updateStore(newstores, coach.getCoachid(), user);
+			updateStore(newstores, coach.getCoachid());
 		}
 		if (extendinfo.containsKey("classinfoid")) {
 			String[] newclassinfoids = (String[]) extendinfo.get("classinfoid");
-			updateClassinfo(newclassinfoids, coach.getCoachid(), user);
+			updateClassinfo(newclassinfoids, coach.getCoachid());
 		}
 		if (extendinfo.containsKey("step2areaid")) {
 			String[] newstep2areaids = (String[]) extendinfo.get("step2areaid");
-			updateStep2Area(newstep2areaids, coach.getCoachid(), user);
+			updateStep2Area(newstep2areaids, coach.getCoachid());
 		}
 		if (extendinfo.containsKey("step3areaid")) {
 			String[] newstep3areaids = (String[]) extendinfo.get("step3areaid");
-			updateStep3Area(newstep3areaids, coach.getCoachid(), user);
+			updateStep3Area(newstep3areaids, coach.getCoachid());
 		}
 		// 插入图片
 		int id = coach.getCoachid();
@@ -221,19 +222,19 @@ public class CoachServiceImpl implements CoachService {
 		return r;
 	}
 
-	private void addHeadCoach(int coachid,User user) {
+	private void addHeadCoach(int coachid) {
 		HeadCoach headCoach = new HeadCoach();
-		headCoach.setDblink(user.getDblink());
+		//headCoach.setDblink(user.getDblink());
 		headCoach.setCoachid(coachid);
 		headCoach.setOvercoach(0);
 		headCoach.setOvercoachcar(0);
 		headCoachMapper.addHeadCoach(headCoach);
 	}
 
-	private void updateStore(String[] newstores, Integer coachid, User user) {
+	private void updateStore(String[] newstores, Integer coachid) {
 		CoachStore param = new CoachStore();
 		param.setCoachid(coachid);
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		List<CoachStore> all = coachStoreMapper.list(param);
 
 		List<CoachStore> addtypes = new ArrayList();
@@ -248,7 +249,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 			if (!flag) {
 				CoachStore n = new CoachStore();
-				n.setDblink(user.getDblink());
+				//n.setDblink(user.getDblink());
 				n.setCoachid(coachid);
 				n.setStoreid(Integer.parseInt(ntype));
 				addtypes.add(n);
@@ -271,34 +272,34 @@ public class CoachServiceImpl implements CoachService {
 		if (addtypes.size() > 0) {
 			Map params = new HashMap();
 			params.put("list", addtypes);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			coachStoreMapper.batchAdd(params);
 		}
 		if (deltypes.size() > 0) {
 			Map params = new HashMap();
 			params.put("list", deltypes);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			coachStoreMapper.batchDel(params);
 		}
 	}
 
-	private void updateStep2Area(String[] newstores, Integer coachid, User user) {
+	private void updateStep2Area(String[] newstores, Integer coachid) {
 		CoachArea param = new CoachArea();
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		param.setCoachid(coachid);
 		param.setStep(2);
-		updateStepArea(newstores, coachid, user, param);
+		updateStepArea(newstores, coachid,param);
 	}
 
-	private void updateStep3Area(String[] newstores, Integer coachid, User user) {
+	private void updateStep3Area(String[] newstores, Integer coachid) {
 		CoachArea param = new CoachArea();
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		param.setCoachid(coachid);
 		param.setStep(3);
-		updateStepArea(newstores, coachid, user, param);
+		updateStepArea(newstores, coachid,  param);
 	}
 
-	private void updateStepArea(String[] newareas, Integer coachid, User user,
+	private void updateStepArea(String[] newareas, Integer coachid,
 			CoachArea param) {
 		List<CoachArea> all = coachAreaMapper.list(param);
 
@@ -314,7 +315,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 			if (!flag) {
 				CoachArea n = new CoachArea();
-				n.setDblink(user.getDblink());
+				//n.setDblink(user.getDblink());
 				n.setCoachid(coachid);
 				n.setAreaid(Integer.parseInt(ntype));
 				n.setStep(param.getStep());
@@ -338,21 +339,21 @@ public class CoachServiceImpl implements CoachService {
 		if (addtypes.size() > 0) {
 			Map params = new HashMap();
 			params.put("list", addtypes);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			coachAreaMapper.batchAdd(params);
 		}
 		if (deltypes.size() > 0) {
 			Map params = new HashMap();
 			params.put("list", deltypes);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			coachAreaMapper.batchDel(params);
 		}
 	}
 
-	private void updateClassinfo(String[] newclassinfos, Integer coachid,
-			User user) {
+	private void updateClassinfo(String[] newclassinfos, Integer coachid
+			) {
 		CoachClassinfo param = new CoachClassinfo();
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		param.setCoachid(coachid);
 		List<CoachClassinfo> all = coachClassinfoMapper.list(param);
 
@@ -368,7 +369,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 			if (!flag) {
 				CoachClassinfo n = new CoachClassinfo();
-				n.setDblink(user.getDblink());
+				//n.setDblink(user.getDblink());
 				n.setCoachid(coachid);
 				n.setClassinfoid(Integer.parseInt(ntype));
 				addtypes.add(n);
@@ -391,19 +392,19 @@ public class CoachServiceImpl implements CoachService {
 		if (addtypes.size() > 0) {
 			Map params = new HashMap();
 			params.put("list", addtypes);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			coachClassinfoMapper.batchAdd(params);
 		}
 		if (deltypes.size() > 0) {
 			Map params = new HashMap();
 			params.put("list", deltypes);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			coachClassinfoMapper.batchDel(params);
 		}
 	}
 
 	@Override
-	public List<Coach> getCoachList(Coach coach, User user) {
+	public List<Coach> getCoachList(Coach coach) {
 		/*
 		 * PageUtil.startPage(coach); List<Coach> coachList =
 		 * coachMapper.selectByCondition(coach); return new
@@ -411,17 +412,18 @@ public class CoachServiceImpl implements CoachService {
 		 */
 		PageUtil.startPage(coach);
 		List<Coach> coachList = coachMapper.selectByCondition(coach);
-
+		
 		try {
 			CoachTeachType cty=new CoachTeachType();
-			cty.setDblink(user.getDblink());
+//			User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
+//			cty.setDblink(user.getDblink());
 			List<CoachTeachType> teachtypes = settingService
 					.listTeachType(cty);
 			CoachJob cj=new CoachJob();
-			cj.setDblink(user.getDblink());
+//			cj.setDblink(user.getDblink());
 			List<CoachJob> jobs = settingService.listJob(cj);
 			Area pa=new Area();
-			pa.setDblink(user.getDblink());
+//			pa.setDblink(user.getDblink());
 			List<Area> areas = areaService.selectAllList(pa);
 
 			List<Integer> ids = new ArrayList<>();
@@ -453,7 +455,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 			if (ids.size() > 0) {
 				Map<Integer, CoachClassinfo> coachClassMap = selectCoachClassBatch(
-						ids, user);
+						ids);
 				for (Coach c : coachList) {
 					CoachClassinfo coachClassinfo = coachClassMap.get(c
 							.getCoachid());
@@ -471,20 +473,20 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public List<Coach> getExportCoachList(Coach coach, User user) {
+	public List<Coach> getExportCoachList(Coach coach) {
 
 		List<Coach> coachList = coachMapper.selectByCondition(coach);
 
 		try {
 			CoachTeachType cty=new CoachTeachType();
-			cty.setDblink(user.getDblink());
+			//cty.setDblink(user.getDblink());
 			List<CoachTeachType> teachtypes = settingService
 					.listTeachType(cty);
 			CoachJob cj=new CoachJob();
-			cj.setDblink(user.getDblink());
+			//cj.setDblink(user.getDblink());
 			List<CoachJob> jobs = settingService.listJob(cj);
 			Area pa=new Area();
-			pa.setDblink(user.getDblink());
+			//pa.setDblink(user.getDblink());
 			List<Area> areas = areaService.selectAllList(pa);
 
 			List<Integer> ids = new ArrayList<>();
@@ -516,7 +518,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 			if (ids.size() > 0) {
 				Map<Integer, CoachClassinfo> coachClassMap = selectCoachClassBatch(
-						ids, user);
+						ids);
 				for (Coach c : coachList) {
 					CoachClassinfo coachClassinfo = coachClassMap.get(c
 							.getCoachid());
@@ -534,7 +536,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public List<Coach> getNoAssignCoachList(Coach coach, User user) {
+	public List<Coach> getNoAssignCoachList(Coach coach) {
 		/*
 		 * PageUtil.startPage(coach); List<Coach> coachList =
 		 * coachMapper.selectByCondition(coach); return new
@@ -545,13 +547,13 @@ public class CoachServiceImpl implements CoachService {
 
 		try {
 			CoachTeachType cty=new CoachTeachType();
-			cty.setDblink(user.getDblink());
+			//cty.setDblink(user.getDblink());
 			List<CoachTeachType> teachtypes = settingService
 					.listTeachType(cty);
 			CoachJob cj=new CoachJob();
-			cj.setDblink(user.getDblink());
+			//cj.setDblink(user.getDblink());
 			Area pa=new Area();
-			pa.setDblink(user.getDblink());
+			//pa.setDblink(user.getDblink());
 			List<CoachJob> jobs = settingService.listJob(cj);
 			List<Area> areas = areaService.selectAllList(pa);
 
@@ -584,7 +586,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 			if (ids.size() > 0) {
 				Map<Integer, CoachClassinfo> coachClassMap = selectCoachClassBatch(
-						ids, user);
+						ids);
 				for (Coach c : coachList) {
 					CoachClassinfo coachClassinfo = coachClassMap.get(c
 							.getCoachid());
@@ -602,8 +604,8 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public List<HeadCoach> getHeadCoachList(Coach coach,User user) {
-		coach.setDblink(user.getDblink());
+	public List<HeadCoach> getHeadCoachList(Coach coach) {
+		//coach.setDblink(user.getDblink());
 		PageUtil.startPage(coach);
 
 		HeadCoach phc=new HeadCoach();
@@ -611,7 +613,7 @@ public class CoachServiceImpl implements CoachService {
 		List<HeadCoach> coachList = headCoachMapper.listHeadCoach(coach);
 		List<HeadCoach> stats= headCoachMapper.statHeadCoach(phc);
 		Area pa=new Area();
-		pa.setDblink(user.getDblink());
+		//pa.setDblink(user.getDblink());
 		List<Area> areas = areaService.selectAllList(pa);
 		
 		List<Integer> users=new ArrayList();
@@ -649,7 +651,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean updateCoach(Coach coach,LogCommon log,Map extendinfo,User user) {
+	public ResultBean updateCoach(Coach coach,LogCommon log,Map extendinfo) {
 		ResultBean r = new ResultBean();
 		Coach ca = new Coach();
 		ca.setDblink(coach.getDblink());
@@ -747,38 +749,38 @@ public class CoachServiceImpl implements CoachService {
 //			}
 //		}
 		
-		updateHeadCoach(oldone, coach, log, user, r);
+		updateHeadCoach(oldone, coach, log,  r);
 		if(r.getCode()!=0){
 			return r;
 		}
 		
 		coachMapper.updateByPrimaryKeySelective(coach);
 		
-		log.setDblink(user.getDblink());
+		//log.setDblink(user.getDblink());
 		logCommonService.insertLogInfo(log);
 		if(extendinfo.containsKey("storeid")){
 			String[] newstores=(String[])extendinfo.get("storeid");
-			updateStore(newstores, coach.getCoachid(), user);
+			updateStore(newstores, coach.getCoachid());
 		}else{//页面没有勾选，都取消
-			updateStore(new String[]{}, coach.getCoachid(), user);
+			updateStore(new String[]{}, coach.getCoachid());
 		}
 		if(extendinfo.containsKey("classinfoid")){
 			String[] newclassinfoids=(String[])extendinfo.get("classinfoid");
-			updateClassinfo(newclassinfoids, coach.getCoachid(), user);
+			updateClassinfo(newclassinfoids, coach.getCoachid());
 		}else{
-			updateClassinfo(new String[]{}, coach.getCoachid(), user);
+			updateClassinfo(new String[]{}, coach.getCoachid());
 		}
 		if(extendinfo.containsKey("step2areaid")){
 			String[] newstep2areaids=(String[])extendinfo.get("step2areaid");
-			updateStep2Area(newstep2areaids, coach.getCoachid(), user);
+			updateStep2Area(newstep2areaids, coach.getCoachid());
 		}else{
-			updateStep2Area(new String[]{}, coach.getCoachid(), user);
+			updateStep2Area(new String[]{}, coach.getCoachid());
 		}
 		if(extendinfo.containsKey("step3areaid")){
 			String[] newstep3areaids=(String[])extendinfo.get("step3areaid");
-			updateStep3Area(newstep3areaids, coach.getCoachid(), user);
+			updateStep3Area(newstep3areaids, coach.getCoachid());
 		}else{
-			updateStep3Area(new String[]{}, coach.getCoachid(), user);
+			updateStep3Area(new String[]{}, coach.getCoachid());
 		}
 		//插入图片
 		int id = coach.getCoachid();
@@ -787,7 +789,7 @@ public class CoachServiceImpl implements CoachService {
 			UploadImage ui = new UploadImage();
 			ui.setBusinessId(id);
 			ui.setModule("coach");
-			ui.setDblink(user.getDblink());
+			//ui.setDblink(user.getDblink());
 			String[] images = array.split(",");
 			for (String key : images) {
 				ui.setDblink(coach.getDblink());
@@ -798,29 +800,29 @@ public class CoachServiceImpl implements CoachService {
 		return r;
 	}
 
-	public void updateHeadCoach(Coach oldone,Coach coach,LogCommon log,User user,ResultBean r){
+	public void updateHeadCoach(Coach oldone,Coach coach,LogCommon log,ResultBean r){
 		if(oldone.getHeadcoachflag()==null||oldone.getHeadcoachflag()==0){//之前不是组长
 			if(coach.getHeadcoachflag()!=null&&coach.getHeadcoachflag()==1){//组长
-				addHeadCoach(coach.getCoachid(),user);
+				addHeadCoach(coach.getCoachid());
 			}else{
 				if(coach.getHeadcoachid()==null||coach.getHeadcoachid()==0){//当前的组长为空
 					if(oldone.getHeadcoachid()!=null&&oldone.getHeadcoachid()!=0){//之前不为空
 						//减少之前headcoach记录里的管理教练数
 						String[] delcoachid=new String[]{ coach.getCoachid()+""};
-						this.assignCoachProcess(oldone.getHeadcoachid(), null, delcoachid, log, user);
+						this.assignCoachProcess(oldone.getHeadcoachid(), null, delcoachid, log);
 					}
 				}else if(coach.getHeadcoachid()!=null&&coach.getHeadcoachid()!=0){//当前组长不为空
 					if(oldone.getHeadcoachid()==null||oldone.getHeadcoachid()==0){//之前为空
 						//增加之前headcoach记录里的管理教练数
 						String[] coachid=new String[]{ coach.getCoachid()+""};
-						this.assignCoachProcess(coach.getHeadcoachid(), coachid, null, log, user);
+						this.assignCoachProcess(coach.getHeadcoachid(), coachid, null, log);
 					}
 				}
 			}
 		}else if(oldone.getHeadcoachflag()!=null&&oldone.getHeadcoachflag()==1){//之前是组长
 			if(coach.getHeadcoachflag()==null||coach.getHeadcoachflag()==0){//修改成不是组长
 				Coach hp=new Coach();
-				hp.setDblink(user.getDblink());
+				//hp.setDblink(user.getDblink());
 				hp.setHeadcoachid(coach.getCoachid());
 				List<Coach> owncoaches= coachMapper.selectByCondition(hp);
 				if(owncoaches!=null&&owncoaches.size()>0){//有管辖教练
@@ -829,7 +831,7 @@ public class CoachServiceImpl implements CoachService {
 					
 				}else{
 					HeadCoach dhp=new HeadCoach();
-					dhp.setDblink(user.getDblink());
+					//dhp.setDblink(user.getDblink());
 					dhp.setCoachid(coach.getCoachid());
 					headCoachMapper.delHeadCoach(dhp);
 				}
@@ -838,16 +840,14 @@ public class CoachServiceImpl implements CoachService {
 	}
 	
 	@Override
-	public ResultBean updateCoachTeachState(Coach coach, LogCommon log,
-			User user) {
+	public ResultBean updateCoachTeachState(Coach coach, LogCommon log) {
 		ResultBean r = new ResultBean();
 		coachMapper.updateTeachState(coach);
 		return r;
 	}
 
 	@Override
-	public ResultBean updateCoachEmploystatus(Coach coach, LogCommon log,
-			User user) {
+	public ResultBean updateCoachEmploystatus(Coach coach, LogCommon log) {
 		ResultBean r = new ResultBean();
 		coachMapper.updateEmploystatus(coach);
 		return r;
@@ -864,24 +864,24 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean getCoachModinfo(Coach coach, int applyid, User user) {
+	public ResultBean getCoachModinfo(Coach coach, int applyid) {
 		ResultBean resultBean = new ResultBean();
 		Coach exist = coachMapper.selectByPrimaryKey(coach);
 		CoachModApply param = new CoachModApply();
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		param.setId(applyid);
 		CoachModApply apply = coachModApplyMapper.getApply(param);
 		String moddetail = apply.getDetail();
 		JSONObject json = JSONObject.parseObject(moddetail);
 		// Coach mod= JSON.toJavaObject(json, Coach.class);
 		copyJsonValueToBean(json, exist);
-
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (apply.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (apply.getStatus() == 0) {// 业务还在等待审核中
 				exist.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
 			} else {
 				Flow flow = new Flow();
-				flow.setDblink(user.getDblink());
+				//flow.setDblink(user.getDblink());
 				flow.setTransactionid(apply.getTransactionid());
 				FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
 				if(fs==null){//没有审批流，可以直接审核
@@ -893,7 +893,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 		} else {
 			Flow flow = new Flow();
-			flow.setDblink(user.getDblink());
+			//flow.setDblink(user.getDblink());
 			flow.setTransactionid(apply.getTransactionid());
 			FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
 			if(fs==null){//没有审批流，可以直接审核
@@ -925,10 +925,10 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public Map getCoachModExtendinfo(Coach coach, int applyid,User user) {
+	public Map getCoachModExtendinfo(Coach coach, int applyid) {
 		Coach exist = coachMapper.selectByPrimaryKey(coach);
 		CoachModApply param = new CoachModApply();
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		param.setId(applyid);
 		CoachModApply apply = coachModApplyMapper.getApply(param);
 		String moddetail = apply.getDetail();
@@ -1013,20 +1013,20 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public Map getCoachExtendById(Coach coach,User user) {
+	public Map getCoachExtendById(Coach coach) {
 		Map map = new HashMap();
 		CoachStore cs = new CoachStore();
 		cs.setCoachid(coach.getCoachid());
-		cs.setDblink(user.getDblink());
+		//cs.setDblink(user.getDblink());
 		List<CoachStore> css = coachStoreMapper.list(cs);
 
 		CoachClassinfo cci = new CoachClassinfo();
-		cci.setDblink(user.getDblink());
+		//cci.setDblink(user.getDblink());
 		cci.setCoachid(coach.getCoachid());
 		List<CoachClassinfo> ccis = coachClassinfoMapper.list(cci);
 
 		CoachArea ca = new CoachArea();
-		ca.setDblink(user.getDblink());
+		//ca.setDblink(user.getDblink());
 		ca.setCoachid(coach.getCoachid());
 		List<CoachArea> cas = coachAreaMapper.list(ca);
 
@@ -1143,31 +1143,30 @@ public class CoachServiceImpl implements CoachService {
 //	}
 
 	@Override
-	public ResultBean incrementCoachStudent(int coachid,User user) {
+	public ResultBean incrementCoachStudent(int coachid) {
 		ResultBean r = new ResultBean();
 		Coach coach = new Coach();
 		coach.setCoachid(coachid);
-		coach.setDblink(user.getDblink());
+		//coach.setDblink(user.getDblink());
 		coachMapper.incrementCoachStudent(coach);
 		return r;
 	}
 
 	@Override
-	public ResultBean decrementCoachStudent(int coachid,User user) {
+	public ResultBean decrementCoachStudent(int coachid) {
 		ResultBean r = new ResultBean();
 		Coach coach = new Coach();
 		coach.setCoachid(coachid);
-		coach.setDblink(user.getDblink());
+		//coach.setDblink(user.getDblink());
 		coachMapper.decrementCoachStudent(coach);
 		return r;
 	}
 
 	@Override
-	public ResultBean getStuAssignRecord(StudentAssign studentAssign, User user)
+	public ResultBean getStuAssignRecord(StudentAssign studentAssign)
 			throws Exception {
 		ResultBean rb = new ResultBean();
-		List<StudentAssign> list = this.getAllStuAssignRecord(studentAssign,
-				user);
+		List<StudentAssign> list = this.getAllStuAssignRecord(studentAssign);
 
 		rb.setResult(new PageInfo<>(list));
 		return rb;
@@ -1175,18 +1174,19 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public List<StudentAssign> getAllStuAssignRecord(
-			StudentAssign studentAssign, User user) throws Exception {
+			StudentAssign studentAssign) throws Exception {
 
 		List<StudentAssign> list = stuAssignMapper.list(studentAssign);
 		Area pa=new Area();
-		pa.setDblink(user.getDblink());
+		//pa.setDblink(user.getDblink());
 		List<Area> areas = areaService.selectAllList(pa);
 		Store ps=new Store();
-		ps.setDblink(user.getDblink());
+		//ps.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		List<Store> stores = storeService.selectAllList(ps, user);
 		
 		CoachTeachType ctt= new CoachTeachType();
-		ctt.setDblink(user.getDblink());
+		//ctt.setDblink(user.getDblink());
 		List<CoachTeachType> teachtypes = settingService
 				.listTeachType(ctt);
 
@@ -1222,11 +1222,11 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public ResultBean modCoachApply(Coach coach, LogCommon log,
-			Map extendsinfo, User user, String businessid) {
+			Map extendsinfo, String businessid) {
 		ResultBean rb = new ResultBean();
 
 		CoachModApply param = new CoachModApply();
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		param.setCoachid(coach.getCoachid());
 
 		CoachModApply eapply = coachModApplyMapper.getApplyByCoachid(param);
@@ -1272,11 +1272,12 @@ public class CoachServiceImpl implements CoachService {
 		}
 
 		CoachModApply apply = new CoachModApply();
-		apply.setDblink(user.getDblink());
+		//apply.setDblink(user.getDblink());
 		apply.setCoachid(coach.getCoachid());
-		apply.setApplyuserid(user.getId());
+		//apply.setApplyuserid(user.getId());
 		apply.setDetail(detail.toJSONString());
 		String desc = "教练[" + exist.getName() + "]修改申请";
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String transactionid = flowService.addFlow(businessid, user.getId(),
 				desc,user);
 		apply.setBusinessid(businessid);
@@ -1378,7 +1379,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean listModCoachApply(CoachModApplyParam param,User user) {
+	public ResultBean listModCoachApply(CoachModApplyParam param) {
 		if (param.getEnddate() != null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(param.getEnddate());
@@ -1393,8 +1394,9 @@ public class CoachServiceImpl implements CoachService {
 		up.setSchoolid(param.getSchoolid());
 		List<User> users = userService.selectSchoolUser(up);
 		Area pa=new Area();
-		pa.setDblink(user.getDblink());
+		//pa.setDblink(user.getDblink());
 		List<Area> areas = areaService.selectAllList(pa);
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		for (CoachModApply apply : list) {
 			for (Area area : areas) {
 				if (apply.getAreaid() == area.getId()) {
@@ -1410,6 +1412,7 @@ public class CoachServiceImpl implements CoachService {
 					apply.setAudituser(s.getUsername());
 				}
 			}
+			
 			if(apply.getApplyuserid()==user.getId()){
 				apply.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
 			}
@@ -1420,19 +1423,19 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public ResultBean updateModCoachApply(Coach coach, LogCommon log,
-			Map extendsinfo, User user, int applyid) {
+			Map extendsinfo,int applyid) {
 		ResultBean rb = new ResultBean();
 
 		Coach exist = coachMapper.selectByPrimaryKey(coach);
 
 		CoachModApply param = new CoachModApply();
-		param.setDblink(user.getDblink());
+		//param.setDblink(user.getDblink());
 		param.setId(applyid);
 
 		CoachModApply apply = coachModApplyMapper.getApply(param);
 
 		JSONObject detail = getModJson(coach, exist);
-
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		apply.setCoachid(coach.getCoachid());
 		apply.setApplyuserid(user.getId());
 		apply.setDetail(detail.toJSONString());
@@ -1442,15 +1445,15 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean auditModCoachApply(int applyid, int state, LogCommon log,
-			User user) {
+	public ResultBean auditModCoachApply(int applyid, int state, LogCommon log) {
 		ResultBean rb = new ResultBean();
 
 		/**
 		 * @todo 审核通过，数据没有改
 		 */
 		CoachModApply param = new CoachModApply();
-		param.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		//param.setDblink(user.getDblink());
 		param.setId(applyid);
 		CoachModApply apply = coachModApplyMapper.getApply(param);
 		Flow flow = flowService.getFlow(apply.getTransactionid(),user);
@@ -1466,7 +1469,7 @@ public class CoachServiceImpl implements CoachService {
 		}
 		
 		
-		flow.setDblink(user.getDblink());
+		//flow.setDblink(user.getDblink());
 		
 		flow.setTransactionid(apply.getTransactionid());
 		FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
@@ -1478,19 +1481,20 @@ public class CoachServiceImpl implements CoachService {
 			}
 		}
 		
-		apply.setDblink(user.getDblink());
+		//apply.setDblink(user.getDblink());
 		
-		auditProcess(apply, flow, state, log, user,rb);
+		auditProcess(apply, flow, state, log,rb);
 		return rb;
 	}
 
 	@Override
 	public ResultBean batchAuditModCoachApply(String[] applyid, int state,
-			LogCommon log, User user) {
+			LogCommon log) {
 		ResultBean rb = new ResultBean();
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		for (String id : applyid) {
 			CoachModApply param = new CoachModApply();
-			param.setDblink(user.getDblink());
+			//param.setDblink(user.getDblink());
 			param.setId(Integer.parseInt(id));
 			CoachModApply apply = coachModApplyMapper.getApply(param);
 			Flow flow = flowService.getFlow(apply.getTransactionid(),user);
@@ -1502,9 +1506,9 @@ public class CoachServiceImpl implements CoachService {
 			} else {
 
 			}
-			flow.setDblink(user.getDblink());
-			apply.setDblink(user.getDblink());
-			auditProcess(apply, flow, state, log, user,rb);
+			//flow.setDblink(user.getDblink());
+			//apply.setDblink(user.getDblink());
+			auditProcess(apply, flow, state, log, rb);
 			
 //			if (state == 1) {
 //				boolean next = (flow != null)
@@ -1521,7 +1525,8 @@ public class CoachServiceImpl implements CoachService {
 	}
 	
 	public void auditProcess(CoachModApply apply,Flow flow,int state, LogCommon log,
-			User user,ResultBean rb1){
+			ResultBean rb1){
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (state == 1) {
 			boolean next = (flow != null)
 					&& flowService.auditFlow(flow, user.getId(),
@@ -1530,9 +1535,9 @@ public class CoachServiceImpl implements CoachService {
 			if (!next) {
 				Coach pc=new Coach(apply
 						.getCoachid());
-				pc.setDblink(user.getDblink());
+				//pc.setDblink(user.getDblink());
 				Coach exist = coachMapper.selectByPrimaryKey(pc);
-				exist.setDblink(user.getDblink());
+				//exist.setDblink(user.getDblink());
 				JSONObject jsonobject = JSONObject.parseObject(apply
 						.getDetail());
 				Iterator<String> keys = jsonobject.keySet().iterator();
@@ -1579,13 +1584,13 @@ public class CoachServiceImpl implements CoachService {
 					if(oldheadcoachid!=null&&oldheadcoachid!=0){//之前不为空
 						//减少之前headcoach记录里的管理教练数
 						String[] delcoachid=new String[]{ exist.getCoachid()+""};
-						this.assignCoachProcess(oldheadcoachid, null, delcoachid, log, user);
+						this.assignCoachProcess(oldheadcoachid, null, delcoachid, log);
 					}
 				}else if(newheadcoachid!=null&&newheadcoachid!=0){//当前组长不为空
 					if(oldheadcoachid==null||oldheadcoachid==0){//之前为空
 						//增加之前headcoach记录里的管理教练数
 						String[] coachid=new String[]{ exist.getCoachid()+""};
-						this.assignCoachProcess(newheadcoachid, coachid, null, log, user);
+						this.assignCoachProcess(newheadcoachid, coachid, null, log);
 					}
 				}
 				
@@ -1593,30 +1598,30 @@ public class CoachServiceImpl implements CoachService {
 					
 				if (extendinfo.containsKey("storeid")) {
 					String[] newstores = (String[]) extendinfo.get("storeid");
-					updateStore(newstores, exist.getCoachid(), user);
+					updateStore(newstores, exist.getCoachid());
 				} else {// 页面没有勾选，都取消
-					updateStore(new String[] {}, exist.getCoachid(), user);
+					updateStore(new String[] {}, exist.getCoachid());
 				}
 				if (extendinfo.containsKey("classinfoid")) {
 					String[] newclassinfoids = (String[]) extendinfo
 							.get("classinfoid");
-					updateClassinfo(newclassinfoids, exist.getCoachid(), user);
+					updateClassinfo(newclassinfoids, exist.getCoachid());
 				} else {
-					updateClassinfo(new String[] {}, exist.getCoachid(), user);
+					updateClassinfo(new String[] {}, exist.getCoachid());
 				}
 				if (extendinfo.containsKey("step2areaid")) {
 					String[] newstep2areaids = (String[]) extendinfo
 							.get("step2areaid");
-					updateStep2Area(newstep2areaids, exist.getCoachid(), user);
+					updateStep2Area(newstep2areaids, exist.getCoachid());
 				} else {
-					updateStep2Area(new String[] {}, exist.getCoachid(), user);
+					updateStep2Area(new String[] {}, exist.getCoachid());
 				}
 				if (extendinfo.containsKey("step3areaid")) {
 					String[] newstep3areaids = (String[]) extendinfo
 							.get("step3areaid");
-					updateStep3Area(newstep3areaids, exist.getCoachid(), user);
+					updateStep3Area(newstep3areaids, exist.getCoachid());
 				} else {
-					updateStep3Area(new String[] {}, exist.getCoachid(), user);
+					updateStep3Area(new String[] {}, exist.getCoachid());
 				}
 
 				coachModApplyMapper.updateApplyStatus(apply);
@@ -1636,10 +1641,10 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public ResultBean assignCoach(int headcoachid, String coachid[],
-			String delcoachid[], LogCommon log, User user) {
+			String delcoachid[], LogCommon log) {
 		ResultBean rb = new ResultBean();
 		
-		assignCoachProcess(headcoachid, coachid, delcoachid, log, user);
+		assignCoachProcess(headcoachid, coachid, delcoachid, log);
 		
 		return rb;
 	}
@@ -1653,7 +1658,7 @@ public class CoachServiceImpl implements CoachService {
 	 * @param user
 	 */
 	public void assignCoachProcess(int headcoachid, String coachid[],
-			String delcoachid[], LogCommon log, User user) {
+			String delcoachid[], LogCommon log) {
 		List list = new ArrayList();
 		List dellist = new ArrayList();
 		if (coachid != null)
@@ -1670,11 +1675,12 @@ public class CoachServiceImpl implements CoachService {
 				coach.setHeadcoachid(0);
 				dellist.add(coach);
 			}
-
+		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Map params = new HashMap();
 		if (list.size() > 0) {
 			params.put("list", list);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			params.put("headcoachid", headcoachid);
 			
 			coachMapper.updateHeadcoach(params);
@@ -1685,12 +1691,12 @@ public class CoachServiceImpl implements CoachService {
 			headCoach.setOvercoach(coachid.length);
 			headCoach.setOvercoachcar(carcount);
 			headCoach.setMuserid(user.getId());
-			headCoach.setDblink(user.getDblink());
+			//headCoach.setDblink(user.getDblink());
 			headCoachMapper.updateHeadCoachData(headCoach);
 		}
 		if (dellist.size() > 0) {
 			params.put("list", dellist);
-			params.put("dblink", user.getDblink());
+			//params.put("dblink", user.getDblink());
 			params.put("headcoachid", 0);
 			coachMapper.updateHeadcoach(params);
 			int carcount = coachMapper.getCoachcarcount(params);
@@ -1700,14 +1706,14 @@ public class CoachServiceImpl implements CoachService {
 			headCoach.setOvercoach(-delcoachid.length);
 			headCoach.setOvercoachcar(-carcount);
 			headCoach.setMuserid(user.getId());
-			headCoach.setDblink(user.getDblink());
+			//headCoach.setDblink(user.getDblink());
 			headCoachMapper.updateHeadCoachData(headCoach);
 		}
 	}
 	
 	@Override
 	public ResultBean batchUpdateCoach(String coachid[], Coach coach,
-			LogCommon log, User user, String classinfoid[]) {
+			LogCommon log, String classinfoid[]) {
 		ResultBean rb = new ResultBean();
 
 		List list = new ArrayList();
@@ -1721,7 +1727,7 @@ public class CoachServiceImpl implements CoachService {
 
 		if (classinfoid != null && classinfoid.length > 0) {
 			for (String id : coachid) {
-				updateClassinfo(classinfoid, Integer.parseInt(id), user);
+				updateClassinfo(classinfoid, Integer.parseInt(id));
 			}
 		} else {
 			// for(String id:coachid){
@@ -1731,7 +1737,7 @@ public class CoachServiceImpl implements CoachService {
 
 		Map params = new HashMap();
 		params.put("list", list);
-		params.put("dblink", user.getDblink());
+		//params.put("dblink", user.getDblink());
 		params.put("teachtypeid", coach.getTeachtypeid());
 		params.put("studentload", coach.getStudentload());
 		if (coach.getTeachtypeid() != null && coach.getTeachtypeid() > 0) {
@@ -1746,9 +1752,9 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public Map<Integer, CoachClassinfo> selectCoachClassBatch(
-			List<Integer> ids, User user) {
+			List<Integer> ids) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("dblink", user.getDblink());
+		//map.put("dblink", user.getDblink());
 		map.put("list", ids);
 		List<CoachClassinfo> ccis = coachClassinfoMapper
 				.selectCoachClassBatch(map);
@@ -1777,10 +1783,9 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public Map<Integer, Integer> getStoreCoachNumBatch(List<Integer> storeids,
-			User user) {
+	public Map<Integer, Integer> getStoreCoachNumBatch(List<Integer> storeids) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("dblink", user.getDblink());
+		//map.put("dblink", user.getDblink());
 		map.put("list", storeids);
 		List<Store> list = coachStoreMapper.batchSelectCount(map);
 		Map<Integer, Integer> result = new HashMap<>();
@@ -1791,12 +1796,12 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean assignList(Coach coach, Integer studentid, User user) {
+	public ResultBean assignList(Coach coach, Integer studentid) {
 		ResultBean r = new ResultBean();
 		try {
 			Student s = new Student();
 			s.setId(studentid);
-			s.setDblink(user.getDblink());
+			//s.setDblink(user.getDblink());
 			s = studentService.getStudent(s);
 			if (s == null)
 				return r;
@@ -1808,7 +1813,7 @@ public class CoachServiceImpl implements CoachService {
 			coach.setTeachstate(1); //分配状态，1正常分配
 			coach.setEmploystatus("0"); //供职状态， 0在职
 			coach.setStudentid(studentid);
-			List<Coach> list = getCoachList(coach, user);
+			List<Coach> list = getCoachList(coach);
 			r.setResult(new PageInfo<>(list));
 		} catch (Exception e) {
 			e.printStackTrace();

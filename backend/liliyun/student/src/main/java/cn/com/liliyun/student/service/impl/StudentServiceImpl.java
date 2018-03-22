@@ -941,7 +941,7 @@ public class StudentServiceImpl implements StudentService {
 		}else{
 			coachStudentMapper.insert(coachStudent);
 			//调用coachservice 增加教练负荷学员数
-			coachService.incrementCoachStudent(coachStudent.getCoachid(),user);
+			coachService.incrementCoachStudent(coachStudent.getCoachid());
 		}
 		
 		if (coachStudent.getIsvalid() == 1) {
@@ -1543,7 +1543,7 @@ public class StudentServiceImpl implements StudentService {
 			}
 		}
 		if (ids.size() > 0) {
-			Map<Integer, CoachClassinfo> coachClassMap = coachService.selectCoachClassBatch(ids, user);
+			Map<Integer, CoachClassinfo> coachClassMap = coachService.selectCoachClassBatch(ids);
 			for (StudentCoachDTO scd : list) {
 				CoachClassinfo coachClassinfo = coachClassMap.get(scd.getCoachid());
 				

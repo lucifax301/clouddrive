@@ -59,8 +59,7 @@ public class CoachController extends BaseController {
 	@RequestMapping(value = "/coach/list")
 	@ResponseBody
 	public ResultBean getList(Coach coach, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
-		List<Coach> list = coachService.getCoachList(coach, user);
+		List<Coach> list = coachService.getCoachList(coach);
 		PageInfo<Coach> pagedResult = new PageInfo(list);
 		ResultBean resultBean = new ResultBean();
 		resultBean.setResult(pagedResult);
@@ -71,8 +70,8 @@ public class CoachController extends BaseController {
 	@RequestMapping(value = "/coach/listnoassign")
 	@ResponseBody
 	public ResultBean getListNoassign(Coach coach, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
-		List<Coach> list = coachService.getNoAssignCoachList(coach, user);
+		//User user = AccessWebUtil.getSessionUser(request);
+		List<Coach> list = coachService.getNoAssignCoachList(coach);
 		PageInfo<Coach> pagedResult = new PageInfo(list);
 		ResultBean resultBean = new ResultBean();
 		resultBean.setResult(pagedResult);
@@ -82,8 +81,8 @@ public class CoachController extends BaseController {
 	
 	@RequestMapping(value = "/coach/export")
 	public ResponseEntity<byte[]> export(Coach coach, HttpServletRequest request) throws IOException {
-		User user = AccessWebUtil.getSessionUser(request);
-		List<Coach> list = coachService.getExportCoachList(coach, user); // 获取数据
+		//User user = AccessWebUtil.getSessionUser(request);
+		List<Coach> list = coachService.getExportCoachList(coach); // 获取数据
 		ExportParams params = new ExportParams("教练导出数据", "导出数据", ExcelType.XSSF);// title
 																					// sheetname
 																					// 文件格式
@@ -122,8 +121,8 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean getCoachExtendById(Coach coach,HttpServletRequest request) {
 		ResultBean resultBean = new ResultBean();
-		User user = AccessWebUtil.getSessionUser(request);
-		Map map = coachService.getCoachExtendById(coach,user);
+		//User user = AccessWebUtil.getSessionUser(request);
+		Map map = coachService.getCoachExtendById(coach);
 		resultBean.setResult(map);
 		return resultBean;
 	}
@@ -142,8 +141,8 @@ public class CoachController extends BaseController {
 	@RequestMapping(value = "/coach/listhead")
 	@ResponseBody
 	public ResultBean getHeadList(Coach coach,HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
-		List<HeadCoach> list = coachService.getHeadCoachList(coach,user);
+		//User user = AccessWebUtil.getSessionUser(request);
+		List<HeadCoach> list = coachService.getHeadCoachList(coach);
 		PageInfo<HeadCoach> pagedResult = new PageInfo(list);
 		ResultBean resultBean = new ResultBean();
 		resultBean.setResult(pagedResult);
@@ -185,7 +184,7 @@ public class CoachController extends BaseController {
 		processExt(extendsinfo, request);
 		coach.setMuid(user.getId());
 		ResultBean resultBean = new ResultBean();
-		coachService.updateCoach(coach, log, extendsinfo, user);
+		coachService.updateCoach(coach, log, extendsinfo);
 		return resultBean;
 	}
 
@@ -241,7 +240,7 @@ public class CoachController extends BaseController {
 		Map extendsinfo = new HashMap();
 		processExt(extendsinfo, request);
 		coach.setMuid(user.getId());
-		return coachService.updateCoach(coach, log, extendsinfo, user);
+		return coachService.updateCoach(coach, log, extendsinfo);
 	}
 
 	@RequestMapping(value = "/coach/updateCoachTeachState")
@@ -252,7 +251,7 @@ public class CoachController extends BaseController {
 		User user = AccessWebUtil.getSessionUser(request);
 
 		coach.setMuid(user.getId());
-		return coachService.updateCoachTeachState(coach, log, user);
+		return coachService.updateCoachTeachState(coach, log);
 	}
 
 	@RequestMapping(value = "/coach/updateCoachEmploystatus")
@@ -263,7 +262,7 @@ public class CoachController extends BaseController {
 		User user = AccessWebUtil.getSessionUser(request);
 
 		coach.setMuid(user.getId());
-		return coachService.updateCoachEmploystatus(coach, log, user);
+		return coachService.updateCoachEmploystatus(coach, log);
 	}
 
 	/**
@@ -372,7 +371,7 @@ public class CoachController extends BaseController {
 	public ResultBean stuAssignRecord(StudentAssign studentAssign, HttpServletRequest request) {
 		User user = AccessWebUtil.getSessionUser(request);
 		try {
-		return coachService.getStuAssignRecord(studentAssign, user);
+		return coachService.getStuAssignRecord(studentAssign);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ResultBean rb = new ResultBean();
@@ -386,7 +385,7 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<byte[]> stuAssignRecordExport(StudentAssign studentAssign, HttpServletRequest request)throws Exception {
 		User user = AccessWebUtil.getSessionUser(request);
-		List<StudentAssign> list=coachService.getAllStuAssignRecord(studentAssign, user);
+		List<StudentAssign> list=coachService.getAllStuAssignRecord(studentAssign);
 		ExportParams params = new ExportParams("教练导出数据", "导出数据", ExcelType.XSSF);// title
 		// sheetname
 		// 文件格式
@@ -421,7 +420,7 @@ public class CoachController extends BaseController {
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
 		ResultBean resultBean = coachService.modCoachApply(coach, log,
-				extendsinfo, user, bussinessid);
+				extendsinfo, bussinessid);
 		return resultBean;
 	}
 
@@ -429,7 +428,7 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean modApplyList(CoachModApplyParam param, HttpServletRequest request) {
 		User user = AccessWebUtil.getSessionUser(request);
-		ResultBean rb = coachService.listModCoachApply(param,user);
+		ResultBean rb = coachService.listModCoachApply(param);
 
 		return rb;
 	}
@@ -451,7 +450,7 @@ public class CoachController extends BaseController {
 		String applyid = request.getParameter("applyid");
 		User user = AccessWebUtil.getSessionUser(request);
 		ResultBean resultBean = coachService.getCoachModinfo(coach,
-				Integer.parseInt(applyid),user);
+				Integer.parseInt(applyid));
 		
 		return resultBean;
 	}
@@ -463,7 +462,7 @@ public class CoachController extends BaseController {
 		String applyid = request.getParameter("applyid");
 		ResultBean resultBean = new ResultBean();
 		Map map = coachService.getCoachModExtendinfo(coach,
-				Integer.parseInt(applyid),user);
+				Integer.parseInt(applyid));
 		resultBean.setResult(map);
 		return resultBean;
 	}
@@ -482,7 +481,7 @@ public class CoachController extends BaseController {
 		coach.setMuid(user.getId());
 
 		ResultBean resultBean = coachService.updateModCoachApply(coach, log,
-				extendsinfo, user, Integer.parseInt(applyid));
+				extendsinfo,  Integer.parseInt(applyid));
 
 		return resultBean;
 	}
@@ -497,7 +496,7 @@ public class CoachController extends BaseController {
 		String state = request.getParameter("state");
 
 		ResultBean resultBean = coachService.auditModCoachApply(
-				Integer.parseInt(applyid), Integer.parseInt(state), log, user);
+				Integer.parseInt(applyid), Integer.parseInt(state), log);
 
 		return resultBean;
 	}
@@ -514,7 +513,7 @@ public class CoachController extends BaseController {
 		String ids[]= applyids.split(",");
 		
 		ResultBean resultBean = coachService.batchAuditModCoachApply(
-				ids, Integer.parseInt(state), log, user);
+				ids, Integer.parseInt(state), log);
 
 		return resultBean;
 	}
@@ -534,7 +533,7 @@ public class CoachController extends BaseController {
 		String coachidstr = request.getParameter("coachid");
 		String coachid[] = coachidstr.split(",");
 		ResultBean resultBean = coachService.assignCoach(
-				Integer.parseInt(headcoachid), coachid, null, log, user);
+				Integer.parseInt(headcoachid), coachid, null, log);
 
 		return resultBean;
 	}
@@ -554,7 +553,7 @@ public class CoachController extends BaseController {
 		String coachidstr = request.getParameter("coachid");
 		String coachid[] = coachidstr.split(",");
 		ResultBean resultBean = coachService.assignCoach(
-				Integer.parseInt(headcoachid), null, coachid, log, user);
+				Integer.parseInt(headcoachid), null, coachid, log);
 
 		return resultBean;
 	}
@@ -570,7 +569,7 @@ public class CoachController extends BaseController {
 		String coachid[] = ids.split(",");
 		String classinfoid[] = request.getParameterValues("classinfoid");
 		ResultBean resultBean = coachService.batchUpdateCoach(coachid, coach,
-				log, user,classinfoid);
+				log, classinfoid);
 
 		return resultBean;
 	}
@@ -595,6 +594,6 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean assignList(Coach coach, @RequestParam("studentid") Integer studentid,
 			HttpServletRequest request){
-		return coachService.assignList(coach, studentid, getUser(request));
+		return coachService.assignList(coach, studentid);
 	}
 }

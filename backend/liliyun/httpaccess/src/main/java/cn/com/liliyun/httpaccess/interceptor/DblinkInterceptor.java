@@ -12,6 +12,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import cn.com.liliyun.common.model.BaseModel;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.user.model.User;
 
@@ -36,6 +37,7 @@ public class DblinkInterceptor {
 		for (Object o : args) {
 			if (o instanceof BaseModel) {
 				User user = (User)session.getAttribute(ConstantUtil.USER_SESSION);
+				
 				if (user != null) {
 					((BaseModel) o).setDblink(user.getDblink());
 					((BaseModel) o).setSchoolname(user.getSchoolname());

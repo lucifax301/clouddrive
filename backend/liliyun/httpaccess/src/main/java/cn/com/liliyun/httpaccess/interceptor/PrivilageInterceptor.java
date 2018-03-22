@@ -10,8 +10,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.GsonUtil;
@@ -72,7 +74,10 @@ public class PrivilageInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		} 
 		
-		//User user = (User) session.getAttribute(ConstantUtil.USER_SESSION);
+		User user = (User) session.getAttribute(ConstantUtil.USER_SESSION);
+		RequestContext rc = RequestContext.getOrCreate();
+		RequestContext.put(ConstantUtil.USER_SESSION, user);
+		
 		return true;
 //		access.debug("************************************Privilege check!");
 //		if (user != null) {
@@ -122,6 +127,13 @@ public class PrivilageInterceptor extends HandlerInterceptorAdapter {
 //			return false;
 //		}
 	}
+	
+	@Override
+	public void postHandle(    
+            HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)    
+            throws Exception {    
+		RequestContext.set(null);
+    }   
 	
 	private void printJson(HttpServletResponse response,ResultBean rb) {
 		response.setContentType("application/json"); 
