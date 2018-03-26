@@ -1,6 +1,5 @@
 package cn.com.liliyun.market.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -8,9 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONObject;
-
-import cn.com.liliyun.coach.model.CoachModApply;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
 import cn.com.liliyun.common.util.ConstantUtil;
@@ -44,9 +41,10 @@ public class MarketServiceImpl implements MarketService {
 	private AreaService areaService;
 	
 	@Override
-	public ResultBean addMarketActivity(MarketActivity activity,LogCommon log,User user,String businessid) {
+	public ResultBean addMarketActivity(MarketActivity activity,String businessid) {
 		ResultBean rb = new ResultBean();
 		String desc="市场活动["+activity.getActivityname()+"]申请";
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String transactionid= flowService.addFlow(businessid, user.getId(),desc,user);
 		activity.setBusinessid(businessid);
 		activity.setTransactionid(transactionid);
@@ -57,7 +55,8 @@ public class MarketServiceImpl implements MarketService {
 	}
 
 	@Override
-	public List<MarketActivity> listActivity(MarketActivity activity,User user) {
+	public List<MarketActivity> listActivity(MarketActivity activity) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (activity.getEnddate() != null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(activity.getEnddate());
@@ -81,13 +80,11 @@ public class MarketServiceImpl implements MarketService {
 	@Override
 	public List<MarketActivity> listExportActivity(MarketActivity activity,User user) {
 		List<MarketActivity> list= marketMapper.listMarket(activity);
-		Area pa=new Area();
-		pa.setDblink(user.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
 		
-		Store ps=new Store();
-		ps.setDblink(user.getDblink());
-		List<Store> stores= storeService.selectAllList(ps, user);
+		List<Area> areas= areaService.selectAllList(null);
+		
+		
+		List<Store> stores= storeService.selectAllList(null);
 		for(MarketActivity act:list){
 			for(Area area:areas){
 				if(act.getAreaid().intValue()==area.getId()){
@@ -126,7 +123,7 @@ public class MarketServiceImpl implements MarketService {
 	}
 
 	@Override
-	public ResultBean updateMarketActivity(MarketActivity activity,LogCommon log,User user) {
+	public ResultBean updateMarketActivity(MarketActivity activity) {
 		ResultBean rb = new ResultBean();
 		MarketActivity apply=marketMapper.getMarket(activity);
 		if(apply.getStatus()!=0){
@@ -139,9 +136,9 @@ public class MarketServiceImpl implements MarketService {
 	}
 
 	@Override
-	public MarketActivity getMarketActivity(MarketActivity activity,User user) {
+	public MarketActivity getMarketActivity(MarketActivity activity) {
 		MarketActivity apply= marketMapper.getMarket(activity);
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 
 		if (apply.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (apply.getStatus() == 0) {// 业务还在等待审核中
@@ -181,9 +178,9 @@ public class MarketServiceImpl implements MarketService {
 	}
 	
 	@Override
-	public MarketActivity getMarketActivityByTran(MarketActivity activity,User user) {
+	public MarketActivity getMarketActivityByTran(MarketActivity activity) {
 		MarketActivity apply= marketMapper.getMarketByTran(activity);
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (apply.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (apply.getStatus() == 0) {// 业务还在等待审核中
 				apply.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
@@ -194,7 +191,7 @@ public class MarketServiceImpl implements MarketService {
 			apply.setExtend(flow);
 		} else {
 			Flow flow = new Flow();
-			flow.setDblink(user.getDblink());
+			
 			flow.setTransactionid(apply.getTransactionid());
 			FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
 			if(fs==null){//没有审批流，可以直接审核
@@ -214,11 +211,10 @@ public class MarketServiceImpl implements MarketService {
 	}
 
 	@Override
-	public ResultBean auditMarketActivity(MarketActivity activity,LogCommon log,
-			 User user) {
+	public ResultBean auditMarketActivity(MarketActivity activity) {
 		ResultBean rb = new ResultBean();
 		
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		MarketActivity apply=marketMapper.getMarket(activity);
 		Flow flow= flowService.getFlow(apply.getTransactionid(),user);
 		if(apply.getStatus()==0){
@@ -232,7 +228,7 @@ public class MarketServiceImpl implements MarketService {
 			return rb;
 		}
 		if(activity.getStatus()==1){
-			flow.setDblink(user.getDblink());
+			
 			boolean next=(flow!=null)&&flowService.auditFlow(flow, user.getId(), ConstantUtil.AUDIT_ACCEPT);
 			if(!next){
 				
@@ -245,9 +241,9 @@ public class MarketServiceImpl implements MarketService {
 	}
 
 	@Override
-	public ResultBean batchAuditMarketActivity(String[] applyid, int state,
-			LogCommon log, User user) {
+	public ResultBean batchAuditMarketActivity(String[] applyid, int state) {
 		ResultBean rb = new ResultBean();
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		for(String id:applyid){
 			MarketActivity activity=new MarketActivity(Integer.parseInt(id));
 			activity.setStatus(state);

@@ -135,6 +135,16 @@ public class PrivilageInterceptor extends HandlerInterceptorAdapter {
 		RequestContext.set(null);
     }   
 	
+	@Override
+	public void afterCompletion(    
+            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)    
+            throws Exception { 
+		if(ex!=null){
+			ResultBean rb = new ResultBean(1,"发生异常了");
+			printJson(response,rb);
+		}
+    }  
+	
 	private void printJson(HttpServletResponse response,ResultBean rb) {
 		response.setContentType("application/json"); 
 		response.setCharacterEncoding("UTF-8");

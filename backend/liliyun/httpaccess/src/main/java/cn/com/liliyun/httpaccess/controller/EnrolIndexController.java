@@ -49,10 +49,8 @@ public class EnrolIndexController extends BaseController {
 	//新增
 		@RequestMapping(value="/addarea")
 		public ResultBean addMarketing(AreaEnrolIndex index,HttpServletRequest request){
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
+			
 			User user = AccessWebUtil.getSessionUser(request);
-			
-			
 			
 			java.util.Enumeration<String> e= request.getParameterNames();
 			List<StoreEnrolIndex> indexs=new ArrayList();
@@ -72,14 +70,14 @@ public class EnrolIndexController extends BaseController {
 			}
 			index.setData(indexs);
 			
-			return enrolIndexService.addAreaEnrollIndex(index, log, user);
+			return enrolIndexService.addAreaEnrollIndex(index);
 		}
 		
 		
 		//更新
 		@RequestMapping(value="/updatearea")
 		public ResultBean updateArea(AreaEnrolIndex index,HttpServletRequest request){
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
+			
 			User user = AccessWebUtil.getSessionUser(request);
 			
 			java.util.Enumeration<String> e= request.getParameterNames();
@@ -100,14 +98,14 @@ public class EnrolIndexController extends BaseController {
 			}
 			index.setData(indexs);
 			
-			return enrolIndexService.updateAreaEnrollIndex(index, log, user);
+			return enrolIndexService.updateAreaEnrollIndex(index);
 		}
 		
 		@RequestMapping(value="/delarea")
 		public ResultBean delArea(AreaEnrolIndex index,HttpServletRequest request){
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
+			
 			User user = AccessWebUtil.getSessionUser(request);
-			return enrolIndexService.delAreaEnrollIndex(index, log, user);
+			return enrolIndexService.delAreaEnrollIndex(index);
 		}
 		
 		//列表

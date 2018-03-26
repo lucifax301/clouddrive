@@ -16,33 +16,33 @@ public interface CoachSettingService {
 	 * 带教类型
 	 * @param type
 	 */
-	public void addTeachType(CoachTeachType type,String[] subject,LogCommon log) throws Exception ;
+	public void addTeachType(CoachTeachType type,String[] subject)  ;
 	
-	public void updateTeachType(CoachTeachType type,String[] subject) throws Exception ;
+	public void updateTeachType(CoachTeachType type,String[] subject)  ;
 	
-	public CoachTeachType getTeachType(CoachTeachType type) throws Exception ;
+	public CoachTeachType getTeachType(CoachTeachType type);
 	
-	public void deleteTeachType(CoachTeachType type) throws Exception ;
+	public void deleteTeachType(CoachTeachType type) ;
 	
-	public void updateTeachTypeStatus(CoachTeachType type) throws Exception ;
+	public void updateTeachTypeStatus(CoachTeachType type)  ;
 	
-	public List<CoachTeachType> listTeachType(CoachTeachType type) throws Exception ;
+	public List<CoachTeachType> listTeachType(CoachTeachType type) ;
 	
 	/**
 	 * 带教班级
 	 * @param type
 	 */
-	public void addClassType(CoachClassType type,LogCommon log) throws Exception ;
+	public void addClassType(CoachClassType type)  ;
 	
-	public void updateClassType(CoachClassType type) throws Exception ;
+	public void updateClassType(CoachClassType type)  ;
 	
-	public CoachClassType getClassType(CoachClassType type) throws Exception ;
+	public CoachClassType getClassType(CoachClassType type) ;
 	
-	public ResultBean deleteClassType(CoachClassType type) throws Exception ;
+	public ResultBean deleteClassType(CoachClassType type)  ;
 	
-	public void updateClassTypeStatus(CoachClassType type) throws Exception ;
+	public void updateClassTypeStatus(CoachClassType type)  ;
 	
-	public List<CoachClassType> listClassType(CoachClassType type) throws Exception ;
+	public List<CoachClassType> listClassType(CoachClassType type)  ;
 	
 	public List<CoachClassType> listAllClassType(CoachClassType type);
 	
@@ -50,7 +50,7 @@ public interface CoachSettingService {
 	 * 车型
 	 * @param type
 	 */
-	public void addCarType(CoachCarType type,LogCommon log) throws Exception ;
+	public void addCarType(CoachCarType type) throws Exception ;
 	
 	public void deleteCarType(CoachCarType type) throws Exception ;
 	
@@ -64,7 +64,7 @@ public interface CoachSettingService {
 	 * @param log
 	 * @throws Exception
 	 */
-	public void addJob(CoachJob job,LogCommon log) throws Exception ;
+	public void addJob(CoachJob job) throws Exception ;
 	
 	public void updateJob(CoachJob job) throws Exception ;
 	

@@ -12,13 +12,11 @@ import cn.com.liliyun.coach.model.CoachStudentDTO;
 import cn.com.liliyun.coach.model.HeadCoach;
 import cn.com.liliyun.coach.model.StudentAssign;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.log.model.LogCommon;
-import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.user.model.User;
 
 public interface CoachService {
 	
-	public ResultBean addCoach(Coach coach,LogCommon log,Map extendsinfo,User user);
+	public ResultBean addCoach(Coach coach,Map extendsinfo,User user);
 	
 	public List<Coach> getCoachList(Coach coach);
 	
@@ -50,11 +48,11 @@ public interface CoachService {
 	 */
 	public ResultBean decrementCoachStudent(int coachid);
 	
-	public ResultBean updateCoach(Coach coach,LogCommon log,Map extendsinfo);
+	public ResultBean updateCoach(Coach coach,Map extendsinfo);
 	
-	public ResultBean updateCoachTeachState(Coach coach,LogCommon log);
+	public ResultBean updateCoachTeachState(Coach coach);
 	
-	public ResultBean updateCoachEmploystatus(Coach coach,LogCommon log);
+	public ResultBean updateCoachEmploystatus(Coach coach);
 	
 	public void deleteById(Coach coach);
 	
@@ -70,9 +68,9 @@ public interface CoachService {
 	
 	public ResultBean getStuListOfCoach(CoachStudentDTO CoachStudentDTO);
 	
-	public ResultBean getStuAssignRecord(StudentAssign studentAssign) throws Exception;
+	public ResultBean getStuAssignRecord(StudentAssign studentAssign) ;
 	
-	public List<StudentAssign> getAllStuAssignRecord(StudentAssign studentAssign) throws Exception;
+	public List<StudentAssign> getAllStuAssignRecord(StudentAssign studentAssign) ;
 	
 	/**
 	 * 教练信息修改申请
@@ -83,21 +81,21 @@ public interface CoachService {
 	 * @param businessid
 	 * @return
 	 */
-	public ResultBean modCoachApply(Coach coach,LogCommon log,Map extendsinfo,String businessid);
+	public ResultBean modCoachApply(Coach coach,Map extendsinfo,String businessid);
 	
 	public CoachModApply getModApply(CoachModApply param);
 	
-	public ResultBean updateModCoachApply(Coach coach,LogCommon log,Map extendsinfo,int applyid);
+	public ResultBean updateModCoachApply(Coach coach,Map extendsinfo,int applyid);
 	
 	public ResultBean listModCoachApply(CoachModApplyParam param);
 	
-	public ResultBean auditModCoachApply(int applyid,int state, LogCommon log);
+	public ResultBean auditModCoachApply(int applyid,int state);
 	
-	public ResultBean batchAuditModCoachApply(String[] applyid,int state, LogCommon log);
+	public ResultBean batchAuditModCoachApply(String[] applyid,int state);
 	
-	public ResultBean assignCoach(int headcoachid,String coachid[],String delcoachid[], LogCommon log);
+	public ResultBean assignCoach(int headcoachid,String coachid[],String delcoachid[]);
 	
-	public ResultBean batchUpdateCoach(String coachid[],Coach coach ,LogCommon log,
+	public ResultBean batchUpdateCoach(String coachid[],Coach coach ,
 			 String classinfoid[]);
 	
 	public Map<Integer, CoachClassinfo> selectCoachClassBatch(List<Integer> ids);

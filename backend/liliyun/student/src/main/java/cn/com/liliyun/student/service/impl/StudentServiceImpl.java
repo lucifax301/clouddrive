@@ -1359,7 +1359,7 @@ public class StudentServiceImpl implements StudentService {
 		store.setId(ts.getTargetstoreid());
 		store.setDblink(user.getDblink());
 		store.setMgrdb(user.getMgrdb());
-		Store ss = storeService.selectOne(store, user);
+		Store ss = storeService.selectOne(store);
 		result.put("transfer", ts);
 		result.put("student", s);
 		result.put("store", ss);
@@ -1390,7 +1390,7 @@ public class StudentServiceImpl implements StudentService {
 
 		Store storetemp = new Store();
 		storetemp.setId(s.getStoreid());
-		Store store = storeService.selectOne(storetemp, user);
+		Store store = storeService.selectOne(storetemp);
 		transferStudent.setFromareaid(s.getAreaid());
 		transferStudent.setFromstoreid(s.getStoreid());
 		transferStudent.setFromstorenum(store.getStorenum());

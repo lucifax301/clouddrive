@@ -44,7 +44,7 @@ public class EnrolDetailServiceImpl implements EnrolDetailService {
 	DecimalFormat df = new DecimalFormat("0.00");
 	
 	@Override
-	public List<EnrolDetail> stat(EnrolDetailParam param,User user) {
+	public List<EnrolDetail> stat(EnrolDetailParam param) {
 		if (param.getEnddate() != null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(param.getEnddate());
@@ -53,26 +53,24 @@ public class EnrolDetailServiceImpl implements EnrolDetailService {
 			param.setEnddate(calendar.getTime());
 		}
 		if(param.getType()==1){
-			return statByArea(param,user);
+			return statByArea(param);
 		}else{
-			return statByStore(param,user);
+			return statByStore(param);
 		}
 		
 	}
 
 	java.text.SimpleDateFormat format=new java.text.SimpleDateFormat("yyyy-MM");
 	
-	private List<EnrolDetail> statByArea(EnrolDetailParam param,User user){
+	private List<EnrolDetail> statByArea(EnrolDetailParam param){
 		
 		List<EnrolDetailItem> list= enrolDetailMapper.statByArea(param);
 		List<EnrolDetailItem> returnlist= enrolDetailMapper.getAreaReturnCount(param);
 		
-		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
-		List<Classinfo> clss= classinfoService.selectAllList(ci);
-		Area pa=new Area();
-		pa.setDblink(user.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
+		
+		List<Classinfo> clss= classinfoService.selectAllList(null);
+		
+		List<Area> areas= areaService.selectAllList(null);
 		List<EnrolDetail> result=new ArrayList();
 		
 		Map<Integer,EnrolDetail> map=new HashMap();
@@ -103,7 +101,7 @@ public class EnrolDetailServiceImpl implements EnrolDetailService {
 		while(it.hasNext()){
 			Integer areaid=it.next();
 			AreaEnrolIndex areaindex=new AreaEnrolIndex();
-			areaindex.setDblink(user.getDblink());
+			
 			areaindex.setAreaid(areaid);
 			List<AreaEnrolIndex> indexs=enrolIndexService.listAreaEnrollIndex(areaindex);
 			AreaEnrolIndex matchindex=null;
@@ -204,16 +202,14 @@ public class EnrolDetailServiceImpl implements EnrolDetailService {
 	}
 	
 	
-	private List<EnrolDetail> statByStore(EnrolDetailParam param,User user){
+	private List<EnrolDetail> statByStore(EnrolDetailParam param){
 		List<EnrolDetailItem> list= enrolDetailMapper.statByStore(param);
 		List<EnrolDetailItem> returnlist= enrolDetailMapper.getStoreReturnCount(param);
 		
-		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
-		List<Classinfo> clss= classinfoService.selectAllList(ci);
-		Store ps=new Store();
-		ps.setDblink(user.getDblink());
-		List<Store> stores= storeService.selectAllList(ps, user);
+		
+		List<Classinfo> clss= classinfoService.selectAllList(null);
+		
+		List<Store> stores= storeService.selectAllList(null);
 		List<EnrolDetail> result=new ArrayList();
 		
 		Map<Integer,EnrolDetail> map=new HashMap();
@@ -248,12 +244,11 @@ public class EnrolDetailServiceImpl implements EnrolDetailService {
 			AreaEnrolIndex areaindex=new AreaEnrolIndex();
 			Store storeparam=new Store();
 			storeparam.setId(storeid);
-			storeparam.setDblink(user.getDblink());
-			Store store=storeService.selectOne(storeparam, user);
+			
+			Store store=storeService.selectOne(storeparam);
 			if(store==null) continue;
 			areaindex.setAreaid(store.getAreaid());
 			
-			areaindex.setDblink(user.getDblink());
 			List<AreaEnrolIndex> indexs=enrolIndexService.listAreaEnrollIndex(areaindex);
 			AreaEnrolIndex matchindex=null;
 			for(AreaEnrolIndex index:indexs){

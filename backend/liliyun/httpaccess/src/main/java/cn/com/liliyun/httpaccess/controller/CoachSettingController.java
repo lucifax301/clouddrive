@@ -69,12 +69,11 @@ public class CoachSettingController extends BaseController{
 	public ResultBean addTeachType(CoachTeachType type,HttpServletRequest request){
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
 			User user=AccessWebUtil.getSessionUser(request);
 			type.setUserId(user.getId());
 			String[] subject=request.getParameterValues("subject");
 			
-			coachSettingService.addTeachType(type,subject,log);
+			coachSettingService.addTeachType(type,subject);
 		}catch(Exception ex){
 			logger.error(ex);
 			ex.printStackTrace();
@@ -99,7 +98,7 @@ public class CoachSettingController extends BaseController{
 	public ResultBean updateTeachType(CoachTeachType type,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
+			//LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
 			User user=AccessWebUtil.getSessionUser(request);
 			String[] subject=request.getParameterValues("subject");
 			coachSettingService.updateTeachType(type,subject);
@@ -113,7 +112,7 @@ public class CoachSettingController extends BaseController{
 	public ResultBean updateTeachTypeStatus(CoachTeachType type,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
+			//LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
 			User user=AccessWebUtil.getSessionUser(request);
 			coachSettingService.updateTeachTypeStatus(type);
 		}catch(Exception ex){
@@ -180,17 +179,11 @@ public class CoachSettingController extends BaseController{
 	public ResultBean addClassType(CoachClassType type,HttpServletRequest request){
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+			
 			User user=AccessWebUtil.getSessionUser(request);
-//			String type=request.getParameter("type");
-//			String data=request.getParameter("classinfo");
-//			List<Classinfo> classinfo=JSONObject.parseArray(data,Classinfo.class);
-//			CoachClassType cct=new CoachClassType();
-//			cct.setType(type);
-//			cct.setUserId(user.getId());
-//			cct.setClassinfo(classinfo);
+
 			type.setUserId(user.getId());
-			coachSettingService.addClassType(type, log);
+			coachSettingService.addClassType(type);
 		}catch(Exception ex){
 			logger.error(ex);
 			ex.printStackTrace();
@@ -229,19 +222,6 @@ public class CoachSettingController extends BaseController{
 	public ResultBean updateClassType(CoachClassType type,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
-			User user=AccessWebUtil.getSessionUser(request);
-			
-//			String type=request.getParameter("type");
-//			String data=request.getParameter("classinfo");
-//			String id=request.getParameter("id");
-//			List<Classinfo> classinfo=JSONObject.parseArray(data,Classinfo.class);
-//			CoachClassType cct=new CoachClassType();
-//			cct.setType(type);
-//			cct.setUserId(user.getId());
-//			cct.setClassinfo(classinfo);
-//			cct.setId(Integer.parseInt(id));
-			
 			
 			coachSettingService.updateClassType(type);
 		}catch(Exception ex){
@@ -254,8 +234,6 @@ public class CoachSettingController extends BaseController{
 	public ResultBean updateClassTypeStatus(CoachClassType type,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
-			User user=AccessWebUtil.getSessionUser(request);
 			coachSettingService.updateClassTypeStatus(type);
 		}catch(Exception ex){
 			rb.setCode(1);
@@ -280,7 +258,7 @@ public class CoachSettingController extends BaseController{
 	public ResultBean saveCarType(CoachCarType type,HttpServletRequest request){
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+			
 			User user=AccessWebUtil.getSessionUser(request);
 			type.setUserId(user.getId());
 			
@@ -325,13 +303,12 @@ public class CoachSettingController extends BaseController{
 	public ResultBean addJob(CoachJob job,HttpServletRequest request){
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+			
 			User user=AccessWebUtil.getSessionUser(request);
 			job.setUserId(user.getId());
-			coachSettingService.addJob(job, log);
+			coachSettingService.addJob(job);
 		}catch(Exception ex){
 			logger.error(ex);
-			ex.printStackTrace();
 			rb.setCode(1);
 		}
 		return rb;
@@ -339,9 +316,8 @@ public class CoachSettingController extends BaseController{
 	
 	@RequestMapping(value="/deleteJob")
 	public ResultBean deleteJob(CoachJob job,HttpServletRequest request) {
-		System.out.println("================:"+job.getIds());
 		String ids=request.getParameter("ids");
-		System.out.println("==================:"+ids);
+		
 		ResultBean rb = new ResultBean();
 		try{
 			coachSettingService.deleteJob(job);
@@ -355,8 +331,6 @@ public class CoachSettingController extends BaseController{
 	public ResultBean updateJob(CoachJob job,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
-			User user=AccessWebUtil.getSessionUser(request);
 			coachSettingService.updateJob(job);
 		}catch(Exception ex){
 			rb.setCode(1);
@@ -368,7 +342,7 @@ public class CoachSettingController extends BaseController{
 	public ResultBean updateJobTypeStatus(CoachJob job,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
+			
 			User user=AccessWebUtil.getSessionUser(request);
 			coachSettingService.updateJobStatus(job);
 		}catch(Exception ex){

@@ -26,40 +26,39 @@ public class StoreServiceImpl implements StoreService {
 	private CoachService coachService;
 
 	@Override
-	public ResultBean insert(Store store, User user) {
-		store.setDblink(user.getDblink());
+	public ResultBean insert(Store store) {
 		storeMapper.insertSelective(store);
 		return new ResultBean();
 	}
 
 	@Override
-	public ResultBean selectByPrimaryKey(Store store, User user) {
-		store.setDblink(user.getDblink());
+	public ResultBean selectByPrimaryKey(Store store) {
+		
 		storeMapper.selectByPrimaryKey(store);
 		return null;
 	}
 
 	@Override
-	public ResultBean updateByPrimaryKey(Store store, User user) {
-		store.setDblink(user.getDblink());
+	public ResultBean updateByPrimaryKey(Store store) {
+		
 		storeMapper.updateByPrimaryKeySelective(store);
 		return new ResultBean();
 	}
 
 	@Override
-	public ResultBean deleteById(Store store, User user) {
+	public ResultBean deleteById(Store store) {
 		String [] ids = store.getIds().split(",");
 		for (String id : ids) {
 			store.setId(Integer.parseInt(id));
-			store.setDblink(user.getDblink());
+			
 			storeMapper.deleteByPrimaryKey(store);
 		}
 		return new ResultBean();
 	}
 
 	@Override
-	public List <Store> selectList(Store store, User user) {
-		store.setDblink(user.getDblink());
+	public List <Store> selectList(Store store) {
+		
 		PageUtil.startPage(store);
 		List <Store> list = storeMapper.selectList(store);
 //		if (store.getPageNo() != null && store.getPageNo() != -1) {
@@ -81,8 +80,8 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List <Store> selectList(Store store, User user, Boolean isStorePage) {
-		store.setDblink(user.getDblink());
+	public List <Store> selectList(Store store,  Boolean isStorePage) {
+		
 		PageUtil.startPage(store);
 		List <Store> list = storeMapper.selectList(store);
 		if (isStorePage) {
@@ -104,24 +103,24 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> selectAllList(Store store, User user) {
-		store.setDblink(user.getDblink());
+	public List<Store> selectAllList(Store store) {
+		
 		return  storeMapper.selectList(store);
 	}
 
 	@Override
-	public Store selectOne(Store store, User user) {
-		store.setDblink(user.getDblink());
+	public Store selectOne(Store store) {
+		
 		return storeMapper.selectByPrimaryKey(store);
 	}
 
 	@Override
-	public int getCount(Store store, User user) {
+	public int getCount(Store store) {
 		return storeMapper.getCount(store);
 	}
 
 	@Override
-	public ResultBean updateByPrimaryKeySelective(Store store, User user) {
+	public ResultBean updateByPrimaryKeySelective(Store store) {
 		storeMapper.updateByPrimaryKeySelective(store);
 		return new ResultBean();
 	}

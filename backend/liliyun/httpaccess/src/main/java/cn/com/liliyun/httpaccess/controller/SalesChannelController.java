@@ -62,7 +62,7 @@ public class SalesChannelController extends BaseController{
 	public ResultBean addChannel(HttpServletRequest request){
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+			
 			User user=AccessWebUtil.getSessionUser(request);
 			String channel=request.getParameter("channel");
 			String coachflag=request.getParameter("coachflag");
@@ -111,7 +111,7 @@ public class SalesChannelController extends BaseController{
 	public ResultBean updateChannel(HttpServletRequest request) {
 		
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
+			
 			User user=AccessWebUtil.getSessionUser(request);
 			
 			String channel=request.getParameter("channel");
@@ -147,8 +147,7 @@ public class SalesChannelController extends BaseController{
 	public ResultBean updateChannelStatus(SalesChannel channel,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		try{
-			LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
-			User user=AccessWebUtil.getSessionUser(request);
+			
 			salesChannelService.updateChannelStatus(channel);
 		}catch(Exception ex){
 			rb.setCode(1);

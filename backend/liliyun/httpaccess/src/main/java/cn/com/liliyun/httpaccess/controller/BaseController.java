@@ -123,19 +123,19 @@ public class BaseController {
 		out.close();
 	}
 	
-	protected LogCommon initLogParams(HttpServletRequest request,int menuId,int action) {
-		final LogCommon logCommon = new LogCommon();
-		logCommon.setMenuid(menuId);
-		logCommon.setAction(action);
-		
-		logCommon.setOperatetime(DateUtil.now());
-		logCommon.setStatus(1);
-		logCommon.setUserid(AccessWebUtil.getSessionUser(request).getId()+"");
-		logCommon.setUsername(AccessWebUtil.getSessionUser(request).getUsername());
-		logCommon.setIp(NetworkUtil.getIpAddress(request));
-		
-		return logCommon;
-	}
+//	protected LogCommon initLogParams(HttpServletRequest request,int menuId,int action) {
+//		final LogCommon logCommon = new LogCommon();
+//		logCommon.setMenuid(menuId);
+//		logCommon.setAction(action);
+//		
+//		logCommon.setOperatetime(DateUtil.now());
+//		logCommon.setStatus(1);
+//		logCommon.setUserid(AccessWebUtil.getSessionUser(request).getId()+"");
+//		logCommon.setUsername(AccessWebUtil.getSessionUser(request).getUsername());
+//		logCommon.setIp(NetworkUtil.getIpAddress(request));
+//		
+//		return logCommon;
+//	}
 	
 	@InitBinder    
 	public void initBinder(WebDataBinder binder) {

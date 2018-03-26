@@ -13,6 +13,12 @@ import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.rpc.RpcInvocation;
 
+/**
+ * tomcat项目了加载类的顺序是class再到lib, 我们这里重写了一个RpcInvocation(包路径和 dubbo的一样)
+ * ，替换dubbo里RpcInvocation,由于先加载我们定义的，dubbo自身的就不会再加载
+ * @author Administrator
+ *
+ */
 @Activate(group={Constants.PROVIDER,Constants.CONSUMER},order=1000,before={"exception"})
 public class RequestContextFilter implements Filter {
 

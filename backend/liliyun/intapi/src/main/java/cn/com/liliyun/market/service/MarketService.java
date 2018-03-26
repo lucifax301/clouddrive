@@ -9,21 +9,19 @@ import cn.com.liliyun.user.model.User;
 
 public interface MarketService {
 
-	public ResultBean addMarketActivity(MarketActivity activity,LogCommon log,User user,String businessid);
+	public ResultBean addMarketActivity(MarketActivity activity,String businessid);
 	
-	public List<MarketActivity> listActivity(MarketActivity activity,User user);
+	public List<MarketActivity> listActivity(MarketActivity activity);
 	
 	public List<MarketActivity> listExportActivity(MarketActivity activity,User user);
 	
-	public ResultBean updateMarketActivity(MarketActivity activity,LogCommon log,User user);
+	public ResultBean updateMarketActivity(MarketActivity activity);
 	
-	public MarketActivity getMarketActivity(MarketActivity activity,User user);
+	public MarketActivity getMarketActivity(MarketActivity activity);
 	
-	public ResultBean auditMarketActivity(MarketActivity activity,LogCommon log,
-			 User user);
+	public ResultBean auditMarketActivity(MarketActivity activity);
 	
-	public ResultBean batchAuditMarketActivity(String[] applyid,int state, LogCommon log,
-			 User user);
+	public ResultBean batchAuditMarketActivity(String[] applyid,int state);
 	
-	public MarketActivity getMarketActivityByTran(MarketActivity activity,User user);
+	public MarketActivity getMarketActivityByTran(MarketActivity activity);
 }

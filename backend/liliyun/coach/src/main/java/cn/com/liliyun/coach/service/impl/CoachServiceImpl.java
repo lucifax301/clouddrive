@@ -110,7 +110,7 @@ public class CoachServiceImpl implements CoachService {
 	private boolean APP_SYNCH;
 
 	@Override
-	public ResultBean addCoach(Coach coach, LogCommon log, Map extendinfo,
+	public ResultBean addCoach(Coach coach,  Map extendinfo,
 			User user) {
 		ResultBean r = new ResultBean();
 		Coach cac = new Coach();
@@ -651,7 +651,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean updateCoach(Coach coach,LogCommon log,Map extendinfo) {
+	public ResultBean updateCoach(Coach coach,Map extendinfo) {
 		ResultBean r = new ResultBean();
 		Coach ca = new Coach();
 		ca.setDblink(coach.getDblink());
@@ -686,8 +686,7 @@ public class CoachServiceImpl implements CoachService {
 			 List listi = coachMapper.selectByterm(cai);
 			 if(listi.size()>0){
 				 Coach cc = (Coach) listi.get(0);
-				 //if(!coach.getIdcard().equals(cc.getIdcard())){
-				 if(coach.getCoachid().intValue()!=cc.getCoachid().intValue()){
+				 if(!coach.getCoachid().equals(cc.getCoachid())){
 					r.setCode(3);
 					r.setMsg("身份证已存在!");
 					return r;
@@ -705,49 +704,18 @@ public class CoachServiceImpl implements CoachService {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+		LogCommon log = new LogCommon();
 		log.setDetail(detail);
 		log.setRelateid(coach.getCoachid()+"");
 		log.setRelatetable("coach");
-		//System.out.println(detail);
+		log.setOperatetime(new Date());
+		
 		
 		if(coach.getPhoto()==null||coach.getPhoto().length()==0){
 			coach.setPhoto(oldone.getPhoto());
 		}
 		
-//		if(oldone.getHeadcoachflag()==null||oldone.getHeadcoachflag()==0){//之前不是组长
-//			if(coach.getHeadcoachflag()!=null&&coach.getHeadcoachflag()==1){//组长
-//				addHeadCoach(coach.getCoachid());
-//			}else{
-//				if(coach.getHeadcoachid()==null||coach.getHeadcoachid()==0){//当前的组长为空
-//					if(oldone.getHeadcoachid()!=null&&oldone.getHeadcoachid()!=0){//之前不为空
-//						//减少之前headcoach记录里的管理教练数
-//						String[] delcoachid=new String[]{ coach.getCoachid()+""};
-//						this.assignCoachProcess(oldone.getHeadcoachid(), null, delcoachid, log, user);
-//					}
-//				}else if(coach.getHeadcoachid()!=null&&coach.getHeadcoachid()!=0){//当前组长不为空
-//					if(oldone.getHeadcoachid()==null||oldone.getHeadcoachid()==0){//之前为空
-//						//增加之前headcoach记录里的管理教练数
-//						String[] coachid=new String[]{ coach.getCoachid()+""};
-//						this.assignCoachProcess(coach.getHeadcoachid(), coachid, null, log, user);
-//					}
-//				}
-//			}
-//		}else if(oldone.getHeadcoachflag()!=null&&oldone.getHeadcoachflag()==1){//之前是组长
-//			if(coach.getHeadcoachflag()==null||coach.getHeadcoachflag()==0){//修改成不是组长
-//				Coach hp=new Coach();
-//				hp.setHeadcoachid(coach.getCoachid());
-//				List<Coach> owncoaches= coachMapper.selectByCondition(hp);
-//				if(owncoaches!=null&&owncoaches.size()>0){//有管辖教练
-//					r.setCode(3);
-//					r.setMsg("此教练有管辖教练，不能修改成普通教练!");
-//					return r;
-//				}else{
-//					HeadCoach dhp=new HeadCoach();
-//					dhp.setCoachid(coach.getCoachid());
-//					headCoachMapper.delHeadCoach(dhp);
-//				}
-//			}
-//		}
+
 		
 		updateHeadCoach(oldone, coach, log,  r);
 		if(r.getCode()!=0){
@@ -809,13 +777,13 @@ public class CoachServiceImpl implements CoachService {
 					if(oldone.getHeadcoachid()!=null&&oldone.getHeadcoachid()!=0){//之前不为空
 						//减少之前headcoach记录里的管理教练数
 						String[] delcoachid=new String[]{ coach.getCoachid()+""};
-						this.assignCoachProcess(oldone.getHeadcoachid(), null, delcoachid, log);
+						this.assignCoachProcess(oldone.getHeadcoachid(), null, delcoachid);
 					}
 				}else if(coach.getHeadcoachid()!=null&&coach.getHeadcoachid()!=0){//当前组长不为空
 					if(oldone.getHeadcoachid()==null||oldone.getHeadcoachid()==0){//之前为空
 						//增加之前headcoach记录里的管理教练数
 						String[] coachid=new String[]{ coach.getCoachid()+""};
-						this.assignCoachProcess(coach.getHeadcoachid(), coachid, null, log);
+						this.assignCoachProcess(coach.getHeadcoachid(), coachid, null);
 					}
 				}
 			}
@@ -840,14 +808,14 @@ public class CoachServiceImpl implements CoachService {
 	}
 	
 	@Override
-	public ResultBean updateCoachTeachState(Coach coach, LogCommon log) {
+	public ResultBean updateCoachTeachState(Coach coach) {
 		ResultBean r = new ResultBean();
 		coachMapper.updateTeachState(coach);
 		return r;
 	}
 
 	@Override
-	public ResultBean updateCoachEmploystatus(Coach coach, LogCommon log) {
+	public ResultBean updateCoachEmploystatus(Coach coach) {
 		ResultBean r = new ResultBean();
 		coachMapper.updateEmploystatus(coach);
 		return r;
@@ -1164,7 +1132,7 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public ResultBean getStuAssignRecord(StudentAssign studentAssign)
-			throws Exception {
+			 {
 		ResultBean rb = new ResultBean();
 		List<StudentAssign> list = this.getAllStuAssignRecord(studentAssign);
 
@@ -1174,7 +1142,7 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public List<StudentAssign> getAllStuAssignRecord(
-			StudentAssign studentAssign) throws Exception {
+			StudentAssign studentAssign) {
 
 		List<StudentAssign> list = stuAssignMapper.list(studentAssign);
 		Area pa=new Area();
@@ -1182,8 +1150,8 @@ public class CoachServiceImpl implements CoachService {
 		List<Area> areas = areaService.selectAllList(pa);
 		Store ps=new Store();
 		//ps.setDblink(user.getDblink());
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
-		List<Store> stores = storeService.selectAllList(ps, user);
+		//User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		List<Store> stores = storeService.selectAllList(ps);
 		
 		CoachTeachType ctt= new CoachTeachType();
 		//ctt.setDblink(user.getDblink());
@@ -1221,7 +1189,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean modCoachApply(Coach coach, LogCommon log,
+	public ResultBean modCoachApply(Coach coach, 
 			Map extendsinfo, String businessid) {
 		ResultBean rb = new ResultBean();
 
@@ -1422,7 +1390,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean updateModCoachApply(Coach coach, LogCommon log,
+	public ResultBean updateModCoachApply(Coach coach, 
 			Map extendsinfo,int applyid) {
 		ResultBean rb = new ResultBean();
 
@@ -1445,7 +1413,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public ResultBean auditModCoachApply(int applyid, int state, LogCommon log) {
+	public ResultBean auditModCoachApply(int applyid, int state) {
 		ResultBean rb = new ResultBean();
 
 		/**
@@ -1483,13 +1451,13 @@ public class CoachServiceImpl implements CoachService {
 		
 		//apply.setDblink(user.getDblink());
 		
-		auditProcess(apply, flow, state, log,rb);
+		auditProcess(apply, flow, state, rb);
 		return rb;
 	}
 
 	@Override
-	public ResultBean batchAuditModCoachApply(String[] applyid, int state,
-			LogCommon log) {
+	public ResultBean batchAuditModCoachApply(String[] applyid, int state
+			) {
 		ResultBean rb = new ResultBean();
 		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		for (String id : applyid) {
@@ -1508,7 +1476,7 @@ public class CoachServiceImpl implements CoachService {
 			}
 			//flow.setDblink(user.getDblink());
 			//apply.setDblink(user.getDblink());
-			auditProcess(apply, flow, state, log, rb);
+			auditProcess(apply, flow, state, rb);
 			
 //			if (state == 1) {
 //				boolean next = (flow != null)
@@ -1524,7 +1492,7 @@ public class CoachServiceImpl implements CoachService {
 		return rb;
 	}
 	
-	public void auditProcess(CoachModApply apply,Flow flow,int state, LogCommon log,
+	public void auditProcess(CoachModApply apply,Flow flow,int state, 
 			ResultBean rb1){
 		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (state == 1) {
@@ -1584,13 +1552,13 @@ public class CoachServiceImpl implements CoachService {
 					if(oldheadcoachid!=null&&oldheadcoachid!=0){//之前不为空
 						//减少之前headcoach记录里的管理教练数
 						String[] delcoachid=new String[]{ exist.getCoachid()+""};
-						this.assignCoachProcess(oldheadcoachid, null, delcoachid, log);
+						this.assignCoachProcess(oldheadcoachid, null, delcoachid);
 					}
 				}else if(newheadcoachid!=null&&newheadcoachid!=0){//当前组长不为空
 					if(oldheadcoachid==null||oldheadcoachid==0){//之前为空
 						//增加之前headcoach记录里的管理教练数
 						String[] coachid=new String[]{ exist.getCoachid()+""};
-						this.assignCoachProcess(newheadcoachid, coachid, null, log);
+						this.assignCoachProcess(newheadcoachid, coachid, null);
 					}
 				}
 				
@@ -1641,10 +1609,10 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public ResultBean assignCoach(int headcoachid, String coachid[],
-			String delcoachid[], LogCommon log) {
+			String delcoachid[]) {
 		ResultBean rb = new ResultBean();
 		
-		assignCoachProcess(headcoachid, coachid, delcoachid, log);
+		assignCoachProcess(headcoachid, coachid, delcoachid);
 		
 		return rb;
 	}
@@ -1658,7 +1626,7 @@ public class CoachServiceImpl implements CoachService {
 	 * @param user
 	 */
 	public void assignCoachProcess(int headcoachid, String coachid[],
-			String delcoachid[], LogCommon log) {
+			String delcoachid[]) {
 		List list = new ArrayList();
 		List dellist = new ArrayList();
 		if (coachid != null)
@@ -1680,7 +1648,7 @@ public class CoachServiceImpl implements CoachService {
 		Map params = new HashMap();
 		if (list.size() > 0) {
 			params.put("list", list);
-			//params.put("dblink", user.getDblink());
+			
 			params.put("headcoachid", headcoachid);
 			
 			coachMapper.updateHeadcoach(params);
@@ -1691,12 +1659,12 @@ public class CoachServiceImpl implements CoachService {
 			headCoach.setOvercoach(coachid.length);
 			headCoach.setOvercoachcar(carcount);
 			headCoach.setMuserid(user.getId());
-			//headCoach.setDblink(user.getDblink());
+			
 			headCoachMapper.updateHeadCoachData(headCoach);
 		}
 		if (dellist.size() > 0) {
 			params.put("list", dellist);
-			//params.put("dblink", user.getDblink());
+			
 			params.put("headcoachid", 0);
 			coachMapper.updateHeadcoach(params);
 			int carcount = coachMapper.getCoachcarcount(params);
@@ -1706,14 +1674,14 @@ public class CoachServiceImpl implements CoachService {
 			headCoach.setOvercoach(-delcoachid.length);
 			headCoach.setOvercoachcar(-carcount);
 			headCoach.setMuserid(user.getId());
-			//headCoach.setDblink(user.getDblink());
+			
 			headCoachMapper.updateHeadCoachData(headCoach);
 		}
 	}
 	
 	@Override
 	public ResultBean batchUpdateCoach(String coachid[], Coach coach,
-			LogCommon log, String classinfoid[]) {
+			String classinfoid[]) {
 		ResultBean rb = new ResultBean();
 
 		List list = new ArrayList();

@@ -51,17 +51,13 @@ public class EnrolStatServiceImpl implements EnrolStatService {
 	DecimalFormat df = new DecimalFormat("0.00");
 	
 	@Override
-	public List<EnrolClassStat> statByClass(EnrolDetailParam param, User user) {
+	public List<EnrolClassStat> statByClass(EnrolDetailParam param) {
 		List<EnrolClassStatItem> list= enrolStatMapper.statByClass(param);
 		List<EnrolClassStatItem> returnlist= enrolStatMapper.getClassReturnCount(param);
 		
-		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
-		List<Classinfo> clss= classinfoService.selectAllList(ci);
+		List<Classinfo> clss= classinfoService.selectAllList(null);
 		
-		Area pa=new Area();
-		pa.setDblink(user.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
+		List<Area> areas= areaService.selectAllList(null);
 		List<EnrolClassStat> result=new ArrayList();
 		
 		Map<Integer,EnrolClassStat> map=new HashMap();
@@ -105,7 +101,7 @@ public class EnrolStatServiceImpl implements EnrolStatService {
 			Integer areaid=it.next();
 			AreaEnrolIndex areaindex=new AreaEnrolIndex();
 			areaindex.setAreaid(areaid);
-			areaindex.setDblink(user.getDblink());
+			
 			List<AreaEnrolIndex> indexs=enrolIndexService.listAreaEnrollIndex(areaindex);
 			AreaEnrolIndex matchindex=null;
 			for(AreaEnrolIndex index:indexs){
@@ -212,17 +208,17 @@ public class EnrolStatServiceImpl implements EnrolStatService {
 
 	
 	@Override
-	public List<EnrolChannelStat> statByChannel(EnrolDetailParam param, User user) {
+	public List<EnrolChannelStat> statByChannel(EnrolDetailParam param) {
 		List<EnrolChannelStatItem> list= enrolStatMapper.statByChannel(param);
 		List<EnrolChannelStatItem> returnlist= enrolStatMapper.getChannelReturnCount(param);
 		
 		//List<Classinfo> clss= classinfoService.selectAllList(new Classinfo());
 		SalesChannel ps=new SalesChannel();
-		ps.setDblink(user.getDblink());
+		
 		
 		List<SalesChannel> clss=salesService.selectChannels(ps);
 		Area pa=new Area();
-		pa.setDblink(user.getDblink());
+		
 		List<Area> areas= areaService.selectAllList(pa);
 		List<EnrolChannelStat> result=new ArrayList();
 		
@@ -258,7 +254,7 @@ public class EnrolStatServiceImpl implements EnrolStatService {
 			Integer areaid=it.next();
 			AreaEnrolIndex areaindex=new AreaEnrolIndex();
 			areaindex.setAreaid(areaid);
-			areaindex.setDblink(user.getDblink());
+			
 			List<AreaEnrolIndex> indexs=enrolIndexService.listAreaEnrollIndex(areaindex);
 			AreaEnrolIndex matchindex=null;
 			for(AreaEnrolIndex index:indexs){
@@ -296,9 +292,9 @@ public class EnrolStatServiceImpl implements EnrolStatService {
 			}
 			
 			param.setBegindate(pdate);
-			List<EnrolClassStat> stats=statByClass(param,user);
+			List<EnrolClassStat> stats=statByClass(param);
 			for(EnrolClassStat s:stats){
-				System.out.println("======:"+s.getHighrate());
+				
 				if(s.getAreaid()!=null&&s.getAreaid().intValue()==detail.getAreaid().intValue()){
 					detail.setHighrate(s.getHighrate());
 				}
@@ -308,7 +304,7 @@ public class EnrolStatServiceImpl implements EnrolStatService {
 		}
 		
 		result.addAll(map.values());
-		System.out.println("===============size:"+result.size());
+		
 		return result;
 	}
 }

@@ -318,13 +318,11 @@ public class KpiStatServiceImpl implements KpiStatService {
 		List<KpiCoachStatRecord> stats2= kpiCoachStatMapper.statByArea2(param);
 		Map<Integer,KpiCoachStat> areaStatMap=new HashMap();
 		
-		Area pa=new Area();
-		pa.setDblink(param.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
 		
-		Store ps=new Store();
-		ps.setDblink(param.getDblink());
-		List<Store> stores= storeService.selectAllList(ps, user);
+		List<Area> areas= areaService.selectAllList(null);
+		
+		
+		List<Store> stores= storeService.selectAllList(null);
 		
 		CoachTeachType ctt=new CoachTeachType();
 		ctt.setDblink(param.getDblink());
@@ -432,13 +430,11 @@ public class KpiStatServiceImpl implements KpiStatService {
 		List<KpiStoreStatRecord> stats2= kpiStoreStatMapper.statByArea2(param);
 		Map<Integer,KpiStoreStat> areaStatMap=new HashMap();
 		
-		Area pa=new Area();
-		pa.setDblink(param.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
 		
-		Store ps=new Store();
-		ps.setDblink(param.getDblink());
-		List<Store> stores= storeService.selectAllList(ps, user);
+		List<Area> areas= areaService.selectAllList(null);
+		
+		
+		List<Store> stores= storeService.selectAllList(null);
 		
 		for(KpiStoreStatRecord stat:stats){
 			if(!areaStatMap.containsKey(stat.getStoreid())){

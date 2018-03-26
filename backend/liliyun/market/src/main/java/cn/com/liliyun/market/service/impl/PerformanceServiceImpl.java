@@ -52,13 +52,11 @@ public class PerformanceServiceImpl implements PerformanceService {
 	public List<CoachPerformanceStat> coachstat(PerformanceParam param,User user) {
 		List<CoachPerformanceStatItem> stats=performanceStatMapper.statByCoach(param);
 		Map<Integer,CoachPerformanceStat> areaStatMap=new HashMap();
-		Area pa=new Area();
-		pa.setDblink(user.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
 		
-		Store ps=new Store();
-		ps.setDblink(user.getDblink());
-		List<Store> stores= storeService.selectAllList(ps, user);
+		List<Area> areas= areaService.selectAllList(null);
+		
+		
+		List<Store> stores= storeService.selectAllList(null);
 		
 		CoachEnrolIndex last= enrolIndexService.getLastCoachEnrolIndex(user);
 		int enrolindex=last==null?0:last.getEnrolindex();

@@ -40,8 +40,7 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 	private AreaService areaService;
 	
 	@Override
-	public ResultBean addAreaEnrollIndex(AreaEnrolIndex index, LogCommon log,
-			User user) {
+	public ResultBean addAreaEnrollIndex(AreaEnrolIndex index) {
 		ResultBean rb = new ResultBean();
 		
 		AreaEnrolIndex areaEnrolIndex= enrolIndexMapper.getAreaEnrolIndexByDate(index);
@@ -56,7 +55,6 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 		if(index.getData()!=null&&index.getData().size()>0){
 			Map params=new HashMap();
 			params.put("list", index.getData());
-			params.put("dblink", user.getDblink());
 			enrolIndexMapper.batchAddStoreEnrolIndex(params);
 		}
 		
@@ -64,8 +62,7 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 	}
 
 	@Override
-	public ResultBean updateAreaEnrollIndex(AreaEnrolIndex index,
-			LogCommon log, User user) {
+	public ResultBean updateAreaEnrollIndex(AreaEnrolIndex index) {
 		ResultBean rb = new ResultBean();
 		
 		
@@ -74,7 +71,7 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 		storeEnrolIndex.setAreaid(areaEnrolIndex.getAreaid());
 		storeEnrolIndex.setYear(areaEnrolIndex.getYear());
 		storeEnrolIndex.setMonth(areaEnrolIndex.getMonth());
-		storeEnrolIndex.setDblink(user.getDblink());
+		
 		List<StoreEnrolIndex> news=index.getData();
 		List<StoreEnrolIndex> storeEnrolIndexs= enrolIndexMapper.listStoreEnrolIndex(storeEnrolIndex);
 		
@@ -99,12 +96,11 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 		if(adds.size()>0){
 			Map params=new HashMap();
 			params.put("list", adds);
-			params.put("dblink", user.getDblink());
+			
 			enrolIndexMapper.batchAddStoreEnrolIndex(params);
 		}
 		if(updates.size()>0){
 			for(StoreEnrolIndex s:updates){
-				s.setDblink(user.getDblink());
 				enrolIndexMapper.updateStoreEnrolIndex(s);
 			}
 		}
@@ -113,15 +109,14 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 	}
 
 	@Override
-	public ResultBean delAreaEnrollIndex(AreaEnrolIndex index, LogCommon log,
-			User user) {
+	public ResultBean delAreaEnrollIndex(AreaEnrolIndex index) {
 		ResultBean rb = new ResultBean();
 		AreaEnrolIndex areaEnrolIndex= enrolIndexMapper.getAreaEnrolIndex(index);
 		enrolIndexMapper.delAreaEnrolIndex(index);
 		
 		StoreEnrolIndex i=new StoreEnrolIndex();
 		i.setAreaid(areaEnrolIndex.getAreaid());
-		i.setDblink(user.getDblink());
+		
 		enrolIndexMapper.delStoreEnrolIndex(i);
 		return rb;
 	}

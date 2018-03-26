@@ -48,14 +48,14 @@ public class IndexController extends BaseController {
 	@RequestMapping(value="/statistics")
 	public ResultBean statistics(HttpServletRequest request, Coach coach,Student student,
 								 Trainarea trainarea,Store store,Car car) {
-		User user = getUser(request);
+		
 		ResultBean rb = new ResultBean();
 		Map <String,Object> data = new HashMap<>();
 		data.put("coachCount", coachService.getCount(coach));
 		data.put("studentCount", studentService.getCount(student));
 		data.put("trainareaCount", trainareaService.getCount(trainarea));
 		data.put("coachCarCount", carBizService.getCount(car));
-		data.put("storeCount", storeService.getCount(store, user));
+		data.put("storeCount", storeService.getCount(store));
 		data.put("daysCount", studentService.get7count(student));
 		rb.setResult(data);
 		return rb;

@@ -8,5 +8,5 @@ import cn.com.liliyun.user.model.User;
 
 public interface EnrolDetailService {
 
-	public List<EnrolDetail> stat(EnrolDetailParam param,User user);
+	public List<EnrolDetail> stat(EnrolDetailParam param);
 }

@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
 				Store store = new Store();
 				store.setDblink(dblink);
 				store.setId(user.getStoreid());
-				store = storeService.selectOne(store, user);
+				store = storeService.selectOne(store);
 				if (store != null) {
 					user.setStorename(store.getName());
 					user.setStorenum(store.getStorenum());

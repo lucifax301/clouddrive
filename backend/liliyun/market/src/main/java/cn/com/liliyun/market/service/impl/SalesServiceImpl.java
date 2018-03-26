@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import cn.com.liliyun.coach.model.CoachClassType;
 import cn.com.liliyun.coach.service.CoachSettingService;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.flow.service.FlowService;
 import cn.com.liliyun.log.model.LogCommon;
@@ -43,15 +45,14 @@ public class SalesServiceImpl implements SalesService {
 	private CoachSettingService coachSettingService;
 
 	@Override
-	public ResultBean addSalesActivity(SalesActivity activity, LogCommon log,
-			User user, String businessid) {
+	public ResultBean addSalesActivity(SalesActivity activity,String businessid) {
 			
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(activity.getEnddate());
 		calendar.add(Calendar.DAY_OF_YEAR, 1);
 		calendar.add(Calendar.SECOND, -1);
 		activity.setEnddate(calendar.getTime());
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String transactionid= flowService.addFlow(businessid, user.getId(),"",user);
 		activity.setTransactionid(transactionid);
 		activity.setApplyuser(user.getUsername());
@@ -163,8 +164,7 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public ResultBean updateSalesActivity(SalesActivity activity,
-			LogCommon log, User user) {
+	public ResultBean updateSalesActivity(SalesActivity activity) {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(activity.getEnddate());
@@ -176,7 +176,7 @@ public class SalesServiceImpl implements SalesService {
 		List<SalesActivityClassinfo> classinfo= activity.getClassinfo();
 		SalesActivityClassinfo cf=new SalesActivityClassinfo();
 		cf.setActivityid(activity.getId());
-		cf.setDblink(user.getDblink());
+		
 		List<SalesActivityClassinfo> eclassinfo=salesMapper.getClass(cf);
 		
 		List<SalesActivityClassinfo> updates=new ArrayList();
@@ -276,15 +276,14 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public ResultBean auditSalesActivity(SalesActivity activity, LogCommon log,
-			User user) {
+	public ResultBean auditSalesActivity(SalesActivity activity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResultBean batchSalesMarketActivity(String[] applyid, int state,
-			LogCommon log, User user) {
+	public ResultBean batchSalesMarketActivity(String[] applyid, int state
+			) {
 		// TODO Auto-generated method stub
 		return null;
 	}

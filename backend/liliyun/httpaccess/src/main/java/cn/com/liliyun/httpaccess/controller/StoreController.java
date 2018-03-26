@@ -31,22 +31,21 @@ public class StoreController extends BaseController {
 	
 	@RequestMapping(value="/add")
 	public ResultBean add(Store store, HttpServletRequest request) {
-		User user =  AccessWebUtil.getSessionUser(request);
+		
 		if (store.getId() == null) {
-			storeService.insert(store, user);
+			storeService.insert(store);
 		} else {
-			storeService.updateByPrimaryKey(store, user);
+			storeService.updateByPrimaryKey(store);
 		}
 		return new ResultBean();
 	}
 	
 	@RequestMapping(value="/list")
 	public ResultBean getList(Store store, HttpServletRequest request) {
-		User user =  AccessWebUtil.getSessionUser(request);
-		System.out.println("================"+store.getDblink()+"==="+user);
+		
 		ResultBean rb = new ResultBean();
 		store.setPageNo(-1);
-		List <Store> list = storeService.selectList(store, user);
+		List <Store> list = storeService.selectList(store);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -56,7 +55,7 @@ public class StoreController extends BaseController {
 		User user =  AccessWebUtil.getSessionUser(request);
 		ResultBean rb = new ResultBean();
 		boolean isStorePage = true;
-		List <Store> list = storeService.selectList(store, user, isStorePage);
+		List <Store> list = storeService.selectList(store,  isStorePage);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -64,7 +63,7 @@ public class StoreController extends BaseController {
 	@RequestMapping(value="/delete")
 	public ResultBean deleteById(Store store, HttpServletRequest request) {
 		User user =  AccessWebUtil.getSessionUser(request);
-		return storeService.deleteById(store, user);
+		return storeService.deleteById(store);
 	}
 	
 	/*
@@ -76,7 +75,7 @@ public class StoreController extends BaseController {
 	public Object listinidname(Store store, @RequestParam(value = "userType", required = false, defaultValue = "0") Integer userType, HttpServletRequest request) {
 		ResultBean r = new ResultBean();
 		
-		List<Store> list = storeService.selectAllList(store, getUser(request));
+		List<Store> list = storeService.selectAllList(store);
 		Map<String, String>[] result = new Map[list.size()];
 		int i = 0;
 		for (Store s : list) {

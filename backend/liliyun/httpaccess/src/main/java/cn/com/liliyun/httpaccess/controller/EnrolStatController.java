@@ -1,6 +1,7 @@
 package cn.com.liliyun.httpaccess.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,10 +76,10 @@ public class EnrolStatController extends BaseController{
 	@RequestMapping(value="/detail/area")
 	public ResultBean detailAreaStat(EnrolDetailParam param,HttpServletRequest request) {
 		ResultBean resultBean = new ResultBean();
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 		Map data=new HashMap();
-		List<EnrolDetail> list= enrolDetailService.stat(param, user);
+		List<EnrolDetail> list= enrolDetailService.stat(param);
 		
 		
 		//String showzero=request.getParameter("showzero");
@@ -130,14 +131,12 @@ public class EnrolStatController extends BaseController{
 	}
 	
 	@RequestMapping(value="/detail/area/export")
-	public ResponseEntity<byte[]> detailAreaStatExport(EnrolDetailParam param,HttpServletRequest request) {
-		try {
+	public ResponseEntity<byte[]> detailAreaStatExport(EnrolDetailParam param,HttpServletRequest request) throws IOException {
+		
 			
-			User user = AccessWebUtil.getSessionUser(request);
-			
-			List<EnrolDetail> list= enrolDetailService.stat(param, user);
+			List<EnrolDetail> list= enrolDetailService.stat(param);
 			Classinfo ci=new Classinfo();
-			ci.setDblink(user.getDblink());
+			
 			List<Classinfo> clss= classinfoService.selectAllList(ci);
 			
 			Workbook wb = getAreaDetailWorkbook(list,clss);
@@ -152,10 +151,7 @@ public class EnrolStatController extends BaseController{
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
 			HttpStatus.CREATED);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			return null;
-		}
+		
 	}
 	
 	public static final String[] detailHeader = { "招生指标", "招生小计", "退费人数", "实际招生","招生完成率","均价", "外地班均价","高端班占比"};
@@ -230,9 +226,9 @@ public class EnrolStatController extends BaseController{
 	public ResultBean detailAreaStore(EnrolDetailParam param,HttpServletRequest request) {
 		ResultBean resultBean = new ResultBean();
 		
-		User user = AccessWebUtil.getSessionUser(request);
 		
-		List<EnrolDetail> list= enrolDetailService.stat(param, user);
+		
+		List<EnrolDetail> list= enrolDetailService.stat(param);
 		Map data=new HashMap();
 		
 		List rlist=new ArrayList();
@@ -258,7 +254,7 @@ public class EnrolStatController extends BaseController{
 		}
 		data.put("list", rlist);
 		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
+		
 		List<Classinfo> clss= classinfoService.selectAllList(ci);
 		data.put("header", clss);
 		resultBean.setResult(data);
@@ -267,13 +263,12 @@ public class EnrolStatController extends BaseController{
 	}
 	
 	@RequestMapping(value="/detail/store/export")
-	public ResponseEntity<byte[]> detailAreaStoreExport(EnrolDetailParam param,HttpServletRequest request) {
+	public ResponseEntity<byte[]> detailAreaStoreExport(EnrolDetailParam param,HttpServletRequest request) throws IOException {
 		
-		User user = AccessWebUtil.getSessionUser(request);
-		try{
-			List<EnrolDetail> list= enrolDetailService.stat(param, user);
+		
+			List<EnrolDetail> list= enrolDetailService.stat(param);
 			Classinfo ci=new Classinfo();
-			ci.setDblink(user.getDblink());
+			
 			List<Classinfo> clss= classinfoService.selectAllList(ci);
 			
 			Workbook wb = getStoreDetailWorkbook(list,clss);
@@ -288,10 +283,7 @@ public class EnrolStatController extends BaseController{
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
 			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
+		
 	}
 	
 	public Workbook getStoreDetailWorkbook(List<EnrolDetail> list,List<Classinfo> clss){
@@ -371,7 +363,7 @@ public class EnrolStatController extends BaseController{
 		
 		User user = AccessWebUtil.getSessionUser(request);
 		Map data=new HashMap();
-		List<EnrolClassStat> list= enrolStatService.statByClass(param, user);
+		List<EnrolClassStat> list= enrolStatService.statByClass(param);
 		
 		
 		List rlist=new ArrayList();
@@ -431,7 +423,7 @@ public class EnrolStatController extends BaseController{
 		User user = AccessWebUtil.getSessionUser(request);
 		Map data=new HashMap();
 		try{
-			List<EnrolClassStat> list= enrolStatService.statByClass(param, user);
+			List<EnrolClassStat> list= enrolStatService.statByClass(param);
 			Classinfo ci=new Classinfo();
 			ci.setDblink(user.getDblink());
 			List<Classinfo> clss= classinfoService.selectAllList(ci);
@@ -534,10 +526,10 @@ public class EnrolStatController extends BaseController{
 	@RequestMapping(value="/stat/channel")
 	public ResultBean chanelStat(EnrolDetailParam param,HttpServletRequest request) {
 		ResultBean resultBean = new ResultBean();
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 		Map data=new HashMap();
-		List<EnrolChannelStat> list= enrolStatService.statByChannel(param, user);
+		List<EnrolChannelStat> list= enrolStatService.statByChannel(param);
 		
 		
 		List rlist=new ArrayList();
@@ -580,16 +572,16 @@ public class EnrolStatController extends BaseController{
 	public static final String[] channelHeader = { "招生指标", "招生小计", "退费人数", "实际招生","高端班占比"};
 	
 	@RequestMapping(value="/stat/channel/export")
-	public ResponseEntity<byte[]>  chanelStatExport(EnrolDetailParam param,HttpServletRequest request) {
+	public ResponseEntity<byte[]>  chanelStatExport(EnrolDetailParam param,HttpServletRequest request) throws IOException {
 		
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
-		User user = AccessWebUtil.getSessionUser(request);
+		
+		
 		Map data=new HashMap();
-		try{
-			List<EnrolChannelStat> list= enrolStatService.statByChannel(param, user);
+		
+			List<EnrolChannelStat> list= enrolStatService.statByChannel(param);
 			
 			SalesChannel sc=new SalesChannel();
-			sc.setDblink(user.getDblink());
+			
 			List<SalesChannel> clss= salesChannelService.selectChannels(sc);
 			
 			Workbook wb = getChannelStatWorkbook(list,clss);
@@ -604,10 +596,7 @@ public class EnrolStatController extends BaseController{
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
 		HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
+		
 	}
 	
 	public Workbook getChannelStatWorkbook(List<EnrolChannelStat> list,List<SalesChannel> clss){

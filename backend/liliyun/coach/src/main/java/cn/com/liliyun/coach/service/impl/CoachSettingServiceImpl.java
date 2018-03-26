@@ -18,6 +18,8 @@ import cn.com.liliyun.coach.model.CoachClassType;
 import cn.com.liliyun.coach.model.CoachJob;
 import cn.com.liliyun.coach.model.CoachTeachType;
 import cn.com.liliyun.coach.service.CoachSettingService;
+import cn.com.liliyun.common.CommonService;
+import cn.com.liliyun.common.exception.BizException;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.BeanCopy;
 import cn.com.liliyun.common.util.PageUtil;
@@ -32,7 +34,7 @@ import cn.com.liliyun.user.service.UserService;
 
 @SuppressWarnings("rawtypes")
 @Service
-public class CoachSettingServiceImpl implements CoachSettingService {
+public class CoachSettingServiceImpl extends CommonService implements CoachSettingService {
 
 	private static Logger logger=Logger.getLogger(CoachSettingService.class);
 	
@@ -57,13 +59,11 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 	@Autowired
 	private UserService userService;
 	
-	private String getMethodName(){
-		return Thread.currentThread().getStackTrace()[1].getMethodName();
-	}
+	
 	
 	@Override
-	public void addTeachType(CoachTeachType type,String[] subject,LogCommon log) {
-		try{
+	public void addTeachType(CoachTeachType type,String[] subject) {
+		
 			if(subject!=null){
 				StringBuilder builder=new StringBuilder();
 				for(int i=0;i<subject.length;i++){
@@ -75,14 +75,11 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 				type.setSubject(builder.toString());
 			}
 			teachTypeMapper.addTeachType(type);
-		}catch(Exception ex){
-			logger.error(getMethodName()+" error:",ex);
-			throw ex;
-		}
+		
 	}
 
 	@Override
-	public void updateTeachType(CoachTeachType type,String[] subject) throws Exception {
+	public void updateTeachType(CoachTeachType type,String[] subject)  {
 		try{
 			CoachTeachType oldone= teachTypeMapper.getTeachType(type);
 			CoachTeachType newone=new CoachTeachType();
@@ -98,14 +95,12 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 				}
 				newone.setSubject(builder.toString());
 			}
-			try{
-				//System.out.println(LogCommonUtil.getChangeString(oldone, newone));
-			}catch(Exception ex){}
+			
 			newone.setDblink(type.getDblink());
 			teachTypeMapper.updateTeachType(newone);
 		}catch(Exception ex){
 			logger.error(getMethodName()+" error:",ex);
-			throw ex;
+			throw new BizException(ex);
 		}
 	}
 
@@ -140,20 +135,18 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 	}
 
 	@Override
-	public void updateTeachTypeStatus(CoachTeachType type)throws Exception  {
+	public void updateTeachTypeStatus(CoachTeachType type)  {
 		try{
 			CoachTeachType oldone= teachTypeMapper.getTeachType(type);
 			CoachTeachType newone=new CoachTeachType();
 			BeanCopy.copyNotNull(oldone, newone);
 			BeanCopy.copyNotNull(type, newone);
-			try{
-//				System.out.println(LogCommonUtil.getChangeString(oldone, newone));
-			}catch(Exception ex){}
-			newone.setDblink(type.getDblink());
+			
+			
 			teachTypeMapper.updateTeachTypeStatus(newone);
 		}catch(Exception ex){
 			logger.error(getMethodName()+" error:",ex);
-			throw ex;
+			throw new BizException(ex);
 		}
 	}
 
@@ -179,7 +172,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 	}
 
 	@Override
-	public void addClassType(CoachClassType type,LogCommon log) {
+	public void addClassType(CoachClassType type) {
 		
 		try{
 			classTypeMapper.addClassType(type);
@@ -191,7 +184,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 				
 				Map params=new HashMap();
 				params.put("list", classinfo);
-				params.put("dblink", type.getDblink());
+				
 				classinfoService.batchAddClass(params);
 			}
 		}catch(Exception ex){
@@ -200,72 +193,29 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 		}
 	}
 
-//	@Override
-//	public void updateClassType(CoachClassType type) throws Exception {
-//		try{
-//			CoachClassType oldone= classTypeMapper.getClassType(type.getId());
-//			CoachClassType newone=new CoachClassType();
-//			BeanCopy.copyNotNull(oldone, newone);
-//			BeanCopy.copyNotNull(type, newone);
-//			try{
-////				System.out.println(LogCommonUtil.getChangeString(oldone, newone));
-//			}catch(Exception ex){}
-//			classTypeMapper.updateClassType(newone);
-//		}catch(Exception ex){
-//			logger.error(getMethodName()+" error:",ex);
-//			throw ex;
-//		}
-//	}
+
 	
 	@Override
-	public void updateClassType(CoachClassType type) throws Exception {
+	public void updateClassType(CoachClassType type)  {
 		try{
 			CoachClassType oldone= classTypeMapper.getClassType(type);
-//			CoachClassType newone=new CoachClassType();
-//			BeanCopy.copyNotNull(oldone, newone);
-//			BeanCopy.copyNotNull(type, newone);
-//			classTypeMapper.updateClassType(newone);
+
 			classTypeMapper.updateClassType(type);
 			List<Classinfo> classinfo= type.getClassinfo();
-//			Classinfo cf=new Classinfo();
-//			cf.setClasstypeid(type.getId());
-			//List<Classinfo> eclassinfo=classinfoService.selectAllList(cf);
 			
 			List<Classinfo> updates=new ArrayList();
 			List<Classinfo> addes=new ArrayList();
 			List<Classinfo> deles=new ArrayList();
-//			for(Classinfo e: eclassinfo){
-//				boolean find=false;
-//				for(Classinfo info:classinfo){
-//					
-//					if(info.getId()!=null&&e.getId().intValue()==info.getId().intValue()){
-//						find=true;
-//						updates.add(info);
-//					}
-//				}
-//				
-//				if(!find){
-//					deles.add(e);
-//				}
-//			}
-			
-//			for(Classinfo info:classinfo){
-//				if(info.getId()==null){
-//					addes.add(info);
-//					info.setClasstypeid(type.getId());
-//				}
-//			}
+
 			
 			if(addes.size()>0){
 				Map params=new HashMap();
 				params.put("list", addes);
-				params.put("dblink", type.getDblink());
 				classinfoService.batchAddClass(params);
 			}
 			if(deles.size()>0){
 				Map params=new HashMap();
 				params.put("list", deles);
-				params.put("dblink", type.getDblink());
 				classinfoService.batchDelClass(params);
 			}
 			if(updates.size()>0){
@@ -309,7 +259,6 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 				//
 				for(String id:ids){
 					CoachClassType cct=new CoachClassType();
-					cct.setDblink(type.getDblink());
 					cct.setId(Integer.parseInt(id));
 					classTypeMapper.deleteClassType(cct);
 				}
@@ -329,7 +278,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 	}
 
 	@Override
-	public void updateClassTypeStatus(CoachClassType type)throws Exception  {
+	public void updateClassTypeStatus(CoachClassType type) {
 		try{
 			CoachClassType oldone= classTypeMapper.getClassType(type);
 			CoachClassType newone=new CoachClassType();
@@ -339,7 +288,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 			classTypeMapper.updateClassTypeStatus(newone);
 		}catch(Exception ex){
 			logger.error(getMethodName()+" error:",ex);
-			throw ex;
+			throw new BizException(ex);
 		}
 	}
 
@@ -389,7 +338,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 	}
 
 	@Override
-	public void addCarType(CoachCarType type,LogCommon log) {
+	public void addCarType(CoachCarType type) {
 		try{
 			carTypeMapper.addCarType(type);
 		}catch(Exception ex){
@@ -436,7 +385,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 				}
 				if(!flag){
 					CoachCarType n=new CoachCarType();
-					n.setDblink(user.getDblink());
+					
 					n.setUserId(user.getId());
 					n.setType(ntype);
 					addtypes.add(n);
@@ -458,13 +407,12 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 			if(addtypes.size()>0){
 				Map params=new HashMap();
 				params.put("list", addtypes);
-				params.put("dblink", user.getDblink());
+				
 				carTypeMapper.batchAddCarType(params);
 			}
 			if(deltypes.size()>0){
 				Map params=new HashMap();
 				params.put("list", deltypes);
-				params.put("dblink", user.getDblink());
 				carTypeMapper.batchDelCarType(params);
 			}
 			
@@ -475,7 +423,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 	}
 
 	@Override
-	public void addJob(CoachJob job, LogCommon log) throws Exception {
+	public void addJob(CoachJob job) throws Exception {
 		try{
 			jobMapper.addJob(job);
 		}catch(Exception ex){
@@ -491,10 +439,7 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 			CoachJob newone=new CoachJob();
 			BeanCopy.copyNotNull(oldone, newone);
 			BeanCopy.copyNotNull(job, newone);
-			try{
-//				System.out.println(LogCommonUtil.getChangeString(oldone, newone));
-			}catch(Exception ex){}
-			newone.setDblink(job.getDblink());
+			
 			jobMapper.updateJob( newone);
 		}catch(Exception ex){
 			logger.error(getMethodName()+" error:",ex);
@@ -522,8 +467,6 @@ public class CoachSettingServiceImpl implements CoachSettingService {
 				for(String id:ids){
 					CoachJob param=new CoachJob();
 					param.setId(Integer.parseInt(id));
-		
-					param.setDblink(job.getDblink());
 					jobMapper.deleteJob(param);
 				}
 			}else{

@@ -42,9 +42,7 @@ import cn.com.liliyun.coach.service.CoachService;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.ExcelUtil;
-import cn.com.liliyun.common.util.LogConstant;
 import cn.com.liliyun.httpaccess.util.AccessWebUtil;
-import cn.com.liliyun.log.model.LogCommon;
 import cn.com.liliyun.user.model.User;
 
 import com.github.pagehelper.PageInfo;
@@ -130,12 +128,12 @@ public class CoachController extends BaseController {
 	@RequestMapping(value = "/coach/addCoach")
 	@ResponseBody
 	public ResultBean addCoach(Coach coach, HttpServletRequest request) {
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 
 		Map extendsinfo = new HashMap();
 		processExt(extendsinfo, request);
-		return coachService.addCoach(coach, log, extendsinfo, user);
+		return coachService.addCoach(coach, extendsinfo, user);
 	}
 
 	@RequestMapping(value = "/coach/listhead")
@@ -177,40 +175,18 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean updateCoachById(Coach coach, HttpServletRequest request)
 			throws AuthException, JSONException {
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 
 		Map extendsinfo = new HashMap();
 		processExt(extendsinfo, request);
 		coach.setMuid(user.getId());
 		ResultBean resultBean = new ResultBean();
-		coachService.updateCoach(coach, log, extendsinfo);
+		coachService.updateCoach(coach,  extendsinfo);
 		return resultBean;
 	}
 
-	// update
-	/*
-	 * @RequestMapping(value="/coach/updateCoach")
-	 * 
-	 * @ResponseBody public ResultBean updateCoach(Coach coach,
-	 * @RequestParam("file") MultipartFile file) throws AuthException,
-	 * JSONException { System.out.println(
-	 * "*****************************************test*************");
-	 * 
-	 * PutRet ret = null; if(file != null) { CommonsMultipartFile cf=
-	 * (CommonsMultipartFile)file; DiskFileItem fi =
-	 * (DiskFileItem)cf.getFileItem();
-	 * 
-	 * ret = PicUtil.uploadFile(fi.getStoreLocation());
-	 * 
-	 * coach.setPhoto_url(ret.getKey()); }
-	 * 
-	 * System.out.println("**********************" + ret.getKey() +
-	 * "**********************" );
-	 * 
-	 * ResultBean resultBean = new ResultBean();
-	 * coachService.updateCoach(coach); return resultBean; }
-	 */
+	
 
 	private void processExt(Map extendsinfo, HttpServletRequest request) {
 		String classinfoid[] = request.getParameterValues("classinfoid");
@@ -235,34 +211,32 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean updateCoach(Coach coach, HttpServletRequest request)
 			throws AuthException, JSONException {
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 		Map extendsinfo = new HashMap();
 		processExt(extendsinfo, request);
 		coach.setMuid(user.getId());
-		return coachService.updateCoach(coach, log, extendsinfo);
+		return coachService.updateCoach(coach,  extendsinfo);
 	}
 
 	@RequestMapping(value = "/coach/updateCoachTeachState")
 	@ResponseBody
 	public ResultBean updateCoachTeachState(Coach coach,
 			HttpServletRequest request) throws AuthException, JSONException {
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
 		User user = AccessWebUtil.getSessionUser(request);
 
 		coach.setMuid(user.getId());
-		return coachService.updateCoachTeachState(coach, log);
+		return coachService.updateCoachTeachState(coach);
 	}
 
 	@RequestMapping(value = "/coach/updateCoachEmploystatus")
 	@ResponseBody
 	public ResultBean updateCoachEmploystatus(Coach coach,
 			HttpServletRequest request) throws AuthException, JSONException {
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
 		User user = AccessWebUtil.getSessionUser(request);
 
 		coach.setMuid(user.getId());
-		return coachService.updateCoachEmploystatus(coach, log);
+		return coachService.updateCoachEmploystatus(coach);
 	}
 
 	/**
@@ -311,7 +285,7 @@ public class CoachController extends BaseController {
 		List<Coach> list = null;
 		File file = new File(targetDir + filename);
 
-		try {
+		
 			if (file.exists()) {
 				if ("1".equals(type)) {
 					ObjectInputStream ois = new ObjectInputStream(
@@ -328,9 +302,7 @@ public class CoachController extends BaseController {
 				return rb;
 
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 		rb.setCode(2);
 		rb.setMsg("操作失败");
 		return rb;
@@ -370,15 +342,9 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean stuAssignRecord(StudentAssign studentAssign, HttpServletRequest request) {
 		User user = AccessWebUtil.getSessionUser(request);
-		try {
+		
 		return coachService.getStuAssignRecord(studentAssign);
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResultBean rb = new ResultBean();
-			rb.setCode(200);
-			rb.setMsg("获取数据失败!");
-			return rb;
-		}
+		
 	}
 
 	@RequestMapping(value = "/coach/stuAssignRecord/export")
@@ -409,9 +375,8 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean modApply(Coach coach, HttpServletRequest request)
 			throws AuthException, JSONException {
-		System.out
-				.println("*****************************************test*************");
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
+		
+		
 		User user = AccessWebUtil.getSessionUser(request);
 
 		Map extendsinfo = new HashMap();
@@ -419,7 +384,7 @@ public class CoachController extends BaseController {
 		coach.setMuid(user.getId());
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
-		ResultBean resultBean = coachService.modCoachApply(coach, log,
+		ResultBean resultBean = coachService.modCoachApply(coach, 
 				extendsinfo, bussinessid);
 		return resultBean;
 	}
@@ -472,7 +437,6 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean modApplyUpdate(Coach coach, HttpServletRequest request) {
 
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_ADD);
 		User user = AccessWebUtil.getSessionUser(request);
 		String applyid = request.getParameter("applyid");
 
@@ -480,7 +444,7 @@ public class CoachController extends BaseController {
 		processExt(extendsinfo, request);
 		coach.setMuid(user.getId());
 
-		ResultBean resultBean = coachService.updateModCoachApply(coach, log,
+		ResultBean resultBean = coachService.updateModCoachApply(coach, 
 				extendsinfo,  Integer.parseInt(applyid));
 
 		return resultBean;
@@ -490,13 +454,12 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean auditModApply(HttpServletRequest request) {
 
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
 		User user = AccessWebUtil.getSessionUser(request);
 		String applyid = request.getParameter("applyid");
 		String state = request.getParameter("state");
 
 		ResultBean resultBean = coachService.auditModCoachApply(
-				Integer.parseInt(applyid), Integer.parseInt(state), log);
+				Integer.parseInt(applyid), Integer.parseInt(state));
 
 		return resultBean;
 	}
@@ -505,7 +468,6 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean batchAuditModApply(HttpServletRequest request) {
 
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
 		User user = AccessWebUtil.getSessionUser(request);
 		String applyids = request.getParameter("applyids");
 		String state = request.getParameter("state");
@@ -513,7 +475,7 @@ public class CoachController extends BaseController {
 		String ids[]= applyids.split(",");
 		
 		ResultBean resultBean = coachService.batchAuditModCoachApply(
-				ids, Integer.parseInt(state), log);
+				ids, Integer.parseInt(state));
 
 		return resultBean;
 	}
@@ -527,13 +489,11 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean assign(HttpServletRequest request) {
 
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
-		User user = AccessWebUtil.getSessionUser(request);
 		String headcoachid = request.getParameter("headcoachid");
 		String coachidstr = request.getParameter("coachid");
 		String coachid[] = coachidstr.split(",");
 		ResultBean resultBean = coachService.assignCoach(
-				Integer.parseInt(headcoachid), coachid, null, log);
+				Integer.parseInt(headcoachid), coachid, null);
 
 		return resultBean;
 	}
@@ -547,13 +507,11 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean unassign(HttpServletRequest request) {
 
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
-		User user = AccessWebUtil.getSessionUser(request);
 		String headcoachid = request.getParameter("headcoachid");
 		String coachidstr = request.getParameter("coachid");
 		String coachid[] = coachidstr.split(",");
 		ResultBean resultBean = coachService.assignCoach(
-				Integer.parseInt(headcoachid), null, coachid, log);
+				Integer.parseInt(headcoachid), null, coachid);
 
 		return resultBean;
 	}
@@ -562,14 +520,11 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean batchupdate(HttpServletRequest request, Coach coach) {
 
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
-		User user = AccessWebUtil.getSessionUser(request);
-
 		String ids = request.getParameter("ids");
 		String coachid[] = ids.split(",");
 		String classinfoid[] = request.getParameterValues("classinfoid");
 		ResultBean resultBean = coachService.batchUpdateCoach(coachid, coach,
-				log, classinfoid);
+				classinfoid);
 
 		return resultBean;
 	}
@@ -578,16 +533,12 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean getCoachLoadStudentInfo(CoachLoadStudentInfo param){
 		
-		try{
+		
 			ResultBean rb=new ResultBean();
 			List<CoachLoadStudentInfo> list= coachService.getCoachLoadStudentInfo(param);
 			rb.setResult(new PageInfo<>(list));
 			return rb;
-		}catch(Exception ex){
-			ex.printStackTrace();
-			ResultBean rb=new ResultBean("获取数据出错");
-			return rb;
-		}
+		
 	}
 	
 	@RequestMapping(value = "/coach/assignList")

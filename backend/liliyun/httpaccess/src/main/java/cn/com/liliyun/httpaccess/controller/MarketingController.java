@@ -54,9 +54,8 @@ public class MarketingController extends BaseController{
 	public ResultBean addMarketing(MarketActivity activity,HttpServletRequest request){
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
 		User user = AccessWebUtil.getSessionUser(request);
-		return marketService.addMarketActivity(activity,log,user,bussinessid);
+		return marketService.addMarketActivity(activity,bussinessid);
 	}
 	
 	
@@ -64,34 +63,29 @@ public class MarketingController extends BaseController{
 	//更新
 	@RequestMapping(value="/updatemarket")
 	public ResultBean updateMarketing(MarketActivity activity,HttpServletRequest request){
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
-		User user = AccessWebUtil.getSessionUser(request);
-		return marketService.updateMarketActivity(activity,log,user);
+		return marketService.updateMarketActivity(activity);
 	}
 	
 	@RequestMapping(value="/auditmarket")
 	public ResultBean auditMarketing(MarketActivity activity,HttpServletRequest request){
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
-		User user = AccessWebUtil.getSessionUser(request);
-		return marketService.auditMarketActivity(activity, log, user);
+		return marketService.auditMarketActivity(activity);
 	}
 	
 	@RequestMapping(value="/batchauditmarket")
 	public ResultBean batchauditmarket(MarketActivity activity,HttpServletRequest request){
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		String applyids= request.getParameter("ids");
 		String state = request.getParameter("status");
 		String ids[]= applyids.split(",");
-		return marketService.batchAuditMarketActivity(ids, Integer.parseInt(state), log, user);
+		return marketService.batchAuditMarketActivity(ids, Integer.parseInt(state));
 	}
 	
 	//列表
 	@RequestMapping(value="/listmarket")
 	public ResultBean geMarketList(MarketActivity activity,HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		ResultBean resultBean = new ResultBean();
-		List<MarketActivity> list= marketService.listActivity(activity,user);
+		List<MarketActivity> list= marketService.listActivity(activity);
 		PageInfo<MarketActivity> pagedResult = new PageInfo<>(list);
 		resultBean.setResult(pagedResult);
 		resultBean.setCode(0);
@@ -123,8 +117,8 @@ public class MarketingController extends BaseController{
 	@RequestMapping(value="/getmarket")
 	public ResultBean getMarket(MarketActivity activity,HttpServletRequest request){
 		ResultBean resultBean = new ResultBean();
-		User user = AccessWebUtil.getSessionUser(request);
-		MarketActivity market= marketService.getMarketActivity(activity,user);
+		
+		MarketActivity market= marketService.getMarketActivity(activity);
 		resultBean.setResult(market);
 		return resultBean;
 	}
@@ -132,8 +126,8 @@ public class MarketingController extends BaseController{
 	@RequestMapping(value="/getByTran")
 	public ResultBean getByTran(MarketActivity activity,HttpServletRequest request){
 		ResultBean resultBean = new ResultBean();
-		User user = AccessWebUtil.getSessionUser(request);
-		MarketActivity market= marketService.getMarketActivityByTran(activity,user);
+		
+		MarketActivity market= marketService.getMarketActivityByTran(activity);
 		resultBean.setResult(market);
 		return resultBean;
 	}
@@ -148,53 +142,6 @@ public class MarketingController extends BaseController{
 		return rb;
 	}
 	
-	/**
-	 * 
-	 * @param filename
-	 * @param type 1确定导入 2放弃导入
-	 */
-//	@SuppressWarnings("unchecked")
-//	@RequestMapping(value="/marketing/importDB",method=RequestMethod.POST)
-//	public ResultBean importExcel(String filename,String type,HttpServletRequest request,Marketing marketing) throws IOException, ClassNotFoundException {
-//		ResultBean rb = new ResultBean();
-//		String targetDir = request.getSession().getServletContext().getRealPath("WEB-INF") + "/uploadExcel/";
-//		List <Marketing> list = null;
-//		File file = new File(targetDir + filename);
-//		try {
-//			if (file.exists()) {
-//				if("1".equals(type)){
-//					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-//					list = (List<Marketing>) ois.readObject();
-//					marketingService.improtExcel(marketing, list);
-//					ois.close();
-//				}else if("2".equals(type)){
-//					file.delete();
-//				}
-//				rb.setResult(list);
-//				rb.setCode(0);
-//				rb.setMsg("操作成功");
-//				return rb;
-//				
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		rb.setCode(2);
-//		rb.setMsg("操作失败");
-//		return rb;
-//	}
-//	
-//	//下载
-//	 @RequestMapping(value = "/marketing/download")    
-//    public ResponseEntity<byte[]> download(HttpServletRequest request) throws IOException {    
-//        String path = request.getSession().getServletContext().getRealPath("WEB-INF") + "/downloadExcel/marketing.xlsx";
-//        File file=new File(path);  
-//        HttpHeaders headers = new HttpHeaders();    
-//        String fileName=new String("潜在客户导入模板.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
-//        headers.setContentDispositionFormData("attachment", fileName);   
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-//        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
-//                                          headers, HttpStatus.CREATED);    
-//    }
+	
 	
 }

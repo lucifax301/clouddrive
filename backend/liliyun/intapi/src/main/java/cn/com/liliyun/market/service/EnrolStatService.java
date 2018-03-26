@@ -9,7 +9,7 @@ import cn.com.liliyun.user.model.User;
 
 public interface EnrolStatService {
 
-	public List<EnrolClassStat> statByClass(EnrolDetailParam param,User user);
+	public List<EnrolClassStat> statByClass(EnrolDetailParam param);
 	
-	public List<EnrolChannelStat> statByChannel(EnrolDetailParam param,User user);
+	public List<EnrolChannelStat> statByChannel(EnrolDetailParam param);
 }

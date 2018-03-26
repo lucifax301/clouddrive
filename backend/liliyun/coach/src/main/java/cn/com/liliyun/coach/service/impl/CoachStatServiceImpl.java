@@ -35,7 +35,7 @@ import cn.com.liliyun.trainorg.model.Area;
 import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.trainorg.service.AreaService;
 import cn.com.liliyun.trainorg.service.StoreService;
-import cn.com.liliyun.user.model.User;
+//import cn.com.liliyun.user.model.User;
 
 @SuppressWarnings("rawtypes")
 @Service
@@ -57,13 +57,13 @@ public class CoachStatServiceImpl implements CoachStatService {
 	private CoachSettingService coachSettingService;
 	
 	@Override
-	public List<AreaStat> statByArea(AreaStatParam param) throws Exception {
-		//List<Coach> coachs= coachMapper.selectByCondition(new Coach());
+	public List<AreaStat> statByArea(AreaStatParam param)  {
+
 		List<AreaStatRecord> stats= coachStatMapper.statByArea(param);
 		Map<Integer,AreaStat> areaStatMap=new HashMap();
 		
 		CoachTeachType ctt=new CoachTeachType();
-		ctt.setDblink(param.getDblink());
+		
 		List<CoachTeachType> coachTeachTypes=coachSettingService.listTeachType(ctt);
 		Area pa=new Area();
 		pa.setDblink(param.getDblink());
@@ -139,7 +139,7 @@ public class CoachStatServiceImpl implements CoachStatService {
 	}
 	
 	@Override
-	public List<TeachTypeStat> statByTeachType(AreaStatParam param) throws Exception {
+	public List<TeachTypeStat> statByTeachType(AreaStatParam param)  {
 		//List<Coach> coachs= coachMapper.selectByCondition(new Coach());
 		List<AreaStatRecord> stats= coachStatMapper.statByTeachType(param);
 		Map<Integer,TeachTypeStat> areaStatMap=new HashMap();
@@ -221,15 +221,15 @@ public class CoachStatServiceImpl implements CoachStatService {
 	}
 	
 	@Override
-	public List<CoachAreaStat> statByCoach(CoachStatParam param, User user) throws Exception {
+	public List<CoachAreaStat> statByCoach(CoachStatParam param) {
 		List<CoachStatRecord> stats= coachStatMapper.statByCoach(param);
 		Map<Integer,CoachAreaStat> areaStatMap=new HashMap();
 		Area pa=new Area();
-		pa.setDblink(user.getDblink());
+		
 		List<Area> areas= areaService.selectAllList(pa);
 		Store ps=new Store();
-		ps.setDblink(user.getDblink());
-		List<Store> stores= storeService.selectAllList(ps, user);
+		
+		List<Store> stores= storeService.selectAllList(ps);
 		for(CoachStatRecord stat:stats){
 			if(!areaStatMap.containsKey(stat.getAreaid())){
 				CoachAreaStat coachAreaStat=new CoachAreaStat();
@@ -323,16 +323,16 @@ public class CoachStatServiceImpl implements CoachStatService {
 	}
 
 	@Override
-	public List<HeadCoachAreaStat> statByHeadCoach(HeadCoachStatParam param, User user)
-			throws Exception {
+	public List<HeadCoachAreaStat> statByHeadCoach(HeadCoachStatParam param)
+			 {
 		List<HeadCoachStatRecord> stats= coachStatMapper.statByHeadCoach(param);
 		Map<Integer,HeadCoachAreaStat> areaStatMap=new HashMap();
 		Area pa=new Area();
-		pa.setDblink(user.getDblink());
+		
 		List<Area> areas= areaService.selectAllList(pa);
 		Store ps=new Store();
-		ps.setDblink(user.getDblink());
-		List<Store> stores= storeService.selectAllList(ps, user);
+		
+		List<Store> stores= storeService.selectAllList(ps);
 		for(HeadCoachStatRecord stat:stats){
 			if(!areaStatMap.containsKey(stat.getAreaid())){
 				HeadCoachAreaStat coachAreaStat=new HeadCoachAreaStat();
@@ -362,7 +362,7 @@ public class CoachStatServiceImpl implements CoachStatService {
 				matchCoachStoreStat=new HeadCoachStat(stat.getHeadcoachid());
 				areaStatMap.get(stat.getAreaid()).getData().add(matchCoachStoreStat);
 				Coach pc= new Coach(stat.getHeadcoachid());
-				pc.setDblink(user.getDblink());
+				
 				Coach c= coachMapper.selectByPrimaryKey(pc);
 				if(c!=null){
 					matchCoachStoreStat.setCoachname(c.getName());

@@ -63,7 +63,7 @@ public class SalesController extends BaseController{
 	public ResultBean listAllClassType(SalesActivity activity,HttpServletRequest request){
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 		try{
 			Classinfo cp=new Classinfo();
@@ -102,7 +102,7 @@ public class SalesController extends BaseController{
 	@RequestMapping(value="/listEditAllClassType")
 	public ResultBean listEditAllClassType(SalesActivity activity,HttpServletRequest request){
 		
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 		try{
 			Classinfo cp=new Classinfo();
@@ -151,7 +151,7 @@ public class SalesController extends BaseController{
 	public ResultBean addSales(SalesActivity activity,HttpServletRequest request){
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_PASS);
+		
 		User user = AccessWebUtil.getSessionUser(request);
 		
 		String data=request.getParameter("classinfos");
@@ -159,7 +159,7 @@ public class SalesController extends BaseController{
 		
 		activity.setClassinfo(classinfo);
 		
-		return salesService.addSalesActivity(activity, log, user, null);
+		return salesService.addSalesActivity(activity, null);
 	}
 	
 	
@@ -167,7 +167,7 @@ public class SalesController extends BaseController{
 	//更新
 	@RequestMapping(value="/update")
 	public ResultBean updateSales(SalesActivity activity,HttpServletRequest request){
-		LogCommon log = initLogParams(request, 0, LogConstant.ACTION_UPDATE);
+		
 		User user=AccessWebUtil.getSessionUser(request);
 		
 		
@@ -177,7 +177,7 @@ public class SalesController extends BaseController{
 		
 		activity.setClassinfo(classinfo);
 		
-		return salesService.updateSalesActivity(activity, log, user);
+		return salesService.updateSalesActivity(activity);
 	}
 	
 	//列表

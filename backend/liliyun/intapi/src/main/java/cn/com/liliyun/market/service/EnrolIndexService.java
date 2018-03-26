@@ -3,7 +3,6 @@ package cn.com.liliyun.market.service;
 import java.util.List;
 
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.log.model.LogCommon;
 import cn.com.liliyun.market.model.AreaEnrolIndex;
 import cn.com.liliyun.market.model.CSEnrolIndex;
 import cn.com.liliyun.market.model.CoachEnrolIndex;
@@ -12,17 +11,17 @@ import cn.com.liliyun.user.model.User;
 public interface EnrolIndexService {
 
 	/**
-	 * Æ¬ÇøÕÐÉúÖ¸±ê·þÎñ
+	 * Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param index
 	 * @param log
 	 * @param user
 	 * @return
 	 */
-	public ResultBean addAreaEnrollIndex(AreaEnrolIndex index,LogCommon log,User user);
+	public ResultBean addAreaEnrollIndex(AreaEnrolIndex index);
 	
-	public ResultBean updateAreaEnrollIndex(AreaEnrolIndex index,LogCommon log,User user);
+	public ResultBean updateAreaEnrollIndex(AreaEnrolIndex index);
 	
-	public ResultBean delAreaEnrollIndex(AreaEnrolIndex index,LogCommon log,User user);
+	public ResultBean delAreaEnrollIndex(AreaEnrolIndex index);
 	
 	public AreaEnrolIndex getAreaEnrollIndex(AreaEnrolIndex index);
 	
@@ -31,7 +30,7 @@ public interface EnrolIndexService {
 	public List<AreaEnrolIndex> listAllAreaEnrollIndex(AreaEnrolIndex index);
 	
 	/**
-	 * Ô±¹¤ÕÐÉúÖ¸±ê·þÎñ
+	 * Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param index
 	 * @return
 	 */

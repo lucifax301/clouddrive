@@ -316,7 +316,7 @@ public class CoachStatController extends BaseController{
 		User user = AccessWebUtil.getSessionUser(request);
 		ResultBean rb = new ResultBean();
 		try{
-			List<CoachAreaStat> areastat=coachStatService.statByCoach(param, user);
+			List<CoachAreaStat> areastat=coachStatService.statByCoach(param);
 			rb.setResult(areastat);
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -329,10 +329,10 @@ public class CoachStatController extends BaseController{
 	
 	@RequestMapping(value="/coachstat/export")
 	public ResponseEntity<byte[]> coachstatExport(CoachStatParam param, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		ResultBean rb = new ResultBean();
 		try{
-			List<CoachAreaStat> areastat=coachStatService.statByCoach(param, user);
+			List<CoachAreaStat> areastat=coachStatService.statByCoach(param);
 			Workbook wb = getCoachStatWorkbook(areastat);
 			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -436,15 +436,12 @@ public class CoachStatController extends BaseController{
 	 */
 	@RequestMapping(value="/headcoachstat")
 	public ResultBean headcoachstat(HeadCoachStatParam param, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		ResultBean rb = new ResultBean();
-		try{
-			List<HeadCoachAreaStat> areastat=coachStatService.statByHeadCoach(param, user);
+		
+			List<HeadCoachAreaStat> areastat=coachStatService.statByHeadCoach(param);
 			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-		}
+		
 		return rb;
 	}
 	
@@ -455,7 +452,7 @@ public class CoachStatController extends BaseController{
 		User user = AccessWebUtil.getSessionUser(request);
 		ResultBean rb = new ResultBean();
 		try{
-			List<HeadCoachAreaStat> areastat=coachStatService.statByHeadCoach(param, user);
+			List<HeadCoachAreaStat> areastat=coachStatService.statByHeadCoach(param);
 			Workbook wb = getHeadCoachStatWorkbook(areastat);
 			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
