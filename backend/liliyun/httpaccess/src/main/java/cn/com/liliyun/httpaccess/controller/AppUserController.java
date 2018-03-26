@@ -818,7 +818,7 @@ public class AppUserController {
 	    {
 	      FinanceAppStat financeAppStat = new FinanceAppStat();
 	      User user = new User();
-	      Map<String, Object> financeAppStatList = this.financeService.getIncomeStat(financeAppStat, user);
+	      Map<String, Object> financeAppStatList = this.financeService.getIncomeStat(financeAppStat);
 	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
 	        r.setResult(financeAppStatList);
 	      }
@@ -856,7 +856,7 @@ public class AppUserController {
 	    {
 	      FinanceAppStat financeAppStat = new FinanceAppStat();
 	      User user = new User();
-	      Map<String, Object> financeAppStatList = this.financeService.getOutcomeStat(financeAppStat, user);
+	      Map<String, Object> financeAppStatList = this.financeService.getOutcomeStat(financeAppStat);
 	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
 	        r.setResult(financeAppStatList);
 	      }
@@ -894,7 +894,7 @@ public class AppUserController {
 	    {
 	      FinanceAppStat financeAppStat = new FinanceAppStat();
 	      User user = new User();
-	      Map<String, Object> financeAppStatList = this.financeService.getOwemoneyStat(financeAppStat, user);
+	      Map<String, Object> financeAppStatList = this.financeService.getOwemoneyStat(financeAppStat);
 	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
 	        r.setResult(financeAppStatList);
 	      }

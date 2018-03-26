@@ -638,7 +638,7 @@ public class MaterialServiceImpl implements MaterialService {
 			params.put("list", logList);
 			studentStatusLogMapper.insertBatch(params);
 
-			studentService.updateStudentBatch(user,studentList);
+			studentService.updateStudentBatch(studentList);
 		}
 		return new ResultBean();
 	}

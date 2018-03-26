@@ -108,7 +108,7 @@ public class OrderExamServiceImpl implements OrderExamService {
                 studentStatusLog.setTableid(tableId);
                 studentStatusLog.setSubject(getSubject(item.getSubject()));
                 studentStatusLog.setSubjectname(getSubjectname(item.getSubject()));
-                studentService.saveStudentStatusLog(user, studentStatusLog);
+                studentService.saveStudentStatusLog(studentStatusLog);
             } else {
 				iterator.remove();
 			}
@@ -246,7 +246,7 @@ public class OrderExamServiceImpl implements OrderExamService {
 			studentStatusLog.setTableid(tableId);
 			studentStatusLog.setSubject(getSubject(item.getSubject()));
 			studentStatusLog.setSubjectname(getSubjectname(item.getSubject()));
-			studentService.saveStudentStatusLog(user,studentStatusLog);
+			studentService.saveStudentStatusLog(studentStatusLog);
 		} 
 		if (list.size() > 0) {
             Integer subject = list.get(0).getSubject();

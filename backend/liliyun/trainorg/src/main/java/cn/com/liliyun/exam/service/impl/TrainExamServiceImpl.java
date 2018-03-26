@@ -88,7 +88,7 @@ public class TrainExamServiceImpl implements TrainExamService {
                 studentStatusLog.setTableid(tableId);
                 studentStatusLog.setSubject(getSubejct(item.getSubject()));
                 studentStatusLog.setSubjectname(getSubejctName(item.getSubject()));
-                studentService.saveStudentStatusLog(user,studentStatusLog);
+                studentService.saveStudentStatusLog(studentStatusLog);
 
 			} else {
 				iterator.remove();
@@ -178,7 +178,7 @@ public class TrainExamServiceImpl implements TrainExamService {
             studentStatusLog.setTableid(tableId);
             studentStatusLog.setSubject(getSubejct(item.getSubject()));
             studentStatusLog.setSubjectname(getSubejctName(item.getSubject()));
-            studentService.saveStudentStatusLog(user,studentStatusLog);
+            studentService.saveStudentStatusLog(studentStatusLog);
 		}
 		if (list.size() > 0) {
             Integer subject = list.get(0).getSubject();

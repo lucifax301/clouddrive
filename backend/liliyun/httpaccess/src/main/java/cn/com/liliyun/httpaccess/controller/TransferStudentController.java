@@ -13,7 +13,6 @@ import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.student.model.Student;
 import cn.com.liliyun.student.model.TransferStudent;
 import cn.com.liliyun.student.service.StudentService;
-import cn.com.liliyun.user.model.User;
 
 @Controller
 @ResponseBody
@@ -25,35 +24,35 @@ public class TransferStudentController {
 	//获取转店列表
 	@RequestMapping(value="/transferStudent/list", method = RequestMethod.GET)
 	public ResultBean getTransferList(HttpServletRequest request, TransferStudent transferStudent) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
+		
 		Boolean isChosen = false;
 		if (transferStudent.getFromareaid() != null || transferStudent.getFromstoreid() != null)
 			isChosen = true;
-		return studentService.getTransferList(transferStudent, isChosen, user);
+		return studentService.getTransferList(transferStudent, isChosen);
 	}
 	
 	@RequestMapping(value="/transferStudent", method = RequestMethod.GET)
 	public ResultBean getTransfer(HttpServletRequest request, TransferStudent transferStudent) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.getTransfer(transferStudent, user);
+		
+		return studentService.getTransfer(transferStudent);
 	}
 	
 	@RequestMapping(value="/transferStudent/add", method = RequestMethod.POST)
 	public ResultBean addTransfer(HttpServletRequest request, TransferStudent transferStudent) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
+		
 		String businessid = (String) request.getSession().getAttribute(ConstantUtil.SESSION_BUSINESS);
-		return studentService.addTransfer(transferStudent, user, businessid);
+		return studentService.addTransfer(transferStudent,  businessid);
 	}
 	
 	@RequestMapping(value="/transferStudent/update", method = RequestMethod.POST)
 	public ResultBean editTransfer(HttpServletRequest request, TransferStudent transferStudent) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.editTransfer(transferStudent, user);
+		
+		return studentService.editTransfer(transferStudent);
 	}
 	
 	@RequestMapping(value="/transferStudent/students", method = RequestMethod.GET)
 	public ResultBean getStudentList(HttpServletRequest request, Student student) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.getTStudentList(student, user);
+		
+		return studentService.getTStudentList(student);
 	}
 }

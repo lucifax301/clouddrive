@@ -44,7 +44,7 @@ import cn.com.liliyun.trainorg.model.Area;
 import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.trainorg.service.AreaService;
 import cn.com.liliyun.trainorg.service.StoreService;
-import cn.com.liliyun.user.model.User;
+
 
 @Controller
 @ResponseBody
@@ -61,19 +61,19 @@ public class FinanceReceiptController extends BaseController {
 	
 	@RequestMapping(value = "/financeSubject/listAll", method = RequestMethod.GET)
 	public ResultBean getFinanceSubjectListAll(FinanceSubject financeSubject, HttpServletRequest request) {
-		return financeService.getFinanceSubjectList(financeSubject, getUser(request));
+		return financeService.getFinanceSubjectList(financeSubject);
 	}
 	
 	@RequestMapping(value = "/financeSubject/list", method = RequestMethod.GET)
 	public ResultBean getFinanceSubjectList(FinanceSubject financeSubject, HttpServletRequest request) {
 		financeSubject.setDisable((byte) 0);
 		financeSubject.setPageNo(-1);
-		return financeService.getFinanceSubjectList(financeSubject, getUser(request));
+		return financeService.getFinanceSubjectList(financeSubject);
 	}
 	
 	@RequestMapping(value = "/financeSubject/add", method = RequestMethod.POST)
 	public ResultBean addFinanceSubject(FinanceSubject financeSubject, HttpServletRequest request) {
-		return financeService.addFinanceSubject(financeSubject, getUser(request));
+		return financeService.addFinanceSubject(financeSubject);
 	}
 	
 	@RequestMapping(value = "/financeSubject/del", method = RequestMethod.POST)
@@ -82,41 +82,39 @@ public class FinanceReceiptController extends BaseController {
 		if (financeSubject.getDisable() != null && financeSubject.getDisable() == (byte) 0) {
 			isdel = false;
 		}
-		return financeService.deleteFinanceSubject(financeSubject, getUser(request), isdel);
+		return financeService.deleteFinanceSubject(financeSubject, isdel);
 	}
 	
 	@RequestMapping(value = "/financeSubcharge/list", method = RequestMethod.GET)
 	public ResultBean getFinanceSubchargeList(FinanceSubcharge financeSubcharge, HttpServletRequest request) {
-		return financeService.getFinanceSubchargeList(financeSubcharge, getUser(request));
+		return financeService.getFinanceSubchargeList(financeSubcharge);
 	}
 	
 	@RequestMapping(value = "/financeSubcharge/add", method = RequestMethod.POST)
 	public ResultBean addFinanceSubcharge(FinanceSubcharge financeSubcharge, HttpServletRequest request) {
-		return financeService.addFinanceSubcharge(financeSubcharge, getUser(request));
+		return financeService.addFinanceSubcharge(financeSubcharge);
 	}
 	
 	@RequestMapping(value = "/financeSubcharge/update", method = RequestMethod.POST)
 	public ResultBean updateFinanceSubcharge(FinanceSubcharge financeSubcharge, HttpServletRequest request) {
-		return financeService.updateFinanceSubcharge(financeSubcharge, getUser(request));
+		return financeService.updateFinanceSubcharge(financeSubcharge);
 	}
 	
 	@RequestMapping(value = "/financeSubcharge/del", method = RequestMethod.POST)
 	public ResultBean delFinanceSubcharge(FinanceSubcharge financeSubcharge, HttpServletRequest request) {
-		return financeService.deleteFinanceSubcharge(financeSubcharge, getUser(request));
+		return financeService.deleteFinanceSubcharge(financeSubcharge);
 	}
 	
 	@RequestMapping(value = "/financeSubcharge/export")
 	public  ResponseEntity<byte[]> exportFinanceSubchargeList(FinanceSubcharge financeSubcharge, HttpServletRequest request) {
 		try {
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-			List<FinanceSubcharge> list = financeService.getFinanceSubchargeExport(financeSubcharge, getUser(request));
 			
-			Area pa=new Area();
-			pa.setDblink(user.getDblink());
-			Map<Integer, MapDTO> area = areaService.getMap(pa);
-			Store ps=new Store();
-			ps.setDblink(user.getDblink());
-			Map<Integer, MapDTO> store = storeService.getMap(ps);
+			List<FinanceSubcharge> list = financeService.getFinanceSubchargeExport(financeSubcharge);
+			
+			
+			Map<Integer, MapDTO> area = areaService.getMap(null);
+			
+			Map<Integer, MapDTO> store = storeService.getMap(null);
 			
 			for(FinanceSubcharge fs : list) {
 				fs.setAreastr(area.get(fs.getAreaid())!=null?area.get(fs.getAreaid()).getName():"");
@@ -140,12 +138,12 @@ public class FinanceReceiptController extends BaseController {
 	
 	@RequestMapping(value = "/financeDeposit/list", method = RequestMethod.GET)
 	public ResultBean getFinanceDepositList(FinanceDeposit financeDeposit, HttpServletRequest request) {
-		return financeService.getFinanceDepositList(financeDeposit, getUser(request));
+		return financeService.getFinanceDepositList(financeDeposit);
 	}
 	
 	@RequestMapping(value = "/financeDeposit/add", method = RequestMethod.POST)
 	public ResultBean addFinanceSubcharge(FinanceDeposit financeDeposit, HttpServletRequest request) {
-		return financeService.addFinanceDeposit(financeDeposit, getUser(request));
+		return financeService.addFinanceDeposit(financeDeposit);
 	}
 	
 	@RequestMapping(value = "/financeDeposit/update", method = RequestMethod.POST)
@@ -154,25 +152,23 @@ public class FinanceReceiptController extends BaseController {
 		Boolean isConfirm = false;
 		if (confirm == 1)
 			isConfirm = true;
-		return financeService.updateFinanceDeposit(financeDeposit, getUser(request), confirm);
+		return financeService.updateFinanceDeposit(financeDeposit, confirm);
 	}
 	
 	@RequestMapping(value = "/financeDeposit/del", method = RequestMethod.POST)
 	public ResultBean delFinanceDeposit(FinanceDeposit financeDeposit, HttpServletRequest request) {
-		return financeService.deleteFinanceDeposit(financeDeposit, getUser(request));
+		return financeService.deleteFinanceDeposit(financeDeposit);
 	}
 	
 	@RequestMapping(value = "/financeDeposit/export")
 	public  ResponseEntity<byte[]> exportFinanceDepositList(FinanceDeposit financeDeposit, HttpServletRequest request) {
 		try {
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-			List<FinanceDeposit> list = financeService.getFinanceDepositExport(financeDeposit, getUser(request));
-			Area pa=new Area();
-			pa.setDblink(user.getDblink());
-			Map<Integer, MapDTO> area = areaService.getMap(pa);
-			Store ps=new Store();
-			ps.setDblink(user.getDblink());
-			Map<Integer, MapDTO> store = storeService.getMap(ps);
+			
+			List<FinanceDeposit> list = financeService.getFinanceDepositExport(financeDeposit);
+			
+			Map<Integer, MapDTO> area = areaService.getMap(null);
+			
+			Map<Integer, MapDTO> store = storeService.getMap(null);
 			for(FinanceDeposit fd : list) {
 				fd.setAreastr(area.get(fd.getAreaid())!=null?area.get(fd.getAreaid()).getName():"");
 				fd.setStorestr(store.get(fd.getStoreid())!=null?store.get(fd.getStoreid()).getName():"");
@@ -195,17 +191,17 @@ public class FinanceReceiptController extends BaseController {
 	
 	@RequestMapping(value = "/financeReceipt/list", method = RequestMethod.GET)
 	public ResultBean getFinanceReceiptList(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.getFinanceReceiptList(financeReceipt, getUser(request));
+		return financeService.getFinanceReceiptList(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/add", method = RequestMethod.POST)
 	public ResultBean addFinanceReceipt(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.addFinanceReceipt(financeReceipt, getUser(request));
+		return financeService.addFinanceReceipt(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/update", method = RequestMethod.POST)
 	public ResultBean updateFinanceReceipt(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.updateFinanceReceipt(financeReceipt, getUser(request));
+		return financeService.updateFinanceReceipt(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/apply", method = RequestMethod.POST)
@@ -217,40 +213,37 @@ public class FinanceReceiptController extends BaseController {
 		}
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
-		return financeService.updateFinanceReceiptApply(financeReceipt, getUser(request), isreview, bussinessid);
+		return financeService.updateFinanceReceiptApply(financeReceipt, isreview, bussinessid);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/invoiceState", method = RequestMethod.POST)
 	public ResultBean updateFinanceReceiptInvoiceState(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.updateFinanceReceiptInvoiceState(financeReceipt, getUser(request));
+		return financeService.updateFinanceReceiptInvoiceState(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/confirm", method = RequestMethod.POST)
 	public ResultBean updateFinanceReceiptConfirm(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.updateFinanceReceiptConfirm(financeReceipt, getUser(request));
+		return financeService.updateFinanceReceiptConfirm(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/listIncome", method = RequestMethod.GET)
 	public ResultBean listIncome(FinanceIncome financeIncome, HttpServletRequest request) {
-		return financeService.selectIncome(financeIncome, getUser(request));
+		return financeService.selectIncome(financeIncome);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/export")
 	public  ResponseEntity<byte[]> exportFinanceReceiptList(FinanceReceipt financeReceipt, HttpServletRequest request) {
 		try {
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-			List<FinanceReceipt> list = financeService.getFinanceReceiptExport(financeReceipt, getUser(request));
-			Area pa=new Area();
-			pa.setDblink(user.getDblink());
-			Map<Integer, MapDTO> area = areaService.getMap(pa);
-			Store ps=new Store();
-			ps.setDblink(user.getDblink());
-			Map<Integer, MapDTO> store = storeService.getMap(ps);
 			
-			FinanceSubject financeSubject=new FinanceSubject();
-			financeSubject.setDblink(user.getDblink());
+			List<FinanceReceipt> list = financeService.getFinanceReceiptExport(financeReceipt);
 			
-			Map<Integer, MapDTO> subject = financeService.getMap(financeSubject);
+			Map<Integer, MapDTO> area = areaService.getMap(null);
+			
+			Map<Integer, MapDTO> store = storeService.getMap(null);
+			
+			
+			
+			Map<Integer, MapDTO> subject = financeService.getMap(null);
 			for(FinanceReceipt fr : list) {
 				fr.setAreastr(area.get(fr.getAreaid())!=null?area.get(fr.getAreaid()).getName():"");
 				fr.setStorestr(store.get(fr.getStoreid())!=null?store.get(fr.getStoreid()).getName():"");
@@ -275,19 +268,15 @@ public class FinanceReceiptController extends BaseController {
 	@RequestMapping(value = "/financeReceipt/invoiceexport")
 	public  ResponseEntity<byte[]> exportFinanceReceiptInvoice(FinanceReceipt financeReceipt, HttpServletRequest request) {
 		try {
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-			List<FinanceInvoiceDTO> list = financeService.getFinanceInvoiceExport(financeReceipt, getUser(request));
-			Area pa=new Area();
-			pa.setDblink(user.getDblink());
-			Map<Integer, MapDTO> area = areaService.getMap(pa);
-			Store ps=new Store();
-			ps.setDblink(user.getDblink());
-			Map<Integer, MapDTO> store = storeService.getMap(ps);
 			
-			FinanceSubject financeSubject=new FinanceSubject();
-			financeSubject.setDblink(user.getDblink());
+			List<FinanceInvoiceDTO> list = financeService.getFinanceInvoiceExport(financeReceipt);
 			
-			Map<Integer, MapDTO> subject = financeService.getMap(financeSubject);
+			Map<Integer, MapDTO> area = areaService.getMap(null);
+			
+			Map<Integer, MapDTO> store = storeService.getMap(null);
+			
+			
+			Map<Integer, MapDTO> subject = financeService.getMap(null);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			DecimalFormat df_bill = new DecimalFormat("0000");
 			String prenum = sdf.format(new Date());
@@ -332,7 +321,7 @@ public class FinanceReceiptController extends BaseController {
 			return rb;
 		}
 		if (list != null && list.size() > 0) {
-			financeService.addFinanceReceiptInvoice(list, getUser(request));
+			financeService.addFinanceReceiptInvoice(list);
 		}
 		return rb;
 	}

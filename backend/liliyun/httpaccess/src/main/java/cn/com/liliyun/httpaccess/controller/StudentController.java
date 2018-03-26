@@ -88,9 +88,9 @@ public class StudentController extends BaseController {
 	public ResultBean addStudent(HttpServletRequest request,Student student){
 		ResultBean rb;
 		if (student.getId() == null) {
-			rb = studentService.addStudent(getUser(request),student);
+			rb = studentService.addStudent(student);
 		} else {
-			rb = studentService.updateStudent(getUser(request),student);
+			rb = studentService.updateStudent(student);
 		}
 		return rb;
 	}
@@ -104,7 +104,7 @@ public class StudentController extends BaseController {
 	//列表
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	public ResultBean getList(HttpServletRequest request,Student student) {
-		return studentService.getStudentList(student, getUser(request));
+		return studentService.getStudentList(student);
 	}
 	
 	//列表
@@ -132,7 +132,7 @@ public class StudentController extends BaseController {
 	@RequestMapping(value="/check", method=RequestMethod.POST)
 	public ResultBean check(HttpServletRequest request,Student student) {
 		student.setCheckstatus(1);
-		return studentService.updateStudent(getUser(request),student);
+		return studentService.updateStudent(student);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -151,7 +151,7 @@ public class StudentController extends BaseController {
 		}
 		params.put("list", list);
 		params.put("dblink", model.getDblink());
-		Map<String, Object> rtnData = studentService.importFlownum(getUser(request),params);
+		Map<String, Object> rtnData = studentService.importFlownum(params);
 		list = (List<Flownum>) rtnData.get("errorlist");
 		if (list != null && list.size() > 0) {
 			ExportParams eparams = new ExportParams("流水号导入错误数据", "错误数据", ExcelType.XSSF);//title sheetname 文件格式
@@ -175,7 +175,7 @@ public class StudentController extends BaseController {
 		
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		String businessid = (String) request.getSession().getAttribute(ConstantUtil.SESSION_BUSINESS);
-		return studentService.addCoachStudent(coachStudent, isreview==1, user, businessid);
+		return studentService.addCoachStudent(coachStudent, isreview==1,  businessid);
 		
 	}
 	
@@ -184,7 +184,7 @@ public class StudentController extends BaseController {
 	public ResultBean coachinfo(HttpServletRequest request, CoachStudent coachStudent){
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		coachStudent.setIsvalid(1);
-		CoachStudent cs=studentService.getCoachStudent(coachStudent, user);
+		CoachStudent cs=studentService.getCoachStudent(coachStudent);
 		ResultBean rb=new ResultBean();
 		if(cs!=null){
 			Coach p=new Coach();
@@ -264,7 +264,7 @@ public class StudentController extends BaseController {
 	@RequestMapping(value="/theoryLessonList", method = RequestMethod.GET)
 	public ResultBean getTheoryList(HttpServletRequest request, TheoryLesson theoryLesson) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.getTheoryList(theoryLesson, user);
+		return studentService.getTheoryList(theoryLesson);
 	}
 	
 	//获取单个理论课数据，包括学员
@@ -272,21 +272,21 @@ public class StudentController extends BaseController {
 	public ResultBean getTheory(HttpServletRequest request, TheoryLessonStoreDto theoryLesson, 
 			@RequestParam(required = false, defaultValue = "0") int isReview) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.getTheory(theoryLesson, user, isReview==1);
+		return studentService.getTheory(theoryLesson, isReview==1);
 	}
 	
 	//新增理论课的时候，获取门店列表数据
 	@RequestMapping(value="/theoryStores", method = RequestMethod.GET)
 	public ResultBean getTheoryStores(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.getTheoryStores(user);
+		return studentService.getTheoryStores();
 	}
 	
 	//获取可参加理论课的学员列表
 	@RequestMapping(value="/theoryStudents", method = RequestMethod.GET)
 	public ResultBean getTheoryStudents(HttpServletRequest request, Student student) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.getTheoryStudents(student, user);
+		return studentService.getTheoryStudents(student);
 	}
 	
 	//增加一个新的理论课，同时必须设置
@@ -308,7 +308,7 @@ public class StudentController extends BaseController {
 				r.setMsg(HttpConstant.ERROR_MSG);
 				return r;
 			}
-			return studentService.addTheory(theoryLesson, stores, user);
+			return studentService.addTheory(theoryLesson, stores);
 	}
 	
 	//增加或删除学员
@@ -316,7 +316,7 @@ public class StudentController extends BaseController {
 	public ResultBean editTheoryStudent(HttpServletRequest request, Integer theoryId, String[] ids,
 			@RequestParam(required = false, defaultValue = "0") int isDel) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.editTheoryStudent(theoryId, ids, user, isDel==1);
+		return studentService.editTheoryStudent(theoryId, ids,  isDel==1);
 	}
 	
 	//修改理论课状态
@@ -324,7 +324,7 @@ public class StudentController extends BaseController {
 	public ResultBean updateTheory(HttpServletRequest request, TheoryLesson theoryLesson) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		String businessid = (String) request.getSession().getAttribute(ConstantUtil.SESSION_BUSINESS);
-		return studentService.updateTheory(theoryLesson, user, businessid);
+		return studentService.updateTheory(theoryLesson,  businessid);
 	}
 	
 	@RequestMapping(value="/learnpause/addpause", method = RequestMethod.POST)
@@ -332,7 +332,7 @@ public class StudentController extends BaseController {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
-		return studentService.addStudentPauseApply(apply,user,bussinessid);
+		return studentService.addStudentPauseApply(apply,bussinessid);
 	}
 	
 	@RequestMapping(value="/learnpause/addresume", method = RequestMethod.POST)
@@ -340,35 +340,35 @@ public class StudentController extends BaseController {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
-		return studentService.addStudentPauseApply(apply,user,bussinessid);
+		return studentService.addStudentPauseApply(apply,bussinessid);
 	}
 	
 	@RequestMapping(value="/learnpause/update", method = RequestMethod.POST)
 	public ResultBean updatelearnpause(HttpServletRequest request, StudentPauseApply apply) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		
-		return studentService.updateStudentPauseApply(apply, user);
+		return studentService.updateStudentPauseApply(apply);
 	}
 	
 	@RequestMapping(value="/learnpause/list")
 	public ResultBean listlearnpause(HttpServletRequest request, StudentPauseApplyParam param) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		
-		return studentService.listStudentPauseApply(param,user);
+		return studentService.listStudentPauseApply(param);
 	}
 	
 	@RequestMapping(value="/learnpause/get")
 	public ResultBean getlearnpause(HttpServletRequest request, StudentPauseApply apply) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		
-		return studentService.getStudentPauseApply(apply,user);
+		return studentService.getStudentPauseApply(apply);
 	}
 	
 	@RequestMapping(value="/learnpause/getByTran")
 	public ResultBean getlearnpauseByTran(HttpServletRequest request, StudentPauseApply apply) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		
-		return studentService.getStudentPauseApplyByTransaction(apply,user);
+		return studentService.getStudentPauseApplyByTransaction(apply);
 	}
 	
 	
@@ -382,14 +382,14 @@ public class StudentController extends BaseController {
 	//列表
 	@RequestMapping(value="/pauselist", method=RequestMethod.GET)
 	public ResultBean pauselist(Student student, HttpServletRequest request) {
-		return studentService.getStudentList(student, getUser(request));
+		return studentService.getStudentList(student);
 	}
 	
 	@RequestMapping(value="/learnpause/audit")
 	public ResultBean auditlearnpause(HttpServletRequest request, StudentPauseApply apply) {
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		
-		return studentService.updateStudentPauseApplyStatus(apply, user);
+		return studentService.updateStudentPauseApplyStatus(apply);
 	}
 	
 	@RequestMapping(value="/theoryLessonText", method = RequestMethod.GET)
@@ -398,7 +398,7 @@ public class StudentController extends BaseController {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.SUCCESS_CODE);
 		r.setMsg(HttpConstant.SUCCESS_MSG);
-		r.setMsg(studentService.theoryLessonText(theoryid, type, user));
+		r.setMsg(studentService.theoryLessonText(theoryid, type));
 		return r;
 	}
 	
@@ -407,7 +407,7 @@ public class StudentController extends BaseController {
 		ResponseEntity<byte[]> r = null;
 		try {
 			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-			List<TheoryStudentExport> list = studentService.theoryStudentExport(theoryStudent, user);
+			List<TheoryStudentExport> list = studentService.theoryStudentExport(theoryStudent);
 			for (TheoryStudentExport tse : list) {
 				tse.setApplyexamstr(tse.getApplyexam()==1?"已受理":tse.getApplyexam().toString());
 			}
@@ -430,7 +430,7 @@ public class StudentController extends BaseController {
 	@RequestMapping(value="/studentCoach", method= RequestMethod.GET)
 	public ResultBean getStudentCoach(HttpServletRequest request, StudentCoachDTO studetCoach){
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		return studentService.getStudentCoach(studetCoach, user);
+		return studentService.getStudentCoach(studetCoach);
 	}
 
 	@RequestMapping(value="/calcMoney")
@@ -440,7 +440,7 @@ public class StudentController extends BaseController {
 			rb.setResult(0);
 			return rb;
 		}
-		return studentService.calcMoney(getUser(request), dto);
+		return studentService.calcMoney( dto);
 	}
 
 }

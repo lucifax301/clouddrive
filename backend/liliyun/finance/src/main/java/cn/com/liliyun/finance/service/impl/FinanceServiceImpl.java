@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.com.liliyun.common.dto.MapDTO;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.FeeSubject;
@@ -111,10 +112,10 @@ public class FinanceServiceImpl implements FinanceService {
 	private FinanceAppStatMapper financeAppStatMapper;
 	
 	@Override
-	public ResultBean getFinancePosList(FinancePos financePos, User user) {
+	public ResultBean getFinancePosList(FinancePos financePos) {
 		ResultBean r = new ResultBean();
 		
-		financePos.setDblink(user.getDblink());
+		
 		PageUtil.startPage(financePos);
 		List<FinancePos> list = financePosMapper.selectList(financePos);
 		r.setResult(new PageInfo<>(list));
@@ -123,10 +124,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean addFinancePos(FinancePos financePos, User user) {
+	public ResultBean addFinancePos(FinancePos financePos) {
 		ResultBean r = new ResultBean();
 		
-		financePos.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		FinancePos fp = financePosMapper.selectByPosnum(financePos);
 		if (fp != null){
 			return r;
@@ -140,10 +141,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean updateFinancePos(FinancePos financePos, User user) {
+	public ResultBean updateFinancePos(FinancePos financePos) {
 		ResultBean r = new ResultBean();
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		
-		financePos.setDblink(user.getDblink());
 		FinancePos fp = financePosMapper.selectByPosnum(financePos);
 		if (fp != null){
 			return r;
@@ -157,10 +158,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean deleteFinancePos(FinancePos financePos, User user) {
+	public ResultBean deleteFinancePos(FinancePos financePos) {
 		ResultBean r = new ResultBean();
 		
-		financePos.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financePos.setMuid(user.getId());
 		financePos.setMname(user.getRealname());
 		financePos.setMtime(new Date());
@@ -170,20 +171,20 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public List<FinancePos> getFinancePosExport(FinancePos financePos, User user) {
+	public List<FinancePos> getFinancePosExport(FinancePos financePos) {
 		List<FinancePos> r = null;
 		
-		financePos.setDblink(user.getDblink());
+		
 		r = financePosMapper.selectList(financePos);
 		
 		return r;
 	}
 
 	@Override
-	public ResultBean getPosAccountList(PosAccount posAccount, User user) {
+	public ResultBean getPosAccountList(PosAccount posAccount) {
 		ResultBean r = new ResultBean();
 		
-		posAccount.setDblink(user.getDblink());
+		
 		PageUtil.startPage(posAccount);
 		List<PosAccount> list = posAccountMapper.selectList(posAccount);
 		r.setResult(new PageInfo<>(list));
@@ -192,18 +193,18 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public FinancePos getFinancePos(FinancePos financePos, User user) {
+	public FinancePos getFinancePos(FinancePos financePos) {
 		FinancePos pos = new FinancePos();
-		pos.setDblink(user.getDblink());
+		
 		pos.setId(financePos.getId());
 		return financePosMapper.selectByPrimaryKey(pos);
 	}
 
 	@Override
-	public ResultBean addPosAccount(PosAccount posAccount, User user) {
+	public ResultBean addPosAccount(PosAccount posAccount) {
 		ResultBean r = new ResultBean();
 		
-		posAccount.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		PosAccount pa = posAccountMapper.selectByAccount(posAccount);
 		if (pa != null) {
 			return r;
@@ -217,10 +218,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean deletePosAccount(PosAccount posAccount, User user) {
+	public ResultBean deletePosAccount(PosAccount posAccount) {
 		ResultBean r = new ResultBean();
 		
-		posAccount.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		posAccount.setMuid(user.getId());
 		posAccount.setMname(user.getRealname());
 		posAccount.setMtime(new Date());
@@ -230,10 +231,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getCashAccountList(CashAccount cashAccount, User user) {
+	public ResultBean getCashAccountList(CashAccount cashAccount) {
 		ResultBean r = new ResultBean();
 		
-		cashAccount.setDblink(user.getDblink());
+		
 		PageUtil.startPage(cashAccount);
 		List<CashAccount> list = cashAccountMapper.selectList(cashAccount);
 		r.setResult(new PageInfo<>(list));
@@ -241,10 +242,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean addCashAccount(CashAccount cashAccount, User user) {
+	public ResultBean addCashAccount(CashAccount cashAccount) {
 		ResultBean r = new ResultBean();
 		
-		cashAccount.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		CashAccount ca = cashAccountMapper.selectByAccount(cashAccount);
 		if (ca != null) {
 			return r;
@@ -258,10 +259,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean deleteCashAccount(CashAccount cashAccount, User user) {
+	public ResultBean deleteCashAccount(CashAccount cashAccount) {
 		ResultBean r = new ResultBean();
 		
-		cashAccount.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		cashAccount.setMuid(user.getId());
 		cashAccount.setMname(user.getRealname());
 		cashAccount.setMtime(new Date());
@@ -271,10 +272,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getFinanceSubjectList(FinanceSubject financeSubject, User user) {
+	public ResultBean getFinanceSubjectList(FinanceSubject financeSubject) {
 		ResultBean r = new ResultBean();
 		
-		financeSubject.setDblink(user.getDblink());
+		
 		List<FinanceSubject> list = financeSubjectMapper.selectList(financeSubject);
 		r.setResult(new PageInfo<>(list));
 		
@@ -282,11 +283,11 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean deleteFinanceSubject(FinanceSubject financeSubject, User user, Boolean isdel) {
+	public ResultBean deleteFinanceSubject(FinanceSubject financeSubject, Boolean isdel) {
 		ResultBean r = new ResultBean();
 		
 		FinanceSubject fs = new FinanceSubject();
-		fs.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		fs.setId(financeSubject.getId());
 		fs.setDisable(isdel?(byte) 1:(byte) 0);
 		fs.setMuid(user.getId());
@@ -304,10 +305,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean addFinanceSubject(FinanceSubject financeSubject, User user) {
+	public ResultBean addFinanceSubject(FinanceSubject financeSubject) {
 		ResultBean r = new ResultBean();
 		
-		financeSubject.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeSubject.setCuid(user.getId());
 		financeSubject.setCname(user.getRealname());
 		financeSubject.setCtime(new Date());
@@ -317,9 +318,9 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public int updateFinanceSubject(FinanceSubject financeSubject, User user) {
+	public int updateFinanceSubject(FinanceSubject financeSubject) {
 		int r = 0;
-		financeSubject.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeSubject.setMuid(user.getId());
 		financeSubject.setMname(user.getRealname());
 		financeSubject.setMtime(new Date());
@@ -328,9 +329,9 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getFinanceSubchargeList(FinanceSubcharge financeSubcharge, User user) {
+	public ResultBean getFinanceSubchargeList(FinanceSubcharge financeSubcharge) {
 		ResultBean r = new ResultBean();
-		financeSubcharge.setDblink(user.getDblink());
+		
 		PageUtil.startPage(financeSubcharge);
 		List<FinanceSubcharge> list = financeSubchargeMapper.selectList(financeSubcharge);
 		r.setResult(new PageInfo<>(list));
@@ -338,12 +339,12 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean addFinanceSubcharge(FinanceSubcharge financeSubcharge, User user) {
+	public ResultBean addFinanceSubcharge(FinanceSubcharge financeSubcharge) {
 		ResultBean r = new ResultBean();
 		if (financeSubcharge.getPosid() != null) {
 			FinancePos fp = new FinancePos();
 			fp.setId(financeSubcharge.getPosid());
-			fp.setDblink(user.getDblink());
+			
 			FinancePos financePos = financePosMapper.selectByPrimaryKey(fp);
 			if (financePos == null) {
 				r.setCode(HttpConstant.DATA_ERROR_COCE);
@@ -353,7 +354,8 @@ public class FinanceServiceImpl implements FinanceService {
 			financeSubcharge.setPosnum(financePos.getPosnum());
 			financeSubcharge.setBankname(financePos.getBankname());
 		}
-		financeSubcharge.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		
 		financeSubcharge.setAreaid(user.getAreaid());
 		financeSubcharge.setStoreid(user.getStoreid());
 		financeSubcharge.setCuid(user.getId());
@@ -364,12 +366,12 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean updateFinanceSubcharge(FinanceSubcharge financeSubcharge, User user) {
+	public ResultBean updateFinanceSubcharge(FinanceSubcharge financeSubcharge) {
 		ResultBean r = new ResultBean();
 		if (financeSubcharge.getPosid() != null) {
 			FinancePos fp = new FinancePos();
 			fp.setId(financeSubcharge.getPosid());
-			fp.setDblink(user.getDblink());
+			
 			FinancePos financePos = financePosMapper.selectByPrimaryKey(fp);
 			if (financePos == null) {
 				r.setCode(HttpConstant.DATA_ERROR_COCE);
@@ -379,7 +381,7 @@ public class FinanceServiceImpl implements FinanceService {
 			financeSubcharge.setPosnum(financePos.getPosnum());
 			financeSubcharge.setBankname(financePos.getBankname());
 		}
-		financeSubcharge.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeSubcharge.setMuid(user.getId());
 		financeSubcharge.setMname(user.getRealname());
 		financeSubcharge.setMtime(new Date());
@@ -388,10 +390,10 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean deleteFinanceSubcharge(FinanceSubcharge financeSubcharge, User user) {
+	public ResultBean deleteFinanceSubcharge(FinanceSubcharge financeSubcharge) {
 		ResultBean r = new ResultBean();
 		FinanceSubcharge fs = new FinanceSubcharge();
-		fs.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		fs.setIds(financeSubcharge.getIds());
 		fs.setMuid(user.getId());
 		fs.setMname(user.getRealname());
@@ -401,16 +403,16 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public List<FinanceSubcharge> getFinanceSubchargeExport(FinanceSubcharge financeSubcharge, User user) {
-		financeSubcharge.setDblink(user.getDblink());
+	public List<FinanceSubcharge> getFinanceSubchargeExport(FinanceSubcharge financeSubcharge) {
+		
 		List<FinanceSubcharge> list = financeSubchargeMapper.selectList(financeSubcharge);
 		return list;
 	}
 
 	@Override
-	public ResultBean getFinanceDepositList(FinanceDeposit financeDeposit, User user) {
+	public ResultBean getFinanceDepositList(FinanceDeposit financeDeposit) {
 		ResultBean r = new ResultBean();
-		financeDeposit.setDblink(user.getDblink());
+		
 		PageUtil.startPage(financeDeposit);
 		List<FinanceDeposit> list = financeDepositMapper.selectList(financeDeposit);
 		r.setResult(new PageInfo<>(list));
@@ -418,9 +420,9 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean addFinanceDeposit(FinanceDeposit financeDeposit, User user) {
+	public ResultBean addFinanceDeposit(FinanceDeposit financeDeposit) {
 		ResultBean r = new ResultBean();
-		financeDeposit.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeDeposit.setAreaid(user.getAreaid());
 		financeDeposit.setStoreid(user.getStoreid());
 		financeDeposit.setIsconfirm((byte) 0);
@@ -432,15 +434,15 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean updateFinanceDeposit(FinanceDeposit financeDeposit, User user, Integer isConfirm) {
+	public ResultBean updateFinanceDeposit(FinanceDeposit financeDeposit, Integer isConfirm) {
 		ResultBean r = new ResultBean();
-		financeDeposit.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeDeposit.setMuid(user.getId());
 		financeDeposit.setMname(user.getRealname());
 		if (isConfirm == 1) {
 			if (financeDeposit.getIds().trim().length() > 0) {
 				FinanceDeposit fd = new FinanceDeposit();
-				fd.setDblink(user.getDblink());
+				
 				fd.setMuid(user.getId());
 				fd.setMname(user.getRealname());
 				fd.setIds(financeDeposit.getIds());
@@ -454,12 +456,12 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean deleteFinanceDeposit(FinanceDeposit financeDeposit, User user) {
+	public ResultBean deleteFinanceDeposit(FinanceDeposit financeDeposit) {
 		ResultBean r = new ResultBean();
 		FinanceDeposit fd = new FinanceDeposit();
 		fd.setIds(financeDeposit.getIds());
 		fd.setIsdel((byte) 1);
-		fd.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		fd.setMtime(new Date());
 		fd.setMuid(user.getId());
 		fd.setMname(user.getRealname());
@@ -468,16 +470,16 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public List<FinanceDeposit> getFinanceDepositExport(FinanceDeposit financeDeposit, User user) {
-		financeDeposit.setDblink(user.getDblink());
+	public List<FinanceDeposit> getFinanceDepositExport(FinanceDeposit financeDeposit) {
+		
 		List<FinanceDeposit> list = financeDepositMapper.selectList(financeDeposit);
 		return list;
 	}
 
 	@Override
-	public ResultBean getFinanceReceiptList(FinanceReceipt financeReceipt, User user) {
+	public ResultBean getFinanceReceiptList(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		PageUtil.startPage(financeReceipt);
 		List<FinanceReceipt> list = financeReceiptMapper.selectList(financeReceipt);
 		r.setResult(new PageInfo<>(list));
@@ -485,13 +487,13 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean addFinanceReceipt(FinanceReceipt financeReceipt, User user) {
+	public ResultBean addFinanceReceipt(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
 		Student student = null;
 		if (financeReceipt.getStudentid() != null) {
 			Student s = new Student();
 			s.setId(financeReceipt.getStudentid());
-			s.setDblink(user.getDblink());
+			
 			student = studentService.getStudent(s);
 			if (student == null) {
 				r.setCode(HttpConstant.ERROR_CODE);
@@ -501,7 +503,7 @@ public class FinanceServiceImpl implements FinanceService {
 			financeReceipt.setAreaid(student.getAreaid());
 			financeReceipt.setStoreid(student.getStoreid());
 		}
-		financeReceipt.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeReceipt.setAreaid(student.getAreaid());
 		financeReceipt.setStoreid(student.getStoreid());
 		financeReceipt.setCuid(user.getId());
@@ -513,9 +515,9 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean updateFinanceReceipt(FinanceReceipt financeReceipt, User user) {
+	public ResultBean updateFinanceReceipt(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		FinanceReceipt fr = financeReceiptMapper.selectByPrimaryKey(financeReceipt);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		if (fr == null || fr.getIsconfirm() == 1) {
@@ -526,6 +528,7 @@ public class FinanceServiceImpl implements FinanceService {
 		if (fr.getModifystate() == 2) {
 			financeReceipt.setModifystate((byte) 4);
 		}
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeReceipt.setMtime(new Date());
 		financeReceipt.setMuid(user.getId());
 		financeReceipt.setMname(user.getRealname());
@@ -534,9 +537,9 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean updateFinanceReceiptApply(FinanceReceipt financeReceipt, User user, Boolean isreview, String businessid) {
+	public ResultBean updateFinanceReceiptApply(FinanceReceipt financeReceipt, Boolean isreview, String businessid) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		FinanceReceipt fr = financeReceiptMapper.selectByPrimaryKey(financeReceipt);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		if (fr == null || fr.getIsconfirm() == 1) {
@@ -548,6 +551,7 @@ public class FinanceServiceImpl implements FinanceService {
 		} else if (isreview && fr.getModifystate() != 1) {
 			return r;
 		}
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (!isreview) {
 			fr.setModifystate((byte) 1);
 			fr.setApplier(user.getRealname());
@@ -580,11 +584,11 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean updateFinanceReceiptInvoiceState(FinanceReceipt financeReceipt, User user) {
+	public ResultBean updateFinanceReceiptInvoiceState(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
 		int state = financeReceipt.getInvoicestate();
 		FinanceReceipt fr = new FinanceReceipt();
-		fr.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		fr.setId(financeReceipt.getId());
 		fr.setInvoicestate((byte) state);
 		switch (state) {
@@ -616,8 +620,8 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 	
 	@Override
-	public List<FinanceReceipt> getFinanceReceiptExport(FinanceReceipt financeReceipt, User user) {
-		financeReceipt.setDblink(user.getDblink());
+	public List<FinanceReceipt> getFinanceReceiptExport(FinanceReceipt financeReceipt) {
+		
 		return financeReceiptMapper.selectList(financeReceipt);
 	}
 
@@ -627,7 +631,7 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public List<FinanceInvoiceDTO> getFinanceInvoiceExport(FinanceReceipt financeReceipt, User user) {
+	public List<FinanceInvoiceDTO> getFinanceInvoiceExport(FinanceReceipt financeReceipt) {
 		if (financeReceipt.getIds() != null && !"".equals(financeReceipt.getIds())) {
 			String ids = financeReceipt.getIds();
 			financeReceipt = new FinanceReceipt();
@@ -636,7 +640,7 @@ public class FinanceServiceImpl implements FinanceService {
 			financeReceipt.setIds(null);
 		}
 		//批次号规则：yyyyMMdd + 当天序号（三位数，不足补0）
-		financeReceipt.setDblink(user.getDblink());
+		
 		String curbatchnum = financeReceiptMapper.selectMaxBatchnum(financeReceipt);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String prebatchnum = sdf.format(new Date());
@@ -646,32 +650,32 @@ public class FinanceServiceImpl implements FinanceService {
 			curnum = Integer.parseInt(curbatchnum.substring(8)) + 1;
 		} 
 		financeReceipt.setNewbatchnum(prebatchnum + df_batch.format(curnum));
-		financeReceipt.setDblink(user.getDblink());
+		
 		financeReceiptMapper.updateBatchnum(financeReceipt);
 		return financeReceiptMapper.selectInvoiceExport(financeReceipt);
 	}
 
 	@Override
-	public ResultBean addFinanceReceiptInvoice(List<FinanceInvoiceImport> list, User user) {
+	public ResultBean addFinanceReceiptInvoice(List<FinanceInvoiceImport> list) {
 		ResultBean r = new ResultBean();
 		for (FinanceInvoiceImport fii : list) {
 			String[] remark = fii.getRemark().split("/");
 			fii.setReceiptnum(remark[7]);
 		}
 		Map<String, Object> map = new HashMap<>();
-		map.put("dblink", user.getDblink());
+		
 		map.put("list", list);
 		financeReceiptMapper.updateByReceiptnumBatch(map);
 		return r;
 	}
 	
 	@Override
-	public ResultBean updateFinanceReceiptConfirm(FinanceReceipt financeReceipt, User user) {
+	public ResultBean updateFinanceReceiptConfirm(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
 		if (financeReceipt.getIds() == null || financeReceipt.getIds().trim().equals(""))
 			return r;
 		List<FinanceReceipt> list = financeReceiptMapper.selectList(financeReceipt);
-		financeReceipt.setDblink(user.getDblink());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeReceipt.setIsconfirm((byte) 1);
 		financeReceipt.setConfirmdate(new Date());
 		financeReceipt.setConfirmname(user.getRealname());
@@ -696,22 +700,22 @@ public class FinanceServiceImpl implements FinanceService {
 			studentMoney.setOwemoney(fr.getReceiptmoney().negate());
 			stuList.add(studentMoney);
 		}
-		studentService.updateReceiptStudentMoney(stuList, stuids, user);
+		studentService.updateReceiptStudentMoney(stuList, stuids);
 		return r;
 	}
 
 	@Override
-	public ResultBean getFinanceCashStatList(FinanceDeposit financeDeposit, User user) {
+	public ResultBean getFinanceCashStatList(FinanceDeposit financeDeposit) {
 		ResultBean r = new ResultBean();
-		financeDeposit.setDblink(user.getDblink());
+		
 		List<FinanceDeposit> list = financeDepositMapper.selectList(financeDeposit);
 		if (list == null || list.size() == 0) 
 			return r;
-		Area area=new Area();
-		area.setDblink(user.getDblink());
-		Map<Integer, MapDTO> areaMap = areaService.getMap(area);
+		
+		
+		Map<Integer, MapDTO> areaMap = areaService.getMap(null);
 		Store store=new Store();
-		store.setDblink(user.getDblink());
+		
 		Map<Integer, MapDTO> storeMap = storeService.getMap(store);
 		Map<String, LinkedList<FinanceStat>> map = new HashMap<>();
 		for (FinanceDeposit fd : list) {
@@ -783,36 +787,36 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getPoscompanyList(FinancePos financePos, User user) {
+	public ResultBean getPoscompanyList(FinancePos financePos) {
 		ResultBean r = new ResultBean();
-		financePos.setDblink(user.getDblink());
+		
 		List<FinancePos> list = financePosMapper.selectPoscompany(financePos);
 		r.setResult(new PageInfo<>(list));
 		return r;
 	}
 	
 	@Override
-	public ResultBean getPosbanknameList(FinancePos financePos, User user) {
+	public ResultBean getPosbanknameList(FinancePos financePos) {
 		ResultBean r = new ResultBean();
-		financePos.setDblink(user.getDblink());
+		
 		List<FinancePos> list = financePosMapper.selectPosbankname(financePos);
 		r.setResult(new PageInfo<>(list));
 		return r;
 	}
 
 	@Override
-	public ResultBean addFinancePosFlow(Workbook workbook, Integer type, User user) throws ParseException {
+	public ResultBean addFinancePosFlow(Workbook workbook, Integer type) throws ParseException {
 		ResultBean r = new ResultBean(HttpConstant.ERROR_CODE, HttpConstant.ERROR_MSG);
 		if (workbook == null || type < 1 || type > 3)
 			return r;
 		Sheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.rowIterator();
 		Map<String, Object> map = new HashMap<>();
-		map.put("dblink", user.getDblink());
+		
 		List<FinancePosFlow> list = new ArrayList<>();
 		
 		FinancePos financePos = new FinancePos();
-		financePos.setDblink(user.getDblink());
+		
 		List<FinancePos> posList = financePosMapper.selectList(financePos);
 		Map<String, FinancePos> posMap = new HashMap<>();
 		for (FinancePos fp : posList) {
@@ -822,6 +826,7 @@ public class FinanceServiceImpl implements FinanceService {
 		 * type = 2 : 北京技术
 		 * type = 3 : 银盛
 		 */
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (type == 1) {
 			while (rows.hasNext()) {
 				Row row = rows.next();
@@ -833,6 +838,7 @@ public class FinanceServiceImpl implements FinanceService {
 						fpf.setAreaid(fp.getAreaid());
 						fpf.setStoreid(fp.getStoreid());
 					}
+					
 					fpf.setPoscompany("银联商务");
 					fpf.setTradedate(row.getCell(1).getDateCellValue());
 					fpf.setPosnum(row.getCell(3).getStringCellValue());
@@ -915,9 +921,9 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getFinancePosFlowList(FinancePosFlow financePosFlow, User user) {
+	public ResultBean getFinancePosFlowList(FinancePosFlow financePosFlow) {
 		ResultBean r = new ResultBean();
-		financePosFlow.setDblink(user.getDblink());
+		
 		List<FinancePosFlow> list = financePosFlowMapper.selectList(financePosFlow);
 		if (list == null || list.size() == 0)
 			return r;
@@ -981,17 +987,17 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getStorePayStatist(FinanceReceipt financeReceipt, User user) {
+	public ResultBean getStorePayStatist(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		List<FinanceReceipt> list = financeReceiptMapper.selectList(financeReceipt);
 		if (list == null || list.size() == 0)
 			return r;
 		Store store=new Store();
-		store.setDblink(user.getDblink());
+		
 		Map<Integer, MapDTO> storeMap = storeService.getMap(store);
 		FinancePos financePos = new FinancePos();
-		financePos.setDblink(user.getDblink());
+		
 		List<FinancePos> posList = financePosMapper.selectList(financePos);
 		Map<Integer, String> posMap = new HashMap<>();
 		//组合成一个对应的Map，获取对应PosId的银行名字
@@ -1058,12 +1064,12 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getBankPosStoreStatList(FinanceReceipt financeReceipt, User user) {
+	public ResultBean getBankPosStoreStatList(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		List<FinanceReceipt> receiptList = financeReceiptMapper.selectList(financeReceipt);
 		FinancePosFlow financePosFlow = new FinancePosFlow();
-		financePosFlow.setDblink(user.getDblink());
+		
 		financePosFlow.setAreaid(financeReceipt.getAreaid());
 		financePosFlow.setTradedatelow(financeReceipt.getReceiptdatelow());
 		financePosFlow.setTradedatetop(financeReceipt.getReceiptdatetop());
@@ -1071,9 +1077,9 @@ public class FinanceServiceImpl implements FinanceService {
 		if ((receiptList == null || receiptList.size() == 0) && (posflowList == null || posflowList.size() == 0)) 
 			return r;
 		
-		FinancePos financePos = new FinancePos();
-		financePos.setDblink(user.getDblink());
-		List<FinancePos> posList = financePosMapper.selectList(financePos);
+		
+		
+		List<FinancePos> posList = financePosMapper.selectList(null);
 		Map<String, String> posMap = new HashMap<>();
 		//组合成一个对应的Map，获取对应Posnum的银行名字
 		for (FinancePos fp : posList) {
@@ -1230,18 +1236,18 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getStoreTypeStatList(FinanceReceipt financeReceipt, User user) {
+	public ResultBean getStoreTypeStatList(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		List<FinanceReceipt> list = financeReceiptMapper.selectList(financeReceipt);
 		if (list == null || list.size() == 0)
 			return r;
 		Map<Integer, LinkedList<FinanceStat>> map = new HashMap<>();
 		Store store=new Store();
-		store.setDblink(user.getDblink());
+		
 		Map<Integer, MapDTO> storeMap = storeService.getMap(store);
 		FinanceSubject financeSubject = new FinanceSubject();
-		financeSubject.setDblink(user.getDblink());
+		
 		List<FinanceSubject> typeList = financeSubjectMapper.selectList(financeSubject);
 		Map<Integer, String> typeMap = new HashMap<>();
 		for (FinanceSubject fs : typeList) {
@@ -1295,20 +1301,20 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getTypeStoreStatList(FinanceReceipt financeReceipt, User user) {
+	public ResultBean getTypeStoreStatList(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		List<FinanceReceipt> list = financeReceiptMapper.selectList(financeReceipt);
 		if (list == null || list.size() == 0)
 			return r;
-		Store store=new Store();
-		store.setDblink(user.getDblink());
+		
+		
 		Map<Integer, LinkedList<FinanceStat>> map = new HashMap<>();
-		Map<Integer, MapDTO> storeMap = storeService.getMap(store);
+		Map<Integer, MapDTO> storeMap = storeService.getMap(null);
 		
 		
 		FinanceSubject financeSubject = new FinanceSubject();
-		financeSubject.setDblink(user.getDblink());
+		
 		List<FinanceSubject> typeList = financeSubjectMapper.selectList(financeSubject);
 		Map<Integer, String> typeMap = new HashMap<>();
 		for (FinanceSubject fs : typeList) {
@@ -1363,18 +1369,18 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getCompanyPosStoreStatList(FinanceReceipt financeReceipt, User user) {
+	public ResultBean getCompanyPosStoreStatList(FinanceReceipt financeReceipt) {
 		ResultBean r = new ResultBean();
-		financeReceipt.setDblink(user.getDblink());
+		
 		List<FinanceReceipt> receiptList = financeReceiptMapper.selectList(financeReceipt);
 		FinancePosFlow financePosFlow = new FinancePosFlow();
-		financePosFlow.setDblink(user.getDblink());
+		
 		financePosFlow.setAreaid(financeReceipt.getAreaid());
 		financePosFlow.setTradedatelow(financeReceipt.getReceiptdatelow());
 		financePosFlow.setTradedatetop(financeReceipt.getReceiptdatetop());
 		List<FinancePosFlow> posflowList = financePosFlowMapper.selectList(financePosFlow);
 		FinanceDeposit financeDeposit = new FinanceDeposit();
-		financeDeposit.setDblink(user.getDblink());
+		
 		financeDeposit.setAreaid(financeReceipt.getAreaid());
 		financeDeposit.setDepositdatelow(financeReceipt.getReceiptdatelow());
 		financeDeposit.setDepositdatetop(financeReceipt.getReceiptdatetop());
@@ -1615,7 +1621,7 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean selectIncome(FinanceIncome financeIncome, User user) {
+	public ResultBean selectIncome(FinanceIncome financeIncome) {
 		ResultBean rb = new ResultBean();
 		PageUtil.startPage(financeIncome);
 		List <FinanceIncome> list = financeReceiptMapper.selectIncome(financeIncome);
@@ -1624,19 +1630,19 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public ResultBean getApplyStatList(StudentApplyStat studentApplyStat, User user) {
+	public ResultBean getApplyStatList(StudentApplyStat studentApplyStat) {
 		ResultBean r = new ResultBean();
-		List<StudentApplyStat> list = studentService.selectApplyStat(studentApplyStat, user);
+		List<StudentApplyStat> list = studentService.selectApplyStat(studentApplyStat);
 		if (list == null || list.size() == 0)
 			return r;
-		Area area=new Area();
-		area.setDblink(user.getDblink());
-		Map<Integer, MapDTO> areaMap = areaService.getMap(area);
+		
+		
+		Map<Integer, MapDTO> areaMap = areaService.getMap(null);
 		Store store=new Store();
-		store.setDblink(user.getDblink());
+		
 		Map<Integer, MapDTO> storeMap = storeService.getMap(store);
 		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
+		
 		Map<Integer, MapDTO> classMap = classinfoService.getMap(ci);
 		Map<String, LinkedList<StudentApplyStat>> map = new HashMap<>();
 		for (StudentApplyStat sas : list) {
@@ -1732,12 +1738,11 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public Map<String, Object> getIncomeStat(FinanceAppStat financeAppStat,
-			User user) {
+	public Map<String, Object> getIncomeStat(FinanceAppStat financeAppStat) {
 		if ((financeAppStat == null) || (financeAppStat.getStartdate() == null) || (financeAppStat.getEnddate() == null)) {
 		      return null;
 		    }
-		    financeAppStat.setDblink(user.getDblink());
+		    
 		    List<FinanceAppStat> list = this.financeAppStatMapper.selectIncomeStat(financeAppStat);
 		    Map<String, FinanceAppStat> map = new HashMap();
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1752,7 +1757,7 @@ public class FinanceServiceImpl implements FinanceService {
 		      }
 		    }
 		    Area a = new Area();
-		    a.setDblink(user.getDblink());
+		    
 		    a.setPageNo(Integer.valueOf(-1));
 		    List<Area> areas = this.areaService.selectAllList(a);
 		    Calendar calendar = Calendar.getInstance();
@@ -1813,12 +1818,11 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public Map<String, Object> getOutcomeStat(FinanceAppStat financeAppStat,
-			User user) {
+	public Map<String, Object> getOutcomeStat(FinanceAppStat financeAppStat) {
 		if ((financeAppStat == null) || (financeAppStat.getStartdate() == null) || (financeAppStat.getEnddate() == null)) {
 		      return null;
 		    }
-		    financeAppStat.setDblink(user.getDblink());
+		    
 		    List<FinanceAppStat> list = this.financeAppStatMapper.selectOutcomeStat(financeAppStat);
 		    Map<String, FinanceAppStat> map = new HashMap();
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1833,7 +1837,7 @@ public class FinanceServiceImpl implements FinanceService {
 		      }
 		    }
 		    Area a = new Area();
-		    a.setDblink(user.getDblink());
+		    
 		    a.setPageNo(Integer.valueOf(-1));
 		    List<Area> areas = this.areaService.selectAllList(a);
 		    Calendar calendar = Calendar.getInstance();
@@ -1894,8 +1898,7 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	@Override
-	public Map<String, Object> getOwemoneyStat(FinanceAppStat financeAppStat,
-			User user) {
+	public Map<String, Object> getOwemoneyStat(FinanceAppStat financeAppStat) {
 		return new HashMap();
 	}
 

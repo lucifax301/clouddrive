@@ -36,7 +36,7 @@ public class FinanceFeeController extends BaseController {
 	@RequestMapping(value="/list")
 	public ResultBean list(HttpServletRequest request,FinanceFee financeFee) {
 		ResultBean rb = new ResultBean();
-		List <FinanceFee> list = financeFeeService.selectList(getUser(request), financeFee);
+		List <FinanceFee> list = financeFeeService.selectList( financeFee);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -44,7 +44,7 @@ public class FinanceFeeController extends BaseController {
 	@RequestMapping(value="/listitem")
 	public ResultBean itemList(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
 		ResultBean rb = new ResultBean();
-		List <FinanceFeeItem> list = financeFeeService.selectItemList(getUser(request), financeFeeItem);
+		List <FinanceFeeItem> list = financeFeeService.selectItemList( financeFeeItem);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -52,7 +52,7 @@ public class FinanceFeeController extends BaseController {
 	@RequestMapping(value="/listallitem")
 	public ResultBean itemAllList(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
 		ResultBean rb = new ResultBean();
-		List <FinanceFeeItem> list = financeFeeService.selectAllItemList(getUser(request), financeFeeItem);
+		List <FinanceFeeItem> list = financeFeeService.selectAllItemList( financeFeeItem);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -60,7 +60,7 @@ public class FinanceFeeController extends BaseController {
 	@RequestMapping(value="/listowe")
 	public ResultBean listOwe(HttpServletRequest request,StudentMoneyDTO dto) {
 		ResultBean rb = new ResultBean();
-		List <StudentMoneyDTO> list = studentService.selectOweList(getUser(request), dto);
+		List <StudentMoneyDTO> list = studentService.selectOweList( dto);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -68,50 +68,50 @@ public class FinanceFeeController extends BaseController {
 	@RequestMapping(value="/listpay")
 	public ResultBean listPay(HttpServletRequest request,FinancePay financePay) {
 		ResultBean rb = new ResultBean();
-		List <FinancePay> list = financeFeeService.selectPay(getUser(request), financePay);
+		List <FinancePay> list = financeFeeService.selectPay( financePay);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
 	
 	@RequestMapping(value="/delitem")
 	public ResultBean delItem(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
-		return financeFeeService.deleteItem(getUser(request), financeFeeItem);
+		return financeFeeService.deleteItem( financeFeeItem);
 	}
 	
 	@RequestMapping(value="/init")
 	public ResultBean init(HttpServletRequest request,Student student) {
-		return financeFeeService.initData(getUser(request), student);
+		return financeFeeService.initData( student);
 	}
 	
 	@RequestMapping(value="/add")
 	public ResultBean add(HttpServletRequest request,FinanceFeeDTO dto,String json) {
 		List <FinanceFeeItem> list = JSONObject.parseArray(json, FinanceFeeItem.class);
-		return financeFeeService.save(getUser(request), dto, list);
+		return financeFeeService.save( dto, list);
 	}
 	
 	@RequestMapping(value="/edit")
 	public ResultBean edit(HttpServletRequest request,FinanceFeeDTO dto,String json) {
 		List <FinanceFeeItem> list = JSONObject.parseArray(json, FinanceFeeItem.class);
-		return financeFeeService.edit(getUser(request), dto, list);
+		return financeFeeService.edit( dto, list);
 	}
 	
 	@RequestMapping(value="/additem")
 	public ResultBean addItem(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
-		return financeFeeService.saveItem(getUser(request), financeFeeItem);
+		return financeFeeService.saveItem( financeFeeItem);
 	}
 	
 	@RequestMapping(value="/edititem")
 	public ResultBean editItem(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
-		return financeFeeService.editItem(getUser(request), financeFeeItem);
+		return financeFeeService.editItem( financeFeeItem);
 	}
 	
 	@RequestMapping(value="/check")
 	public ResultBean check(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
-		return financeFeeService.check(getUser(request), financeFeeItem);
+		return financeFeeService.check( financeFeeItem);
 	}
 	
 	@RequestMapping(value="/checkbatch")
 	public ResultBean checkBatch(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
-		return financeFeeService.checkBatch(getUser(request), financeFeeItem);
+		return financeFeeService.checkBatch( financeFeeItem);
 	}
 }

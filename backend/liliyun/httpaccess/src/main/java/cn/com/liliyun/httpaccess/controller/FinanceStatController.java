@@ -30,7 +30,7 @@ public class FinanceStatController extends BaseController {
 	
 	@RequestMapping(value = "/getCashStat", method = RequestMethod.GET)
 	public ResultBean getFinanceCashStatList(FinanceDeposit financeDeposit, HttpServletRequest request) {
-		return financeService.getFinanceCashStatList(financeDeposit, getUser(request));
+		return financeService.getFinanceCashStatList(financeDeposit);
 	}
 	
 	@RequestMapping(value = "/import", method = RequestMethod.POST)
@@ -42,41 +42,41 @@ public class FinanceStatController extends BaseController {
 		} else {
 			wb = new HSSFWorkbook(file.getInputStream());
 		}
-		return financeService.addFinancePosFlow(wb, type, getUser(request));
+		return financeService.addFinancePosFlow(wb, type);
 	}
 	
 	@RequestMapping(value = "/getFinancePosFlowList", method = RequestMethod.GET)
 	public ResultBean getFinancePosFlowList(FinancePosFlow financePosFlow, HttpServletRequest request) {
-		return financeService.getFinancePosFlowList(financePosFlow, getUser(request));
+		return financeService.getFinancePosFlowList(financePosFlow);
 	}
 	
 	@RequestMapping(value = "/getStorePayStat", method = RequestMethod.GET)
 	public ResultBean getStorePayStatList(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.getStorePayStatist(financeReceipt, getUser(request));
+		return financeService.getStorePayStatist(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/getBankPosStoreStat", method = RequestMethod.GET)
 	public ResultBean getBankPosStoreStatList(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.getBankPosStoreStatList(financeReceipt, getUser(request));
+		return financeService.getBankPosStoreStatList(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/getStoreTypeStat", method = RequestMethod.GET)
 	public ResultBean getStoreTypeStatList(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.getStoreTypeStatList(financeReceipt, getUser(request));
+		return financeService.getStoreTypeStatList(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/getTypeStoreStat", method = RequestMethod.GET)
 	public ResultBean getTypeStoreStatList(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.getTypeStoreStatList(financeReceipt, getUser(request));
+		return financeService.getTypeStoreStatList(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/getCompanyPosStoreStat", method = RequestMethod.GET)
 	public ResultBean getCompanyPosStoreStatList(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		return financeService.getCompanyPosStoreStatList(financeReceipt, getUser(request));
+		return financeService.getCompanyPosStoreStatList(financeReceipt);
 	}
 	
 	@RequestMapping(value = "/getApplyStat", method = RequestMethod.GET)
 	public ResultBean getApplyStatList(StudentApplyStat studentApplyStat, HttpServletRequest request) {
-		return financeService.getApplyStatList(studentApplyStat, getUser(request));
+		return financeService.getApplyStatList(studentApplyStat);
 	}
 }

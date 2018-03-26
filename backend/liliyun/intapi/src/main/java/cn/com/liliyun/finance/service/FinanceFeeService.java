@@ -12,29 +12,29 @@ import cn.com.liliyun.user.model.User;
 
 public interface FinanceFeeService {
 	
-	List <FinanceFee> selectList(User user,FinanceFee financeFee);
+	List <FinanceFee> selectList(FinanceFee financeFee);
 	
-	List <FinanceFeeItem> selectItemList(User user,FinanceFeeItem financeFeeItem);
+	List <FinanceFeeItem> selectItemList(FinanceFeeItem financeFeeItem);
 
-	List <FinanceFeeItem> selectAllItemList(User user,FinanceFeeItem FinanceFeeItem);
+	List <FinanceFeeItem> selectAllItemList(FinanceFeeItem FinanceFeeItem);
 
-	List <FinancePay> selectPay(User user,FinancePay financePay);
+	List <FinancePay> selectPay(FinancePay financePay);
 	
-	ResultBean save(User user,FinanceFeeDTO dto,List <FinanceFeeItem> list);
+	ResultBean save(FinanceFeeDTO dto,List <FinanceFeeItem> list);
 	
-	ResultBean edit(User user,FinanceFeeDTO dto,List <FinanceFeeItem> list);
+	ResultBean edit(FinanceFeeDTO dto,List <FinanceFeeItem> list);
 	
-	ResultBean initData(User user,Student student);
+	ResultBean initData(Student student);
 	
-	ResultBean saveItem(User user,FinanceFeeItem financeFeeItem);
+	ResultBean saveItem(FinanceFeeItem financeFeeItem);
 	
-	ResultBean editItem(User user,FinanceFeeItem financeFeeItem);
+	ResultBean editItem(FinanceFeeItem financeFeeItem);
 	
-	ResultBean check(User user,FinanceFeeItem financeFeeItem);
+	ResultBean check(FinanceFeeItem financeFeeItem);
 	
-	ResultBean checkBatch(User user,FinanceFeeItem financeFeeItem);
+	ResultBean checkBatch(FinanceFeeItem financeFeeItem);
 	
-	ResultBean deleteItem(User user,FinanceFeeItem financeFeeItem);
+	ResultBean deleteItem(FinanceFeeItem financeFeeItem);
 
-	ResultBean saveFinanceItem(User user, FinanceFeeItem feeItem,Student student);
+	ResultBean saveFinanceItem( FinanceFeeItem feeItem,Student student);
 }

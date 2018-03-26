@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import cn.com.liliyun.coach.model.Coach;
 import cn.com.liliyun.coach.model.CoachClassinfo;
 import cn.com.liliyun.coach.service.CoachService;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
 import cn.com.liliyun.common.util.ApplyExam;
@@ -162,16 +163,16 @@ public class StudentServiceImpl implements StudentService {
 	private boolean DATA_SYNCH;
 
 	@Override
-	public ResultBean addStudent(User user,Student student) {
+	public ResultBean addStudent(Student student) {
 		ResultBean r = new ResultBean();
-		String dblink = user.getDblink();
+		
         Student stu = studentMapper.selectOne(student);
         if (stu != null) {
             r.setCode(HttpConstant.DATA_ERROR_COCE);
             r.setMsg("身份证号码重复");
             return r;
         }
-
+        User user = RequestContext.get(ConstantUtil.USER_SESSION);
         student.setApplyexam(ApplyExam.SIGNUP_STUDENT_INFO.getApplyexam());
         student.setApplystatus(ApplyExam.SIGNUP_STUDENT_INFO.getApplystatus());
         student.setAreaid(user.getAreaid());
@@ -181,7 +182,7 @@ public class StudentServiceImpl implements StudentService {
 
         //计算费用
         Classinfo classinfo = new Classinfo();
-        classinfo.setDblink(dblink);
+        
         Integer classinfoid = student.getClassid();
         classinfo.setId(classinfoid);
         //获取班别信息
@@ -205,7 +206,7 @@ public class StudentServiceImpl implements StudentService {
 			favorPrice = BigDecimal.ZERO;
 		} else {
 			SalesActivityClassinfo activityClassinfo = new SalesActivityClassinfo();
-			activityClassinfo.setDblink(dblink);
+			
 			activityClassinfo.setClassinfoid(classinfoid);
 			activityClassinfo.setActivityid(activityid);
 			activityClassinfo = salesService.getMatchActivityClass(activityClassinfo);
@@ -246,7 +247,7 @@ public class StudentServiceImpl implements StudentService {
             studentMoney.setOwestatus(OweFee.UNOWE.getStatus());
             item.setCheckstatus(2);
         }
-        financeFeeService.saveFinanceItem(user, item, student);
+        financeFeeService.saveFinanceItem(item, student);
 
 		System.out.println("############################");
 		System.out.println("减免费用:" + submoney + "@全价格" + fullPrice + "@全部优惠" + discountmoney + "@优惠金额" + favorPrice);
@@ -267,7 +268,7 @@ public class StudentServiceImpl implements StudentService {
         financeReceipt.setCashmoney(cashmoney);
         FinancePos pos = new FinancePos();
         pos.setId(student.getPosid());
-        pos = financeService.getFinancePos(pos,user);
+        pos = financeService.getFinancePos(pos);
         if (pos != null) {
             financeReceipt.setPosid(student.getPosid());
             financeReceipt.setPosnum(pos.getPosnum());
@@ -279,13 +280,13 @@ public class StudentServiceImpl implements StudentService {
         financeReceipt.setReceiptmoney(paymoney);
         financeReceipt.setReceiptdate(student.getPaydate());
         financeReceipt.setInvoicename(student.getBillname());
-        financeService.addFinanceReceipt(financeReceipt,user);
+        financeService.addFinanceReceipt(financeReceipt);
 
         if (paymoney.compareTo(contractmoney) == -1) { //支付金额小于合同金额
             studentMoney.setOwestatus(OweFee.OWE.getStatus());
             //studentMoney.setOwemoney();
         }
-		studentMoney.setDblink(dblink);
+		
 		studentMoney.setStudentid(student.getId());
 		studentMoney.setSignmoney(fullPrice);
 		studentMoney.setContractmoney(contractmoney);
@@ -304,7 +305,7 @@ public class StudentServiceImpl implements StudentService {
 		studentStatusLog.setIdcard(student.getIdcard());
 		studentStatusLog.setSubject(ApplyExam.SIGNUP_STUDENT_INFO.getSubject());
 		studentStatusLog.setSubjectname(ApplyExam.SIGNUP_STUDENT_INFO.getName());
-	    saveStudentStatusLog(user,studentStatusLog);
+	    saveStudentStatusLog(studentStatusLog);
 
 		return new ResultBean();
     }
@@ -320,8 +321,8 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean updateStudent(User user,Student student) {
-	    student.setDblink(user.getDblink());
+	public ResultBean updateStudent(Student student) {
+	    
         studentMapper.updateByPrimaryKeySelective(student);
 		return new ResultBean();
 	}
@@ -337,10 +338,10 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getStudentList(Student student, User user) {
+	public ResultBean getStudentList(Student student) {
 		ResultBean rb = new ResultBean();
 		PageUtil.startPage(student);
-		student.setDblink(user.getDblink());
+		
 		List<Student> list = studentMapper.selectList(student);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
@@ -378,14 +379,14 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getTheoryList(TheoryLesson theoryLesson, User user) {
+	public ResultBean getTheoryList(TheoryLesson theoryLesson) {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
 
 		TheoryLesson temp = new TheoryLesson();
 		temp.setState(5);
-		updateTheory(temp, user, "");
+		updateTheory(temp, "");
 		//每次获取List的时候，读取上次更新列表时间，超过半小时则再次更新。
 //		File file = ResourceUtils.getFile("classpath:../lastupdatetime");
 //		FileInputStream fis = new FileInputStream(file);
@@ -411,7 +412,8 @@ public class StudentServiceImpl implements StudentService {
 //			fw.write(sdf.format(date));
 //			fw.close();
 //		}
-
+		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 		//门店帐号，只能看本门店数据，片区帐号，只能看本片区的
 		TheoryLessonStoreDto dto = new TheoryLessonStoreDto();
@@ -424,8 +426,7 @@ public class StudentServiceImpl implements StudentService {
 		dto.setPageNo(theoryLesson.getPageNo());
 		dto.setPageSize(theoryLesson.getPageSize());
 		dto.setOrders(theoryLesson.getOrders());
-		dto.setDblink(user.getDblink());
-		dto.setMgrdb(user.getMgrdb());
+		
 
 		List<TheoryLessonStoreDto> theoryLessons = null;
 		PageUtil.startPage(dto);
@@ -455,7 +456,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getTheory(TheoryLessonStoreDto theoryLesson, User user, boolean isReview) {
+	public ResultBean getTheory(TheoryLessonStoreDto theoryLesson,  boolean isReview) {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
@@ -465,13 +466,13 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg(HttpConstant.ERROR_MSG);
 			return r;
 		}
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 
 		if (theoryLesson.getTheoryid() == null && theoryLesson.getTransactionid() != null && !theoryLesson.getTransactionid().trim().equals("")) {
 			TheoryLessonStoreDto tl = new TheoryLessonStoreDto();
 			tl.setTransactionid(theoryLesson.getTransactionid());
-			tl.setDblink(user.getDblink());
-			tl.setMgrdb(user.getMgrdb());
+			
 			List<TheoryLessonStoreDto> list = theoryLessonMapper.selectLesson(tl);
 			if (list != null && list.size() > 0) {
 				theoryLesson.setTheoryid(list.get(0).getTheoryid());
@@ -564,9 +565,9 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getTheoryStores(User user) {
+	public ResultBean getTheoryStores() {
 		ResultBean r = new ResultBean();
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		List<TheoryStoreDto> tsds = theoryStoreMapper.selectStoreByAreaId(user.getDblink(), user.getMgrdb(), user.getAreaid());
 		r.setCode(HttpConstant.SUCCESS_CODE);
 		r.setMsg(HttpConstant.SUCCESS_MSG);
@@ -576,13 +577,12 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getTheoryStudents(Student student, User user) {
+	public ResultBean getTheoryStudents(Student student) {
 		ResultBean r = new ResultBean();
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		student.setAreaid(user.getAreaid());
 		student.setStoreid(user.getStoreid());
-		student.setDblink(user.getDblink());
-		student.setMgrdb(user.getMgrdb());
+		
 		PageUtil.startPage(student);
 		List<Student> students = studentMapper.selectTheoryStudents(student);
 		r.setResult(new PageInfo<>(students));
@@ -593,9 +593,9 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean addTheory(TheoryLesson theoryLesson, String stores, User user) {
+	public ResultBean addTheory(TheoryLesson theoryLesson, String stores) {
 		ResultBean r = new ResultBean();
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 		if (privilege != 1) {
 			r.setCode(HttpConstant.NO_AUTH_COCE);
@@ -613,8 +613,7 @@ public class StudentServiceImpl implements StudentService {
 		theoryLesson.setAreaid(user.getAreaid());
 		theoryLesson.setState(1);
 		theoryLesson.setCuid(user.getId());
-		theoryLesson.setDblink(user.getDblink());
-		theoryLesson.setMgrdb(user.getMgrdb());
+		
 		theoryLessonMapper.insertSelective(theoryLesson);
 		int total = 0;
 
@@ -626,15 +625,13 @@ public class StudentServiceImpl implements StudentService {
 				ts.setTheoryid(theoryLesson.getTheoryid());
 				ts.setStoreid(Integer.parseInt(storeid));
 				ts.setRecomnum(Integer.parseInt(num));
-				ts.setDblink(user.getDblink());
-				ts.setMgrdb(user.getMgrdb());
+				
 				theoryStoreMapper.insertSelective(ts);
 			}
 			total += Integer.parseInt(num);
 		}
 		theoryLesson.setRecomnum(total);
-		theoryLesson.setDblink(user.getDblink());
-		theoryLesson.setMgrdb(user.getMgrdb());
+		
 		theoryLessonMapper.updateByPrimaryKeySelective(theoryLesson);
 		r.setCode(HttpConstant.SUCCESS_CODE);
 		r.setMsg(HttpConstant.SUCCESS_MSG);
@@ -644,11 +641,11 @@ public class StudentServiceImpl implements StudentService {
 
 
 	@Override
-	public ResultBean editTheoryStudent(Integer theoryId, String[] ids, User user, boolean isDel) {
+	public ResultBean editTheoryStudent(Integer theoryId, String[] ids,  boolean isDel) {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 
 		TheoryLesson theory = theoryLessonMapper.selectByPrimaryKey(user.getDblink(), user.getMgrdb(), theoryId);
@@ -658,8 +655,7 @@ public class StudentServiceImpl implements StudentService {
 		else if (privilege == 2) { //提交名单之后，privilege==2即门店客服，不允许再修改名单
 			TheoryStoreExample example = new TheoryStoreExample();
 			example.createCriteria().andTheoryidEqualTo(theoryId).andStoreidEqualTo(user.getStoreid());
-			example.setDblink(user.getDblink());
-			example.setMgrdb(user.getMgrdb());
+			
 			List<TheoryStore> tStores = theoryStoreMapper.selectByExample(example);
 			if (tStores == null || tStores.size() != 1 || "2".equals(tStores.get(0).getExtra()))
 				return r;
@@ -671,7 +667,7 @@ public class StudentServiceImpl implements StudentService {
 			if (ids != null && ids.length > 0) {
 				for (String id : ids) {
 					TheoryStudent s = new TheoryStudent();
-					s.setDblink(user.getDblink());
+					
 					s.setStudentid(Integer.parseInt(id));
 					s.setStoreid(user.getStoreid());
 					s.setTheoryid(theoryId);
@@ -681,14 +677,13 @@ public class StudentServiceImpl implements StudentService {
 			}
 			Map<String, Object> map = new HashMap<>();
 			map.put("list", theoryStudents);
-			map.put("dblink", user.getDblink());
+			
 			theoryStudentMapper.insertSelectiveBatch(map);
 			//更新理论课对应门店的学员人数数据
 			TheoryStore theoryStore = new TheoryStore();
 			theoryStore.setTheoryid(theoryId);
 			theoryStore.setStoreid(user.getStoreid());
-			theoryStore.setDblink(user.getDblink());
-			theoryStore.setMgrdb(user.getMgrdb());
+			
 			theoryStoreMapper.updateStoreArrangedNum(theoryStore);
 			//更新理论课学员人数数据
 			theoryLessonMapper.updateLessonArrangedNum(user.getDblink(), user.getMgrdb(), theoryId);
@@ -698,8 +693,7 @@ public class StudentServiceImpl implements StudentService {
 				return r;
 			TheoryStudentExample example = new TheoryStudentExample();
 			example.createCriteria().andTheoryidEqualTo(theoryId).andStudentidEqualTo(Integer.parseInt(ids[0]));
-			example.setDblink(user.getDblink());
-			example.setMgrdb(user.getMgrdb());
+			
 			List<TheoryStudent> tStudents = theoryStudentMapper.selectByExample(example);
 			if (tStudents == null || tStudents.size() > 1)
 				return r;
@@ -716,8 +710,7 @@ public class StudentServiceImpl implements StudentService {
 			TheoryStore theoryStore = new TheoryStore();
 			theoryStore.setTheoryid(theoryId);
 			theoryStore.setStoreid(tStudent.getStoreid());
-			theoryStore.setDblink(user.getDblink());
-			theoryStore.setMgrdb(user.getMgrdb());
+			
 			theoryStoreMapper.updateStoreArrangedNum(theoryStore);
 			//更新理论课学员人数数据
 			theoryLessonMapper.updateLessonArrangedNum(user.getDblink(), user.getMgrdb(), theoryId);
@@ -729,8 +722,9 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean updateTheory(TheoryLesson theoryLesson, User user, String businessid) {
+	public ResultBean updateTheory(TheoryLesson theoryLesson,  String businessid) {
 		ResultBean r = new ResultBean();
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (theoryLesson.getState() == 5) {
 			TheoryLessonExample tle = new TheoryLessonExample();
 			tle.createCriteria().andStateEqualTo(4).andIsdelEqualTo((byte) 0).andEndtimeLessThan(new Date());
@@ -744,8 +738,7 @@ public class StudentServiceImpl implements StudentService {
 		
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 
-		theoryLesson.setDblink(user.getDblink());
-		theoryLesson.setMgrdb(user.getMgrdb());
+		
 		int state = theoryLesson.getState();
 		TheoryLesson theory = theoryLessonMapper.selectByPrimaryKey(user.getDblink(), user.getMgrdb(), theoryLesson.getTheoryid());
 		switch (state) {
@@ -769,7 +762,7 @@ public class StudentServiceImpl implements StudentService {
 				if (theory == null || theory.getState() != 3 && theory.getState() != 4)
 					return r;
 				TheoryLesson tl = new TheoryLesson();
-				tl.setDblink(user.getDblink());
+				
 				tl.setTheoryid(theoryLesson.getTheoryid());
 				tl.setState(1);
 				theoryLessonMapper.updateByPrimaryKeySelective(tl);
@@ -790,8 +783,7 @@ public class StudentServiceImpl implements StudentService {
 				//若都添加了学员，更新理论课状态为待审核
 				tsexample.clear();
 				tsexample.createCriteria().andTheoryidEqualTo(theoryLesson.getTheoryid());
-				tsexample.setDblink(user.getDblink());
-				tsexample.setMgrdb(user.getMgrdb());
+				
 				List<TheoryStore> tStores = theoryStoreMapper.selectByExample(tsexample);
 				boolean isCompleted = true;
 				for (TheoryStore tStore : tStores) {
@@ -804,8 +796,7 @@ public class StudentServiceImpl implements StudentService {
 					TheoryLesson temp = new TheoryLesson();
 					temp.setTheoryid(theory.getTheoryid());
 					temp.setState(2);
-					temp.setDblink(user.getDblink());
-					temp.setMgrdb(user.getMgrdb());
+					
 					
 					String desc = "理论课[" + theory.getLessonname() + "]学员安排审核";
 					String transactionid = flowService.addFlow(businessid, user.getId(), desc,user);
@@ -818,7 +809,7 @@ public class StudentServiceImpl implements StudentService {
 				if (theory == null || theory.getState() != 2)
 					return r;
 				Flow flow_accept = flowService.getFlow(theory.getTransactionid(),user);
-				flow_accept.setDblink(user.getDblink());
+				
 				boolean next = (flow_accept != null) && flowService.auditFlow(flow_accept, user.getId(), ConstantUtil.AUDIT_ACCEPT);
 				if (!next) {
 					//设置审核人等信息
@@ -833,7 +824,7 @@ public class StudentServiceImpl implements StudentService {
 					return r;
 				//短信通知，后期再添加，找到未发送短信学员发送短信并把对应字段remark置为1
 				TheoryStudentExample example4 = new TheoryStudentExample();
-				example4.setDblink(user.getDblink());
+				
 				example4.createCriteria().andRemarkNotEqualTo("1").andTheoryidEqualTo(theoryLesson.getTheoryid());
 				List<TheoryStudent> tslist = theoryStudentMapper.selectByExample(example4);
 				if (tslist != null && tslist.size() > 0) {
@@ -844,17 +835,17 @@ public class StudentServiceImpl implements StudentService {
 						StudentStatusLog studentStatusLog = new StudentStatusLog();
 						studentStatusLog.setStudentid(ts.getStudentid());
 						Student student = new Student();
-						student.setDblink(user.getDblink());
+						
 						student.setId(ts.getStudentid());
 						Student s = studentMapper.selectByPrimaryKey(student);
 						studentStatusLog.setIdcard(s!=null?s.getIdcard():"");
 						studentStatusLog.setSubject(ApplyExam.SUBJECT1_CLASS_CLASS.getSubject());
 						studentStatusLog.setSubjectname(ApplyExam.SUBJECT1_CLASS_CLASS.getName());
-						saveStudentStatusLog(user, studentStatusLog);
+						saveStudentStatusLog(studentStatusLog);
 						
 						student.setApplyexam(ApplyExam.SUBJECT1_CLASS_CLASS.getApplyexam());
 						student.setApplystatus(ApplyExam.SUBJECT1_CLASS_CLASS.getApplystatus());
-						updateStudent(user, student);
+						updateStudent( student);
 					}
 					
 					TheoryStudent ts4 = new TheoryStudent();
@@ -894,13 +885,13 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview, User user, String businessid) {
+	public ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview,  String businessid) {
 		ResultBean r=new ResultBean();
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (!isreview) {
 			Student student = new Student();
 			student.setId(coachStudent.getStudentid());
-			student.setDblink(user.getDblink());
-			student.setMgrdb(user.getMgrdb());
+			
 			student = studentMapper.selectByPrimaryKey(student);
 			coachStudent.setCuid(user.getId());
 			if (student.getApplyexam() != null && (student.getApplyexam() > 3 || (student.getApplyexam() == 2 && student.getApplystatus() > 1))) {
@@ -919,8 +910,7 @@ public class StudentServiceImpl implements StudentService {
 			}
 		}
 
-		coachStudent.setDblink(user.getDblink());
-		coachStudent.setMgrdb(user.getMgrdb());
+		
 		CoachStudent exist= coachStudentMapper.get(coachStudent);
 		if(exist!=null){
 			if (isreview && coachStudent.getState() != null) {
@@ -928,7 +918,7 @@ public class StudentServiceImpl implements StudentService {
 				coachStudent.setReviewid(user.getId());
 				
 				Flow flow = flowService.getFlow(exist.getTransactionid(),user);
-				flow.setDblink(user.getDblink());
+				
 				if (coachStudent.getState() == 2) { //申请通过
 					boolean next = (flow != null) && flowService.auditFlow(flow, user.getId(), ConstantUtil.AUDIT_ACCEPT);
 					if (next)
@@ -949,7 +939,7 @@ public class StudentServiceImpl implements StudentService {
 			studentStatusLog.setStudentid(coachStudent.getStudentid());
 			Student student = new Student();
 			student.setId(coachStudent.getStudentid());
-			student.setDblink(user.getDblink());
+			
 			Student s = studentMapper.selectByPrimaryKey(student);
 			studentStatusLog.setIdcard(s!=null?s.getIdcard():"");
 			if (exist != null) {
@@ -961,27 +951,27 @@ public class StudentServiceImpl implements StudentService {
 				
 				student.setApplyexam(ApplyExam.SUBJECT2_CAOCH_ASSIGN.getApplyexam());
 				student.setApplystatus(ApplyExam.SUBJECT2_CAOCH_ASSIGN.getApplystatus());
-				updateStudent(user, student);
+				updateStudent( student);
 			}
-			saveStudentStatusLog(user, studentStatusLog);
+			saveStudentStatusLog( studentStatusLog);
 		}
 		
 		return r;
 	}
 
 	@Override
-	public CoachStudent getCoachStudent(CoachStudent coachStudent, User user) {
+	public CoachStudent getCoachStudent(CoachStudent coachStudent) {
 		return coachStudentMapper.get(coachStudent);
 	}
 
 
 	@Override
-	public ResultBean addStudentPauseApply(StudentPauseApply apply,User user,String businessid) {
+	public ResultBean addStudentPauseApply(StudentPauseApply apply,String businessid) {
 		ResultBean r=new ResultBean();
 
 		StudentPauseApply param = new StudentPauseApply();
 		param.setStudentid(apply.getStudentid());
-		param.setDblink(user.getDblink());
+		
 
 		StudentPauseApply eapply = studentPauseApplyMapper.getApplyByStudentid(param);
 		if (eapply != null) {
@@ -989,7 +979,7 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg(ResultCode.ERRORINFO.PAUSEAPPLYEXIST);
 			return r;
 		}
-
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		apply.setApplyuserid(user.getId());
 
 		apply.setApplyuserid(user.getId());
@@ -1003,7 +993,7 @@ public class StudentServiceImpl implements StudentService {
 		}
 		Student sp=new Student();
 		sp.setId(apply.getStudentid());
-		sp.setDblink(user.getDblink());
+		
 		Student exist=studentMapper.selectByPrimaryKey(sp);
 		String desc = "学员[" + exist.getName() + "]"+typestr+"申请";
 		String transactionid = flowService.addFlow(businessid, user.getId(),
@@ -1019,8 +1009,9 @@ public class StudentServiceImpl implements StudentService {
 
 
 	@Override
-	public String theoryLessonText(Integer theoryid, Integer type, User user) {
+	public String theoryLessonText(Integer theoryid, Integer type) {
 		String r = null;
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String cancelText = "尊敬的学员，由于临时的特殊原因，驾校取消了{1}的{3}培训，给您带来的不便，十分抱歉，如有问题请联系客服！";
 		String classText = "尊敬的喱喱学员，请您于{1}携带{2}到{3}参加{5}培训，课程时间为{6}，培训为指纹签到，请您提前十分钟到达现场签到";
 		TheoryLesson theoryLesson = theoryLessonMapper.selectByPrimaryKey(user.getDblink(), user.getMgrdb(), theoryid);
@@ -1047,25 +1038,26 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List<TheoryStudentExport> theoryStudentExport(TheoryStudent theoryStudent, User user) {
+	public List<TheoryStudentExport> theoryStudentExport(TheoryStudent theoryStudent) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		theoryStudent.setStoreid(user.getStoreid());
 		return studentMapper.selectStudentExport(theoryStudent);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> importFlownum(User user,Map <String,Object> params) {
+	public Map<String, Object> importFlownum(Map <String,Object> params) {
 		Map<String,Object> rtnData = new HashMap<>();
 		List <Flownum> list = (List<Flownum>) params.get("list");
-		String dblink = user.getDblink();
+		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		Student update = new Student();
-		update.setDblink(dblink);
+		
 		Student result = new Student();
-		result.setDblink(dblink);
+		
 		StudentStatusLog studentStatusLog = new StudentStatusLog();
-		studentStatusLog.setDblink(dblink);
+		
 		StringBuilder sb = new StringBuilder();
 		int errorCount = 0 , total = list.size();
 		Iterator<Flownum> f = list.iterator();
@@ -1102,7 +1094,7 @@ public class StudentServiceImpl implements StudentService {
 				studentStatusLog.setIdcard(result.getIdcard());
 				studentStatusLog.setSubject(ApplyExam.SIGNUP_ACCEPT_FLOWNUM.getSubject());
 				studentStatusLog.setSubjectname(ApplyExam.SIGNUP_ACCEPT_FLOWNUM.getName());
-				saveStudentStatusLog(user,studentStatusLog);
+				saveStudentStatusLog(studentStatusLog);
 				successlist.add(flownum);
 				f.remove();
 			}
@@ -1116,7 +1108,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean updateStudentPauseApply(StudentPauseApply apply,User user) {
+	public ResultBean updateStudentPauseApply(StudentPauseApply apply) {
 		ResultBean r=new ResultBean();
 		StudentPauseApply exist= studentPauseApplyMapper.get(apply);
 		if(exist.getStatus()!=0){
@@ -1129,7 +1121,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean updateStudentPauseApplyStatus(StudentPauseApply apply,User user) {
+	public ResultBean updateStudentPauseApplyStatus(StudentPauseApply apply) {
 		ResultBean r=new ResultBean();
 		StudentPauseApply exist= studentPauseApplyMapper.get(apply);
 		if(exist.getStatus()!=0){
@@ -1137,13 +1129,14 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg(ResultCode.ERRORINFO.APPLYHASAUDIT);
 			return r;
 		}
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		apply.setAudituserid(user.getId());
 		apply.setAudituser(user.getUsername());
 		//apply.setAuditdate(new Date());
 
 		Student student=new Student();
 		student.setId(exist.getStudentid());
-		student.setDblink(user.getDblink());
+		
 		Student existstu= studentMapper.selectByPrimaryKey(student);
 
 		if(apply.getType()==PAUSE_TYPE&& apply.getStatus()==1){//暂停审核通过
@@ -1163,7 +1156,7 @@ public class StudentServiceImpl implements StudentService {
 		}
 
 		Flow flow = flowService.getFlow(exist.getTransactionid(),user);
-		flow.setDblink(user.getDblink());
+		
 		if (apply.getStatus() == 1) {
 			boolean next = (flow != null)
 					&& flowService.auditFlow(flow, user.getId(),
@@ -1204,7 +1197,7 @@ public class StudentServiceImpl implements StudentService {
 	private static final int RESUME_TYPE=2;
 
 	@Override
-	public ResultBean listStudentPauseApply(StudentPauseApplyParam param,User user) {
+	public ResultBean listStudentPauseApply(StudentPauseApplyParam param) {
 		if(param.getEtime()!=null){
 			Calendar calendar=Calendar.getInstance();
 			calendar.setTime(param.getEtime());
@@ -1215,10 +1208,13 @@ public class StudentServiceImpl implements StudentService {
 		ResultBean rb = new ResultBean();
 		PageUtil.startPage(param);
 		List<StudentPauseApply> list = studentPauseApplyMapper.list(param);
-		User up=new User();
-		up.setDblink(user.getDblink());
-		up.setMgrdb(true);
-		List<User> users= userService.selectSchoolUser(up);
+		
+		/**
+		 * @todo
+		 * user module need to route to mgrdb
+		 */
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		List<User> users= userService.selectSchoolUser(null);
 		for(StudentPauseApply apply:list){
 
 			for(User s:users){
@@ -1239,15 +1235,15 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getStudentPauseApply(StudentPauseApply apply,User user) {
+	public ResultBean getStudentPauseApply(StudentPauseApply apply) {
 		StudentPauseApply exist=studentPauseApplyMapper.get(apply);
-
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (exist.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (exist.getStatus() == 0) {// 业务还在等待审核中
 				exist.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
 			} else {
 				Flow flow = new Flow();
-				flow.setDblink(user.getDblink());
+				
 				flow.setTransactionid(exist.getTransactionid());
 				FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
 				if(fs==null){//说明没有审批流
@@ -1259,7 +1255,7 @@ public class StudentServiceImpl implements StudentService {
 			}
 		} else {
 			Flow flow = new Flow();
-			flow.setDblink(user.getDblink());
+			
 			flow.setTransactionid(exist.getTransactionid());
 			FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
 			if(fs==null){//说明没有审批流
@@ -1279,14 +1275,14 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getStudentPauseApplyByTransaction(StudentPauseApply apply,User user) {
+	public ResultBean getStudentPauseApplyByTransaction(StudentPauseApply apply) {
 		StudentPauseApply exist=studentPauseApplyMapper.getByTransaction(apply);
 		User up=new User();
 		up.setMgrdb(true);
 		up.setId(exist.getApplyuserid());
 		User applyuser= userService.getUser(up);
 		exist.setApplyuser(applyuser.getUsername());
-
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		if (exist.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (exist.getStatus() == 0) {// 业务还在等待审核中
 				exist.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
@@ -1295,7 +1291,7 @@ public class StudentServiceImpl implements StudentService {
 			}
 		} else {
 			Flow flow = new Flow();
-			flow.setDblink(user.getDblink());
+			
 			flow.setTransactionid(exist.getTransactionid());
 			FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
 			if(fs==null){//说明没有审批流
@@ -1315,16 +1311,15 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getTransferList(TransferStudent transferStudent, Boolean isChosen, User user) {
+	public ResultBean getTransferList(TransferStudent transferStudent, Boolean isChosen) {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		int level = user.getLevel();
 		transferStudent.setTargetareaid(level!=0?user.getAreaid():null);
 		transferStudent.setTargetstoreid(level==2?user.getStoreid():null);
-		transferStudent.setDblink(user.getDblink());
-		transferStudent.setMgrdb(user.getMgrdb());
+		
 
 		List<TransferStudent> list = null;
 		PageUtil.startPage(transferStudent);
@@ -1343,22 +1338,19 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getTransfer(TransferStudent transferStudent, User user) {
+	public ResultBean getTransfer(TransferStudent transferStudent) {
 		ResultBean r = new ResultBean();
 		
 		Map<String, Object> result = new HashMap<>();
-		transferStudent.setDblink(user.getDblink());
-		transferStudent.setMgrdb(user.getMgrdb());
+		
 		TransferStudent ts = transferStudentMapper.selectByPrimaryKey(transferStudent);
 		Student student = new Student();
 		student.setId(ts.getStudentid());
-		student.setDblink(user.getDblink());
-		student.setMgrdb(user.getMgrdb());
+		
 		Student s = studentMapper.selectByPrimaryKey(student);
 		Store store = new Store();
 		store.setId(ts.getTargetstoreid());
-		store.setDblink(user.getDblink());
-		store.setMgrdb(user.getMgrdb());
+		
 		Store ss = storeService.selectOne(store);
 		result.put("transfer", ts);
 		result.put("student", s);
@@ -1371,14 +1363,14 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean addTransfer(TransferStudent transferStudent, User user, String businessid) {
+	public ResultBean addTransfer(TransferStudent transferStudent,  String businessid) {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
 		
 		Student ss = new Student();
 		ss.setId(transferStudent.getStudentid());
-		ss.setDblink(user.getDblink());
+		
 		Student s = studentMapper.selectByPrimaryKey(ss);
 		if (s.getStoreid() == null ||
 				transferStudent.getTargetareaid() == null || transferStudent.getTargetstoreid() == null)
@@ -1387,7 +1379,7 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg("不能把原门店设置为目标门店！");
 			return r;
 		}
-
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Store storetemp = new Store();
 		storetemp.setId(s.getStoreid());
 		Store store = storeService.selectOne(storetemp);
@@ -1401,8 +1393,7 @@ public class StudentServiceImpl implements StudentService {
 		transferStudent.setState(1);
 		transferStudent.setCuid(user.getId());
 		transferStudent.setCname(user.getRealname());
-		transferStudent.setDblink(user.getDblink());
-		transferStudent.setMgrdb(user.getMgrdb());
+		
 		
 //			String desc = "学员[" + s.getName() + "]转店审核";
 //			String transactionid = flowService.addFlow(businessid, user.getId(), desc);
@@ -1416,14 +1407,13 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean editTransfer(TransferStudent transferStudent, User user) {
+	public ResultBean editTransfer(TransferStudent transferStudent) {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
 		
 		Integer state = transferStudent.getState();
-		transferStudent.setDblink(user.getDblink());
-		transferStudent.setMgrdb(user.getMgrdb());
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		TransferStudent transfer = transferStudentMapper.selectByPrimaryKey(transferStudent);
 		if (transfer.getState() != 1)
 			return r;
@@ -1431,8 +1421,7 @@ public class StudentServiceImpl implements StudentService {
 			TransferStudent ts = new TransferStudent();
 			ts.setId(transferStudent.getId());
 			ts.setState(state);
-			ts.setDblink(user.getDblink());
-			ts.setMgrdb(user.getMgrdb());
+			
 			if (state == 2 || state == 9) {
 				ts.setReviewid(user.getId());
 				ts.setReviewname(user.getRealname());
@@ -1444,7 +1433,7 @@ public class StudentServiceImpl implements StudentService {
 				studentStatusLog.setIdcard(transfer.getIdcard());
 				studentStatusLog.setSubject(ApplyExam.OTHER_TRANSFER_STORE.getSubject());
 				studentStatusLog.setSubjectname(ApplyExam.OTHER_TRANSFER_STORE.getName());
-				saveStudentStatusLog(user, studentStatusLog);
+				saveStudentStatusLog( studentStatusLog);
 			} else if (state != 0) {
 				return r;
 			}
@@ -1460,7 +1449,7 @@ public class StudentServiceImpl implements StudentService {
 			if (transferStudent.getStudentid() != null) {
 				Student ss = new Student();
 				ss.setId(transferStudent.getStudentid());
-				ss.setDblink(user.getDblink());
+				
 				Student s = studentMapper.selectByPrimaryKey(ss);
 				if (s == null || s.getStoreid() == null)
 					return r;
@@ -1484,13 +1473,13 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getTStudentList(Student student, User user) {
+	public ResultBean getTStudentList(Student student) {
 		ResultBean r = new ResultBean();
-		
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		int level = user.getLevel();
 		student.setAreaid(level!=0?user.getAreaid():null);
 		student.setStoreid(level==2?user.getStoreid():null);
-		student.setDblink(user.getDblink());
+		
 		r.setResult(new PageInfo<>(getList(student)));
 		r.setCode(HttpConstant.SUCCESS_CODE);
 		r.setMsg(HttpConstant.SUCCESS_MSG);
@@ -1532,7 +1521,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean getStudentCoach(StudentCoachDTO studentCoachDTO, User user) {
+	public ResultBean getStudentCoach(StudentCoachDTO studentCoachDTO) {
 		ResultBean r = new ResultBean();
 		PageUtil.startPage(studentCoachDTO);
 		List<StudentCoachDTO> list = coachStudentMapper.selectStudentCoach(studentCoachDTO);
@@ -1560,8 +1549,8 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public void saveStudentStatusLog(User user,StudentStatusLog studentStatusLog) {
-		studentStatusLog.setDblink(user.getDblink());
+	public void saveStudentStatusLog(StudentStatusLog studentStatusLog) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		studentStatusLog.setCuid(user.getId());
 		studentStatusLog.setCname(user.getRealname());
 		studentStatusLog.setCtime(new Date());
@@ -1571,17 +1560,17 @@ public class StudentServiceImpl implements StudentService {
 	}
 
     @Override
-    public void saveLogBatch(User user, List<StudentStatusLog> list) {
+    public void saveLogBatch( List<StudentStatusLog> list) {
         Map <String,Object> params = new HashMap<>();
-        params.put("dblink",user.getDblink());
+        
         params.put("list",list);
         studentStatusLogMapper.insertBatch(params);
     }
 
     @Override
-    public void updateStudentBatch(User user, List<Student> list) {
+    public void updateStudentBatch( List<Student> list) {
         Map <String,Object> params = new HashMap<>();
-        params.put("dblink",user.getDblink());
+        
         params.put("list",list);
         studentMapper.updateBatch(params);
     }
@@ -1631,7 +1620,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean checkStudent(User user, Student student) {
+	public ResultBean checkStudent( Student student) {
 //		user.getLevel()
 
 		return null;
@@ -1649,18 +1638,18 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List <StudentMoneyDTO> selectOweList(User user, StudentMoneyDTO dto) {
+	public List <StudentMoneyDTO> selectOweList( StudentMoneyDTO dto) {
 		PageUtil.startPage(dto);
 		return studentMoneyMapper.selectOweList(dto);
 	}
 
 
 	@Override
-	public ResultBean calcMoney(User user, StudentCalcMoneyDTO dto) {
+	public ResultBean calcMoney( StudentCalcMoneyDTO dto) {
 		ResultBean rb = new ResultBean();
-		String dblink = user.getDblink();
+		
 		Classinfo classinfo = new Classinfo();
-		classinfo.setDblink(dblink);
+		
 		classinfo.setId(dto.getClassinfoid());
 		classinfo = classinfoService.get(classinfo);
 		if (classinfo == null) {
@@ -1677,22 +1666,22 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List<StudentApplyStat> selectApplyStat(StudentApplyStat studentApplyStat, User user) {
-		studentApplyStat.setDblink(user.getDblink());
+	public List<StudentApplyStat> selectApplyStat(StudentApplyStat studentApplyStat) {
+		
 		return studentMapper.selectApplyStat(studentApplyStat);
 	}
 
 	@Override
-	public void updateReceiptStudentMoney(List<StudentMoney> list, String ids, User user) {
+	public void updateReceiptStudentMoney(List<StudentMoney> list, String ids) {
 		if (list.size() > 0) {
 			Map<String, Object> map = new HashMap<>();
-			map.put("dblink", user.getDblink());
+			
 			map.put("list", list);
 			studentMoneyMapper.updateReceiptOweMoney(map);
 		}
 		if (ids.length() > 0) {
 			StudentMoney studentMoney = new StudentMoney();
-			studentMoney.setDblink(user.getDblink());
+			
 			studentMoney.setIds(ids.substring(1));
 			studentMoneyMapper.updateReceiptOweStatus(studentMoney);
 		}

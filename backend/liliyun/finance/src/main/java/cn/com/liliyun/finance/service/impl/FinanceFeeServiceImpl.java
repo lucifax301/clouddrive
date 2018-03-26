@@ -1,7 +1,9 @@
 package cn.com.liliyun.finance.service.impl;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.FeeSubject;
 import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.common.util.PageUtil;
@@ -15,6 +17,7 @@ import cn.com.liliyun.student.model.StudentMoney;
 import cn.com.liliyun.student.model.StudentStatusLog;
 import cn.com.liliyun.student.service.StudentService;
 import cn.com.liliyun.user.model.User;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,37 +41,37 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 	private StudentService studentService;
 
 	@Override
-	public List<FinanceFee> selectList(User user,FinanceFee financeFee) {
+	public List<FinanceFee> selectList(FinanceFee financeFee) {
 		PageUtil.startPage(financeFee);
 		return financeFeeMapper.selectList(financeFee);
 	}
 
 	@Override
-	public List<FinanceFeeItem> selectItemList(User user,FinanceFeeItem financeFeeItem) {
+	public List<FinanceFeeItem> selectItemList(FinanceFeeItem financeFeeItem) {
 		PageUtil.startPage(financeFeeItem);
 		return financeFeeItemMapper.selectList(financeFeeItem);
 	}
 
 	@Override
-	public List<FinanceFeeItem> selectAllItemList(User user, FinanceFeeItem financeFeeItem) {
+	public List<FinanceFeeItem> selectAllItemList( FinanceFeeItem financeFeeItem) {
 		PageUtil.startPage(financeFeeItem);
 		return financeFeeItemMapper.selectAllList(financeFeeItem);
 	}
 
 	@Override
-	public ResultBean save(User user,FinanceFeeDTO dto, List<FinanceFeeItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean save(FinanceFeeDTO dto, List<FinanceFeeItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
         Date now = new Date();
         String tableId = user.getBatchId();
 
         FinanceSubject subject = new FinanceSubject();
-        subject.setDblink(dblink);
+        
         subject.setId(dto.getSubject());
         subject = financeSubjectMapper.selectByPrimaryKey(subject);
         Iterator<FinanceFeeItem> itr = list.iterator();
 
         Student query = new Student();
-        query.setDblink(dblink);
+        
         List <StudentStatusLog> logList = new ArrayList<>();
 //          List <Student> studentList = new ArrayList<>();
         while (itr.hasNext()) {
@@ -140,16 +143,16 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 		int count = 0;
 		if (list.size() > 0) {
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			count = financeFeeItemMapper.insertBatch(params);
-			studentService.saveLogBatch(user,logList);
+			studentService.saveLogBatch(logList);
 //			studentService.updateStudentBatch(user,studentList);
 		}
 		if (count > 0) {
 			FinanceFee fee = new FinanceFee();
 			fee.setTableid(tableId);
-			fee.setDblink(dblink);
+			
 			fee.setApplyexam(dto.getApplyexam());
 			fee.setSubject1(FeeSubject.PAY.getStatus());
 			fee.setSubject2(subject.getId());
@@ -169,17 +172,17 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 	}
 
 	@Override
-	public ResultBean edit(User user, FinanceFeeDTO dto, List<FinanceFeeItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean edit( FinanceFeeDTO dto, List<FinanceFeeItem> list) {
+		
 		String tableid = dto.getTableid();
 		FinanceFee financeFee = new FinanceFee();
-		financeFee.setDblink(dblink);
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		financeFee.setTableid(tableid);
 		financeFee = financeFeeMapper.selectByPrimaryKey(financeFee);
 		Date now = new Date();
 		Iterator<FinanceFeeItem> itr = list.iterator();
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		while (itr.hasNext()) {
 			FinanceFeeItem item = itr.next();
 			query.setIdcard(item.getIdcard());
@@ -211,22 +214,22 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 		int size = list.size();
 		if (size > 0) {
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			financeFeeItemMapper.insertBatch(params);
-			recount(user, tableid);
+			recount(tableid);
 		}
 		return new ResultBean();
 	}
 
 
 	@Override
-	public ResultBean initData(User user, Student student) {
+	public ResultBean initData( Student student) {
 		student = studentService.getStudent(student);
 		StudentMoney studentMoney = new StudentMoney();
 		Map <String,Object> data = new HashMap<>();
 		if (student != null) {
-			studentMoney.setDblink(user.getDblink());
+			
 			studentMoney.setStudentid(student.getId());
 			studentMoney = studentService.getStudentMoney(studentMoney);
 			data.put("studentid", student.getId());
@@ -255,15 +258,15 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 	}
 
 	@Override
-	public ResultBean saveItem(User user, FinanceFeeItem feeItem) {
-	    String dblink = user.getDblink();
+	public ResultBean saveItem( FinanceFeeItem feeItem) {
+	    User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Student student = new Student();
-		student.setDblink(dblink);
+		
 		student.setId(feeItem.getStudentid());
 		student = studentService.getStudent(student);
 		if (student != null) {
             Date now = new Date();
-            feeItem.setDblink(dblink);
+            
             feeItem.setCuid(user.getId());
             feeItem.setName(student.getName());
             feeItem.setIdcard(student.getIdcard());
@@ -282,10 +285,10 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 	}
 
     @Override
-    public ResultBean saveFinanceItem(User user, FinanceFeeItem feeItem,Student student) {
-        String dblink = user.getDblink();
+    public ResultBean saveFinanceItem( FinanceFeeItem feeItem,Student student) {
+        
         Date now = new Date();
-        feeItem.setDblink(dblink);
+        User user = RequestContext.get(ConstantUtil.USER_SESSION);
         feeItem.setName(student.getName());
         feeItem.setIdcard(student.getIdcard());
         feeItem.setCuid(user.getId());
@@ -307,7 +310,8 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
     }
 
     @Override
-	public ResultBean editItem(User user, FinanceFeeItem feeItem) {
+	public ResultBean editItem( FinanceFeeItem feeItem) {
+    	User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		feeItem.setMuid(user.getId());
 		feeItem.setMname(user.getRealname());
 		feeItem.setMtime(new Date());
@@ -317,7 +321,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 	}
 
 	@Override
-	public ResultBean deleteItem(User user, FinanceFeeItem financeFeeItem) {
+	public ResultBean deleteItem( FinanceFeeItem financeFeeItem) {
 		String checkIds = financeFeeItem.getIds();
 		String tableid = financeFeeItem.getTableid();
 		if (StringUtils.isBlank(checkIds)
@@ -330,12 +334,13 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 			financeFeeItem.setItemid(Integer.parseInt(id));
 			financeFeeItemMapper.deleteByPrimaryKey(financeFeeItem);
 		}
-		recount(user, tableid);
+		recount( tableid);
 		return new ResultBean();
 	}
 
     @Override
-    public ResultBean check(User user, FinanceFeeItem feeItem) {
+    public ResultBean check( FinanceFeeItem feeItem) {
+    	User user = RequestContext.get(ConstantUtil.USER_SESSION);
         String tableid = feeItem.getTableid();
         Date now = new Date();
         feeItem.setCheckuid(user.getId());
@@ -350,18 +355,19 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
         //减免费审核通过
         if (feeItem.getSubject2() == FeeSubject.REDUCE_FEE.getStatus()) {
             StudentMoney studentMoney = new StudentMoney();
-            studentMoney.setDblink(user.getDblink());
+            
             studentMoney.setStudentid(feeItem.getStudentid());
             studentMoney.setOwesubmoney(BigDecimal.ZERO);
             studentService.updateStudentMoney(studentMoney);
         }
         financeFeeItemMapper.updateByPrimaryKeySelective(feeItem);
-        recount(user, tableid);
+        recount( tableid);
         return new ResultBean();
     }
 
 	@Override
-	public ResultBean checkBatch(User user, FinanceFeeItem financeFeeItem) {
+	public ResultBean checkBatch( FinanceFeeItem financeFeeItem) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String checkids = financeFeeItem.getIds();
         String tableids = financeFeeItem.getTableids();
         if (StringUtils.isBlank(checkids)) {
@@ -388,22 +394,22 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
             Set <String> idset = new HashSet<>();
             for (String tid : tids) {
                 if (StringUtils.isNotBlank(tid) && idset.add(tid)) {
-                    recount(user, tid);
+                    recount( tid);
                 }
             }
         }
         return new ResultBean();
     }
 	
-	private void recount(User user,String tableid) {
-		String dblink = user.getDblink();
+	private void recount(String tableid) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		FinanceFee financeFee = new FinanceFee();
 		financeFee.setTableid(tableid);
-		financeFee.setDblink(user.getDblink());
+		
 		financeFee = financeFeeMapper.selectByPrimaryKey(financeFee);
 		if (financeFee != null) {
 			FinanceFeeItem query = new FinanceFeeItem();
-			query.setDblink(dblink);
+			
 			query.setTableid(tableid);
 			List <FinanceFeeItem> all = financeFeeItemMapper.selectList(query);
 			BigDecimal paymoney = BigDecimal.ZERO;
@@ -417,7 +423,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 			}
 			FinanceFee fee = new FinanceFee();
 			fee.setTableid(financeFee.getTableid());
-			fee.setDblink(dblink);
+			
 			fee.setTotal(all.size());
 			fee.setTotalmoney(money.multiply(new BigDecimal(all.size())));
 			fee.setPaytotal(paytotal);
@@ -430,7 +436,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 	}
 
 	@Override
-	public List<FinancePay> selectPay(User user, FinancePay financePay) {
+	public List<FinancePay> selectPay( FinancePay financePay) {
 		PageUtil.startPage(financePay);
 		return financeFeeItemMapper.selectPay(financePay);
 	}

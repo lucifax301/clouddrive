@@ -2,6 +2,7 @@ package cn.com.liliyun.common.util;
 
 public class ConstantUtil {
 	
+	public static final String MRG = "MGR";
 	//服务器主库连接
 	public static final String LILIYUN_DB = "liliyun";
 	//注册审核状态 0:未审核 1：审核通过 2：审核拒绝

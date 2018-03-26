@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.EncryptUtil;
@@ -135,6 +136,7 @@ public class UserServiceImpl implements UserService {
 		privilegeMapper.insertRoleUser(roleUser);
 		log.info("分配根账户角色...");
 		
+		//RequestContext.put(ConstantUtil.MRG, true);
 		//更新数据库配置信息
 		dbConfig.setMgrdb(true);
 		dbConfig.setSchoolid(r.getId());

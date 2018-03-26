@@ -52,86 +52,86 @@ public class PosController extends BaseController {
 	
 	@RequestMapping(value = "/posAccountList", method = RequestMethod.GET)
 	public ResultBean getPosAccountList(PosAccount posAccount, HttpServletRequest request) {
-		return financeService.getPosAccountList(posAccount, getUser(request));
+		return financeService.getPosAccountList(posAccount);
 	}
 	
 	@RequestMapping(value = "/posAccountAll", method = RequestMethod.GET)
 	public ResultBean getPosAccountAll(PosAccount posAccount, HttpServletRequest request) {
 		posAccount.setPageNo(-1);
-		return financeService.getPosAccountList(posAccount, getUser(request));
+		return financeService.getPosAccountList(posAccount);
 	}
 	
 	@RequestMapping(value = "/addPosAccount", method = RequestMethod.POST)
 	public ResultBean addPosAccount(PosAccount posAccount, HttpServletRequest request) {
-		return financeService.addPosAccount(posAccount, getUser(request));
+		return financeService.addPosAccount(posAccount);
 	}
 	
 	@RequestMapping(value = "/delPosAccount", method = RequestMethod.POST)
 	public ResultBean delPosAccount(PosAccount posAccount, HttpServletRequest request) {
-		return financeService.deletePosAccount(posAccount, getUser(request));
+		return financeService.deletePosAccount(posAccount);
 	}
 	
 	@RequestMapping(value = "/cashAccountList", method = RequestMethod.GET)
 	public ResultBean getCashAccountList(CashAccount cashAccount, HttpServletRequest request) {
-		return financeService.getCashAccountList(cashAccount, getUser(request));
+		return financeService.getCashAccountList(cashAccount);
 	}
 	
 	@RequestMapping(value = "/cashAccountAll", method = RequestMethod.GET)
 	public ResultBean getCashAccountAll(CashAccount cashAccount, HttpServletRequest request) {
 		cashAccount.setPageNo(-1);
-		return financeService.getCashAccountList(cashAccount, getUser(request));
+		return financeService.getCashAccountList(cashAccount);
 	}
 	
 	@RequestMapping(value = "/addCashAccount", method = RequestMethod.POST)
 	public ResultBean addCashAccount(CashAccount cashAccount, HttpServletRequest request) {
-		return financeService.addCashAccount(cashAccount, getUser(request));
+		return financeService.addCashAccount(cashAccount);
 	}
 	
 	@RequestMapping(value = "/delCashAccount", method = RequestMethod.POST)
 	public ResultBean delCashAccount(CashAccount cashAccount, HttpServletRequest request) {
-		return financeService.deleteCashAccount(cashAccount, getUser(request));
+		return financeService.deleteCashAccount(cashAccount);
 	}
 	
 	@RequestMapping(value = "/financePosList", method = RequestMethod.GET)
 	public ResultBean getFinancePosList(FinancePos financePos, HttpServletRequest request) {
-		return financeService.getFinancePosList(financePos, getUser(request));
+		return financeService.getFinancePosList(financePos);
 	}
 	
 	@RequestMapping(value = "/financePosALL", method = RequestMethod.GET)
 	public ResultBean getFinancePosALL(FinancePos financePos, HttpServletRequest request) {
 		financePos.setPageNo(-1);
-		return financeService.getFinancePosList(financePos, getUser(request));
+		return financeService.getFinancePosList(financePos);
 	}
 	
 	@RequestMapping(value = "/poscompanyALL", method = RequestMethod.GET)
 	public ResultBean getPoscompanyALL(FinancePos financePos, HttpServletRequest request) {
-		return financeService.getPoscompanyList(financePos, getUser(request));
+		return financeService.getPoscompanyList(financePos);
 	}
 	
 	@RequestMapping(value = "/posbanknameALL", method = RequestMethod.GET)
 	public ResultBean getPosbanknameALL(FinancePos financePos, HttpServletRequest request) {
-		return financeService.getPosbanknameList(financePos, getUser(request));
+		return financeService.getPosbanknameList(financePos);
 	}
 	
 	@RequestMapping(value = "/updateFinancePos", method = RequestMethod.POST)
 	public ResultBean updateFinancePos(FinancePos financePos, HttpServletRequest request) {
-		return financeService.updateFinancePos(financePos, getUser(request));
+		return financeService.updateFinancePos(financePos);
 	}
 	
 	@RequestMapping(value = "/addFinancePos", method = RequestMethod.POST)
 	public ResultBean addFinancePos(FinancePos financePos, HttpServletRequest request) {
-		return financeService.addFinancePos(financePos, getUser(request));
+		return financeService.addFinancePos(financePos);
 	}
 	
 	@RequestMapping(value = "/delFinancePos", method = RequestMethod.POST)
 	public ResultBean delFinancePos(FinancePos financePos, HttpServletRequest request) {
-		return financeService.deleteFinancePos(financePos, getUser(request));
+		return financeService.deleteFinancePos(financePos);
 	}
 	
 	@RequestMapping(value = "/getFinancePosExport")
 	public ResponseEntity<byte[]> getFinancePosExport(FinancePos financePos, HttpServletRequest request) {
 		try {
-			List<FinancePos> list = financeService.getFinancePosExport(financePos, getUser(request));
+			List<FinancePos> list = financeService.getFinancePosExport(financePos);
 			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 			Area pa=new Area();
 			pa.setDblink(user.getDblink());
