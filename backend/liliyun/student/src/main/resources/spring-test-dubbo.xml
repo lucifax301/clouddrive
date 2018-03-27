@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/task 
+	http://www.springframework.org/schema/task/spring-task-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    
+    <dubbo:application name="student-dubbo-server"  />
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/> 
+    <dubbo:protocol name="dubbo" port="32002" threadpool="fixed" threads="100"/>
+    <dubbo:consumer timeout="${dubbo.timeout}" />
+    
+    <dubbo:service id="studentService" interface="cn.com.liliyun.student.service.StudentService" ref="studentServiceImpl" />
+    <dubbo:service id="transfertableService" interface="cn.com.liliyun.student.service.TransfertableService" ref="transfertableServiceImpl" />
+	<dubbo:service id="fileService" interface="cn.com.liliyun.student.service.FileService" ref="fileServiceImpl" />
+	<dubbo:service id="materialService" interface="cn.com.liliyun.student.service.MaterialService" ref="materialServiceImpl" />
+	<dubbo:service id="studentStatusService" interface="cn.com.liliyun.student.service.StudentStatusService" ref="studentStatusServiceImpl" />
+
+</beans>

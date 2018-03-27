@@ -108,8 +108,8 @@ public class StudentServiceImpl implements StudentService {
 	@Autowired
 	private CoachService coachService;
 
-	@Autowired
-	private DefaultMQProducer dataProducer;
+//	@Autowired
+//	private DefaultMQProducer dataProducer;
 
 	@Autowired
 	private TheoryLessonMapper theoryLessonMapper;
@@ -485,7 +485,7 @@ public class StudentServiceImpl implements StudentService {
 				r.setMsg("没有权限!");
 				return r;
 			} else {
-				TheoryLesson tl = theoryLessonMapper.selectByPrimaryKey(user.getDblink(), user.getMgrdb(), theoryLesson.getTheoryid());
+				TheoryLesson tl = theoryLessonMapper.selectByPrimaryKey(theoryLesson.getTheoryid());
 				if (tl == null)
 					return r;
 			}
@@ -648,7 +648,7 @@ public class StudentServiceImpl implements StudentService {
 		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 
-		TheoryLesson theory = theoryLessonMapper.selectByPrimaryKey(user.getDblink(), user.getMgrdb(), theoryId);
+		TheoryLesson theory = theoryLessonMapper.selectByPrimaryKey(theoryId);
 
 		if (theory == null)
 			return r;
@@ -686,7 +686,7 @@ public class StudentServiceImpl implements StudentService {
 			
 			theoryStoreMapper.updateStoreArrangedNum(theoryStore);
 			//更新理论课学员人数数据
-			theoryLessonMapper.updateLessonArrangedNum(user.getDblink(), user.getMgrdb(), theoryId);
+			theoryLessonMapper.updateLessonArrangedNum(theoryId);
 		} else if (isDel) {
 			//业务规定，删除每次只删除一个，ids长度不为1则数据有问题
 			if (ids.length != 1)
@@ -713,7 +713,7 @@ public class StudentServiceImpl implements StudentService {
 			
 			theoryStoreMapper.updateStoreArrangedNum(theoryStore);
 			//更新理论课学员人数数据
-			theoryLessonMapper.updateLessonArrangedNum(user.getDblink(), user.getMgrdb(), theoryId);
+			theoryLessonMapper.updateLessonArrangedNum( theoryId);
 		}
 		r.setCode(HttpConstant.SUCCESS_CODE);
 		r.setMsg(HttpConstant.SUCCESS_MSG);
@@ -730,7 +730,7 @@ public class StudentServiceImpl implements StudentService {
 			tle.createCriteria().andStateEqualTo(4).andIsdelEqualTo((byte) 0).andEndtimeLessThan(new Date());
 			TheoryLesson tl = new TheoryLesson();
 			tl.setState(5);
-			theoryLessonMapper.updateByExampleSelective(user.getDblink(), user.getMgrdb(), tl, tle);
+			theoryLessonMapper.updateByExampleSelective( tl, tle);
 			return r;
 		}
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
@@ -740,7 +740,7 @@ public class StudentServiceImpl implements StudentService {
 
 		
 		int state = theoryLesson.getState();
-		TheoryLesson theory = theoryLessonMapper.selectByPrimaryKey(user.getDblink(), user.getMgrdb(), theoryLesson.getTheoryid());
+		TheoryLesson theory = theoryLessonMapper.selectByPrimaryKey(theoryLesson.getTheoryid());
 		switch (state) {
 			case 0:
 				if (theory == null || theory.getState() != 4)
@@ -1014,7 +1014,7 @@ public class StudentServiceImpl implements StudentService {
 		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String cancelText = "尊敬的学员，由于临时的特殊原因，驾校取消了{1}的{3}培训，给您带来的不便，十分抱歉，如有问题请联系客服！";
 		String classText = "尊敬的喱喱学员，请您于{1}携带{2}到{3}参加{5}培训，课程时间为{6}，培训为指纹签到，请您提前十分钟到达现场签到";
-		TheoryLesson theoryLesson = theoryLessonMapper.selectByPrimaryKey(user.getDblink(), user.getMgrdb(), theoryid);
+		TheoryLesson theoryLesson = theoryLessonMapper.selectByPrimaryKey(theoryid);
 		if (theoryLesson == null)
 			return r;
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");

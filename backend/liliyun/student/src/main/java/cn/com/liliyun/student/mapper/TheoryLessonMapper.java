@@ -1,11 +1,15 @@
 package cn.com.liliyun.student.mapper;
 
+import cn.com.liliyun.common.annotation.DBRoute;
 import cn.com.liliyun.theory.dto.TheoryLessonStoreDto;
 import cn.com.liliyun.theory.model.TheoryLesson;
 import cn.com.liliyun.theory.model.TheoryLessonExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
+@DBRoute("test")
 public interface TheoryLessonMapper {
     int countByExample(TheoryLessonExample example);
 
@@ -19,9 +23,9 @@ public interface TheoryLessonMapper {
 
     List<TheoryLesson> selectByExample(TheoryLessonExample example);
 
-    TheoryLesson selectByPrimaryKey(@Param("dblink") String dblink, @Param("mgrdb") Boolean mgrdb, @Param("theoryid") Integer theoryid);
+    TheoryLesson selectByPrimaryKey(@Param("theoryid") Integer theoryid);
 
-    int updateByExampleSelective(@Param("dblink") String dblink, @Param("mgrdb") Boolean mgrdb, @Param("record") TheoryLesson record, @Param("example") TheoryLessonExample example);
+    int updateByExampleSelective(@Param("record") TheoryLesson record, @Param("example") TheoryLessonExample example);
 
     int updateByExample(@Param("record") TheoryLesson record, @Param("example") TheoryLessonExample example);
 
@@ -40,5 +44,5 @@ public interface TheoryLessonMapper {
     /*
      * 更新理论课已安排总人数
      */
-    int updateLessonArrangedNum(@Param("dblink") String dblink, @Param("mgrdb") Boolean mgrdb, @Param("theoryid") Integer theoryId);
+    int updateLessonArrangedNum(@Param("theoryid") Integer theoryId);
 }

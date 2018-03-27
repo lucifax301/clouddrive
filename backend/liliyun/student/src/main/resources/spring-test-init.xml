@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/task 
+	http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+	<!-- 支持标注 -->
+	<context:annotation-config />
+	<!-- use-default-filters="false" regex exclude才有效 -->
+	<!--  <context:component-scan base-package="cn.com.liliyun" use-default-filters="false">-->
+	<context:component-scan base-package="cn.com.liliyun">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<!--  <context:exclude-filter type="regex" expression=".student.service.*" />-->
+	</context:component-scan>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:jdbc.properties</value>
+				<value>classpath*:datasynch-rmq.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="utf-8" />
+	</bean>
+	<bean id="daoInterceptor" class="cn.com.liliyun.common.interceptor.DaoInterceptor"></bean>
+	<aop:config>
+		<aop:pointcut expression="execution(public * cn.com.liliyun.student.mapper.TheoryLessonMapper.selectByPrimaryKey(..))" id="testpointcut"/>
+		<aop:advisor advice-ref="daoInterceptor" pointcut-ref="testpointcut"/>
+	</aop:config>
+	<import resource="spring-test-dubbo.xml" />
+	<import resource="spring-test-database.xml" />
+	<import resource="spring-mybatis.xml" />
+	
+	<import resource="classpath*:coach-client.xml"/>
+	<import resource="classpath*:trainorg-client.xml"/>
+	<import resource="classpath*:user-client.xml"/>
+	<import resource="classpath*:market-client.xml"/>
+	<import resource="classpath*:finance-client.xml"/>
+</beans>

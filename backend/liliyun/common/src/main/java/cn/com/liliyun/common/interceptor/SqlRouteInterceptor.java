@@ -59,9 +59,7 @@ public class SqlRouteInterceptor implements Interceptor{
 		}else{
 			mgrdb = true;
 		}
-//		if (paramObject instanceof User) {
-//			
-//		}
+
 		//如果设置mgrdb=true时，连接走管理数据库时，不会做数据路由，直接操作管理库
 		if (StringUtils.isNotEmpty(schema) && mgrdb == false) {
 			MetaObject metaStatementHandler = SystemMetaObject.forObject(statementHandler);  
