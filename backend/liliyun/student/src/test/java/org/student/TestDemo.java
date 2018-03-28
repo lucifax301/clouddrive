@@ -37,6 +37,6 @@ public class TestDemo {
 		RequestContext.put(ConstantUtil.USER_SESSION, user);
 		System.out.println("###############################xx");
 		theoryLessonMapper.selectByPrimaryKey(1);
-		
+		theoryLessonMapper.selectLesson(null);
 	}
 }

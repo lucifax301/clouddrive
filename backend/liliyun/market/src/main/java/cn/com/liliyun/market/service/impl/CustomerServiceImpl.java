@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageInfo;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.market.mapper.CustomerRecordMapper;
@@ -38,10 +40,10 @@ public class CustomerServiceImpl implements CustomerService {
 //	private CustomerStatMapper customerStatMapper;
 
 	@Override
-	public ResultBean addCustomerRecord(CustomerRecord customerRecord, User user) {
+	public ResultBean addCustomerRecord(CustomerRecord customerRecord) {
 		ResultBean r = new ResultBean();
 		
-		customerRecord.setDblink(user.getDblink());
+		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
 		customerRecord.setCuid(user.getId());
 		customerRecord.setCname(user.getRealname());
 		customerRecordMapper.insertSelective(customerRecord);
@@ -50,15 +52,15 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public ResultBean getCustomerRecord(CustomerRecord customerRecord, User user) {
+	public ResultBean getCustomerRecord(CustomerRecord customerRecord) {
 		ResultBean r = new ResultBean();
 		
 		Map<String, Object> map = new HashMap<>();
-		map.put("dblink", user.getDblink());
+		
 		CustomerRecord cr = customerRecordMapper.selectByPrimaryKey(map);
 		List<CustomerRecord> crList = null;
 		if (cr != null)
-			crList = getCustomerRecordByStuID(cr.getStudentid(), user);
+			crList = getCustomerRecordByStuID(cr.getStudentid());
 		map.clear();
 		map.put("record", cr);
 		map.put("history", crList);
@@ -68,11 +70,11 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public ResultBean getCustomerRecordList(CustomerRecord customerRecord, User user) {
+	public ResultBean getCustomerRecordList(CustomerRecord customerRecord) {
 		ResultBean r = new ResultBean();
 		
 		PageUtil.startPage(customerRecord);
-		customerRecord.setDblink(user.getDblink());
+		
 		List<CustomerRecord> list = customerRecordMapper.selectlist(customerRecord);
 		r.setResult(new PageInfo<CustomerRecord>(list));
 		
@@ -80,23 +82,21 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public ResultBean editCustomerRecord(CustomerRecord customerRecord, User user) {
+	public ResultBean editCustomerRecord(CustomerRecord customerRecord) {
 		ResultBean r = new ResultBean();
 		
-		customerRecord.setDblink(user.getDblink());
 		customerRecordMapper.updateByPrimaryKeySelective(customerRecord);
 		
 		return r;
 	}
 
 	@Override
-	public List<CustomerRecord> getCustomerRecordByStuID(Integer studentid, User user) {
+	public List<CustomerRecord> getCustomerRecordByStuID(Integer studentid) {
 		List<CustomerRecord> r = null;
 		
 		if (studentid != null) {
 			CustomerRecord customerRecord = new CustomerRecord();
 			customerRecord.setStudentid(studentid);
-			customerRecord.setDblink(user.getDblink());
 			r = customerRecordMapper.selectlist(customerRecord);
 		}
 		
@@ -104,7 +104,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public ResultBean handleCustomerRecord(CustomerRecord customerRecord, User user) {
+	public ResultBean handleCustomerRecord(CustomerRecord customerRecord) {
 		ResultBean r = new ResultBean();
 		
 		String [] ids = customerRecord.getIds().split(",");
@@ -114,18 +114,16 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
-		map.put("dblink", user.getDblink());
 		customerRecordMapper.handleRecordBatch(map);
 		
 		return r;
 	}
 
 	@Override
-	public List<CustomerRecord> getCustomerRecordExport(CustomerRecord customerRecord, User user) {
+	public List<CustomerRecord> getCustomerRecordExport(CustomerRecord customerRecord) {
 		List<CustomerRecord> r = null;
 		
 		if (customerRecord != null) {
-			customerRecord.setDblink(user.getDblink());
 			r = customerRecordMapper.selectlist(customerRecord);
 		}
 		
@@ -133,10 +131,10 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public ResultBean addPotentialCustomer(PotentialCustomer potentialCustomer, User user) {
+	public ResultBean addPotentialCustomer(PotentialCustomer potentialCustomer) {
 		ResultBean r = new ResultBean();
 		
-		potentialCustomer.setDblink(user.getDblink());
+		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
 		potentialCustomer.setCuid(user.getId());
 		potentialCustomer.setCname(user.getRealname());
 		potentialCustomerMapper.insertSelective(potentialCustomer);
@@ -145,11 +143,10 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public ResultBean getPotentialCustomerList(PotentialCustomer potentialCustomer, User user) {
+	public ResultBean getPotentialCustomerList(PotentialCustomer potentialCustomer) {
 		ResultBean r = new ResultBean();
 		
 		PageUtil.startPage(potentialCustomer);
-		potentialCustomer.setDblink(user.getDblink());
 		List<PotentialCustomer> list = potentialCustomerMapper.selectList(potentialCustomer);
 		r.setResult(new PageInfo<PotentialCustomer>(list));
 		
@@ -157,27 +154,25 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public ResultBean editPotentialCustomer(PotentialCustomer potentialCustomer, User user) {
+	public ResultBean editPotentialCustomer(PotentialCustomer potentialCustomer) {
 		ResultBean r = new ResultBean();
 		
-		potentialCustomer.setDblink(user.getDblink());
 		potentialCustomerMapper.updateByPrimaryKeySelective(potentialCustomer);
 		
 		return r;
 	}
 
 	@Override
-	public List<PotentialCustomer> getPotentialCustomerExport(PotentialCustomer potentialCustomer, User user) {
+	public List<PotentialCustomer> getPotentialCustomerExport(PotentialCustomer potentialCustomer) {
 		List<PotentialCustomer> list = null;
 		
-		potentialCustomer.setDblink(user.getDblink());
 		list = potentialCustomerMapper.selectList(potentialCustomer);
 		
 		return list;
 	}
 
 	@Override
-	public List<CustomerStat> getChannelNewStuStat(CustomerStat customerStat, User user) {
+	public List<CustomerStat> getChannelNewStuStat(CustomerStat customerStat) {
 		return new ArrayList<>();
 //		customerStat.setDblink(user.getDblink());
 //		List<CustomerStat> list = customerStatMapper.selectChannelNewStuStat(customerStat);
@@ -205,12 +200,12 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<CustomerStat> getPotentialNewStuStat(CustomerStat customerStat, User user) {
+	public List<CustomerStat> getPotentialNewStuStat(CustomerStat customerStat) {
 		return new ArrayList<>();
 	}
 
 	@Override
-	public List<CustomerStat> getNewStuStat(CustomerStat customerStat, User user) {
+	public List<CustomerStat> getNewStuStat(CustomerStat customerStat) {
 		return new ArrayList<>();
 	}
 }

@@ -22,7 +22,7 @@ public interface OrderExamService {
 	
 	public List<OrderExamItem> listItem(OrderExamItem orderExamItem);
 	
-	public ResultBean add(User user, List <OrderExamItem> list);
+	public ResultBean add(List <OrderExamItem> list);
 	
-	public Map<String,Object> importData(User user, List <OrderExamItem> list);
+	public Map<String,Object> importData(List <OrderExamItem> list);
 }

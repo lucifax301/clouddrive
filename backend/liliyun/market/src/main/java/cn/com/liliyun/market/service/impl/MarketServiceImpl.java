@@ -78,7 +78,7 @@ public class MarketServiceImpl implements MarketService {
 	
 	
 	@Override
-	public List<MarketActivity> listExportActivity(MarketActivity activity,User user) {
+	public List<MarketActivity> listExportActivity(MarketActivity activity) {
 		List<MarketActivity> list= marketMapper.listMarket(activity);
 		
 		List<Area> areas= areaService.selectAllList(null);

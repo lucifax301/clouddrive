@@ -1,7 +1,9 @@
 package cn.com.liliyun.exam.service.impl;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.common.util.SubjectEnum;
 import cn.com.liliyun.exam.mapper.TrainExamItemMapper;
@@ -12,6 +14,7 @@ import cn.com.liliyun.student.service.StudentService;
 import cn.com.liliyun.trainorg.model.*;
 import cn.com.liliyun.trainorg.service.TrainExamService;
 import cn.com.liliyun.user.model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,16 +50,16 @@ public class TrainExamServiceImpl implements TrainExamService {
 	}
 
 	@Override
-	public ResultBean add(User user, List<TrainExamItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean add(List<TrainExamItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 
 		StudentStatusLog studentStatusLog = new StudentStatusLog();
-		studentStatusLog.setDblink(dblink);
+	
 
 		Student result;
 		int ok = 0, fail = 0;
@@ -98,11 +101,11 @@ public class TrainExamServiceImpl implements TrainExamService {
 		if (list.size() > 0) {
 		    Integer subject = list.get(0).getSubject();
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = trainExamItemMapper.insertBatch(params);
 			TrainExam trainExam = new TrainExam();
-			trainExam.setDblink(dblink);
+			
 			trainExam.setTableid(tableId);
 			trainExam.setSubject(subject);
 			trainExam.setItemcount(count);
@@ -119,16 +122,16 @@ public class TrainExamServiceImpl implements TrainExamService {
 	}
 
 	@Override
-	public Map<String, Object> importData(User user, List<TrainExamItem> list) {
-		String dblink = user.getDblink();
+	public Map<String, Object> importData(List<TrainExamItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 
 		StudentStatusLog studentStatusLog = new StudentStatusLog();
-		studentStatusLog.setDblink(dblink);
+		
 		StringBuilder sb = new StringBuilder();
 		Student result;
 		int ok = 0, fail = 0;
@@ -183,11 +186,11 @@ public class TrainExamServiceImpl implements TrainExamService {
 		if (list.size() > 0) {
             Integer subject = list.get(0).getSubject();
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = trainExamItemMapper.insertBatch(params);
 			TrainExam trainExam = new TrainExam();
-			trainExam.setDblink(dblink);
+			
 			trainExam.setTableid(tableId);
 			trainExam.setSubject(subject);
 			trainExam.setItemcount(count);

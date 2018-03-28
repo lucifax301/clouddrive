@@ -1,11 +1,13 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.student.model.Transfertable;
-import cn.com.liliyun.student.model.TransfertableItem;
-import cn.com.liliyun.student.service.TransfertableService;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jeecgframework.poi.excel.ExcelExportUtil;
@@ -20,12 +22,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.student.model.Transfertable;
+import cn.com.liliyun.student.model.TransfertableItem;
+import cn.com.liliyun.student.service.TransfertableService;
+
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @ResponseBody
@@ -40,7 +43,7 @@ public class TransfertableController extends BaseController {
 	@RequestMapping(value="/list")
 	public ResultBean list(HttpServletRequest request, Transfertable transfertable) {
 		ResultBean rb = new ResultBean();
-		List<Transfertable> list = transfertableService.list(getUser(request),transfertable);
+		List<Transfertable> list = transfertableService.list(transfertable);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -48,7 +51,7 @@ public class TransfertableController extends BaseController {
 	@RequestMapping(value="/itemlist")
 	public ResultBean itemlist(HttpServletRequest request,TransfertableItem transfertableItem) {
 		ResultBean rb = new ResultBean();
-		List<TransfertableItem> list = transfertableService.listItem(getUser(request),transfertableItem);
+		List<TransfertableItem> list = transfertableService.listItem(transfertableItem);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -57,7 +60,7 @@ public class TransfertableController extends BaseController {
 	public ResultBean storelist(HttpServletRequest request,String json) {
 		ResultBean rb = new ResultBean();
 		List <Transfertable> list = JSONObject.parseArray(json, Transfertable.class);
-		List <TransfertableItem> dataList = transfertableService.listAreaTransferItem(getUser(request), list);
+		List <TransfertableItem> dataList = transfertableService.listAreaTransferItem( list);
 		rb.setResult(new PageInfo<>(dataList));
 		return rb;
 	}
@@ -66,7 +69,7 @@ public class TransfertableController extends BaseController {
 	public ResultBean licenselist(HttpServletRequest request,String json) {
 		ResultBean rb = new ResultBean();
 		List <Transfertable> list = JSONObject.parseArray(json, Transfertable.class);
-		List <TransfertableItem> dataList = transfertableService.listLicenseTransferItem(getUser(request), list);
+		List <TransfertableItem> dataList = transfertableService.listLicenseTransferItem( list);
 		rb.setResult(new PageInfo<>(dataList));
 		return rb;
 	}
@@ -78,7 +81,7 @@ public class TransfertableController extends BaseController {
 	@RequestMapping(value="/storetransfer")
 	public ResultBean storetransfer(HttpServletRequest request,String json) {
 		List <TransfertableItem> list = JSONObject.parseArray(json, TransfertableItem.class);
-		return transfertableService.doStoreTransfer(getUser(request), list);
+		return transfertableService.doStoreTransfer( list);
 	}
 	
 	/**
@@ -89,7 +92,7 @@ public class TransfertableController extends BaseController {
 	public ResultBean areatransfer(HttpServletRequest request,String json) {
 		ResultBean rb = new ResultBean();
 		List <Transfertable> list = JSONObject.parseArray(json, Transfertable.class);
-		transfertableService.doAreaTranfer(getUser(request), list);
+		transfertableService.doAreaTranfer( list);
 		return rb;
 	}
 	
@@ -100,7 +103,7 @@ public class TransfertableController extends BaseController {
 	@RequestMapping(value="/licensetransfer")
 	public ResultBean licensetransfer(HttpServletRequest request,String json) {
 		List <TransfertableItem> list = JSONObject.parseArray(json, TransfertableItem.class);
-		return transfertableService.doStoreTransfer(getUser(request), list);
+		return transfertableService.doStoreTransfer( list);
 	}
 	
 	/**
@@ -110,7 +113,7 @@ public class TransfertableController extends BaseController {
 	@RequestMapping(value="/areareturn")
 	public ResultBean areareturn(HttpServletRequest request,String json,String rtnreason) {
 		List <TransfertableItem> list = JSONObject.parseArray(json, TransfertableItem.class);
-		return transfertableService.doAreaReturn(getUser(request), list, rtnreason);
+		return transfertableService.doAreaReturn( list, rtnreason);
 	}
 	
 	/**
@@ -120,7 +123,7 @@ public class TransfertableController extends BaseController {
 	@RequestMapping(value="/licensereturn")
 	public ResultBean licensereturn(HttpServletRequest request,String json,String rtnreason) {
 		List <TransfertableItem> list = JSONObject.parseArray(json, TransfertableItem.class);
-		return transfertableService.doLicenseReturn(getUser(request), list, rtnreason);
+		return transfertableService.doLicenseReturn( list, rtnreason);
 	}
 
 	/**
@@ -130,7 +133,7 @@ public class TransfertableController extends BaseController {
 	@RequestMapping(value="/licensereceive")
 	public ResultBean receive(HttpServletRequest request,String json) {
 		List <Transfertable> list = JSONObject.parseArray(json, Transfertable.class);
-		return transfertableService.doLicenseReceive(getUser(request),list);	
+		return transfertableService.doLicenseReceive(list);	
 	}
 
 	

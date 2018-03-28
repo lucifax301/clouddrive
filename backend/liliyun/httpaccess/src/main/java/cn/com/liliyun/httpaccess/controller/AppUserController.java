@@ -711,8 +711,8 @@ public class AppUserController {
 		ResultBean r = new ResultBean();
 		try {
 			CustomerStat customerStat = new CustomerStat();
-			User user = new User();
-			List<CustomerStat> customerStatlist =  customerService.getChannelNewStuStat(customerStat, user);
+			
+			List<CustomerStat> customerStatlist =  customerService.getChannelNewStuStat(customerStat);
 			if (customerStatlist != null && customerStatlist.size() > 0) {
 				r.setResult(customerStatlist);
 			}
@@ -746,8 +746,8 @@ public class AppUserController {
 		ResultBean r = new ResultBean();
 		try {
 			CustomerStat customerStat = new CustomerStat();
-			User user = new User();
-			List<CustomerStat> customerStatlist =  customerService.getPotentialNewStuStat(customerStat, user);
+			
+			List<CustomerStat> customerStatlist =  customerService.getPotentialNewStuStat(customerStat);
 			if (customerStatlist != null && customerStatlist.size() > 0) {
 				r.setResult(customerStatlist);
 			}
@@ -781,8 +781,8 @@ public class AppUserController {
 		ResultBean r = new ResultBean();
 		try {
 			CustomerStat customerStat = new CustomerStat();
-			User user = new User();
-			List<CustomerStat> customerStatlist =  customerService.getNewStuStat(customerStat, user);
+			
+			List<CustomerStat> customerStatlist =  customerService.getNewStuStat(customerStat);
 			if (customerStatlist != null && customerStatlist.size() > 0) {
 				r.setResult(customerStatlist);
 			}
@@ -817,7 +817,7 @@ public class AppUserController {
 	    try
 	    {
 	      FinanceAppStat financeAppStat = new FinanceAppStat();
-	      User user = new User();
+	      
 	      Map<String, Object> financeAppStatList = this.financeService.getIncomeStat(financeAppStat);
 	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
 	        r.setResult(financeAppStatList);
@@ -855,7 +855,7 @@ public class AppUserController {
 	    try
 	    {
 	      FinanceAppStat financeAppStat = new FinanceAppStat();
-	      User user = new User();
+	      
 	      Map<String, Object> financeAppStatList = this.financeService.getOutcomeStat(financeAppStat);
 	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
 	        r.setResult(financeAppStatList);
@@ -893,7 +893,7 @@ public class AppUserController {
 	    try
 	    {
 	      FinanceAppStat financeAppStat = new FinanceAppStat();
-	      User user = new User();
+	     
 	      Map<String, Object> financeAppStatList = this.financeService.getOwemoneyStat(financeAppStat);
 	      if ((financeAppStatList != null) && (financeAppStatList.size() > 0)) {
 	        r.setResult(financeAppStatList);

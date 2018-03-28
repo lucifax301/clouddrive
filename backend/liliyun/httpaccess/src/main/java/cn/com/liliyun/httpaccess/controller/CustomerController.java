@@ -61,51 +61,48 @@ public class CustomerController extends BaseController{
 	
 	@RequestMapping(value = "addCustomerRecord", method = RequestMethod.POST)
 	public ResultBean addCustomerRecord(CustomerRecord customerRecord, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.addCustomerRecord(customerRecord, user);
+		return customerService.addCustomerRecord(customerRecord);
 	}
 	
 	@RequestMapping(value = "getCustomerRecord", method = RequestMethod.GET)
 	public ResultBean getCustomerRecord(CustomerRecord customerRecord, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.getCustomerRecord(customerRecord, user);
+		return customerService.getCustomerRecord(customerRecord);
 	}
 	
 	@RequestMapping(value = "customerRecordList", method = RequestMethod.GET)
 	public ResultBean getCustomerRecordList(CustomerRecord customerRecord, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.getCustomerRecordList(customerRecord, user);
+		return customerService.getCustomerRecordList(customerRecord);
 	}
 	
 	@RequestMapping(value = "editCustomerRecord", method = RequestMethod.POST)
 	public ResultBean editCustomerRecord(CustomerRecord customerRecord, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.editCustomerRecord(customerRecord, user);
+		
+		return customerService.editCustomerRecord(customerRecord);
 	}
 	
 	@RequestMapping(value = "handleCustomerRecord", method = RequestMethod.POST)
 	public ResultBean handleCustomerRecord(CustomerRecord customerRecord, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.handleCustomerRecord(customerRecord, user);
+		
+		return customerService.handleCustomerRecord(customerRecord);
 	}
 	
 	@RequestMapping(value = "customerHistory", method = RequestMethod.GET)
 	public ResultBean getCustomerHistory(CustomerRecord customerRecord, HttpServletRequest request) {
-		User user = getUser(request);
+		
 		ResultBean r = new ResultBean();
 		
-		r.setResult(customerService.getCustomerRecordByStuID(customerRecord.getStudentid(), user));
+		r.setResult(customerService.getCustomerRecordByStuID(customerRecord.getStudentid()));
 		
 		return r;
 	}
 	
 	@RequestMapping(value = "customerRecord/export")
     public ResponseEntity<byte[]> export(CustomerRecord customerRecord, HttpServletRequest request) throws IOException {
-    	User user = getUser(request);
-		List<CustomerRecord> list = customerService.getCustomerRecordExport(customerRecord, user);
-		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
-		Map<Integer, MapDTO> classMap = classService.getMap(ci);
+    	
+		List<CustomerRecord> list = customerService.getCustomerRecordExport(customerRecord);
+		
+		
+		Map<Integer, MapDTO> classMap = classService.getMap(null);
 		Map<Byte, String> stateMap = new HashMap<>();
 		stateMap.put((byte) 0, "未处理");
 		stateMap.put((byte) 1, "已处理");
@@ -199,38 +196,37 @@ public class CustomerController extends BaseController{
     
     @RequestMapping(value = "addPotentialCustomer", method = RequestMethod.POST)
 	public ResultBean addPotentialCustomer(PotentialCustomer potentialCustomer, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.addPotentialCustomer(potentialCustomer, user);
+		
+		return customerService.addPotentialCustomer(potentialCustomer);
 	}
 	
 	@RequestMapping(value = "potentialCustomerList", method = RequestMethod.GET)
 	public ResultBean getPotentialCustomerList(PotentialCustomer potentialCustomer, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.getPotentialCustomerList(potentialCustomer, user);
+		
+		return customerService.getPotentialCustomerList(potentialCustomer);
 	}
 	
 	@RequestMapping(value = "editPotentialCustomer", method = RequestMethod.POST)
 	public ResultBean editPotentialCustomer(PotentialCustomer potentialCustomer, HttpServletRequest request) {
-		User user = getUser(request);
-		return customerService.editPotentialCustomer(potentialCustomer, user);
+		
+		return customerService.editPotentialCustomer(potentialCustomer);
 	}
 	
 	@RequestMapping(value = "potentialCustomer/export")
     public ResponseEntity<byte[]> potentialCustomerExport(PotentialCustomer potentialCustomer, HttpServletRequest request) throws IOException {
-    	User user = getUser(request);
-		List<PotentialCustomer> list = customerService.getPotentialCustomerExport(potentialCustomer, user);
+    	
+		List<PotentialCustomer> list = customerService.getPotentialCustomerExport(potentialCustomer);
 		
 		
 		
-		Area pa=new Area();
-		pa.setDblink(user.getDblink());
-		Map<Integer, MapDTO> areaMap = areaService.getMap(pa);
-		Store ps=new Store();
-		ps.setDblink(user.getDblink());
-		Map<Integer, MapDTO> storeMap = storeService.getMap(ps);
+		
+		
+		Map<Integer, MapDTO> areaMap = areaService.getMap(null);
+		
+		Map<Integer, MapDTO> storeMap = storeService.getMap(null);
 		
 		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
+		
 		Map<Integer, MapDTO> classMap = classService.getMap(ci);
 		
 		Map<Byte, String> infosourceMap = new HashMap<>(); // 等确定后添加信息来源的映射

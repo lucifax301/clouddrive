@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.SubjectEnum;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.exam.mapper.OrderExamItemMapper;
@@ -54,12 +57,12 @@ public class OrderExamServiceImpl implements OrderExamService {
     }
 
     @Override
-	public ResultBean add(User user, List<OrderExamItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean add(List<OrderExamItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
         Date now = new Date();
         String tableId = user.getBatchId();
         Student query = new Student();
-        query.setDblink(dblink);
+        
         Student result;
         Iterator<OrderExamItem> iterator = list.iterator();
         int ok = 0, fail = 0, change = 0;
@@ -91,7 +94,7 @@ public class OrderExamServiceImpl implements OrderExamService {
                 if (item.getChangedate() == 1) {
                     change++;
                     OrderExamItem oei = new OrderExamItem();
-                    oei.setDblink(dblink);
+                    
                     oei.setSubject(item.getSubject());
                     oei.setResult(item.getResult());
                     oei.setStudentid(item.getStudentid());
@@ -117,11 +120,11 @@ public class OrderExamServiceImpl implements OrderExamService {
 		if (list.size() > 0) {
             Integer subject = list.get(0).getSubject();
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = orderExamItemMapper.insertBatch(params);
 			OrderExam orderExam = new OrderExam();
-			orderExam.setDblink(dblink);
+			
 			orderExam.setTableid(tableId);
 			orderExam.setAreaid(user.getAreaid());
 			orderExam.setStoreid(user.getStoreid());
@@ -170,14 +173,14 @@ public class OrderExamServiceImpl implements OrderExamService {
 	}
 
 	@Override
-	public Map<String,Object> importData(User user, List<OrderExamItem> list) {
-		String dblink = user.getDblink();
+	public Map<String,Object> importData(List<OrderExamItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		StudentStatusLog studentStatusLog = new StudentStatusLog();
-		studentStatusLog.setDblink(dblink);
+		
 		Student result;
 		StringBuilder sb = new StringBuilder();
 		Iterator<OrderExamItem> iterator = list.iterator();
@@ -228,7 +231,7 @@ public class OrderExamServiceImpl implements OrderExamService {
 			if (item.getChangedate() == 1) {
 				change++;
 				OrderExamItem oei = new OrderExamItem();
-				oei.setDblink(dblink);
+				
 				oei.setSubject(item.getSubject());
 				oei.setResult(item.getResult());
 				oei.setStudentid(item.getStudentid());
@@ -251,11 +254,11 @@ public class OrderExamServiceImpl implements OrderExamService {
 		if (list.size() > 0) {
             Integer subject = list.get(0).getSubject();
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = orderExamItemMapper.insertBatch(params);
 			OrderExam orderExam = new OrderExam();
-			orderExam.setDblink(dblink);
+			
 			orderExam.setTableid(tableId);
 			orderExam.setAreaid(user.getAreaid());
 			orderExam.setStoreid(user.getStoreid());

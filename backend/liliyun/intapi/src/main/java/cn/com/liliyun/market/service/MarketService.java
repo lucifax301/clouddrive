@@ -13,7 +13,7 @@ public interface MarketService {
 	
 	public List<MarketActivity> listActivity(MarketActivity activity);
 	
-	public List<MarketActivity> listExportActivity(MarketActivity activity,User user);
+	public List<MarketActivity> listExportActivity(MarketActivity activity);
 	
 	public ResultBean updateMarketActivity(MarketActivity activity);
 	

@@ -665,9 +665,9 @@ public class EnrolStatController extends BaseController{
 	@RequestMapping(value="/performance/staff")
 	public ResultBean performanceStaff(PerformanceParam param,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		try{
-			List<StaffPerformanceStat> areastat=performanceService.staffstat(param, user);
+			List<StaffPerformanceStat> areastat=performanceService.staffstat(param);
 			rb.setResult(areastat);
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -679,9 +679,9 @@ public class EnrolStatController extends BaseController{
 	@RequestMapping(value="/performance/coach")
 	public ResultBean performanceCoach(PerformanceParam param,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		try{
-			List<CoachPerformanceStat> areastat=performanceService.coachstat(param, user);
+			List<CoachPerformanceStat> areastat=performanceService.coachstat(param);
 			rb.setResult(areastat);
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -693,9 +693,9 @@ public class EnrolStatController extends BaseController{
 	@RequestMapping(value="/performance/coach/export")
 	public ResponseEntity<byte[]> performanceCoachExport(PerformanceParam param,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		try{
-			List<CoachPerformanceStat> areastat=performanceService.coachstat(param, user);
+			List<CoachPerformanceStat> areastat=performanceService.coachstat(param);
 			Workbook wb = getPerformanceCoachWorkbook(areastat);
 			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();

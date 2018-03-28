@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-@DBRoute("test")
+
 public interface TheoryLessonMapper {
     int countByExample(TheoryLessonExample example);
 

@@ -63,7 +63,7 @@ public class SalesChannelController extends BaseController{
 		ResultBean rb = new ResultBean();
 		try{
 			
-			User user=AccessWebUtil.getSessionUser(request);
+			
 			String channel=request.getParameter("channel");
 			String coachflag=request.getParameter("coachflag");
 			String staffflag=request.getParameter("staffflag");
@@ -71,8 +71,7 @@ public class SalesChannelController extends BaseController{
 			List<SalesChannel> channels=JSONObject.parseArray(data,SalesChannel.class);
 			SalesChannel cct=new SalesChannel();
 			cct.setChannel(channel);
-			cct.setUserid(user.getId());
-			cct.setCuser(user.getUsername());
+			
 			cct.setData(channels);
 			if(coachflag!=null&&!"".equals(coachflag)){
 				cct.setCoachflag(Integer.parseInt(coachflag));
@@ -81,9 +80,7 @@ public class SalesChannelController extends BaseController{
 				cct.setStaffflag(Integer.parseInt(staffflag));
 			}
 			
-//			type.setUserId(user.getId());
-//			System.out.println("==========="+type.getClassinfo());
-			salesChannelService.addChannel(cct,user);
+			salesChannelService.addChannel(cct);
 		}catch(Exception ex){
 			logger.error(ex);
 			ex.printStackTrace();
@@ -112,8 +109,6 @@ public class SalesChannelController extends BaseController{
 		
 		try{
 			
-			User user=AccessWebUtil.getSessionUser(request);
-			
 			String channel=request.getParameter("channel");
 			String data=request.getParameter("channels");
 			String coachflag=request.getParameter("coachflag");
@@ -122,7 +117,7 @@ public class SalesChannelController extends BaseController{
 			List<SalesChannel> classinfo=JSONObject.parseArray(data,SalesChannel.class);
 			SalesChannel cct=new SalesChannel();
 			cct.setChannel(channel);
-			cct.setUserid(user.getId());
+			
 			cct.setData(classinfo);
 			cct.setId(Integer.parseInt(id));
 			if(coachflag!=null&&!"".equals(coachflag)){
@@ -132,7 +127,7 @@ public class SalesChannelController extends BaseController{
 				cct.setStaffflag(Integer.parseInt(staffflag));
 			}
 			
-			salesChannelService.updateChannel(cct,user);
+			salesChannelService.updateChannel(cct);
 			return new ResultBean();
 		}catch(Exception ex){
 			ex.printStackTrace();

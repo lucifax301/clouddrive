@@ -11,8 +11,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.student.mapper.StudentMapper;
 import cn.com.liliyun.student.mapper.StudentStatusLogMapper;
@@ -43,13 +45,13 @@ public class TransfertableServiceImpl implements TransfertableService {
 	private StudentStatusLogMapper studentStatusLogMapper;
 
 	@Override
-	public List<Transfertable> list(User user, Transfertable transfertable) {
+	public List<Transfertable> list(Transfertable transfertable) {
 		PageUtil.startPage(transfertable);
 		return transfertableMapper.selectList(transfertable);
 	}
 
 	@Override
-	public List<TransfertableItem> listItem(User user, TransfertableItem transfertableItem) {
+	public List<TransfertableItem> listItem(TransfertableItem transfertableItem) {
 		return transfertableItemMapper.selectList(transfertableItem);
 	}
 
@@ -60,11 +62,11 @@ public class TransfertableServiceImpl implements TransfertableService {
 	 * @return
 	 */
 	@Override
-	public ResultBean doStoreTransfer(User user, List<TransfertableItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doStoreTransfer(List<TransfertableItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String tableId = user.getBatchId();
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		Iterator <TransfertableItem> iterator = list.iterator();
 		List <Student> photobackUpdateList = new ArrayList<>();
 		List <StudentStatusLog> logList = new ArrayList<>();
@@ -91,7 +93,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 				studentStatusLog.setTableid(tableId);
 				studentStatusLog.setSubject(ApplyExam.SIGNUP_MATERIAL_STORE.getSubject());
 				studentStatusLog.setSubjectname(ApplyExam.SIGNUP_MATERIAL_STORE.getName());
-				addList(user,logList,studentStatusLog);
+				addList(logList,studentStatusLog);
 			} else {
 				iterator.remove();
 			}
@@ -99,7 +101,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 
 		if (list.size() > 0) {
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = transfertableItemMapper.insertBatch(params);
 			//更新照片回执
@@ -110,7 +112,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 			studentStatusLogMapper.insertBatch(params);
 			//新增业务数据
 			Transfertable transfertable = new Transfertable();
-			transfertable.setDblink(dblink);
+			
 			transfertable.setTableid(tableId);
 			transfertable.setItemcount(count);
 			transfertable.setCorrectnum(count);
@@ -131,11 +133,11 @@ public class TransfertableServiceImpl implements TransfertableService {
 	 * @return
 	 */
 	@Override
-	public List<TransfertableItem> listAreaTransferItem(User user, List<Transfertable> list) {
+	public List<TransfertableItem> listAreaTransferItem(List<Transfertable> list) {
 		List<TransfertableItem> dataList = new ArrayList<>();
 		for (Transfertable t : list) {
 			TransfertableItem item = new TransfertableItem();
-			item.setDblink(user.getDblink());
+			
 			item.setStatus(0); // 只查询正常的学员
 			item.setTableid(t.getTableid());
 			List<TransfertableItem> itemList = transfertableItemMapper.selectList(item);
@@ -151,11 +153,11 @@ public class TransfertableServiceImpl implements TransfertableService {
 	 * @return
 	 */
 	@Override
-	public List<TransfertableItem> listLicenseTransferItem(User user, List<Transfertable> list) {
+	public List<TransfertableItem> listLicenseTransferItem(List<Transfertable> list) {
 		List<TransfertableItem> dataList = new ArrayList<>();
 		for (Transfertable t : list) {
 			TransfertableItem item = new TransfertableItem();
-			item.setDblink(user.getDblink());
+			
 			item.setStatus(0); // 只查询正常的学员
 			item.setAreatableid(t.getTableid()); //只看片区提交上来的数据
 			List<TransfertableItem> itemList = transfertableItemMapper.selectList(item);
@@ -165,13 +167,13 @@ public class TransfertableServiceImpl implements TransfertableService {
 	}
 
 	@Override
-	public ResultBean doAreaTranfer(User user, List<Transfertable> list) {
-		String dblink = user.getDblink();
+	public ResultBean doAreaTranfer(List<Transfertable> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		String tableId = user.getBatchId();
 		TransfertableItem item = new TransfertableItem();
-		item.setDblink(dblink);
+		
 		Map<String, Object> params = new HashMap<>();
-		params.put("dblink", dblink);
+		
 		int count = 0;
 		List <StudentStatusLog> logList = new ArrayList<>();
 		for (Transfertable t : list) {
@@ -188,7 +190,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 					studentStatusLog.setTableid(tableId);
 					studentStatusLog.setSubject(ApplyExam.SIGNUP_MATERIAL_AREA.getSubject());
 					studentStatusLog.setSubjectname(ApplyExam.SIGNUP_MATERIAL_AREA.getName());
-					addList(user,logList,studentStatusLog);
+					addList(logList,studentStatusLog);
 				}
 				params.put("list", itemList);
 				int i = transfertableItemMapper.updateTableIdBatch(params);
@@ -201,7 +203,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 			studentStatusLogMapper.insertBatch(params);
 			
 			Transfertable transfertable = new Transfertable(); //生成新的批次信息
-			transfertable.setDblink(dblink);
+			
 			transfertable.setTableid(tableId);
 			transfertable.setItemcount(count);
 			transfertable.setCorrectnum(count);
@@ -216,14 +218,14 @@ public class TransfertableServiceImpl implements TransfertableService {
 	}
 
 	@Override
-	public ResultBean doAreaReturn(User user, List<TransfertableItem> list, String rtnreason) {
-		String dblink = user.getDblink();
+	public ResultBean doAreaReturn(List<TransfertableItem> list, String rtnreason) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Transfertable transfertable = new Transfertable();
-		transfertable.setDblink(dblink);
+		
 		Map<String, Object> params = new HashMap<>();
-		params.put("dblink", dblink);
+		
 		TransfertableItem transfertableItem = new TransfertableItem();
-		transfertableItem.setDblink(dblink);
+		
 		List <StudentStatusLog> logList = new ArrayList<>();
 		for (TransfertableItem item : list) {
 			transfertableItem.setTableid(item.getTableid());
@@ -241,7 +243,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 			studentStatusLog.setTableid(item.getTableid());
 			studentStatusLog.setSubject(ApplyExam.SIGNUP_MATERIAL_RETURN.getSubject());
 			studentStatusLog.setSubjectname(ApplyExam.SIGNUP_MATERIAL_RETURN.getName());
-			addList(user,logList,studentStatusLog);
+			addList(logList,studentStatusLog);
 		}
 		
 		if (logList.size() > 0) {
@@ -253,12 +255,12 @@ public class TransfertableServiceImpl implements TransfertableService {
 	}
 
 	@Override
-	public ResultBean doLicenseReturn(User user, List<TransfertableItem> list, String rtnreason) {
-		String dblink = user.getDblink();
+	public ResultBean doLicenseReturn(List<TransfertableItem> list, String rtnreason) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Transfertable transfertable = new Transfertable();
-		transfertable.setDblink(dblink);
+		
 		TransfertableItem transfertableItem = new TransfertableItem();
-		transfertableItem.setDblink(dblink);
+		
 		List <StudentStatusLog> logList = new ArrayList<>();
 		for (TransfertableItem item : list) {
 			transfertableItem.setAreatableid(item.getAreatableid());
@@ -278,12 +280,12 @@ public class TransfertableServiceImpl implements TransfertableService {
 			studentStatusLog.setTableid(item.getTableid());
 			studentStatusLog.setSubject(ApplyExam.SIGNUP_MATERIAL_RETURN.getSubject());
 			studentStatusLog.setSubjectname(ApplyExam.SIGNUP_MATERIAL_RETURN.getName());
-			addList(user,logList,studentStatusLog);
+			addList(logList,studentStatusLog);
 		}
 		if (logList.size() > 0) {
 			//跟新进度
 			Map <String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", logList);
 			studentStatusLogMapper.insertBatch(params);
 		}
@@ -291,12 +293,12 @@ public class TransfertableServiceImpl implements TransfertableService {
 	}
 
 	@Override
-	public ResultBean doLicenseReceive(User user, List <Transfertable> list) {
-		String dblink = user.getDblink();
+	public ResultBean doLicenseReceive(List <Transfertable> list) {
+		
 		Map<String, Object> params = new HashMap<>();
-		params.put("dblink", dblink);
+		
 		TransfertableItem item = new TransfertableItem();
-		item.setDblink(dblink);
+		
 		List <StudentStatusLog> logList = new ArrayList<>();
 		for (Transfertable t : list) {
 			item.setTableid(t.getTableid());
@@ -311,11 +313,11 @@ public class TransfertableServiceImpl implements TransfertableService {
 					studentStatusLog.setTableid(item.getTableid());
 					studentStatusLog.setSubject(ApplyExam.SIGNUP_MATERIAL_SHCOOL.getSubject());
 					studentStatusLog.setSubjectname(ApplyExam.SIGNUP_MATERIAL_SHCOOL.getName());
-					addList(user,logList,studentStatusLog);
+					addList(logList,studentStatusLog);
 				}
 			}
 			Transfertable update = new Transfertable();
-			update.setDblink(dblink);
+			
 			update.setTableid(t.getTableid());
 			update.setStatus(4);
 			transfertableMapper.updateByPrimaryKeySelective(update);
@@ -328,7 +330,8 @@ public class TransfertableServiceImpl implements TransfertableService {
 		return new ResultBean();
 	}
 
-	private void addList(User user,List <StudentStatusLog> list,StudentStatusLog studentStatusLog) {
+	private void addList(List <StudentStatusLog> list,StudentStatusLog studentStatusLog) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		studentStatusLog.setCuid(user.getId());
 		studentStatusLog.setCname(user.getRealname());
 		studentStatusLog.setCtime(new Date());

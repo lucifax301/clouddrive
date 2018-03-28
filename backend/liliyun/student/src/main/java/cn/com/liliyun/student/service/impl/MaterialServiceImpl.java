@@ -1,7 +1,9 @@
 package cn.com.liliyun.student.service.impl;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.student.mapper.MaterialItemMapper;
 import cn.com.liliyun.student.mapper.MaterialMapper;
@@ -14,6 +16,7 @@ import cn.com.liliyun.student.model.StudentStatusLog;
 import cn.com.liliyun.student.service.MaterialService;
 import cn.com.liliyun.student.service.StudentService;
 import cn.com.liliyun.user.model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,16 +52,16 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public ResultBean doLearncard(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doLearncard(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		
 		Student update = new Student();
-		update.setDblink(dblink);
+		
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -97,7 +100,7 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -108,7 +111,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -119,13 +122,11 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 	
 	@Override
-	public ResultBean doApplyStamp(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doApplyStamp(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
-		
 		Student query = new Student();
-		query.setDblink(dblink);
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -160,7 +161,7 @@ public class MaterialServiceImpl implements MaterialService {
 		
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -171,7 +172,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -182,13 +183,13 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 	
 	@Override
-	public ResultBean doSchoolStamp(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doSchoolStamp(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student query = new Student();
-		query.setDblink(dblink);
+
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -221,7 +222,7 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -232,7 +233,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -243,15 +244,15 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public Map<String, Object> importIcCard(User user,List <MaterialItem> list) {
-		String dblink = user.getDblink();
+	public Map<String, Object> importIcCard(List <MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student update = new Student();
-		update.setDblink(dblink);
+		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		
 		StringBuilder sb = new StringBuilder();
 		int errorCount = 0 , total = list.size();
@@ -299,7 +300,7 @@ public class MaterialServiceImpl implements MaterialService {
 		
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", successList);
 			
 			int count = materialItemMapper.insertBatch(params);
@@ -312,7 +313,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -328,13 +329,13 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public ResultBean doTribillPrint(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doTribillPrint(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -367,7 +368,7 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -378,7 +379,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -389,13 +390,13 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 	
 	@Override
-	public ResultBean doTribillStamp(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doTribillStamp(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -429,7 +430,7 @@ public class MaterialServiceImpl implements MaterialService {
 		
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -440,7 +441,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -451,13 +452,13 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public ResultBean doRepayMaterial(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doRepayMaterial(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -491,7 +492,7 @@ public class MaterialServiceImpl implements MaterialService {
 		
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -502,7 +503,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -513,13 +514,13 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public ResultBean doRtnMaterial(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doRtnMaterial(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -552,7 +553,7 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -563,7 +564,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			
@@ -574,13 +575,13 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public ResultBean doLicense(User user, List<MaterialItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doLicense(List<MaterialItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		
 		Student result;
 		Iterator<MaterialItem> iterator = list.iterator();
@@ -620,7 +621,7 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = materialItemMapper.insertBatch(params);
 			Material material = new Material();
@@ -631,7 +632,7 @@ public class MaterialServiceImpl implements MaterialService {
 			material.setCname(user.getRealname());
 			material.setCuid(user.getId());
 			material.setCtime(now);
-			material.setDblink(dblink);
+			
 			material.setItemcount(count);
 			materialMapper.insertSelective(material);
 			

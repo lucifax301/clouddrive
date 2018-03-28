@@ -9,7 +9,6 @@ import cn.com.liliyun.trainorg.model.TrainExamItem;
 import cn.com.liliyun.trainorg.model.TrainExamItemDetailVo;
 import cn.com.liliyun.trainorg.model.TrainExamItemVo;
 import cn.com.liliyun.trainorg.model.TrainExamItemYearVo;
-import cn.com.liliyun.user.model.User;
 
 /**
  * 考试培训
@@ -21,9 +20,9 @@ public interface TrainExamService {
 	
 	public List<TrainExamItem> listOfCoach(TrainExamItem trainExam);
 	
-	public ResultBean add(User user, List <TrainExamItem> list);
+	public ResultBean add(List <TrainExamItem> list);
 	
-	public Map <String,Object> importData(User user, List <TrainExamItem> list);
+	public Map <String,Object> importData(List <TrainExamItem> list);
 	
 	public List<TrainExamItem> listItem(TrainExamItem trainExamItem);
 

@@ -9,12 +9,12 @@ import cn.com.liliyun.user.model.User;
 
 public interface FileService {
 
-	public List<File> list(User user,File file);
+	public List<File> list(File file);
 	
-	public ResultBean doHandleFile(User user, List <FileItem> list);
+	public ResultBean doHandleFile(List <FileItem> list);
 	
-	public List <FileItem> listItem(User user,FileItem fileItem);
+	public List <FileItem> listItem(FileItem fileItem);
 	
-	public ResultBean doStuFile(User user, List <FileItem> list);
+	public ResultBean doStuFile(List <FileItem> list);
 	
 }

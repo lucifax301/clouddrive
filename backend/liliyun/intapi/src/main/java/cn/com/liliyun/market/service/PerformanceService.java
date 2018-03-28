@@ -9,7 +9,7 @@ import cn.com.liliyun.user.model.User;
 
 public interface PerformanceService {
 
-	public List<CoachPerformanceStat> coachstat(PerformanceParam param,User user);
+	public List<CoachPerformanceStat> coachstat(PerformanceParam param);
 	
-	public List<StaffPerformanceStat> staffstat(PerformanceParam param,User user);
+	public List<StaffPerformanceStat> staffstat(PerformanceParam param);
 }

@@ -22,9 +22,9 @@ public interface KpiStatService {
 	
 	public List<KpiClassStat> statByClass(KpiClassStatParam param);
 	
-	public List<KpiCoachStat> statByCoach(KpiCoachStatParam param, User user) throws Exception;
+	public List<KpiCoachStat> statByCoach(KpiCoachStatParam param) ;
 	
-	public List<KpiStoreStat> statByStore(KpiStoreStatParam param, User user);
+	public List<KpiStoreStat> statByStore(KpiStoreStatParam param);
 	
 	public List<KpiHeadCoachStat> statByHeadCoach(KpiHeadCoachStatParam param);
 	

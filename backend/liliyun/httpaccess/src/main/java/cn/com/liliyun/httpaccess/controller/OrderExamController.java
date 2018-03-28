@@ -86,7 +86,7 @@ public class OrderExamController extends BaseController {
 	@RequestMapping(value="/add")
 	public ResultBean add(HttpServletRequest request, String json) {
 		List <OrderExamItem> list = JSONObject.parseArray(json, OrderExamItem.class);
-		return orderExamService.add(getUser(request), list);
+		return orderExamService.add(list);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,7 +102,7 @@ public class OrderExamController extends BaseController {
 			rb.setMsg("数据解析错误,请检查导入数据模板!");
 			return rb;
 		}
-		Map<String, Object> rtnData =  orderExamService.importData(getUser(request), list);
+		Map<String, Object> rtnData =  orderExamService.importData(list);
 		list = (List<OrderExamItem>) rtnData.get("errorlist");
 		if (list != null && list.size() > 0) {
 			ExportParams eparams = new ExportParams("预约考试导入错误数据", "错误数据", ExcelType.XSSF);//title sheetname 文件格式

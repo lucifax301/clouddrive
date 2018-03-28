@@ -67,11 +67,11 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private PrivilegeService privilegeService;
 	
-	@Autowired
-	private DefaultMQProducer dataProducer;
+//	@Autowired
+//	private DefaultMQProducer dataProducer;
 		
-	@Value("${data.synch}")
-	private boolean APP_SYNCH;
+//	@Value("${data.synch}")
+//	private boolean APP_SYNCH;
 	
 	/**
 	 * 通过邀请码，分配系统根账号，初始化数据库 
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 		}
 	
 		DbConfig dbConfig = new DbConfig();
-		dbConfig.setMgrdb(true);
+		
 		dbConfig = dbConfigMapper.selectDB(dbConfig);
 		if (dbConfig == null) {
 			rb.setCode(100);
@@ -136,7 +136,6 @@ public class UserServiceImpl implements UserService {
 		privilegeMapper.insertRoleUser(roleUser);
 		log.info("分配根账户角色...");
 		
-		//RequestContext.put(ConstantUtil.MRG, true);
 		//更新数据库配置信息
 		dbConfig.setMgrdb(true);
 		dbConfig.setSchoolid(r.getId());

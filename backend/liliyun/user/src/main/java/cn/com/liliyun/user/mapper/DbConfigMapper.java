@@ -1,7 +1,9 @@
 package cn.com.liliyun.user.mapper;
 
+import cn.com.liliyun.common.annotation.DBRoute;
 import cn.com.liliyun.user.model.DbConfig;
 
+@DBRoute("MRG")
 public interface DbConfigMapper {
     int deleteByPrimaryKey(Integer id);
 

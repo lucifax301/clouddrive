@@ -77,7 +77,7 @@ public class TrainExamController extends BaseController {
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public ResultBean add(HttpServletRequest request,String json) {
 		List <TrainExamItem> list = JSONObject.parseArray(json, TrainExamItem.class);
-		return trainExamService.add(getUser(request), list);
+		return trainExamService.add(list);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -93,7 +93,7 @@ public class TrainExamController extends BaseController {
 			rb.setMsg("数据解析错误,请检查导入数据模板!");
 			return rb;
 		}
-		Map<String, Object> rtnData =  trainExamService.importData(getUser(request), list);
+		Map<String, Object> rtnData =  trainExamService.importData(list);
 		list = (List<TrainExamItem>) rtnData.get("errorlist");
 		if (list != null && list.size() > 0) {
 			ExportParams eparams = new ExportParams("考试培训导入错误数据", "错误数据", ExcelType.XSSF);//title sheetname 文件格式

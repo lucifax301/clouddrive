@@ -2,6 +2,8 @@ package cn.com.liliyun.common.util;
 
 public class ConstantUtil {
 	
+	public static final String ROUTE_DB = "DB_ROUTE";
+	
 	public static final String MRG = "MGR";
 	//服务器主库连接
 	public static final String LILIYUN_DB = "liliyun";

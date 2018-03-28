@@ -3,9 +3,11 @@ package cn.com.liliyun.user.mapper;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.liliyun.common.annotation.DBRoute;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.vo.UserVo;
 
+@DBRoute("MRG")
 public interface UserMapper {
 
 	int deleteByPrimaryKey(User user);

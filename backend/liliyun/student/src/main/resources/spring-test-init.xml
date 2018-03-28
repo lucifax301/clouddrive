@@ -34,8 +34,15 @@
 		<property name="fileEncoding" value="utf-8" />
 	</bean>
 	<bean id="daoInterceptor" class="cn.com.liliyun.common.interceptor.DaoInterceptor"></bean>
+	<bean id="daoAspect" class="cn.com.liliyun.common.interceptor.DaoAspect"></bean>
 	<aop:config>
-		<aop:pointcut expression="execution(public * cn.com.liliyun.student.mapper.TheoryLessonMapper.selectByPrimaryKey(..))" id="testpointcut"/>
+		<!--  <aop:pointcut expression="execution(public * cn.com.liliyun.student.mapper.TheoryLessonMapper.selectByPrimaryKey(..))" id="testpointcut"/>-->
+		<aop:pointcut expression="execution(public * cn.com.liliyun.*.mapper.*.*(..))" id="testpointcut"/>
+		<!--  
+		<aop:aspect id="testAspect" ref="daoAspect">
+		<aop:before method="before"  pointcut-ref="testpointcut"/>
+		</aop:aspect>
+		-->
 		<aop:advisor advice-ref="daoInterceptor" pointcut-ref="testpointcut"/>
 	</aop:config>
 	<import resource="spring-test-dubbo.xml" />

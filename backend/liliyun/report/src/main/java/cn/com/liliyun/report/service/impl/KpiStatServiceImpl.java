@@ -45,7 +45,7 @@ import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.trainorg.service.AreaService;
 import cn.com.liliyun.trainorg.service.ClassinfoService;
 import cn.com.liliyun.trainorg.service.StoreService;
-import cn.com.liliyun.user.model.User;
+
 
 @SuppressWarnings("rawtypes")
 @Service
@@ -106,9 +106,8 @@ public class KpiStatServiceImpl implements KpiStatService {
 		//有考试成绩的人		
 		List<KpiAreaStatRecord> stats2= kpiAreaStatMapper.statByArea2(param);
 		Map<Integer,KpiAreaStat> areaStatMap=new HashMap();
-		Area pa=new Area();
-		pa.setDblink(param.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
+		
+		List<Area> areas= areaService.selectAllList(null);
 		for(KpiAreaStatRecord stat:stats){
 			if(!areaStatMap.containsKey(stat.getAreaid())){
 				KpiAreaStat kpiAreaStat=new KpiAreaStat();
@@ -215,13 +214,10 @@ public class KpiStatServiceImpl implements KpiStatService {
 		List<KpiClassStatRecord> stats= kpiClassStatMapper.statByArea1(param);
 		List<KpiClassStatRecord> stats2= kpiClassStatMapper.statByArea2(param);
 		Map<Integer,KpiClassStat> areaStatMap=new HashMap();
-		Area pa=new Area();
-		pa.setDblink(param.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
 		
-		Classinfo ci=new Classinfo();
-		ci.setDblink(param.getDblink());
-		List<Classinfo> classes= classinfoService.selectAllList(ci);
+		List<Area> areas= areaService.selectAllList(null);
+		
+		List<Classinfo> classes= classinfoService.selectAllList(null);
 		for(KpiClassStatRecord stat:stats){
 			if(!areaStatMap.containsKey(stat.getClassid())){
 				KpiClassStat kpiClassStat=new KpiClassStat();
@@ -313,7 +309,7 @@ public class KpiStatServiceImpl implements KpiStatService {
 	}
 
 	@Override
-	public List<KpiCoachStat> statByCoach(KpiCoachStatParam param, User user) throws Exception{
+	public List<KpiCoachStat> statByCoach(KpiCoachStatParam param) {
 		List<KpiCoachStatRecord> stats= kpiCoachStatMapper.statByArea1(param);
 		List<KpiCoachStatRecord> stats2= kpiCoachStatMapper.statByArea2(param);
 		Map<Integer,KpiCoachStat> areaStatMap=new HashMap();
@@ -325,7 +321,7 @@ public class KpiStatServiceImpl implements KpiStatService {
 		List<Store> stores= storeService.selectAllList(null);
 		
 		CoachTeachType ctt=new CoachTeachType();
-		ctt.setDblink(param.getDblink());
+		
 		
 		List<CoachTeachType> teachtypes= coachSettingService.listTeachType(ctt);
 		for(KpiCoachStatRecord stat:stats){
@@ -425,7 +421,7 @@ public class KpiStatServiceImpl implements KpiStatService {
 	}
 
 	@Override
-	public List<KpiStoreStat> statByStore(KpiStoreStatParam param, User user) {
+	public List<KpiStoreStat> statByStore(KpiStoreStatParam param) {
 		List<KpiStoreStatRecord> stats= kpiStoreStatMapper.statByArea1(param);
 		List<KpiStoreStatRecord> stats2= kpiStoreStatMapper.statByArea2(param);
 		Map<Integer,KpiStoreStat> areaStatMap=new HashMap();
@@ -512,9 +508,7 @@ public class KpiStatServiceImpl implements KpiStatService {
 		List<KpiHeadCoachStatRecord> stats2= kpiHeadCoachStatMapper.statByArea2(param);
 		Map<Integer,KpiHeadCoachStat> areaStatMap=new HashMap();
 		
-		Area pa=new Area();
-		pa.setDblink(param.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
+		List<Area> areas= areaService.selectAllList(null);
 		
 		
 		for(KpiHeadCoachStatRecord stat:stats){
@@ -588,13 +582,9 @@ public class KpiStatServiceImpl implements KpiStatService {
 		List<KpiExamStatRecord> stats2= kpiExamStatMapper.statByArea2(param);
 		Map<String,KpiExamStat> areaStatMap=new HashMap();
 		
-		Area pa=new Area();
-		pa.setDblink(param.getDblink());
-		List<Area> areas= areaService.selectAllList(pa);
+		List<Area> areas= areaService.selectAllList(null);
 		
-		Classinfo ci=new Classinfo();
-		ci.setDblink(param.getDblink());
-		List<Classinfo> classes= classinfoService.selectAllList(ci);
+		List<Classinfo> classes= classinfoService.selectAllList(null);
 		for(KpiExamStatRecord stat:stats){
 			if(!areaStatMap.containsKey(stat.getExam())){
 				KpiExamStat kpiExamStat=new KpiExamStat();

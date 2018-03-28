@@ -9,22 +9,21 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.liliyun.common.CommonService;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.market.mapper.SalesChannelMapper;
 import cn.com.liliyun.market.model.SalesChannel;
 import cn.com.liliyun.market.service.SalesChannelService;
-import cn.com.liliyun.student.service.StudentService;
 import cn.com.liliyun.user.model.User;
 
 @Service
-public class SalesChannelServiceImpl implements SalesChannelService {
+public class SalesChannelServiceImpl extends CommonService implements SalesChannelService {
 	
 	private static Logger logger=Logger.getLogger(SalesChannelServiceImpl.class);
 	
-	private String getMethodName(){
-		return Thread.currentThread().getStackTrace()[1].getMethodName();
-	}
 	
 	@Autowired
 	private SalesChannelMapper salesChannelMapper;
@@ -32,11 +31,14 @@ public class SalesChannelServiceImpl implements SalesChannelService {
 	//private StudentService studentService;
 	
 	@Override
-	public ResultBean addChannel(SalesChannel channel,User user) {
+	public ResultBean addChannel(SalesChannel channel) {
+		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
 		
+		channel.setUserid(user.getId());
+		channel.setCuser(user.getUsername());
 		channel.setParentid(0);
 		channel.setStatus(0);
-		channel.setDblink(user.getDblink());
+		
 		salesChannelMapper.addChannel(channel);
 		List<SalesChannel> channels= channel.getData();
 		if(channels!=null&&channels.size()>0){
@@ -48,7 +50,7 @@ public class SalesChannelServiceImpl implements SalesChannelService {
 				
 			Map params=new HashMap();
 			params.put("list", channels);
-			params.put("dblink", channel.getDblink());
+			
 			salesChannelMapper.batchAddChannel(params);
 		}
 			
@@ -57,15 +59,16 @@ public class SalesChannelServiceImpl implements SalesChannelService {
 	}
 
 	@Override
-	public ResultBean updateChannel(SalesChannel channel,User user) {
-		channel.setDblink(user.getDblink());
+	public ResultBean updateChannel(SalesChannel channel) {
+		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
+		channel.setUserid(user.getId());
 		SalesChannel oldone= salesChannelMapper.getChannel(channel);
-		channel.setDblink(user.getDblink());
+		
 		salesChannelMapper.updateChannel(channel);
 		List<SalesChannel> classinfo= channel.getData();
 		SalesChannel cf=new SalesChannel();
 		cf.setParentid(channel.getId());
-		cf.setDblink(user.getDblink());
+		
 		List<SalesChannel> eclassinfo=salesChannelMapper.listChannel(cf);
 		
 		List<SalesChannel> updates=new ArrayList();
@@ -106,13 +109,13 @@ public class SalesChannelServiceImpl implements SalesChannelService {
 		if(addes.size()>0){
 			Map params=new HashMap();
 			params.put("list", addes);
-			params.put("dblink", channel.getDblink());
+			
 			salesChannelMapper.batchAddChannel(params);
 		}
 		if(deles.size()>0){
 			Map params=new HashMap();
 			params.put("list", deles);
-			params.put("dblink", channel.getDblink());
+			
 			salesChannelMapper.batchDelChannel(params);
 		}
 		if(updates.size()>0){

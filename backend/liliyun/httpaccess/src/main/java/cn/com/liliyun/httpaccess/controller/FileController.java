@@ -32,7 +32,7 @@ public class FileController extends BaseController {
 	@RequestMapping(value="/list")
 	public ResultBean getList(HttpServletRequest request, File file) {
 		ResultBean rb = new ResultBean();
-		List <File> list = fileService.list(getUser(request), file);
+		List <File> list = fileService.list(file);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
@@ -40,7 +40,7 @@ public class FileController extends BaseController {
 	@RequestMapping(value="/itemlist")
 	public ResultBean itemlist(HttpServletRequest request,FileItem fileItem) {
 		ResultBean rb = new ResultBean();
-		List <FileItem> list = fileService.listItem(getUser(request), fileItem);
+		List <FileItem> list = fileService.listItem(fileItem);
 		rb.setResult(new PageInfo<>(list));
 		return rb; 
 	}
@@ -48,13 +48,13 @@ public class FileController extends BaseController {
 	@RequestMapping(value="/handlefile")
 	public ResultBean handleFile(HttpServletRequest request,String json) {
 		List <FileItem> list = JSONObject.parseArray(json, FileItem.class);
-		return fileService.doHandleFile(getUser(request), list);
+		return fileService.doHandleFile(list);
 	}
 	
 	@RequestMapping(value="/stufile")
 	public ResultBean studentFile(HttpServletRequest request, String json) {
 		List <FileItem> list = JSONObject.parseArray(json, FileItem.class);
-		return fileService.doStuFile(getUser(request), list);
+		return fileService.doStuFile(list);
 	}
 	
 }

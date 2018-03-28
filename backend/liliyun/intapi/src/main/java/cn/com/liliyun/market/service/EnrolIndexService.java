@@ -36,14 +36,14 @@ public interface EnrolIndexService {
 	 */
 	public ResultBean editCSEnrolIndex(CSEnrolIndex index);
 	
-	public CSEnrolIndex getLastCSEnrolIndex(User user);
+	public CSEnrolIndex getLastCSEnrolIndex();
 	
 	public ResultBean getCSEnrolIndex(CSEnrolIndex index);
 	
 	
 	public ResultBean editCoachEnrolIndex(CoachEnrolIndex index);
 	
-	public CoachEnrolIndex getLastCoachEnrolIndex(User user);
+	public CoachEnrolIndex getLastCoachEnrolIndex();
 	
 	public ResultBean getCoachEnrolIndex(CoachEnrolIndex index);
 }

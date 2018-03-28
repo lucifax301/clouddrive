@@ -6,53 +6,52 @@ import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.market.model.CustomerRecord;
 import cn.com.liliyun.market.model.CustomerStat;
 import cn.com.liliyun.market.model.PotentialCustomer;
-import cn.com.liliyun.user.model.User;
 
 public interface CustomerService {
 	
-	public ResultBean addCustomerRecord(CustomerRecord customerRecord, User user);
+	public ResultBean addCustomerRecord(CustomerRecord customerRecord);
 	
-	public ResultBean getCustomerRecord(CustomerRecord customerRecord, User user);
+	public ResultBean getCustomerRecord(CustomerRecord customerRecord);
 	
-	public ResultBean getCustomerRecordList(CustomerRecord customerRecord, User user);
+	public ResultBean getCustomerRecordList(CustomerRecord customerRecord);
 	
-	public ResultBean editCustomerRecord(CustomerRecord customerRecord, User user);
+	public ResultBean editCustomerRecord(CustomerRecord customerRecord);
 	
-	public List<CustomerRecord> getCustomerRecordByStuID(Integer studentid, User user);
+	public List<CustomerRecord> getCustomerRecordByStuID(Integer studentid);
 	
-	public ResultBean handleCustomerRecord(CustomerRecord customerRecord, User user);
+	public ResultBean handleCustomerRecord(CustomerRecord customerRecord);
 
-	public List<CustomerRecord> getCustomerRecordExport(CustomerRecord customerRecord, User user);
+	public List<CustomerRecord> getCustomerRecordExport(CustomerRecord customerRecord);
 	
-	public ResultBean addPotentialCustomer(PotentialCustomer potentialCustomer, User user);
+	public ResultBean addPotentialCustomer(PotentialCustomer potentialCustomer);
 	
-	public ResultBean getPotentialCustomerList(PotentialCustomer potentialCustomer, User user);
+	public ResultBean getPotentialCustomerList(PotentialCustomer potentialCustomer);
 	
-	public ResultBean editPotentialCustomer(PotentialCustomer potentialCustomer, User user);
+	public ResultBean editPotentialCustomer(PotentialCustomer potentialCustomer);
 	
-	public List<PotentialCustomer> getPotentialCustomerExport(PotentialCustomer potentialCustomer, User user);
+	public List<PotentialCustomer> getPotentialCustomerExport(PotentialCustomer potentialCustomer);
 	
 	/**
-	 * 获取各渠道的新增学员统计
+	 * 锟斤拷取锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷学员统锟斤拷
 	 * @param customerStat
 	 * @param user
 	 * @return
 	 */
-	public List<CustomerStat> getChannelNewStuStat(CustomerStat customerStat, User user);
+	public List<CustomerStat> getChannelNewStuStat(CustomerStat customerStat);
 	
 	/**
-	 * 获取潜在客户转化学员统计
+	 * 锟斤拷取潜锟节客伙拷转锟斤拷学员统锟斤拷
 	 * @param customerStat
 	 * @param user
 	 * @return
 	 */
-	public List<CustomerStat> getPotentialNewStuStat(CustomerStat customerStat, User user);
+	public List<CustomerStat> getPotentialNewStuStat(CustomerStat customerStat);
 	
 	/**
-	 * 获取新学员（分潜在非潜在）统计
+	 * 锟斤拷取锟斤拷学员锟斤拷锟斤拷潜锟节凤拷潜锟节ｏ拷统锟斤拷
 	 * @param customerStat
 	 * @param user
 	 * @return
 	 */
-	public List<CustomerStat> getNewStuStat(CustomerStat customerStat, User user);
+	public List<CustomerStat> getNewStuStat(CustomerStat customerStat);
 }

@@ -1,7 +1,9 @@
 package cn.com.liliyun.student.service.impl;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.student.mapper.FileItemMapper;
 import cn.com.liliyun.student.mapper.FileMapper;
@@ -13,6 +15,7 @@ import cn.com.liliyun.student.model.Student;
 import cn.com.liliyun.student.model.StudentStatusLog;
 import cn.com.liliyun.student.service.FileService;
 import cn.com.liliyun.user.model.User;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,26 +39,26 @@ public class FileServiceImpl implements FileService {
 	private StudentStatusLogMapper studentStatusLogMapper;
 	
 	@Override
-	public List<File> list(User user,File file) {
+	public List<File> list(File file) {
 		PageUtil.startPage(file);
 		return fileMapper.selectList(file);
 	}
 
 	@Override
-	public ResultBean doHandleFile(User user, List<FileItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doHandleFile( List<FileItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		Student result;
 		Iterator<FileItem> iterator = list.iterator();
 		List <StudentStatusLog> logList = new ArrayList<>();
 		
 		//生成档案编号 A000001 A999999 -> B000001
 		FileItem item = new FileItem();
-		item.setDblink(dblink);
+		
 		item.setType(0);
 		String filenum = fileItemMapper.selectMaxFilenum(item);
 		while (iterator.hasNext()) {
@@ -88,7 +91,7 @@ public class FileServiceImpl implements FileService {
 		}
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = fileItemMapper.insertBatch(params);
 			params.put("list", logList);
@@ -101,7 +104,7 @@ public class FileServiceImpl implements FileService {
 			file.setCtime(now);
 			file.setAreaid(user.getAreaid());
 			file.setStoreid(user.getAreaid());
-			file.setDblink(dblink);
+			
 			file.setItemcount(count);
 			fileMapper.insertSelective(file);
 		}
@@ -112,19 +115,19 @@ public class FileServiceImpl implements FileService {
 	
 
 	@Override
-	public ResultBean doStuFile(User user, List<FileItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean doStuFile( List<FileItem> list) {
+		User user = RequestContext.get(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 		Student result;
 		Iterator<FileItem> iterator = list.iterator();
 		List <StudentStatusLog> logList = new ArrayList<>();
 		
 		//生成档案编号 A000001 A999999 -> B000001
 		FileItem item = new FileItem();
-		item.setDblink(dblink);
+		
 		item.setType(1);
 		String filenum = fileItemMapper.selectMaxFilenum(item);
 		while (iterator.hasNext()) {
@@ -157,7 +160,7 @@ public class FileServiceImpl implements FileService {
 		}
 		if (list.size() > 0) {
 			Map <String,Object> params = new HashMap<>(2);
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = fileItemMapper.insertBatch(params);
 			params.put("list", logList);
@@ -171,7 +174,7 @@ public class FileServiceImpl implements FileService {
 			file.setCname(user.getRealname());
 			file.setCuid(user.getId());
 			file.setCtime(now);
-			file.setDblink(dblink);
+			
 			file.setItemcount(count);
 			fileMapper.insertSelective(file);
 		}
@@ -181,7 +184,7 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public List<FileItem> listItem(User user, FileItem fileItem) {
+	public List<FileItem> listItem( FileItem fileItem) {
 		return fileItemMapper.selectList(fileItem);
 	}
 	

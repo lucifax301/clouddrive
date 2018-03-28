@@ -17,6 +17,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import cn.com.liliyun.common.model.BaseModel;
 import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.util.ConstantUtil;
+import cn.com.liliyun.common.util.ThreadTruck;
 
 
 /**
@@ -52,14 +53,32 @@ public class SqlRouteInterceptor implements Interceptor{
 //			}
 //		}
 		
-		BaseModel user = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION);
-		if(user!=null){
-			schema = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getDblink();
-			mgrdb = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getMgrdb();
+		
+		//dao有指定哪个库
+		//目前除了mgr db外，其他不指定
+		String DB_ROUTE = (String)ThreadTruck.get(ConstantUtil.ROUTE_DB);
+		if(DB_ROUTE!=null){
+			if(ConstantUtil.MRG.equals(DB_ROUTE)){
+				mgrdb = true;
+			}else{//不是mgr就用用户本身的db路由
+				BaseModel user = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION);
+				if(user!=null){
+					schema = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getDblink();;
+					mgrdb = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getMgrdb();
+				}else{
+					mgrdb = true;
+				}
+			}
 		}else{
-			mgrdb = true;
+			BaseModel user = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION);
+			if(user!=null){
+				schema = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getDblink();
+				mgrdb = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getMgrdb();
+			}else{
+				mgrdb = true;
+			}
 		}
-
+		
 		//如果设置mgrdb=true时，连接走管理数据库时，不会做数据路由，直接操作管理库
 		if (StringUtils.isNotEmpty(schema) && mgrdb == false) {
 			MetaObject metaStatementHandler = SystemMetaObject.forObject(statementHandler);  

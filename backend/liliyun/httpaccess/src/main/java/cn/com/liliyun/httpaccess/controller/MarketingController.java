@@ -94,8 +94,7 @@ public class MarketingController extends BaseController{
 	
 	@RequestMapping(value="/listmarket/export")
 	public ResponseEntity<byte[]> export(MarketActivity activity,HttpServletRequest request)  throws IOException{
-		User user = AccessWebUtil.getSessionUser(request);
-		List<MarketActivity> list= marketService.listExportActivity(activity, user);
+		List<MarketActivity> list= marketService.listExportActivity(activity);
 		
 		ExportParams params = new ExportParams("市场活动数据", "导出数据", ExcelType.XSSF);// title
 		// sheetname

@@ -188,13 +188,13 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 	}
 
 	@Override
-	public CSEnrolIndex getLastCSEnrolIndex(User user){
+	public CSEnrolIndex getLastCSEnrolIndex(){
 		Date now=new Date();
 		java.text.SimpleDateFormat format=new java.text.SimpleDateFormat("yyyy");
 		String year= format.format(now);
 		CSEnrolIndex index=new CSEnrolIndex();
 		index.setYear(Integer.parseInt(year));
-		index.setDblink(user.getDblink());
+		
 		List<CSEnrolIndex> cslist= csenrolIndexMapper.listCSEnrolIndex(index);
 		CSEnrolIndex last=null;
 		if(cslist!=null&&cslist.size()>0){
@@ -280,13 +280,13 @@ public class EnrolIndexServiceImpl implements EnrolIndexService {
 	}
 
 	@Override
-	public CoachEnrolIndex getLastCoachEnrolIndex(User user) {
+	public CoachEnrolIndex getLastCoachEnrolIndex() {
 		Date now=new Date();
 		java.text.SimpleDateFormat format=new java.text.SimpleDateFormat("yyyy");
 		String year= format.format(now);
 		CoachEnrolIndex index=new CoachEnrolIndex();
 		index.setYear(Integer.parseInt(year));
-		index.setDblink(user.getDblink());
+		
 		List<CoachEnrolIndex> cslist= coachenrolIndexMapper.listCoachEnrolIndex(index);
 		CoachEnrolIndex last=null;
 		if(cslist!=null&&cslist.size()>0){

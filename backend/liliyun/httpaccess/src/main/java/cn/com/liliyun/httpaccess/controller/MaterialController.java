@@ -25,13 +25,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.student.model.Material;
 import cn.com.liliyun.student.model.MaterialItem;
 import cn.com.liliyun.student.service.MaterialService;
+
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 
 
 /**
@@ -64,49 +64,49 @@ public class MaterialController extends BaseController {
 	@RequestMapping(value="/learncard")
 	public ResultBean learncard(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doLearncard(getUser(request), list);
+		return materialService.doLearncard(list);
 	}
 	
 	@RequestMapping(value="/applystamp")
 	public ResultBean applystamp(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doApplyStamp(getUser(request), list);
+		return materialService.doApplyStamp( list);
 	}
 	
 	@RequestMapping(value="/schoolstamp")
 	public ResultBean schoolstamp(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doSchoolStamp(getUser(request), list);
+		return materialService.doSchoolStamp( list);
 	}
 	
 	@RequestMapping(value="/license")
 	public ResultBean license(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doLicense(getUser(request), list);
+		return materialService.doLicense( list);
 	}
 	
 	@RequestMapping(value="/tribillprint")
 	public ResultBean tribillprint(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doTribillPrint(getUser(request), list);
+		return materialService.doTribillPrint( list);
 	}
 	
 	@RequestMapping(value="/tribillstamp")
 	public ResultBean tribillstamp(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doTribillStamp(getUser(request), list);
+		return materialService.doTribillStamp( list);
 	}
 	
 	@RequestMapping(value="/repaymaterial")
 	public ResultBean repaymaterial(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doRepayMaterial(getUser(request), list);
+		return materialService.doRepayMaterial( list);
 	}
 	
 	@RequestMapping(value="/rtnmaterial")
 	public ResultBean rtnmaterial(HttpServletRequest request, String json) {
 		List <MaterialItem> list = JSONObject.parseArray(json, MaterialItem.class);
-		return materialService.doRtnMaterial(getUser(request), list);
+		return materialService.doRtnMaterial( list);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -122,7 +122,7 @@ public class MaterialController extends BaseController {
 			rb.setMsg("数据解析错误,请检查导入数据模板!");
 			return rb;
 		}
-		Map<String, Object> rtnData = materialService.importIcCard(getUser(request),list);
+		Map<String, Object> rtnData = materialService.importIcCard(list);
 		list = (List<MaterialItem>) rtnData.get("errorlist");
 		if (list != null && list.size() > 0) {
 			ExportParams eparams = new ExportParams("IC卡导入错误数据", "错误数据", ExcelType.XSSF);//title sheetname 文件格式

@@ -9,9 +9,9 @@ import cn.com.liliyun.user.model.User;
 
 public interface SalesChannelService {
 
-	public ResultBean addChannel(SalesChannel channel,User user);
+	public ResultBean addChannel(SalesChannel channel);
 	
-	public ResultBean updateChannel(SalesChannel channel,User user);
+	public ResultBean updateChannel(SalesChannel channel);
 	
 	public ResultBean updateChannelStatus(SalesChannel channel);
 	

@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.report.model.KpiAreaStat;
 import cn.com.liliyun.report.model.KpiAreaStatParam;
 import cn.com.liliyun.report.model.KpiAreaStatRecord;
@@ -47,7 +46,6 @@ import cn.com.liliyun.report.model.KpiStoreStat;
 import cn.com.liliyun.report.model.KpiStoreStatParam;
 import cn.com.liliyun.report.model.KpiStoreStatRecord;
 import cn.com.liliyun.report.service.KpiStatService;
-import cn.com.liliyun.user.model.User;
 
 @Controller
 @ResponseBody
@@ -276,10 +274,10 @@ public class KpiStatController extends BaseController{
 	
 	@RequestMapping(value="/coachstat")
 	public ResultBean coachStat(KpiCoachStatParam param, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		ResultBean rb = new ResultBean();
 		try{
-			List<KpiCoachStat> areastat=kpiStatService.statByCoach(param, user);
+			List<KpiCoachStat> areastat=kpiStatService.statByCoach(param);
 			rb.setResult(areastat);
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -291,10 +289,10 @@ public class KpiStatController extends BaseController{
 	
 	@RequestMapping(value="/coachstat/export")
 	public ResponseEntity<byte[]> coachStatExport(KpiCoachStatParam param, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		ResultBean rb = new ResultBean();
 		try{
-			List<KpiCoachStat> areastat=kpiStatService.statByCoach(param, user);
+			List<KpiCoachStat> areastat=kpiStatService.statByCoach(param);
 			
 			Workbook wb = getCoachStatWorkbook(areastat);
 			
@@ -399,10 +397,10 @@ public class KpiStatController extends BaseController{
 	
 	@RequestMapping(value="/storestat")
 	public ResultBean storeStat(KpiStoreStatParam param, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		ResultBean rb = new ResultBean();
 		try{
-			List<KpiStoreStat> areastat=kpiStatService.statByStore(param, user);
+			List<KpiStoreStat> areastat=kpiStatService.statByStore(param);
 			rb.setResult(areastat);
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -414,10 +412,10 @@ public class KpiStatController extends BaseController{
 	
 	@RequestMapping(value="/storestat/export")
 	public ResponseEntity<byte[]> storeStatExport(KpiStoreStatParam param, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
+		
 		ResultBean rb = new ResultBean();
 		try{
-			List<KpiStoreStat> areastat=kpiStatService.statByStore(param, user);
+			List<KpiStoreStat> areastat=kpiStatService.statByStore(param);
 			
 			Workbook wb = getStoreStatWorkbook(areastat);
 			

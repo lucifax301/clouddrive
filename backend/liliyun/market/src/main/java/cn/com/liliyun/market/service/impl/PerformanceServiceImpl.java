@@ -49,7 +49,7 @@ public class PerformanceServiceImpl implements PerformanceService {
 	private EnrolIndexService enrolIndexService;
 	
 	@Override
-	public List<CoachPerformanceStat> coachstat(PerformanceParam param,User user) {
+	public List<CoachPerformanceStat> coachstat(PerformanceParam param) {
 		List<CoachPerformanceStatItem> stats=performanceStatMapper.statByCoach(param);
 		Map<Integer,CoachPerformanceStat> areaStatMap=new HashMap();
 		
@@ -58,7 +58,7 @@ public class PerformanceServiceImpl implements PerformanceService {
 		
 		List<Store> stores= storeService.selectAllList(null);
 		
-		CoachEnrolIndex last= enrolIndexService.getLastCoachEnrolIndex(user);
+		CoachEnrolIndex last= enrolIndexService.getLastCoachEnrolIndex();
 		int enrolindex=last==null?0:last.getEnrolindex();
 		
 		for(CoachPerformanceStatItem item:stats){
@@ -133,15 +133,15 @@ public class PerformanceServiceImpl implements PerformanceService {
 	}
 
 	@Override
-	public List<StaffPerformanceStat> staffstat(PerformanceParam param,User user) {
+	public List<StaffPerformanceStat> staffstat(PerformanceParam param) {
 		List<StaffPerformanceStatItem> stats=performanceStatMapper.statByStaff(param);
 		Map<Integer,StaffPerformanceStat> areaStatMap=new HashMap();
 		Dept pa=new Dept();
-		pa.setDblink(user.getDblink());
+		
 		List<Dept> depts= deptService.selectList(pa);
 		
 		
-		CSEnrolIndex last= enrolIndexService.getLastCSEnrolIndex(user);
+		CSEnrolIndex last= enrolIndexService.getLastCSEnrolIndex();
 		int enrolindex=last==null?0:last.getEnrolindex();
 		
 		for(StaffPerformanceStatItem item:stats){
