@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.user.mapper.PrivilegeMapper;
+import cn.com.liliyun.user.mapper.UserMapper;
 import cn.com.liliyun.user.model.Privilege;
 import cn.com.liliyun.user.model.Role;
 import cn.com.liliyun.user.model.RolePrivilege;
@@ -28,6 +29,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
 	@Autowired
 	private PrivilegeMapper privilegeMapper;
+	
+	@Autowired
+	private UserMapper userMapper;
 
 	PrivilegeCompare pcompare=new PrivilegeCompare();
 	
@@ -110,12 +114,12 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		
 	}
 
-	public List<Privilege> getAllPrivilege(Privilege privilege) throws Exception {
+	public List<Privilege> getAllPrivilege(Privilege privilege) {
 		List<Privilege> privileges = privilegeMapper.getAllPrivilege(privilege);
 		return privileges;
 	}
 
-	public List<Privilege> getAllDevPrivilege(Privilege privilege) throws Exception {
+	public List<Privilege> getAllDevPrivilege(Privilege privilege) {
 		List<Privilege> privileges = privilegeMapper.getAllDevPrivilege(privilege);
 		return merge(privileges,false);
 	}
@@ -123,7 +127,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	
 	
 	@Override
-	public List<Privilege> getAllBtn(User user) throws Exception {
+	public List<Privilege> getAllBtn(User user) {
 		//List<Privilege> privileges = privilegeMapper.listUserBtn(user);
 		int roleid= user.getRoleid();
 		Role role=new Role();
@@ -135,7 +139,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 
-	public List<Privilege> getUserPrivilege(User user) throws Exception {
+	public List<Privilege> getUserPrivilege(User user) {
 		//List<Privilege> privileges = privilegeMapper.listUserPrivilege(user);
 		int roleid= user.getRoleid();
 		Role role=new Role();
@@ -145,7 +149,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		return merge(privileges,false);
 	}
 
-	public List<Privilege> getUserPrivilegeList(User user) throws Exception {
+	public List<Privilege> getUserPrivilegeList(User user) {
 		int roleid= user.getRoleid();
 		Role role=new Role();
 		role.setId(roleid);
@@ -156,7 +160,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	@Override
-	public void insertRole(Role role) throws Exception {
+	public void insertRole(Role role) {
 		String privilegestr = role.getPrivilegestr();
 		if (privilegestr != null) {
 			String item[] = privilegestr.split(",");
@@ -183,14 +187,14 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 			Map<String, Object> params = new HashMap<>();
 			params.put("list", rolePrivileges);
 			params.put("dblink", role.getDblink());
-			params.put("mgrdb", role.getMgrdb());
+			
 			privilegeMapper.insertRolePrivilege(params);
 		}
 		
 	}
 
 	@Override
-	public int delRole(Role role) throws Exception {
+	public int delRole(Role role) {
 		if (role != null) {
 			if (role.getIds() == null) {
 				privilegeMapper.delRolePrivilege(role);
@@ -208,7 +212,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	@Override
-	public int updateRole(Role role) throws Exception {
+	public int updateRole(Role role) {
 		String privilegestr = role.getPrivilegestr();
 		if (privilegestr != null) {
 			String item[] = privilegestr.split(",");
@@ -232,18 +236,18 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("list", rolePrivileges);
 		params.put("dblink", role.getDblink());
-		params.put("mgrdb", role.getMgrdb());
+		
 		privilegeMapper.insertRolePrivilege(params);
 		privilegeMapper.updateRole(role);
 		return 1;
 	}
 
-	public int enable(Role role) throws Exception {
+	public int enable(Role role) {
 		return privilegeMapper.enableRole(role);
 	}
 
 	@Override
-	public Role getRole(Role role) throws Exception {
+	public Role getRole(Role role) {
 		Role role1 = privilegeMapper.getRole(role);
 		if (role1 != null) {
 			List<Privilege> privileges = privilegeMapper.listRolePrivilege(role);
@@ -278,9 +282,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 			Map<String, Object> params = new HashMap<>();
 			params.put("ids", ids);
 			params.put("dblink", role.getDblink());
-			params.put("mgrdb", role.getMgrdb());
+			
 			List<Map> c1 = privilegeMapper.listRolePrivilegeCount(params);
-			List<Map> c2 = privilegeMapper.listRoleUserCount(params);
+			List<Map> c2 = userMapper.listRoleUserCount(params);
 			for (Role item : roles) {
 				for (Map i1 : c1) {
 					if (item.getId() == (int) i1.get("role_id")) {
@@ -308,7 +312,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	@Override
-	public int insertRoleUser(RoleUser roleUser) throws Exception {
+	public int insertRoleUser(RoleUser roleUser) {
 		List<RoleUser> roleUsers = new ArrayList();
 		if (roleUser.getIds() != null && roleUser.getIds().length() > 0) {
 			String ids[] = roleUser.getIds().split(",");
@@ -325,47 +329,47 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 			RoleUser params = roleUsers.get(0);
 			params.setDblink(roleUser.getDblink());
 			params.setMgrdb(roleUser.getMgrdb());
-			return privilegeMapper.insertRoleUser(params);
+			return userMapper.insertRoleUser(params);
 		} else
 			return 0;
 	}
 
 	@Override
-	public int delRoleUser(RoleUser roleUser) throws Exception {
-		return privilegeMapper.delRoleUser(roleUser);
+	public int delRoleUser(RoleUser roleUser) {
+		return userMapper.delRoleUser(roleUser);
 	}
 
 	@Override
-	public PageInfo <User> listRoleUser(RoleUser roleUser) throws Exception {
-		List <Integer> ids = privilegeMapper.listRoleUserIds(roleUser);
+	public PageInfo <User> listRoleUser(RoleUser roleUser) {
+		List <Integer> ids = userMapper.listRoleUserIds(roleUser);
 		Map<String, Object> params = new HashMap<>();
 		params.put("list", ids);
 		params.put("dblink", roleUser.getDblink());
-		params.put("mgrdb", true);
+		
 		PageHelper.startPage(roleUser.getPageNo(), roleUser.getPageSize());
-		List <User> users = privilegeMapper.listRoleUser(params);
+		List <User> users = userMapper.listRoleUser(params);
 		return new PageInfo<>(users);
 	}
 	
 	@Override
-	public PageInfo <User> listNotRoleUser(RoleUser roleUser) throws Exception {
-		List <Integer> ids = privilegeMapper.listRoleUserIds(roleUser);
+	public PageInfo <User> listNotRoleUser(RoleUser roleUser) {
+		List <Integer> ids = userMapper.listRoleUserIds(roleUser);
 		Map<String, Object> params = new HashMap<>();
 		params.put("list", ids);
 		params.put("dblink", roleUser.getDblink());
-		params.put("mgrdb", true);
+		
 		PageHelper.startPage(roleUser.getPageNo(), roleUser.getPageSize());
-		List <User>	users = privilegeMapper.listNotRoleUser(params);
+		List <User>	users = userMapper.listNotRoleUser(params);
 		return new PageInfo<>(users);
 	}
 
 	@Override
-	public int insertPrivilege(Privilege privilege) throws Exception {
+	public int insertPrivilege(Privilege privilege) {
 		return privilegeMapper.insertPrivilege(privilege);
 	}
 
 	@Override
-	public int delPrivilege(Privilege privilege, User user) throws Exception {
+	public int delPrivilege(Privilege privilege, User user) {
 		String [] ids = privilege.getIds().split(",");
 		for (String id : ids) {
 			privilege.setId(Integer.parseInt(id));
@@ -376,7 +380,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	@Override
-	public int updatePrivilege(Privilege privilege) throws Exception {
+	public int updatePrivilege(Privilege privilege) {
 		return privilegeMapper.updatePrivilege(privilege);
 	}
 

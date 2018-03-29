@@ -9,10 +9,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.EncryptUtil;
@@ -36,7 +34,6 @@ import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.service.PrivilegeService;
 import cn.com.liliyun.user.service.UserService;
 
-import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.github.pagehelper.PageInfo;
 
 @Service
@@ -133,7 +130,7 @@ public class UserServiceImpl implements UserService {
 		roleUser.setUserId(user.getId());
 		roleUser.setRoleId(1);
 		roleUser.setDblink(dblink);
-		privilegeMapper.insertRoleUser(roleUser);
+		userMapper.insertRoleUser(roleUser);
 		log.info("分配根账户角色...");
 		
 		//更新数据库配置信息

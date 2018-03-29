@@ -25,18 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.com.liliyun.coach.model.Coach;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.ExcelUtil;
-import cn.com.liliyun.common.util.LogConstant;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
-import cn.com.liliyun.log.model.LogCommon;
-import cn.com.liliyun.market.model.CSEnrolIndex;
 import cn.com.liliyun.market.model.MarketActivity;
 import cn.com.liliyun.market.service.MarketService;
 import cn.com.liliyun.trainorg.model.Marketing;
-import cn.com.liliyun.user.model.User;
 
 import com.github.pagehelper.PageInfo;
 
@@ -52,10 +45,7 @@ public class MarketingController extends BaseController{
 	//新增
 	@RequestMapping(value="/addmarket")
 	public ResultBean addMarketing(MarketActivity activity,HttpServletRequest request){
-		String bussinessid = (String) request.getSession().getAttribute(
-				ConstantUtil.SESSION_BUSINESS);
-		User user = AccessWebUtil.getSessionUser(request);
-		return marketService.addMarketActivity(activity,bussinessid);
+		return marketService.addMarketActivity(activity);
 	}
 	
 	

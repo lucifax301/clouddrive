@@ -6,8 +6,6 @@ import java.util.Map;
 import cn.com.liliyun.common.model.BaseModel;
 import cn.com.liliyun.user.model.Privilege;
 import cn.com.liliyun.user.model.Role;
-import cn.com.liliyun.user.model.RoleUser;
-import cn.com.liliyun.user.model.User;
 
 @SuppressWarnings("rawtypes")
 public interface PrivilegeMapper {
@@ -42,31 +40,16 @@ public interface PrivilegeMapper {
 	
 	public List<Privilege> listUserRolePrivilege(Role role);
 	
-	
 	//public List<Privilege> listUserBtn(User user);
 	
 	public List<Privilege> listUserRoleBtn(Role role);
-	
-	
 	
 	public List<Role> listRole(Role role);
 	
 	public List<Map> listRolePrivilegeCount(Map<String, Object> params);
 	
-	public List<Map> listRoleUserCount(Map<String, Object> params);
-	
 	public int getRoleTotal(Role role);
 	
-	public int insertRoleUser(RoleUser roleUser);
 	
-	public int delRoleUser(RoleUser roleUser);
-	
-	public List<Integer> listRoleUserIds(RoleUser roleUser);
-	
-	public List<User> listRoleUser(Map<String, Object> params);
-	
-	public List<User> listNotRoleUser(Map<String, Object> params);
-	
-	public int getRoleUserTotal(RoleUser roleUser);
 	
 }

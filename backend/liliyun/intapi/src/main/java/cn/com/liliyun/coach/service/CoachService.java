@@ -12,11 +12,11 @@ import cn.com.liliyun.coach.model.CoachStudentDTO;
 import cn.com.liliyun.coach.model.HeadCoach;
 import cn.com.liliyun.coach.model.StudentAssign;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.user.model.User;
+
 
 public interface CoachService {
 	
-	public ResultBean addCoach(Coach coach,Map extendsinfo,User user);
+	public ResultBean addCoach(Coach coach,Map extendsinfo);
 	
 	public List<Coach> getCoachList(Coach coach);
 	

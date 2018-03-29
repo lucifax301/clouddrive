@@ -9,7 +9,7 @@ import cn.com.liliyun.user.model.User;
 
 public interface MarketService {
 
-	public ResultBean addMarketActivity(MarketActivity activity,String businessid);
+	public ResultBean addMarketActivity(MarketActivity activity);
 	
 	public List<MarketActivity> listActivity(MarketActivity activity);
 	

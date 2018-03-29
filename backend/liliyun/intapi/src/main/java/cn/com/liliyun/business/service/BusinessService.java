@@ -43,9 +43,9 @@ public interface BusinessService {
 	
 	public ResultBean updateFlowTemplate(FlowTemplate flowTemplate);
 	
-	public List<Flow> findUserFlow(FlowStep flowStep,User user);
+	public List<Flow> findUserFlow(FlowStep flowStep);
 	
-	public List<Flow> findMyFlow(Flow flow,User user);
+	public List<Flow> findMyFlow(Flow flow);
 	
 	public List<FlowStep> listFlowStep(FlowStep flowStep);
 }

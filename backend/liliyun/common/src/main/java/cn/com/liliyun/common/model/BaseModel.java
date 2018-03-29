@@ -38,7 +38,27 @@ public class BaseModel implements Serializable {
 
 	private Domain domain=new Domain();
 
+	private Integer cuid;
+	
+	private Integer muid;
+	
+	
+	
+	public Integer getMuid() {
+		return muid;
+	}
 
+	public void setMuid(Integer muid) {
+		this.muid = muid;
+	}
+
+	public Integer getCuid() {
+		return cuid;
+	}
+
+	public void setCuid(Integer cuid) {
+		this.cuid = cuid;
+	}
 
 	public void setDomain(Domain domain) {
 		this.domain = domain;

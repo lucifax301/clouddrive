@@ -1,15 +1,10 @@
 package cn.com.liliyun.user.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.github.pagehelper.PageInfo;
 
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.DateUtil;
@@ -25,6 +20,8 @@ import cn.com.liliyun.user.model.Register;
 import cn.com.liliyun.user.model.RoleUser;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.service.RegisterService;
+
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class RegisterServiceImpl implements RegisterService{
@@ -43,8 +40,8 @@ public class RegisterServiceImpl implements RegisterService{
 	@Autowired
 	private UserMapper userMapper;
 
-	@Value("${data.synch}")
-	private boolean APP_SYNCH;
+//	@Value("${data.synch}")
+//	private boolean APP_SYNCH;
 	
 	@Override
 	public ResultBean saveRegister(Register register) {
@@ -100,7 +97,7 @@ public class RegisterServiceImpl implements RegisterService{
 		roleUser.setUserId(user.getId());
 		roleUser.setRoleId(1); //默认1为驾校根用户
 		roleUser.setDblink(dblink);
-		privilegeMapper.insertRoleUser(roleUser);
+		userMapper.insertRoleUser(roleUser);
 		logger.info("分配根账户角色...");
 		
 		//更新数据库配置信息

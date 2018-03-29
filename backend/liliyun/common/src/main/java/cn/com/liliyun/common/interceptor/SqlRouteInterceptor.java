@@ -61,19 +61,19 @@ public class SqlRouteInterceptor implements Interceptor{
 			if(ConstantUtil.MRG.equals(DB_ROUTE)){
 				mgrdb = true;
 			}else{//不是mgr就用用户本身的db路由
-				BaseModel user = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION);
+				BaseModel user = RequestContext.<BaseModel>getValue(ConstantUtil.USER_SESSION);
 				if(user!=null){
-					schema = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getDblink();;
-					mgrdb = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getMgrdb();
+					schema = RequestContext.<BaseModel>getValue(ConstantUtil.USER_SESSION).getDblink();;
+					mgrdb = RequestContext.<BaseModel>getValue(ConstantUtil.USER_SESSION).getMgrdb();
 				}else{
 					mgrdb = true;
 				}
 			}
 		}else{
-			BaseModel user = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION);
+			BaseModel user = RequestContext.<BaseModel>getValue(ConstantUtil.USER_SESSION);
 			if(user!=null){
-				schema = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getDblink();
-				mgrdb = RequestContext.<BaseModel>get(ConstantUtil.USER_SESSION).getMgrdb();
+				schema = RequestContext.<BaseModel>getValue(ConstantUtil.USER_SESSION).getDblink();
+				mgrdb = RequestContext.<BaseModel>getValue(ConstantUtil.USER_SESSION).getMgrdb();
 			}else{
 				mgrdb = true;
 			}

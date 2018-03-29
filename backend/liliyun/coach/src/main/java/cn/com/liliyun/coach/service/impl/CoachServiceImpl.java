@@ -110,11 +110,10 @@ public class CoachServiceImpl implements CoachService {
 	private boolean APP_SYNCH;
 
 	@Override
-	public ResultBean addCoach(Coach coach,  Map extendinfo,
-			User user) {
+	public ResultBean addCoach(Coach coach,  Map extendinfo) {
 		ResultBean r = new ResultBean();
 		Coach cac = new Coach();
-		cac.setDblink(coach.getDblink());
+		
 		cac.setMobile(coach.getMobile());
 
 		List listm = coachMapper.selectByterm(cac);
@@ -125,7 +124,7 @@ public class CoachServiceImpl implements CoachService {
 		}
 
 		Coach coa = new Coach();
-		coa.setDblink(coach.getDblink());
+		
 		coa.setDrilicence(coach.getDrilicence());
 		List listd = coachMapper.selectByterm(coa);
 		if (listd.size() > 0) {
@@ -135,7 +134,7 @@ public class CoachServiceImpl implements CoachService {
 		}
 
 		Coach coac = new Coach();
-		coac.setDblink(coach.getDblink());
+		
 		coac.setIdcard(coach.getIdcard());
 		List listi = coachMapper.selectByterm(coac);
 		if (listi.size() > 0) {
@@ -149,7 +148,7 @@ public class CoachServiceImpl implements CoachService {
 
 		if (coach.getHeadcoachid() != null && coach.getHeadcoachid() > 0) {
 			HeadCoach headCoach = new HeadCoach();
-			headCoach.setDblink(user.getDblink());
+			
 			headCoach.setCoachid(coach.getHeadcoachid());
 			headCoach.setOvercoach(1);
 			headCoach.setOvercoachcar(0);
@@ -234,7 +233,7 @@ public class CoachServiceImpl implements CoachService {
 	private void updateStore(String[] newstores, Integer coachid) {
 		CoachStore param = new CoachStore();
 		param.setCoachid(coachid);
-		//param.setDblink(user.getDblink());
+		
 		List<CoachStore> all = coachStoreMapper.list(param);
 
 		List<CoachStore> addtypes = new ArrayList();
@@ -249,7 +248,6 @@ public class CoachServiceImpl implements CoachService {
 			}
 			if (!flag) {
 				CoachStore n = new CoachStore();
-				//n.setDblink(user.getDblink());
 				n.setCoachid(coachid);
 				n.setStoreid(Integer.parseInt(ntype));
 				addtypes.add(n);
@@ -843,7 +841,7 @@ public class CoachServiceImpl implements CoachService {
 		JSONObject json = JSONObject.parseObject(moddetail);
 		// Coach mod= JSON.toJavaObject(json, Coach.class);
 		copyJsonValueToBean(json, exist);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (apply.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (apply.getStatus() == 0) {// 业务还在等待审核中
 				exist.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
@@ -1245,9 +1243,9 @@ public class CoachServiceImpl implements CoachService {
 		//apply.setApplyuserid(user.getId());
 		apply.setDetail(detail.toJSONString());
 		String desc = "教练[" + exist.getName() + "]修改申请";
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		String transactionid = flowService.addFlow(businessid, user.getId(),
-				desc,user);
+				desc);
 		apply.setBusinessid(businessid);
 		apply.setApplyuser(user.getUsername());
 		apply.setTransactionid(transactionid);
@@ -1364,7 +1362,7 @@ public class CoachServiceImpl implements CoachService {
 		Area pa=new Area();
 		//pa.setDblink(user.getDblink());
 		List<Area> areas = areaService.selectAllList(pa);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		for (CoachModApply apply : list) {
 			for (Area area : areas) {
 				if (apply.getAreaid() == area.getId()) {
@@ -1403,7 +1401,7 @@ public class CoachServiceImpl implements CoachService {
 		CoachModApply apply = coachModApplyMapper.getApply(param);
 
 		JSONObject detail = getModJson(coach, exist);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		apply.setCoachid(coach.getCoachid());
 		apply.setApplyuserid(user.getId());
 		apply.setDetail(detail.toJSONString());
@@ -1420,11 +1418,11 @@ public class CoachServiceImpl implements CoachService {
 		 * @todo 审核通过，数据没有改
 		 */
 		CoachModApply param = new CoachModApply();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		//param.setDblink(user.getDblink());
 		param.setId(applyid);
 		CoachModApply apply = coachModApplyMapper.getApply(param);
-		Flow flow = flowService.getFlow(apply.getTransactionid(),user);
+		Flow flow = flowService.getFlow(apply.getTransactionid());
 		if (apply.getStatus() == 0) {
 			apply.setStatus(state);
 			apply.setAudituserid(user.getId());
@@ -1459,13 +1457,13 @@ public class CoachServiceImpl implements CoachService {
 	public ResultBean batchAuditModCoachApply(String[] applyid, int state
 			) {
 		ResultBean rb = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		for (String id : applyid) {
 			CoachModApply param = new CoachModApply();
 			//param.setDblink(user.getDblink());
 			param.setId(Integer.parseInt(id));
 			CoachModApply apply = coachModApplyMapper.getApply(param);
-			Flow flow = flowService.getFlow(apply.getTransactionid(),user);
+			Flow flow = flowService.getFlow(apply.getTransactionid());
 			if (apply.getStatus() == 0) {
 				apply.setStatus(state);
 				apply.setAudituserid(user.getId());
@@ -1494,7 +1492,7 @@ public class CoachServiceImpl implements CoachService {
 	
 	public void auditProcess(CoachModApply apply,Flow flow,int state, 
 			ResultBean rb1){
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (state == 1) {
 			boolean next = (flow != null)
 					&& flowService.auditFlow(flow, user.getId(),
@@ -1644,7 +1642,7 @@ public class CoachServiceImpl implements CoachService {
 				dellist.add(coach);
 			}
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Map params = new HashMap();
 		if (list.size() > 0) {
 			params.put("list", list);

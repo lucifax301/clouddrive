@@ -51,7 +51,7 @@ public class TrainExamServiceImpl implements TrainExamService {
 
 	@Override
 	public ResultBean add(List<TrainExamItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 
@@ -123,7 +123,7 @@ public class TrainExamServiceImpl implements TrainExamService {
 
 	@Override
 	public Map<String, Object> importData(List<TrainExamItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 

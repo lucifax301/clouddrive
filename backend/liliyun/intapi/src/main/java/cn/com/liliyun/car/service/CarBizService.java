@@ -2,7 +2,6 @@ package cn.com.liliyun.car.service;
 
 import cn.com.liliyun.car.model.*;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.user.model.User;
 
 import java.util.List;
 
@@ -12,44 +11,44 @@ public interface CarBizService {
 	
 	ResultBean updateCostRemind(CarCostRemind costRemind);
 	
-	List <CarRemind> listCarRemind(User user,CarCostRemind carCostRemind);
+	List <CarRemind> listCarRemind(CarCostRemind carCostRemind);
 	
 	List <CarMileage> listMileage(CarMileage mileage);
 	
 	List <CarScrap> listScrap(CarScrap carScrap);
 	
-	ResultBean editScrap(User user,CarScrap carScrap);
+	ResultBean editScrap(CarScrap carScrap);
 	
-	ResultBean addDelay(User user,CarScrap carScrap);
+	ResultBean addDelay(CarScrap carScrap);
 	
-	ResultBean editDelay(User user,CarScrap carScrap);
+	ResultBean editDelay(CarScrap carScrap);
 	
 	CarMileage getMileage(CarMileage mileage);
 	
-	ResultBean editMileage(User user,CarMileage mileage);
+	ResultBean editMileage(CarMileage mileage);
 	
 	List<CarLog> getCarLogList(CarLog carLog);
 	
-	public ResultBean getCarPartsList(CarParts carParts, User user);
+	public ResultBean getCarPartsList(CarParts carParts);
 	
-	public ResultBean addCarParts(CarParts carParts, User user);
+	public ResultBean addCarParts(CarParts carParts);
 	
-	public List<CarParts> getCarPartsExport(CarParts carParts, User user);
+	public List<CarParts> getCarPartsExport(CarParts carParts);
 	
-	public List<PartsSetting> getPartsSettings(User user);
+	public List<PartsSetting> getPartsSettings();
 
-	public ResultBean setPartsSetting(List<PartsSetting> partsSettings, User user);
+	public ResultBean setPartsSetting(List<PartsSetting> partsSettings);
 	
-	public ResultBean getPartsNotice(PartsSetting partsSetting, User user);
+	public ResultBean getPartsNotice(PartsSetting partsSetting);
 
-	public ResultBean editCarParts(CarParts carParts, User user);
+	public ResultBean editCarParts(CarParts carParts);
 
 	public Integer getCount(Car car);
 
-	ResultBean addLog(CarLog carLog, User user, String bussinessid);
+	ResultBean addLog(CarLog carLog);
 
-	CarLog getLog(CarLog carLog, User user);
+	CarLog getLog(CarLog carLog);
 
-	void updateAuditLog(CarLog carLog, User user, String bussinessid, int i);
+	void updateAuditLog(CarLog carLog,int i);
 	
 }

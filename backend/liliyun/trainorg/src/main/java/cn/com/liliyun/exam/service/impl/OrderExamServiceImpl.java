@@ -58,7 +58,7 @@ public class OrderExamServiceImpl implements OrderExamService {
 
     @Override
 	public ResultBean add(List<OrderExamItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
         Date now = new Date();
         String tableId = user.getBatchId();
         Student query = new Student();
@@ -174,7 +174,7 @@ public class OrderExamServiceImpl implements OrderExamService {
 
 	@Override
 	public Map<String,Object> importData(List<OrderExamItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		Student query = new Student();

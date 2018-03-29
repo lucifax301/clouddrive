@@ -18,8 +18,18 @@ public class ResultBean implements Serializable{
 	
 	private Object extend;
 	
+	private String stack;
 	
 	
+	
+	public String getStack() {
+		return stack;
+	}
+
+	public void setStack(String stack) {
+		this.stack = stack;
+	}
+
 	public Object getExtend() {
 		return extend;
 	}

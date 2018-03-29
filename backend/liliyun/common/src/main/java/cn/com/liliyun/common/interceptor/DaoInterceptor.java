@@ -7,6 +7,11 @@ import cn.com.liliyun.common.annotation.DBRoute;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.ThreadTruck;
 
+/**
+ * 拦截dao接口，如果dao有DBRoute注解路由到MRD数据库，就注入到线程里，最后释放
+ * @author Administrator
+ *
+ */
 public class DaoInterceptor implements MethodInterceptor {
 
 	@Override
@@ -22,7 +27,9 @@ public class DaoInterceptor implements MethodInterceptor {
 			}
 			return invocation.proceed();
 		}finally{
-			ThreadTruck.remove(ConstantUtil.ROUTE_DB);
+			if(route!=null){
+				ThreadTruck.remove(ConstantUtil.ROUTE_DB);
+			}
 		}
 	}
 

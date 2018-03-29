@@ -10,6 +10,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.com.liliyun.business.model.ActionBusiness;
 import cn.com.liliyun.business.service.BusinessService;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.user.model.User;
 
@@ -45,7 +46,10 @@ public class BusinessInterceptor extends HandlerInterceptorAdapter{
 		ab.setActionid(actionid);
 		ActionBusiness actionBusiness=businessService.getActionBusiness(ab);
 		if(actionBusiness!=null){
-			session.setAttribute(ConstantUtil.SESSION_BUSINESS, actionBusiness.getBusinessid());
+			//session.setAttribute(ConstantUtil.SESSION_BUSINESS, actionBusiness.getBusinessid());
+			RequestContext rc = RequestContext.get();
+			rc.putValue(ConstantUtil.SESSION_BUSINESS, actionBusiness.getBusinessid());
+			
 		}
 		}
 		return true;

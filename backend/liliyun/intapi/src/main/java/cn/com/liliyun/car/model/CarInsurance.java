@@ -49,10 +49,6 @@ public class CarInsurance extends BaseModel implements Serializable {
     private Integer busrisksPay;
 
     
-    
-
-    private Long cuid;
-
     private Date saliDate;
     
     private String saliStartDate;//交强险投保开始日期 仅做查询参数
@@ -222,14 +218,6 @@ public class CarInsurance extends BaseModel implements Serializable {
 
     public void setCname(String cname) {
         this.cname = cname == null ? null : cname.trim();
-    }
-
-    public Long getCuid() {
-        return cuid;
-    }
-
-    public void setCuid(Long cuid) {
-        this.cuid = cuid;
     }
 
     public Date getSaliDate() {

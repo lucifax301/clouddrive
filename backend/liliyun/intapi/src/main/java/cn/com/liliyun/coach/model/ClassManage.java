@@ -28,10 +28,6 @@ public class ClassManage extends BaseModel implements Serializable {
 
     private String classdesc;
 
-    private Long cuid;
-
-    private Long muid;
-
     private Date ctime;
 
     private Date mtime;
@@ -126,22 +122,6 @@ public class ClassManage extends BaseModel implements Serializable {
     public void setClassdesc(String classdesc) {
         this.classdesc = classdesc == null ? null : classdesc.trim();
     }
-
-	public Long getCuid() {
-		return cuid;
-	}
-
-	public void setCuid(Long cuid) {
-		this.cuid = cuid;
-	}
-
-	public Long getMuid() {
-		return muid;
-	}
-
-	public void setMuid(Long muid) {
-		this.muid = muid;
-	}
 
 	public Date getCtime() {
 		return ctime;

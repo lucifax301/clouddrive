@@ -1,8 +1,20 @@
 package cn.com.liliyun.exam.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.com.liliyun.common.CommonService;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.common.util.SubjectEnum;
 import cn.com.liliyun.exam.mapper.ResultExamItemMapper;
@@ -14,13 +26,9 @@ import cn.com.liliyun.trainorg.model.ResultExam;
 import cn.com.liliyun.trainorg.model.ResultExamItem;
 import cn.com.liliyun.trainorg.service.ResultExamService;
 import cn.com.liliyun.user.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
-public class ResultExamServiceImpl implements ResultExamService {
+public class ResultExamServiceImpl extends CommonService implements ResultExamService {
 
 	@Autowired
 	private ResultExamMapper resultExamMapper;
@@ -49,16 +57,16 @@ public class ResultExamServiceImpl implements ResultExamService {
 	}
 
 	@Override
-	public ResultBean add(User user, List<ResultExamItem> list) {
-		String dblink = user.getDblink();
+	public ResultBean add(List<ResultExamItem> list) {
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 
 		StudentStatusLog studentStatusLog = new StudentStatusLog();
-		studentStatusLog.setDblink(dblink);
+		
 
 		Student result;
 		int ok = 0, fail = 0;
@@ -100,11 +108,11 @@ public class ResultExamServiceImpl implements ResultExamService {
 		if (list.size() > 0) {
 		    Integer subject = list.get(0).getSubject();
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = resultExamItemMapper.insertBatch(params);
 			ResultExam resultExam = new ResultExam();
-			resultExam.setDblink(dblink);
+			
 			resultExam.setTableid(tableId);
 			resultExam.setSubject(subject);
 			resultExam.setItemcount(count);
@@ -121,16 +129,16 @@ public class ResultExamServiceImpl implements ResultExamService {
 	}
 
 	@Override
-	public Map<String, Object> importData(User user, List<ResultExamItem> list) {
-		String dblink = user.getDblink();
+	public Map<String, Object> importData(List<ResultExamItem> list) {
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 
 		Student query = new Student();
-		query.setDblink(dblink);
+		
 
 		StudentStatusLog studentStatusLog = new StudentStatusLog();
-		studentStatusLog.setDblink(dblink);
+		
 		StringBuilder sb = new StringBuilder();
 		Student result;
 		int ok = 0, fail = 0;
@@ -187,11 +195,11 @@ public class ResultExamServiceImpl implements ResultExamService {
 		if (list.size() > 0) {
             Integer subject = list.get(0).getSubject();
 			Map<String, Object> params = new HashMap<>();
-			params.put("dblink", dblink);
+			
 			params.put("list", list);
 			int count = resultExamItemMapper.insertBatch(params);
 			ResultExam resultExam = new ResultExam();
-			resultExam.setDblink(dblink);
+			
 			resultExam.setTableid(tableId);
 			resultExam.setSubject(subject);
 			resultExam.setItemcount(count);

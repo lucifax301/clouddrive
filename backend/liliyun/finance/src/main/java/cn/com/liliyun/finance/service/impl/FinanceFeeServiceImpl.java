@@ -60,7 +60,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 
 	@Override
 	public ResultBean save(FinanceFeeDTO dto, List<FinanceFeeItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
         Date now = new Date();
         String tableId = user.getBatchId();
 
@@ -176,7 +176,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 		
 		String tableid = dto.getTableid();
 		FinanceFee financeFee = new FinanceFee();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeFee.setTableid(tableid);
 		financeFee = financeFeeMapper.selectByPrimaryKey(financeFee);
 		Date now = new Date();
@@ -259,7 +259,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 
 	@Override
 	public ResultBean saveItem( FinanceFeeItem feeItem) {
-	    User user = RequestContext.get(ConstantUtil.USER_SESSION);
+	    User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Student student = new Student();
 		
 		student.setId(feeItem.getStudentid());
@@ -288,7 +288,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
     public ResultBean saveFinanceItem( FinanceFeeItem feeItem,Student student) {
         
         Date now = new Date();
-        User user = RequestContext.get(ConstantUtil.USER_SESSION);
+        User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
         feeItem.setName(student.getName());
         feeItem.setIdcard(student.getIdcard());
         feeItem.setCuid(user.getId());
@@ -311,7 +311,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 
     @Override
 	public ResultBean editItem( FinanceFeeItem feeItem) {
-    	User user = RequestContext.get(ConstantUtil.USER_SESSION);
+    	User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		feeItem.setMuid(user.getId());
 		feeItem.setMname(user.getRealname());
 		feeItem.setMtime(new Date());
@@ -340,7 +340,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 
     @Override
     public ResultBean check( FinanceFeeItem feeItem) {
-    	User user = RequestContext.get(ConstantUtil.USER_SESSION);
+    	User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
         String tableid = feeItem.getTableid();
         Date now = new Date();
         feeItem.setCheckuid(user.getId());
@@ -367,7 +367,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
 
 	@Override
 	public ResultBean checkBatch( FinanceFeeItem financeFeeItem) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		String checkids = financeFeeItem.getIds();
         String tableids = financeFeeItem.getTableids();
         if (StringUtils.isBlank(checkids)) {
@@ -402,7 +402,7 @@ public class FinanceFeeServiceImpl implements FinanceFeeService {
     }
 	
 	private void recount(String tableid) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		FinanceFee financeFee = new FinanceFee();
 		financeFee.setTableid(tableid);
 		

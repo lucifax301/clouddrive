@@ -63,7 +63,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 	 */
 	@Override
 	public ResultBean doStoreTransfer(List<TransfertableItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		String tableId = user.getBatchId();
 		Student query = new Student();
 		
@@ -168,7 +168,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 
 	@Override
 	public ResultBean doAreaTranfer(List<Transfertable> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		String tableId = user.getBatchId();
 		TransfertableItem item = new TransfertableItem();
 		
@@ -219,7 +219,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 
 	@Override
 	public ResultBean doAreaReturn(List<TransfertableItem> list, String rtnreason) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Transfertable transfertable = new Transfertable();
 		
 		Map<String, Object> params = new HashMap<>();
@@ -256,7 +256,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 
 	@Override
 	public ResultBean doLicenseReturn(List<TransfertableItem> list, String rtnreason) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Transfertable transfertable = new Transfertable();
 		
 		TransfertableItem transfertableItem = new TransfertableItem();
@@ -331,7 +331,7 @@ public class TransfertableServiceImpl implements TransfertableService {
 	}
 
 	private void addList(List <StudentStatusLog> list,StudentStatusLog studentStatusLog) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		studentStatusLog.setCuid(user.getId());
 		studentStatusLog.setCname(user.getRealname());
 		studentStatusLog.setCtime(new Date());

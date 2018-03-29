@@ -53,7 +53,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public ResultBean doLearncard(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
@@ -123,7 +123,7 @@ public class MaterialServiceImpl implements MaterialService {
 	
 	@Override
 	public ResultBean doApplyStamp(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		Student query = new Student();
@@ -184,7 +184,7 @@ public class MaterialServiceImpl implements MaterialService {
 	
 	@Override
 	public ResultBean doSchoolStamp(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
@@ -245,7 +245,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public Map<String, Object> importIcCard(List <MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
@@ -330,7 +330,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public ResultBean doTribillPrint(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
@@ -391,7 +391,7 @@ public class MaterialServiceImpl implements MaterialService {
 	
 	@Override
 	public ResultBean doTribillStamp(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
@@ -453,7 +453,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public ResultBean doRepayMaterial(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
@@ -515,7 +515,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public ResultBean doRtnMaterial(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		
@@ -576,7 +576,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public ResultBean doLicense(List<MaterialItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		

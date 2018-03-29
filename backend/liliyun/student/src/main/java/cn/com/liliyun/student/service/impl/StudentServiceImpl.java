@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import cn.com.liliyun.coach.model.Coach;
 import cn.com.liliyun.coach.model.CoachClassinfo;
 import cn.com.liliyun.coach.service.CoachService;
+import cn.com.liliyun.common.CommonService;
 import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
@@ -86,14 +87,13 @@ import cn.com.liliyun.trainorg.service.StoreService;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.service.UserService;
 
-import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.github.pagehelper.PageInfo;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @Service
-public class StudentServiceImpl implements StudentService {
+public class StudentServiceImpl extends CommonService implements StudentService {
 
 	Logger logger = Logger.getLogger(StudentServiceImpl.class);
 	@Autowired
@@ -172,7 +172,7 @@ public class StudentServiceImpl implements StudentService {
             r.setMsg("身份证号码重复");
             return r;
         }
-        User user = RequestContext.get(ConstantUtil.USER_SESSION);
+        User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
         student.setApplyexam(ApplyExam.SIGNUP_STUDENT_INFO.getApplyexam());
         student.setApplystatus(ApplyExam.SIGNUP_STUDENT_INFO.getApplystatus());
         student.setAreaid(user.getAreaid());
@@ -386,7 +386,7 @@ public class StudentServiceImpl implements StudentService {
 
 		TheoryLesson temp = new TheoryLesson();
 		temp.setState(5);
-		updateTheory(temp, "");
+		updateTheory(temp);
 		//每次获取List的时候，读取上次更新列表时间，超过半小时则再次更新。
 //		File file = ResourceUtils.getFile("classpath:../lastupdatetime");
 //		FileInputStream fis = new FileInputStream(file);
@@ -413,7 +413,7 @@ public class StudentServiceImpl implements StudentService {
 //			fw.close();
 //		}
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 		//门店帐号，只能看本门店数据，片区帐号，只能看本片区的
 		TheoryLessonStoreDto dto = new TheoryLessonStoreDto();
@@ -466,7 +466,7 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg(HttpConstant.ERROR_MSG);
 			return r;
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 
 		if (theoryLesson.getTheoryid() == null && theoryLesson.getTransactionid() != null && !theoryLesson.getTransactionid().trim().equals("")) {
@@ -567,7 +567,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public ResultBean getTheoryStores() {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		List<TheoryStoreDto> tsds = theoryStoreMapper.selectStoreByAreaId(user.getDblink(), user.getMgrdb(), user.getAreaid());
 		r.setCode(HttpConstant.SUCCESS_CODE);
 		r.setMsg(HttpConstant.SUCCESS_MSG);
@@ -579,7 +579,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public ResultBean getTheoryStudents(Student student) {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		student.setAreaid(user.getAreaid());
 		student.setStoreid(user.getStoreid());
 		
@@ -595,7 +595,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public ResultBean addTheory(TheoryLesson theoryLesson, String stores) {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 		if (privilege != 1) {
 			r.setCode(HttpConstant.NO_AUTH_COCE);
@@ -645,7 +645,7 @@ public class StudentServiceImpl implements StudentService {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		int privilege = user.getLevel(); //2门店、1片区、0驾校
 
 		TheoryLesson theory = theoryLessonMapper.selectByPrimaryKey(theoryId);
@@ -722,9 +722,10 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean updateTheory(TheoryLesson theoryLesson,  String businessid) {
+	public ResultBean updateTheory(TheoryLesson theoryLesson) {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
+		String businessid = this.getContextValue(ConstantUtil.SESSION_BUSINESS);
 		if (theoryLesson.getState() == 5) {
 			TheoryLessonExample tle = new TheoryLessonExample();
 			tle.createCriteria().andStateEqualTo(4).andIsdelEqualTo((byte) 0).andEndtimeLessThan(new Date());
@@ -799,7 +800,7 @@ public class StudentServiceImpl implements StudentService {
 					
 					
 					String desc = "理论课[" + theory.getLessonname() + "]学员安排审核";
-					String transactionid = flowService.addFlow(businessid, user.getId(), desc,user);
+					String transactionid = flowService.addFlow(businessid, user.getId(), desc);
 					temp.setBusinessid(businessid);
 					temp.setTransactionid(transactionid);
 					theoryLessonMapper.updateByPrimaryKeySelective(temp);
@@ -808,7 +809,7 @@ public class StudentServiceImpl implements StudentService {
 			case 3:
 				if (theory == null || theory.getState() != 2)
 					return r;
-				Flow flow_accept = flowService.getFlow(theory.getTransactionid(),user);
+				Flow flow_accept = flowService.getFlow(theory.getTransactionid());
 				
 				boolean next = (flow_accept != null) && flowService.auditFlow(flow_accept, user.getId(), ConstantUtil.AUDIT_ACCEPT);
 				if (!next) {
@@ -870,7 +871,7 @@ public class StudentServiceImpl implements StudentService {
 				theoryLesson.setReviewtime(new Date());
 				theoryLessonMapper.updateByPrimaryKeySelective(theoryLesson);
 				
-				Flow flow_reject = flowService.getFlow(theory.getTransactionid(),user);
+				Flow flow_reject = flowService.getFlow(theory.getTransactionid());
 				if (flow_reject != null)
 					flowService.auditFlow(flow_reject, user.getId(), ConstantUtil.AUDIT_REJECT);
 				break;
@@ -885,9 +886,10 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview,  String businessid) {
+	public ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview) {
 		ResultBean r=new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
+		String businessid = this.getContextValue(ConstantUtil.SESSION_BUSINESS);
 		if (!isreview) {
 			Student student = new Student();
 			student.setId(coachStudent.getStudentid());
@@ -901,7 +903,7 @@ public class StudentServiceImpl implements StudentService {
 				coachStudent.setReviewid(-1);
 				
 				String desc = "学员[" + student.getName() + "]教练变更申请";
-				String transactionid = flowService.addFlow(businessid, user.getId(), desc,user);
+				String transactionid = flowService.addFlow(businessid, user.getId(), desc);
 				coachStudent.setBusinessid(businessid);
 				coachStudent.setTransactionid(transactionid);
 			} else {
@@ -917,7 +919,7 @@ public class StudentServiceImpl implements StudentService {
 				coachStudent.setIsvalid(coachStudent.getState()==2?1:0);
 				coachStudent.setReviewid(user.getId());
 				
-				Flow flow = flowService.getFlow(exist.getTransactionid(),user);
+				Flow flow = flowService.getFlow(exist.getTransactionid());
 				
 				if (coachStudent.getState() == 2) { //申请通过
 					boolean next = (flow != null) && flowService.auditFlow(flow, user.getId(), ConstantUtil.AUDIT_ACCEPT);
@@ -966,7 +968,7 @@ public class StudentServiceImpl implements StudentService {
 
 
 	@Override
-	public ResultBean addStudentPauseApply(StudentPauseApply apply,String businessid) {
+	public ResultBean addStudentPauseApply(StudentPauseApply apply) {
 		ResultBean r=new ResultBean();
 
 		StudentPauseApply param = new StudentPauseApply();
@@ -979,7 +981,8 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg(ResultCode.ERRORINFO.PAUSEAPPLYEXIST);
 			return r;
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
+		String businessid = this.getContextValue(ConstantUtil.SESSION_BUSINESS);
 		apply.setApplyuserid(user.getId());
 
 		apply.setApplyuserid(user.getId());
@@ -997,7 +1000,7 @@ public class StudentServiceImpl implements StudentService {
 		Student exist=studentMapper.selectByPrimaryKey(sp);
 		String desc = "学员[" + exist.getName() + "]"+typestr+"申请";
 		String transactionid = flowService.addFlow(businessid, user.getId(),
-				desc,user);
+				desc);
 
 
 		apply.setTransactionid(transactionid);
@@ -1011,7 +1014,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public String theoryLessonText(Integer theoryid, Integer type) {
 		String r = null;
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		String cancelText = "尊敬的学员，由于临时的特殊原因，驾校取消了{1}的{3}培训，给您带来的不便，十分抱歉，如有问题请联系客服！";
 		String classText = "尊敬的喱喱学员，请您于{1}携带{2}到{3}参加{5}培训，课程时间为{6}，培训为指纹签到，请您提前十分钟到达现场签到";
 		TheoryLesson theoryLesson = theoryLessonMapper.selectByPrimaryKey(theoryid);
@@ -1039,7 +1042,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public List<TheoryStudentExport> theoryStudentExport(TheoryStudent theoryStudent) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		theoryStudent.setStoreid(user.getStoreid());
 		return studentMapper.selectStudentExport(theoryStudent);
 	}
@@ -1129,7 +1132,7 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg(ResultCode.ERRORINFO.APPLYHASAUDIT);
 			return r;
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		apply.setAudituserid(user.getId());
 		apply.setAudituser(user.getUsername());
 		//apply.setAuditdate(new Date());
@@ -1155,7 +1158,7 @@ public class StudentServiceImpl implements StudentService {
 
 		}
 
-		Flow flow = flowService.getFlow(exist.getTransactionid(),user);
+		Flow flow = flowService.getFlow(exist.getTransactionid());
 		
 		if (apply.getStatus() == 1) {
 			boolean next = (flow != null)
@@ -1213,7 +1216,7 @@ public class StudentServiceImpl implements StudentService {
 		 * @todo
 		 * user module need to route to mgrdb
 		 */
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		List<User> users= userService.selectSchoolUser(null);
 		for(StudentPauseApply apply:list){
 
@@ -1237,7 +1240,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public ResultBean getStudentPauseApply(StudentPauseApply apply) {
 		StudentPauseApply exist=studentPauseApplyMapper.get(apply);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (exist.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (exist.getStatus() == 0) {// 业务还在等待审核中
 				exist.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
@@ -1282,7 +1285,7 @@ public class StudentServiceImpl implements StudentService {
 		up.setId(exist.getApplyuserid());
 		User applyuser= userService.getUser(up);
 		exist.setApplyuser(applyuser.getUsername());
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (exist.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (exist.getStatus() == 0) {// 业务还在等待审核中
 				exist.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
@@ -1315,7 +1318,7 @@ public class StudentServiceImpl implements StudentService {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		int level = user.getLevel();
 		transferStudent.setTargetareaid(level!=0?user.getAreaid():null);
 		transferStudent.setTargetstoreid(level==2?user.getStoreid():null);
@@ -1363,7 +1366,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public ResultBean addTransfer(TransferStudent transferStudent,  String businessid) {
+	public ResultBean addTransfer(TransferStudent transferStudent) {
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.DATA_ERROR_COCE);
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
@@ -1379,7 +1382,7 @@ public class StudentServiceImpl implements StudentService {
 			r.setMsg("不能把原门店设置为目标门店！");
 			return r;
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Store storetemp = new Store();
 		storetemp.setId(s.getStoreid());
 		Store store = storeService.selectOne(storetemp);
@@ -1413,7 +1416,7 @@ public class StudentServiceImpl implements StudentService {
 		r.setMsg(HttpConstant.DATA_ERROR_MSG);
 		
 		Integer state = transferStudent.getState();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		TransferStudent transfer = transferStudentMapper.selectByPrimaryKey(transferStudent);
 		if (transfer.getState() != 1)
 			return r;
@@ -1475,7 +1478,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public ResultBean getTStudentList(Student student) {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		int level = user.getLevel();
 		student.setAreaid(level!=0?user.getAreaid():null);
 		student.setStoreid(level==2?user.getStoreid():null);
@@ -1550,7 +1553,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public void saveStudentStatusLog(StudentStatusLog studentStatusLog) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		studentStatusLog.setCuid(user.getId());
 		studentStatusLog.setCname(user.getRealname());
 		studentStatusLog.setCtime(new Date());

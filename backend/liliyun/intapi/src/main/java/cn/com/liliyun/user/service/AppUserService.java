@@ -7,52 +7,52 @@ import cn.com.liliyun.user.model.Config;
 
 public interface AppUserService {
 
-	ResultBean login(String mobile, String password)  throws Exception ;
+	public ResultBean login(String mobile, String password)  ;
 
-	ResultBean logout(String userId);
+	public ResultBean logout(String userId);
 
-	ResultBean getUserInfo(String userId);
+	public ResultBean getUserInfo(String userId);
 
-	ResultBean updateUser(Integer userId, String schoolId, String password,String passwordOld,  String photo, String name, String sex, String mobile, String codeInput);
+	public ResultBean updateUser(Integer userId, String schoolId, String password,String passwordOld,  String photo, String name, String sex, String mobile, String codeInput);
 
-	ResultBean feedback(Long  userId, Integer deptId, String content, String pic);
+	public ResultBean feedback(Long  userId, Integer deptId, String content, String pic);
 
-	ResultBean getSysMsg(Long userId, Integer schoolId);
+	public ResultBean getSysMsg(Long userId, Integer schoolId);
 
-	ResultBean getToDo(Long userId, Integer schoolId);
+	public ResultBean getToDo(Long userId, Integer schoolId);
 
-	ResultBean getToDoDetail(Long userId, Integer schoolId, String flowId);
+	public ResultBean getToDoDetail(Long userId, Integer schoolId, String flowId);
 
-	ResultBean approve(Long userId, Integer schoolId, String flowId, String content);
+	public ResultBean approve(Long userId, Integer schoolId, String flowId, String content);
 
 	List<Config> getHomeConfig(Long userId, String schoolId, String companyId);
 
-	ResultBean getPotentialCustomerList(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getPotentialCustomerList(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getSalesChannel(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getSalesChannel(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getFinanceReceipt(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getFinanceReceipt(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getFinancePayOut(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getFinancePayOut(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getFinanceArrearage(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getFinanceArrearage(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getExam(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getExam(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getExamItem(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getExamItem(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getDepartment(Long userId, String schoolId, String companyId);
+	public ResultBean getDepartment(Long userId, String schoolId, String companyId);
 
-	ResultBean getTopContacts(Long userId, String schoolId, String companyId);
+	public ResultBean getTopContacts(Long userId, String schoolId, String companyId);
 
-	ResultBean upTopContacts(Long userId, String deptId, String schoolId, String companyId, Integer contsUserId,
+	public ResultBean upTopContacts(Long userId, String deptId, String schoolId, String companyId, Integer contsUserId,
 			String contsSchoolId);
 
-	ResultBean getDepartmentStaff(Long userId, Integer deptId, String schoolId, String companyId);
+	public ResultBean getDepartmentStaff(Long userId, Integer deptId, String schoolId, String companyId);
 
-	ResultBean getStaffInfo(Integer userId, String deptId, String schoolId, String companyId, Integer staffId);
+	public ResultBean getStaffInfo(Integer userId, String deptId, String schoolId, String companyId, Integer staffId);
 
-	ResultBean updatePasswd(String mobile, String password);
+	public ResultBean updatePasswd(String mobile, String password);
 
 
 }

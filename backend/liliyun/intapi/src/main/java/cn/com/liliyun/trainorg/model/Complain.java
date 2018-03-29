@@ -26,10 +26,6 @@ public class Complain extends BaseModel implements Serializable {
 
     private String manageremark;
 
-    private Long cuid;
-
-    private Long muid;
-
     private Date ctime;
 
     private Date mtime;
@@ -123,22 +119,7 @@ public class Complain extends BaseModel implements Serializable {
     public void setManageremark(String manageremark) {
         this.manageremark = manageremark == null ? null : manageremark.trim();
     }
-
-    public Long getCuid() {
-        return cuid;
-    }
-
-    public void setCuid(Long cuid) {
-        this.cuid = cuid;
-    }
-
-    public Long getMuid() {
-        return muid;
-    }
-
-    public void setMuid(Long muid) {
-        this.muid = muid;
-    }
+    
 
     public Date getCtime() {
         return ctime;

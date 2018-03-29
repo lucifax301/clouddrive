@@ -1,15 +1,7 @@
 package cn.com.liliyun.report.service;
 
-import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.report.model.AppIndexInfo;
-import cn.com.liliyun.report.model.CertificateCollectDto;
-import cn.com.liliyun.trainorg.model.TrainExamItemDetailVo;
-import cn.com.liliyun.trainorg.model.TrainExamItemVo;
-import cn.com.liliyun.trainorg.model.TrainExamItemYearVo;
 import cn.com.liliyun.user.model.User;
-import org.apache.xmlbeans.impl.xb.xsdschema.AppinfoDocument;
-
-import java.util.List;
 
 /**
  * APP获取首页统计信息

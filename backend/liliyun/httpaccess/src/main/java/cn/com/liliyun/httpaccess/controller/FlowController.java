@@ -33,57 +33,31 @@ public class FlowController {
 	@RequestMapping(value = "/listmy")
 	@ResponseBody
 	public ResultBean listmy(Flow flow,HttpServletRequest request) {
-		ResultBean rb = null;
-		User user = AccessWebUtil.getSessionUser(request);
-		try {
-			List<Flow> list = flowService.findMyFlow(flow, user);
-			PageInfo<Flow> pagedResult = new PageInfo(list);
-			rb=new ResultBean();
-			rb.setResult(pagedResult);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			rb=new ResultBean();
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		List<Flow> list = flowService.findMyFlow(flow);
+		PageInfo<Flow> pagedResult = new PageInfo(list);
+		ResultBean rb=new ResultBean();
+		rb.setResult(pagedResult);
 		return rb;
+		
 	}
 	
 	@RequestMapping(value = "/list")
 	@ResponseBody
 	public ResultBean list(FlowStep flowstep,HttpServletRequest request) {
-		ResultBean rb = null;
-		User user = AccessWebUtil.getSessionUser(request);
-		try {
-			List<Flow> list = flowService.findUserFlow(flowstep, user);
-			PageInfo<Flow> pagedResult = new PageInfo(list);
-			rb=new ResultBean();
-			rb.setResult(pagedResult);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			rb=new ResultBean();
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		List<Flow> list = flowService.findUserFlow(flowstep);
+		PageInfo<Flow> pagedResult = new PageInfo(list);
+		ResultBean rb=new ResultBean();
+		rb.setResult(pagedResult);
 		return rb;
 	}
 	
 	@RequestMapping(value = "/listflowstep")
 	@ResponseBody
 	public ResultBean listflowstep(FlowStep flowstep,HttpServletRequest request) {
-		ResultBean rb = null;
-		User user = AccessWebUtil.getSessionUser(request);
-		try {
-			List<FlowStep> list = flowService.listFlowStep(flowstep);
-			PageInfo<Flow> pagedResult = new PageInfo(list);
-			rb=new ResultBean();
-			rb.setResult(pagedResult);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			rb=new ResultBean();
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		List<FlowStep> list = flowService.listFlowStep(flowstep);
+		PageInfo<Flow> pagedResult = new PageInfo(list);
+		ResultBean rb=new ResultBean();
+		rb.setResult(pagedResult);
 		return rb;
 	}
 }

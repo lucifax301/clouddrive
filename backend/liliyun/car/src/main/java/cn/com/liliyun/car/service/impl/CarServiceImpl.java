@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +23,12 @@ import cn.com.liliyun.car.model.CarOilwear;
 import cn.com.liliyun.car.model.CarRepair;
 import cn.com.liliyun.car.model.CarTax;
 import cn.com.liliyun.car.service.ICarService;
+import cn.com.liliyun.common.CommonService;
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
 import cn.com.liliyun.common.util.BeanCopy;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.DateUtil;
 import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.common.util.PageUtil;
@@ -40,7 +40,7 @@ import cn.com.liliyun.user.model.User;
 import com.github.pagehelper.PageInfo;
 
 @Service
-public class CarServiceImpl implements ICarService {
+public class CarServiceImpl extends CommonService implements ICarService {
 
 	private Logger logger = Logger.getLogger(CarServiceImpl.class);
 
@@ -93,7 +93,7 @@ public class CarServiceImpl implements ICarService {
 	}
 
 	@Override
-	public ResultBean addCar(User user,Car car) {
+	public ResultBean addCar(Car car) {
 		ResultBean r = new ResultBean();
 		
 		Car carInfo = carManager.queryCarByCarno(car);
@@ -102,16 +102,16 @@ public class CarServiceImpl implements ICarService {
 			r.setMsg("车牌号已经存在");
 			return r;
 		}
-		carManager.addCar(user,car);
+		carManager.addCar(car);
 		
 		return r;
 	}
 
 	@Override
-	public ResultBean updateCar(User user,Car car) {
+	public ResultBean updateCar(Car car) {
 		ResultBean r = new ResultBean();
 		
-		carManager.updateCar(user,car);
+		carManager.updateCar(car);
 		
 		return r;
 	}
@@ -549,8 +549,8 @@ public class CarServiceImpl implements ICarService {
 	}
 
 	@Override
-	public List<CarAccident> getCarAccidentList(CarAccident carAccident, User user) {
-		carAccident.setDblink(user.getDblink());
+	public List<CarAccident> getCarAccidentList(CarAccident carAccident) {
+		
 		PageUtil.startPage(carAccident);
 		List<CarAccident> list = carManager.queryCarAccidentList(carAccident);
 		return list;
@@ -558,10 +558,10 @@ public class CarServiceImpl implements ICarService {
 	}
 
 	@Override
-	public ResultBean getCarAccident(CarAccident carAccident, User user) {
+	public ResultBean getCarAccident(CarAccident carAccident) {
 		ResultBean r = new ResultBean();
 		try {
-			carAccident.setDblink(user.getDblink());
+			
 			CarAccident ca = carManager.queryCarAccident(carAccident);
 			r.setResult(ca);
 		} catch (Exception e) {
@@ -573,10 +573,10 @@ public class CarServiceImpl implements ICarService {
 	}
 
 	@Override
-	public ResultBean addCarAccident(CarAccident carAccident, User user) {
+	public ResultBean addCarAccident(CarAccident carAccident) {
 		ResultBean r = new ResultBean();
 		
-		carAccident.setDblink(user.getDblink());
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		carAccident.setCuid(user.getId());
 		carManager.addCarAccident(carAccident);
 		
@@ -584,10 +584,10 @@ public class CarServiceImpl implements ICarService {
 	}
 
 	@Override
-	public ResultBean updateCarAccident(CarAccident carAccident, User user) {
+	public ResultBean updateCarAccident(CarAccident carAccident) {
 		ResultBean r = new ResultBean();
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		
-		carAccident.setDblink(user.getDblink());
 		carAccident.setCtime(null);
 		carAccident.setCuid(null);
 		carAccident.setMuid(user.getId());
@@ -597,10 +597,10 @@ public class CarServiceImpl implements ICarService {
 	}
 
 	@Override
-	public List<CarAccident> getCarAccidentExport(CarAccident carAccident, User user) {
+	public List<CarAccident> getCarAccidentExport(CarAccident carAccident) {
 		List<CarAccident> r = null;
 		try {
-			carAccident.setDblink(user.getDblink());
+			
 			r = carManager.queryCarAccidentList(carAccident);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -609,10 +609,10 @@ public class CarServiceImpl implements ICarService {
 	}
 
 	@Override
-	public ResultBean importCarOilwear(List<CarOilwearImport> list,User user) {
+	public ResultBean importCarOilwear(List<CarOilwearImport> list) {
 		ResultBean r = new ResultBean();
 		Map<String,Object> params=new HashMap<String,Object>();
-		params.put("dblink", user.getDblink());
+		
 		params.put("list", list);
 		List<Car> carList=carManager.queryCarListOilCards(params);
 		Iterator<CarOilwearImport> it= list.iterator();
@@ -637,7 +637,7 @@ public class CarServiceImpl implements ICarService {
 		}	
 		if(list.size()>0){
 			params.put("list", list);
-			params.put("dblink", user.getDblink());
+			
 			carManager.importCarOilwear(params);
 		}
 		return r;

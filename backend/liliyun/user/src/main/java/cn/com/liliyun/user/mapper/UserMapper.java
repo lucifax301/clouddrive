@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.liliyun.common.annotation.DBRoute;
+import cn.com.liliyun.user.model.RoleUser;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.vo.UserVo;
 
@@ -39,4 +40,18 @@ public interface UserMapper {
     //public User selectOneWithRole(User user);
     
     //public List<User> selectListWithRole(User user);
+    
+    public List<User> listRoleUser(Map<String, Object> params);
+	
+	public List<User> listNotRoleUser(Map<String, Object> params);
+	
+	public int insertRoleUser(RoleUser roleUser);
+	
+	public int delRoleUser(RoleUser roleUser);
+	
+	public List<Integer> listRoleUserIds(RoleUser roleUser);
+	
+	public int getRoleUserTotal(RoleUser roleUser);
+	
+	public List<Map> listRoleUserCount(Map<String, Object> params);
 }

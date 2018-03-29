@@ -18,9 +18,7 @@ public class ComplainReturn extends BaseModel implements Serializable {
 
     private Date ctime;
 
-    private Long cuid;
-
-    private Long muid;
+    
 
     private String cusername;
 
@@ -76,22 +74,7 @@ public class ComplainReturn extends BaseModel implements Serializable {
         this.ctime = ctime;
     }
 
-    public Long getCuid() {
-        return cuid;
-    }
-
-    public void setCuid(Long cuid) {
-        this.cuid = cuid;
-    }
-
-    public Long getMuid() {
-        return muid;
-    }
-
-    public void setMuid(Long muid) {
-        this.muid = muid;
-    }
-
+    
     public String getCusername() {
         return cusername;
     }

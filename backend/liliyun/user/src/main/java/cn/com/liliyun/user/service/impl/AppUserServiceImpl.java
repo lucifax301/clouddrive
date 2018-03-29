@@ -52,7 +52,7 @@ public class AppUserServiceImpl implements AppUserService {
 	*/
 
 	@Override
-	public ResultBean login(String mobile, String password) throws Exception {
+	public ResultBean login(String mobile, String password)  {
 		ResultBean r = new ResultBean();
 		
 		User userQuery = new User();

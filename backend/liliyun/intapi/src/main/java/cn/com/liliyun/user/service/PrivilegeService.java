@@ -11,41 +11,41 @@ import cn.com.liliyun.user.model.User;
 
 public interface PrivilegeService {
 	
-	public List<Privilege> getAllPrivilege(Privilege privilege)throws Exception;
+	public List<Privilege> getAllPrivilege(Privilege privilege);
 	
-	public List<Privilege> getAllDevPrivilege(Privilege privilege)throws Exception;
+	public List<Privilege> getAllDevPrivilege(Privilege privilege);
 	
-	public List<Privilege> getAllBtn(User user)throws Exception;
+	public List<Privilege> getAllBtn(User user);
 
-	public void insertRole(Role role) throws Exception;
+	public void insertRole(Role role) ;
 	
-	public int delPrivilege(Privilege privilege, User user) throws Exception;
+	public int delPrivilege(Privilege privilege, User user) ;
 	
-	public int insertPrivilege(Privilege privilege) throws Exception;
+	public int insertPrivilege(Privilege privilege) ;
 	
-	public int updatePrivilege(Privilege privilege) throws Exception;
+	public int updatePrivilege(Privilege privilege) ;
 	
-	public int delRole(Role role) throws Exception;
+	public int delRole(Role role) ;
 	
-	public int updateRole(Role role) throws Exception;
+	public int updateRole(Role role) ;
 	
-	public int enable(Role role) throws Exception;
+	public int enable(Role role) ;
 	
-	public Role getRole(Role role) throws Exception;
+	public Role getRole(Role role) ;
 	
-	public List<Privilege> getUserPrivilege(User user)throws Exception;
+	public List<Privilege> getUserPrivilege(User user);
 	
-	public PageInfo <Role> listRole(Role role, Boolean isPage) throws Exception;
+	public PageInfo <Role> listRole(Role role, Boolean isPage) ;
 	
-	public int insertRoleUser(RoleUser roleUser) throws Exception;
+	public int insertRoleUser(RoleUser roleUser) ;
 	
-	public int delRoleUser(RoleUser roleUser) throws Exception;
+	public int delRoleUser(RoleUser roleUser) ;
 	
-	public PageInfo <User> listRoleUser(RoleUser roleUser) throws Exception;
+	public PageInfo <User> listRoleUser(RoleUser roleUser) ;
 	
-	public PageInfo <User> listNotRoleUser(RoleUser roleUser) throws Exception;
+	public PageInfo <User> listNotRoleUser(RoleUser roleUser) ;
 	
-	public List<Privilege> getUserPrivilegeList(User user)throws Exception;
+	public List<Privilege> getUserPrivilegeList(User user);
 	
 	public List<Role> listAllRole(Role role);
 }

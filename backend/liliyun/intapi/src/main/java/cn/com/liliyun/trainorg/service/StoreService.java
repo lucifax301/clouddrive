@@ -6,7 +6,6 @@ import java.util.Map;
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.trainorg.model.Store;
-import cn.com.liliyun.user.model.User;
 
 /**
  * 培训机构-门店
@@ -15,25 +14,25 @@ import cn.com.liliyun.user.model.User;
  */
 public interface StoreService {
 	
-	ResultBean insert(Store store);
+	public ResultBean insert(Store store);
 
-	ResultBean selectByPrimaryKey(Store store);
+	public ResultBean selectByPrimaryKey(Store store);
 	
-	ResultBean updateByPrimaryKeySelective(Store store);
+	public ResultBean updateByPrimaryKeySelective(Store store);
 
-	ResultBean updateByPrimaryKey(Store store);
+	public ResultBean updateByPrimaryKey(Store store);
 
-	ResultBean deleteById(Store store);
+	public ResultBean deleteById(Store store);
 	
-	List<Store> selectList(Store store);
+	public List<Store> selectList(Store store);
 	
-	List<Store> selectList(Store store, Boolean isStorePage);
+	public List<Store> selectList(Store store, Boolean isStorePage);
 	
-	List<Store> selectAllList(Store store);
+	public List<Store> selectAllList(Store store);
 	
-	Store selectOne(Store store);
+	public Store selectOne(Store store);
 	
-	int getCount(Store store);
+	public int getCount(Store store);
 	
 	public Map<Integer,MapDTO> getMap(Store store);
 	

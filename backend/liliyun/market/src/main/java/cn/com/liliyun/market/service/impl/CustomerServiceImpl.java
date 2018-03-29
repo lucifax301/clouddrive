@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public ResultBean addCustomerRecord(CustomerRecord customerRecord) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.<User>getValue(ConstantUtil.USER_SESSION);
 		customerRecord.setCuid(user.getId());
 		customerRecord.setCname(user.getRealname());
 		customerRecordMapper.insertSelective(customerRecord);
@@ -134,7 +134,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public ResultBean addPotentialCustomer(PotentialCustomer potentialCustomer) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.<User>getValue(ConstantUtil.USER_SESSION);
 		potentialCustomer.setCuid(user.getId());
 		potentialCustomer.setCname(user.getRealname());
 		potentialCustomerMapper.insertSelective(potentialCustomer);

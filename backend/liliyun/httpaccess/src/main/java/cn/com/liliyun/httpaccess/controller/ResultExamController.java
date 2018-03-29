@@ -74,7 +74,7 @@ public class ResultExamController extends BaseController {
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public ResultBean add(HttpServletRequest request,String json) {
 		List <ResultExamItem> list = JSONObject.parseArray(json, ResultExamItem.class);
-		return resultExamService.add(getUser(request), list);
+		return resultExamService.add(list);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -90,7 +90,7 @@ public class ResultExamController extends BaseController {
 			rb.setMsg("数据解析错误,请检查导入数据模板!");
 			return rb;
 		}
-		Map<String, Object> rtnData =  resultExamService.importData(getUser(request), list);
+		Map<String, Object> rtnData =  resultExamService.importData(list);
 		list = (List<ResultExamItem>) rtnData.get("errorlist");
 			if (list != null && list.size() > 0) {
 			ExportParams eparams = new ExportParams("考试成绩导入错误数据", "错误数据", ExcelType.XSSF);//title sheetname 文件格式

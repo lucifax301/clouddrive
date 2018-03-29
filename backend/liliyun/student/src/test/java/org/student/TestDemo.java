@@ -34,7 +34,7 @@ public class TestDemo {
 		User user = new User();
 		user.setMgrdb(false);
 		user.setDblink("jx_00002");
-		RequestContext.put(ConstantUtil.USER_SESSION, user);
+		RequestContext.putValue(ConstantUtil.USER_SESSION, user);
 		System.out.println("###############################xx");
 		theoryLessonMapper.selectByPrimaryKey(1);
 		theoryLessonMapper.selectLesson(null);

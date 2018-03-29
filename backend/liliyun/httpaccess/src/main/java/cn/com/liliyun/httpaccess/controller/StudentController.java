@@ -1,31 +1,16 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import cn.com.liliyun.coach.model.Coach;
-import cn.com.liliyun.coach.service.CoachService;
-import cn.com.liliyun.common.dto.MapDTO;
-import cn.com.liliyun.common.model.BaseModel;
-import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.ApplyExam;
-import cn.com.liliyun.common.util.ConstantUtil;
-import cn.com.liliyun.common.util.HttpConstant;
-import cn.com.liliyun.importexcel.model.Flownum;
-import cn.com.liliyun.student.dto.StudentCalcMoneyDTO;
-import cn.com.liliyun.student.dto.StudentCoachDTO;
-import cn.com.liliyun.student.model.*;
-import cn.com.liliyun.student.service.StudentService;
-import cn.com.liliyun.theory.dto.TheoryLessonStoreDto;
-import cn.com.liliyun.theory.dto.TheoryStudentExport;
-import cn.com.liliyun.theory.model.TheoryLesson;
-import cn.com.liliyun.theory.model.TheoryStudent;
-import cn.com.liliyun.trainorg.model.Area;
-import cn.com.liliyun.trainorg.model.Classinfo;
-import cn.com.liliyun.trainorg.model.Store;
-import cn.com.liliyun.trainorg.service.AreaService;
-import cn.com.liliyun.trainorg.service.ClassinfoService;
-import cn.com.liliyun.trainorg.service.StoreService;
-import cn.com.liliyun.user.model.User;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.github.pagehelper.PageInfo;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -48,17 +33,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
+import cn.com.liliyun.coach.model.Coach;
+import cn.com.liliyun.coach.service.CoachService;
+import cn.com.liliyun.common.dto.MapDTO;
+import cn.com.liliyun.common.model.BaseModel;
+import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.ApplyExam;
+import cn.com.liliyun.common.util.HttpConstant;
+import cn.com.liliyun.importexcel.model.Flownum;
+import cn.com.liliyun.student.dto.StudentCalcMoneyDTO;
+import cn.com.liliyun.student.dto.StudentCoachDTO;
+import cn.com.liliyun.student.model.CoachStudent;
+import cn.com.liliyun.student.model.Student;
+import cn.com.liliyun.student.model.StudentPauseApply;
+import cn.com.liliyun.student.model.StudentPauseApplyParam;
+import cn.com.liliyun.student.model.StudentStatusLog;
+import cn.com.liliyun.student.service.StudentService;
+import cn.com.liliyun.theory.dto.TheoryLessonStoreDto;
+import cn.com.liliyun.theory.dto.TheoryStudentExport;
+import cn.com.liliyun.theory.model.TheoryLesson;
+import cn.com.liliyun.theory.model.TheoryStudent;
+import cn.com.liliyun.trainorg.service.AreaService;
+import cn.com.liliyun.trainorg.service.ClassinfoService;
+import cn.com.liliyun.trainorg.service.StoreService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @ResponseBody
@@ -150,7 +149,7 @@ public class StudentController extends BaseController {
 			return rb;
 		}
 		params.put("list", list);
-		params.put("dblink", model.getDblink());
+		
 		Map<String, Object> rtnData = studentService.importFlownum(params);
 		list = (List<Flownum>) rtnData.get("errorlist");
 		if (list != null && list.size() > 0) {
@@ -172,17 +171,13 @@ public class StudentController extends BaseController {
 	@RequestMapping(value="/assignCoach")
 	public ResultBean assignCoach(HttpServletRequest request, CoachStudent coachStudent,
 			@RequestParam(value = "isreview", required = false, defaultValue = "0") Integer isreview){
-		
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		String businessid = (String) request.getSession().getAttribute(ConstantUtil.SESSION_BUSINESS);
-		return studentService.addCoachStudent(coachStudent, isreview==1,  businessid);
+		return studentService.addCoachStudent(coachStudent, isreview==1);
 		
 	}
 	
 	//学员的教练信息
 	@RequestMapping(value="/coach")
 	public ResultBean coachinfo(HttpServletRequest request, CoachStudent coachStudent){
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		coachStudent.setIsvalid(1);
 		CoachStudent cs=studentService.getCoachStudent(coachStudent);
 		ResultBean rb=new ResultBean();
@@ -230,17 +225,11 @@ public class StudentController extends BaseController {
     @RequestMapping(value = "/export")
     public ResponseEntity<byte[]> export(Student student,HttpServletRequest request) throws IOException {
     	List<Student> list = studentService.getAllList(student); //获取数据
-    	User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
     	
-    	Area area=new Area();
-		area.setDblink(user.getDblink());
-		Map<Integer, MapDTO> areas = areaService.getMap(area);
-		Store store=new Store();
-		store.setDblink(user.getDblink());
-		Map<Integer, MapDTO> stores = storeService.getMap(store);
-		Classinfo ci=new Classinfo();
-		ci.setDblink(user.getDblink());
-		Map<Integer, MapDTO> classes = classinfoService.getMap(ci);
+		
+		Map<Integer, MapDTO> areas = areaService.getMap(null);
+		Map<Integer, MapDTO> stores = storeService.getMap(null);
+		Map<Integer, MapDTO> classes = classinfoService.getMap(null);
     	
     	for (Student s : list) {
     		s.setAreaname(areas.get(s.getAreaid()) != null ? areas.get(s.getAreaid()).getName() : "");
@@ -263,7 +252,6 @@ public class StudentController extends BaseController {
 	//获取理论课列表
 	@RequestMapping(value="/theoryLessonList", method = RequestMethod.GET)
 	public ResultBean getTheoryList(HttpServletRequest request, TheoryLesson theoryLesson) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		return studentService.getTheoryList(theoryLesson);
 	}
 	
@@ -271,28 +259,24 @@ public class StudentController extends BaseController {
 	@RequestMapping(value="/theoryLesson", method = RequestMethod.GET)
 	public ResultBean getTheory(HttpServletRequest request, TheoryLessonStoreDto theoryLesson, 
 			@RequestParam(required = false, defaultValue = "0") int isReview) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		return studentService.getTheory(theoryLesson, isReview==1);
 	}
 	
 	//新增理论课的时候，获取门店列表数据
 	@RequestMapping(value="/theoryStores", method = RequestMethod.GET)
 	public ResultBean getTheoryStores(HttpServletRequest request) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		return studentService.getTheoryStores();
 	}
 	
 	//获取可参加理论课的学员列表
 	@RequestMapping(value="/theoryStudents", method = RequestMethod.GET)
 	public ResultBean getTheoryStudents(HttpServletRequest request, Student student) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		return studentService.getTheoryStudents(student);
 	}
 	
 	//增加一个新的理论课，同时必须设置
 	@RequestMapping(value="/add/theoryLesson", method = RequestMethod.POST)
 	public ResultBean addTheory(HttpServletRequest request, TheoryLesson theoryLesson, String stores) {
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 			String start = request.getParameter("starttime");
 			String end = request.getParameter("endtime");
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -315,67 +299,48 @@ public class StudentController extends BaseController {
 	@RequestMapping(value="/edit/theoryStudent", method = RequestMethod.POST)
 	public ResultBean editTheoryStudent(HttpServletRequest request, Integer theoryId, String[] ids,
 			@RequestParam(required = false, defaultValue = "0") int isDel) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		return studentService.editTheoryStudent(theoryId, ids,  isDel==1);
 	}
 	
 	//修改理论课状态
 	@RequestMapping(value="/update/theoryLesson", method = RequestMethod.POST)
 	public ResultBean updateTheory(HttpServletRequest request, TheoryLesson theoryLesson) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		String businessid = (String) request.getSession().getAttribute(ConstantUtil.SESSION_BUSINESS);
-		return studentService.updateTheory(theoryLesson,  businessid);
+		return studentService.updateTheory(theoryLesson);
 	}
 	
 	@RequestMapping(value="/learnpause/addpause", method = RequestMethod.POST)
 	public ResultBean learnpause(HttpServletRequest request, StudentPauseApply apply) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		String bussinessid = (String) request.getSession().getAttribute(
-				ConstantUtil.SESSION_BUSINESS);
-		return studentService.addStudentPauseApply(apply,bussinessid);
+		return studentService.addStudentPauseApply(apply);
 	}
 	
 	@RequestMapping(value="/learnpause/addresume", method = RequestMethod.POST)
 	public ResultBean learnresume(HttpServletRequest request, StudentPauseApply apply) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		String bussinessid = (String) request.getSession().getAttribute(
-				ConstantUtil.SESSION_BUSINESS);
-		return studentService.addStudentPauseApply(apply,bussinessid);
+		return studentService.addStudentPauseApply(apply);
 	}
 	
 	@RequestMapping(value="/learnpause/update", method = RequestMethod.POST)
 	public ResultBean updatelearnpause(HttpServletRequest request, StudentPauseApply apply) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		
 		return studentService.updateStudentPauseApply(apply);
 	}
 	
 	@RequestMapping(value="/learnpause/list")
 	public ResultBean listlearnpause(HttpServletRequest request, StudentPauseApplyParam param) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		
 		return studentService.listStudentPauseApply(param);
 	}
 	
 	@RequestMapping(value="/learnpause/get")
 	public ResultBean getlearnpause(HttpServletRequest request, StudentPauseApply apply) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		
 		return studentService.getStudentPauseApply(apply);
 	}
 	
 	@RequestMapping(value="/learnpause/getByTran")
 	public ResultBean getlearnpauseByTran(HttpServletRequest request, StudentPauseApply apply) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		
 		return studentService.getStudentPauseApplyByTransaction(apply);
 	}
 	
 	
 	@RequestMapping(value="/learnpause/getByStuId")
 	public ResultBean getlearnpauseBystuid(HttpServletRequest request, StudentPauseApply apply) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		
 		return studentService.getStudentPauseApplyByStuId(apply);
 	}
 	
@@ -387,14 +352,12 @@ public class StudentController extends BaseController {
 	
 	@RequestMapping(value="/learnpause/audit")
 	public ResultBean auditlearnpause(HttpServletRequest request, StudentPauseApply apply) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		
 		return studentService.updateStudentPauseApplyStatus(apply);
 	}
 	
 	@RequestMapping(value="/theoryLessonText", method = RequestMethod.GET)
 	public ResultBean theoryLessonText(HttpServletRequest request, Integer type, Integer theoryid) {
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
+		
 		ResultBean r = new ResultBean();
 		r.setCode(HttpConstant.SUCCESS_CODE);
 		r.setMsg(HttpConstant.SUCCESS_MSG);
@@ -406,7 +369,7 @@ public class StudentController extends BaseController {
 	public ResponseEntity<byte[]> theoryStudentExport(HttpServletRequest request, TheoryStudent theoryStudent) {
 		ResponseEntity<byte[]> r = null;
 		try {
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
+			
 			List<TheoryStudentExport> list = studentService.theoryStudentExport(theoryStudent);
 			for (TheoryStudentExport tse : list) {
 				tse.setApplyexamstr(tse.getApplyexam()==1?"已受理":tse.getApplyexam().toString());
@@ -429,7 +392,6 @@ public class StudentController extends BaseController {
 	//获取学员列表，附带教练信息
 	@RequestMapping(value="/studentCoach", method= RequestMethod.GET)
 	public ResultBean getStudentCoach(HttpServletRequest request, StudentCoachDTO studetCoach){
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		return studentService.getStudentCoach(studetCoach);
 	}
 

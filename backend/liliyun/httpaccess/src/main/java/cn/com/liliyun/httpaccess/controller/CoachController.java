@@ -129,11 +129,9 @@ public class CoachController extends BaseController {
 	@ResponseBody
 	public ResultBean addCoach(Coach coach, HttpServletRequest request) {
 		
-		User user = AccessWebUtil.getSessionUser(request);
-
 		Map extendsinfo = new HashMap();
 		processExt(extendsinfo, request);
-		return coachService.addCoach(coach, extendsinfo, user);
+		return coachService.addCoach(coach, extendsinfo);
 	}
 
 	@RequestMapping(value = "/coach/listhead")

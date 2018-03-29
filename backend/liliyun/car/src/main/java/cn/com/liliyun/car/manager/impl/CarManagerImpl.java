@@ -29,8 +29,10 @@ import cn.com.liliyun.car.model.CarOilwear;
 import cn.com.liliyun.car.model.CarRepair;
 import cn.com.liliyun.car.model.CarTax;
 import cn.com.liliyun.car.model.CoachCar;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.util.CarChangeType;
 import cn.com.liliyun.common.util.CarStatus;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.importexcel.model.CarOilwearImport;
 import cn.com.liliyun.user.model.User;
 
@@ -76,12 +78,12 @@ public class CarManagerImpl implements ICarManager {
 	}
 
 	@Override
-	public void addCar(User user,Car car) {
+	public void addCar(Car car) {
 		carMapper.insertSelective(car);
-		
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		//新增记录
 		CarLog carLog = new CarLog();
-		carLog.setDblink(car.getDblink());
+		
 		carLog.setCarid(car.getCarId());
 		carLog.setCarno(car.getCarNo());
 		carLog.setCuid(user.getId());
@@ -98,7 +100,7 @@ public class CarManagerImpl implements ICarManager {
 			carLog.setType(CarChangeType.USE.getStatus());
 			carLogMapper.insertSelective(carLog);
 			CoachCar coachCar=new CoachCar();
-			coachCar.setDblink(car.getDblink());
+			
 			coachCar.setCoachid(car.getCoachId());
 			coachCar.setCarno(car.getCarNo());
 			carMapper.updateCoachCar(coachCar);
@@ -107,10 +109,10 @@ public class CarManagerImpl implements ICarManager {
 	}
 
 	@Override
-	public void updateCar(User user,Car car) {
+	public void updateCar(Car car) {
 		Car before = carMapper.selectByCarNo(car);
 		CarLog carLog = new CarLog();
-		carLog.setDblink(car.getDblink());
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		carLog.setCarid(car.getCarId());
 		carLog.setCarno(car.getCarNo());
 		carLog.setCuid(user.getId());

@@ -36,13 +36,13 @@ public class RequestContext {
 		return rc;
 	}
 	
-	public static void put(String key,Object value){
+	public static void putValue(String key,Object value){
 		RequestContext rc = getOrCreate();
 		rc.data.put(key, value);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T  get(String key){
+	public static <T> T  getValue(String key){
 		RequestContext rc = getOrCreate();
 		return (T)rc.data.get(key);
 	}

@@ -97,41 +97,29 @@ public class CarBizController extends BaseController {
 		String bussinessid = (String) request.getSession().getAttribute(
 				ConstantUtil.SESSION_BUSINESS);
 		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		carBizService.addLog(carLog,user,bussinessid);
+		carBizService.addLog(carLog);
 		return rb;
 	}
 	
 	@RequestMapping(value = "/getLog")
 	public ResultBean getLog(CarLog carLog,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		try{		
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-			CarLog c=carBizService.getLog(carLog,user);
-			rb.setResult(c);
-			return rb;
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		CarLog c=carBizService.getLog(carLog);
+		rb.setResult(c);
 		return rb;
 	}
 	
 	@RequestMapping(value = "/passAuditLog")
 	public ResultBean passAuditLog(CarLog carLog,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		String bussinessid = (String) request.getSession().getAttribute(
-				ConstantUtil.SESSION_BUSINESS);
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		carBizService.updateAuditLog(carLog,user,bussinessid,1);//1代表通过审批
+		carBizService.updateAuditLog(carLog,1);//1代表通过审批
 		return rb;
 	}
 	
 	@RequestMapping(value = "/refuseAuditLog")
 	public ResultBean refuseAuditLog(CarLog carLog,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		String bussinessid = (String) request.getSession().getAttribute(
-				ConstantUtil.SESSION_BUSINESS);
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-		carBizService.updateAuditLog(carLog,user,bussinessid,2);//2表示拒绝审批
+		carBizService.updateAuditLog(carLog,2);//2表示拒绝审批
 		return rb;
 	}
 	
@@ -139,29 +127,29 @@ public class CarBizController extends BaseController {
 	@RequestMapping(value = "/listremind")
 	public ResultBean listRemind(HttpServletRequest request,CarCostRemind carCostRemind) {
 		ResultBean rb = new ResultBean();
-		List <CarRemind> list = carBizService.listCarRemind(getUser(request), carCostRemind);
+		List <CarRemind> list = carBizService.listCarRemind(carCostRemind);
 		rb.setResult(new PageInfo<>(list));
 		return rb;
 	}
 	
 	@RequestMapping(value="/editmileage")
 	public ResultBean editMileage(HttpServletRequest request, CarMileage mileage) {
-		return carBizService.editMileage(getUser(request),mileage);
+		return carBizService.editMileage(mileage);
 	}
 	
 	@RequestMapping(value = "/getCarPartsList", method = RequestMethod.GET)
 	public ResultBean getCarPartsList(CarParts carParts, HttpServletRequest request) {
-		return carBizService.getCarPartsList(carParts, getUser(request));
+		return carBizService.getCarPartsList(carParts);
 	}
 	
 	@RequestMapping(value = "/addCarPartsList", method = RequestMethod.POST)
 	public ResultBean addCarPartsList(CarParts carParts, HttpServletRequest request) {
-		return carBizService.addCarParts(carParts, getUser(request));
+		return carBizService.addCarParts(carParts);
 	}
 	
 	@RequestMapping(value = "/editCarParts", method = RequestMethod.POST)
 	public ResultBean editCarPartsList(CarParts carParts, HttpServletRequest request) {
-		return carBizService.editCarParts(carParts, getUser(request));
+		return carBizService.editCarParts(carParts);
 	}
 	
 	@RequestMapping(value = "/listscrap", method = RequestMethod.GET)
@@ -174,23 +162,23 @@ public class CarBizController extends BaseController {
 	
 	@RequestMapping(value = "/editscrap", method = RequestMethod.POST)
 	public ResultBean addScrap(CarScrap carScrap, HttpServletRequest request) {
-		return carBizService.editScrap(getUser(request), carScrap);
+		return carBizService.editScrap(carScrap);
 	}
 	
 	@RequestMapping(value = "/adddelay", method = RequestMethod.POST)
 	public ResultBean adddelay(CarScrap carScrap, HttpServletRequest request) {
-		return carBizService.addDelay(getUser(request), carScrap);
+		return carBizService.addDelay(carScrap);
 	}
 	
 	@RequestMapping(value = "/editdelay", method = RequestMethod.POST)
 	public ResultBean editdelay(CarScrap carScrap, HttpServletRequest request) {
-		return carBizService.editDelay(getUser(request), carScrap);
+		return carBizService.editDelay(carScrap);
 	}
 	
 	@RequestMapping(value = "/getCarPartsExport")
 	public ResponseEntity<byte[]> getCarPartsExport(CarParts carParts, HttpServletRequest request) {
 		try {
-			List<CarParts> list = carBizService.getCarPartsExport(carParts, getUser(request));
+			List<CarParts> list = carBizService.getCarPartsExport(carParts);
 			Map<Integer, String> parttypeMap = new HashMap<>();
 			parttypeMap.put(1, "轮胎");
 			parttypeMap.put(2, "机油");
@@ -245,7 +233,7 @@ public class CarBizController extends BaseController {
 		ps5.setPartstype(5); 
 		ps5.setMonth(partsSettingDto.getBatterymonth()); 
 		list.add(ps5);
-		return carBizService.setPartsSetting(list, getUser(request));
+		return carBizService.setPartsSetting(list);
 		
 	}
 	
@@ -253,14 +241,14 @@ public class CarBizController extends BaseController {
 	public ResultBean getPartsSettings(HttpServletRequest request) {
 		ResultBean r = new ResultBean();
 		
-		r.setResult(carBizService.getPartsSettings(getUser(request)));
+		r.setResult(carBizService.getPartsSettings());
 		
 		return r;
 	}
 	
 	@RequestMapping(value = "/getPartsNoticeList", method = RequestMethod.GET)
 	public ResultBean getPartsNoticeList(PartsSetting partsSetting, HttpServletRequest request) {
-		return carBizService.getPartsNotice(partsSetting, getUser(request));
+		return carBizService.getPartsNotice(partsSetting);
 	}
 	
 	@RequestMapping(value = "/getPartsNoticeExport")
@@ -268,7 +256,7 @@ public class CarBizController extends BaseController {
 		try {
 			partsSetting.setPageNo(-1);
 			@SuppressWarnings("unchecked")
-			List<CarPartsNotice> list = ((PageInfo<CarPartsNotice>) carBizService.getPartsNotice(partsSetting, getUser(request)).getResult()).getList();
+			List<CarPartsNotice> list = ((PageInfo<CarPartsNotice>) carBizService.getPartsNotice(partsSetting).getResult()).getList();
 			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 			Area area=new Area();
 			area.setDblink(user.getDblink());

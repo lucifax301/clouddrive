@@ -41,7 +41,7 @@ public class Staff extends BaseModel{
 	
 	private Date createdate;
 	
-	private Integer cuid;
+	
 
 	private Map detailinfo;
 	
@@ -175,13 +175,7 @@ public class Staff extends BaseModel{
 		this.createdate = createdate;
 	}
 
-	public Integer getCuid() {
-		return cuid;
-	}
-
-	public void setCuid(Integer cuid) {
-		this.cuid = cuid;
-	}
+	
 	
 	
 }

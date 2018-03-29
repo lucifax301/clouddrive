@@ -52,8 +52,8 @@ public class SalesServiceImpl implements SalesService {
 		calendar.add(Calendar.DAY_OF_YEAR, 1);
 		calendar.add(Calendar.SECOND, -1);
 		activity.setEnddate(calendar.getTime());
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
-		String transactionid= flowService.addFlow(businessid, user.getId(),"",user);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
+		String transactionid= flowService.addFlow(businessid, user.getId(),"");
 		activity.setTransactionid(transactionid);
 		activity.setApplyuser(user.getUsername());
 		activity.setApplyuserid(user.getId());

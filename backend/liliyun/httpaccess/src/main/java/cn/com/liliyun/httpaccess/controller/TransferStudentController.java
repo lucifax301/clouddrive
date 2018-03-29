@@ -24,7 +24,6 @@ public class TransferStudentController {
 	//获取转店列表
 	@RequestMapping(value="/transferStudent/list", method = RequestMethod.GET)
 	public ResultBean getTransferList(HttpServletRequest request, TransferStudent transferStudent) {
-		
 		Boolean isChosen = false;
 		if (transferStudent.getFromareaid() != null || transferStudent.getFromstoreid() != null)
 			isChosen = true;
@@ -39,9 +38,7 @@ public class TransferStudentController {
 	
 	@RequestMapping(value="/transferStudent/add", method = RequestMethod.POST)
 	public ResultBean addTransfer(HttpServletRequest request, TransferStudent transferStudent) {
-		
-		String businessid = (String) request.getSession().getAttribute(ConstantUtil.SESSION_BUSINESS);
-		return studentService.addTransfer(transferStudent,  businessid);
+		return studentService.addTransfer(transferStudent);
 	}
 	
 	@RequestMapping(value="/transferStudent/update", method = RequestMethod.POST)

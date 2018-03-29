@@ -32,7 +32,7 @@ public class SalesChannelServiceImpl extends CommonService implements SalesChann
 	
 	@Override
 	public ResultBean addChannel(SalesChannel channel) {
-		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.<User>getValue(ConstantUtil.USER_SESSION);
 		
 		channel.setUserid(user.getId());
 		channel.setCuser(user.getUsername());
@@ -60,7 +60,7 @@ public class SalesChannelServiceImpl extends CommonService implements SalesChann
 
 	@Override
 	public ResultBean updateChannel(SalesChannel channel) {
-		User user = RequestContext.<User>get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.<User>getValue(ConstantUtil.USER_SESSION);
 		channel.setUserid(user.getId());
 		SalesChannel oldone= salesChannelMapper.getChannel(channel);
 		

@@ -172,13 +172,13 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public List<Flow> findUserFlow(FlowStep flowStep, User user) {
-		return flowService.findUserFlow(flowStep, user);
+	public List<Flow> findUserFlow(FlowStep flowStep) {
+		return flowService.findUserFlow(flowStep);
 	}
 
 	@Override
-	public List<Flow> findMyFlow(Flow flow, User user) {
-		return flowService.findMyFlow(flow, user);
+	public List<Flow> findMyFlow(Flow flow) {
+		return flowService.findMyFlow(flow);
 	}
 
 	@Override

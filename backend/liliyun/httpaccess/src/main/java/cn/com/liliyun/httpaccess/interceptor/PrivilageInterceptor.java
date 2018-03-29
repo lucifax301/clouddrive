@@ -2,6 +2,7 @@ package cn.com.liliyun.httpaccess.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -70,13 +71,13 @@ public class PrivilageInterceptor extends HandlerInterceptorAdapter {
 		if (session.getAttribute(ConstantUtil.USER_SESSION) == null) {
 		    rb.setCode(-1);
 		    rb.setMsg("用户请登录!");
-			printJson(response, rb);
+			printJson(response, rb,null);
 			return false;
 		} 
 		
 		User user = (User) session.getAttribute(ConstantUtil.USER_SESSION);
 		RequestContext rc = RequestContext.getOrCreate();
-		RequestContext.put(ConstantUtil.USER_SESSION, user);
+		RequestContext.putValue(ConstantUtil.USER_SESSION, user);
 		
 		return true;
 //		access.debug("************************************Privilege check!");
@@ -141,20 +142,29 @@ public class PrivilageInterceptor extends HandlerInterceptorAdapter {
             throws Exception { 
 		if(ex!=null){
 			ResultBean rb = new ResultBean(1,"发生异常了");
-			printJson(response,rb);
+			printJson(response,rb,ex);
 		}
     }  
 	
-	private void printJson(HttpServletResponse response,ResultBean rb) {
+	private void printJson(HttpServletResponse response,ResultBean rb,Exception ex) {
 		response.setContentType("application/json"); 
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = null;
+
+		if(ex!=null){
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			rb.setStack(sw.toString());
+		}
 		try {
 			out = response.getWriter();
+			out.print(GsonUtil.serialNulls(rb));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		out.print(GsonUtil.serialNulls(rb));
+		
 		out.flush();
 		out.close();
 	}

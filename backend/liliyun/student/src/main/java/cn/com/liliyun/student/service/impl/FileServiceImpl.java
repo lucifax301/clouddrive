@@ -46,7 +46,7 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public ResultBean doHandleFile( List<FileItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 
@@ -116,7 +116,7 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public ResultBean doStuFile( List<FileItem> list) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		Date now = new Date();
 		String tableId = user.getBatchId();
 		Student query = new Student();

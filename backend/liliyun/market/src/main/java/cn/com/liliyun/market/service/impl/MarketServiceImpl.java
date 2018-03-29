@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.liliyun.common.CommonService;
 import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
@@ -15,7 +16,6 @@ import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.flow.model.Flow;
 import cn.com.liliyun.flow.model.FlowStep;
 import cn.com.liliyun.flow.service.FlowService;
-import cn.com.liliyun.log.model.LogCommon;
 import cn.com.liliyun.market.mapper.MarketMapper;
 import cn.com.liliyun.market.model.MarketActivity;
 import cn.com.liliyun.market.service.MarketService;
@@ -26,7 +26,7 @@ import cn.com.liliyun.trainorg.service.StoreService;
 import cn.com.liliyun.user.model.User;
 
 @Service
-public class MarketServiceImpl implements MarketService {
+public class MarketServiceImpl extends CommonService implements MarketService {
 
 	@Autowired
 	private MarketMapper marketMapper;
@@ -41,11 +41,12 @@ public class MarketServiceImpl implements MarketService {
 	private AreaService areaService;
 	
 	@Override
-	public ResultBean addMarketActivity(MarketActivity activity,String businessid) {
+	public ResultBean addMarketActivity(MarketActivity activity) {
+		String businessid = this.<String>getContextValue(ConstantUtil.SESSION_BUSINESS);
 		ResultBean rb = new ResultBean();
 		String desc="市场活动["+activity.getActivityname()+"]申请";
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
-		String transactionid= flowService.addFlow(businessid, user.getId(),desc,user);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
+		String transactionid= flowService.addFlow(businessid, user.getId(),desc);
 		activity.setBusinessid(businessid);
 		activity.setTransactionid(transactionid);
 		activity.setApplyuser(user.getUsername());
@@ -56,7 +57,7 @@ public class MarketServiceImpl implements MarketService {
 
 	@Override
 	public List<MarketActivity> listActivity(MarketActivity activity) {
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (activity.getEnddate() != null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(activity.getEnddate());
@@ -138,7 +139,7 @@ public class MarketServiceImpl implements MarketService {
 	@Override
 	public MarketActivity getMarketActivity(MarketActivity activity) {
 		MarketActivity apply= marketMapper.getMarket(activity);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 
 		if (apply.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (apply.getStatus() == 0) {// 业务还在等待审核中
@@ -154,7 +155,7 @@ public class MarketServiceImpl implements MarketService {
 					apply.setModapplystat(ConstantUtil.AUDIT_RIGHT_NONE);
 				}
 			}
-			Flow flow=flowService.getFlow(apply.getTransactionid(),user);
+			Flow flow=flowService.getFlow(apply.getTransactionid());
 			apply.setExtend(flow);
 		} else {
 			Flow flow = new Flow();
@@ -180,14 +181,14 @@ public class MarketServiceImpl implements MarketService {
 	@Override
 	public MarketActivity getMarketActivityByTran(MarketActivity activity) {
 		MarketActivity apply= marketMapper.getMarketByTran(activity);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (apply.getApplyuserid() == user.getId().intValue()) {// 当前用户是发起人
 			if (apply.getStatus() == 0) {// 业务还在等待审核中
 				apply.setModapplystat(ConstantUtil.AUDIT_RIGHT_CAN_CANCEL);
 			} else {
 				apply.setModapplystat(ConstantUtil.AUDIT_RIGHT_NONE);
 			}
-			Flow flow=flowService.getFlow(apply.getTransactionid(),user);
+			Flow flow=flowService.getFlow(apply.getTransactionid());
 			apply.setExtend(flow);
 		} else {
 			Flow flow = new Flow();
@@ -214,9 +215,9 @@ public class MarketServiceImpl implements MarketService {
 	public ResultBean auditMarketActivity(MarketActivity activity) {
 		ResultBean rb = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		MarketActivity apply=marketMapper.getMarket(activity);
-		Flow flow= flowService.getFlow(apply.getTransactionid(),user);
+		Flow flow= flowService.getFlow(apply.getTransactionid());
 		if(apply.getStatus()==0){
 			apply.setStatus(activity.getStatus());
 			apply.setAudituserid(user.getId());
@@ -243,13 +244,13 @@ public class MarketServiceImpl implements MarketService {
 	@Override
 	public ResultBean batchAuditMarketActivity(String[] applyid, int state) {
 		ResultBean rb = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		for(String id:applyid){
 			MarketActivity activity=new MarketActivity(Integer.parseInt(id));
 			activity.setStatus(state);
 			
 			MarketActivity apply=marketMapper.getMarket(activity);
-			Flow flow= flowService.getFlow(apply.getTransactionid(),user);
+			Flow flow= flowService.getFlow(apply.getTransactionid());
 			if(apply.getStatus()==0){
 				apply.setStatus(activity.getStatus());
 				apply.setAudituserid(user.getId());

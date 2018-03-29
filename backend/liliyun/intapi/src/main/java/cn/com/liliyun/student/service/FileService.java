@@ -5,7 +5,6 @@ import java.util.List;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.student.model.File;
 import cn.com.liliyun.student.model.FileItem;
-import cn.com.liliyun.user.model.User;
 
 public interface FileService {
 

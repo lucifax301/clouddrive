@@ -14,7 +14,7 @@ public interface FlowService {
 	 * @param userid
 	 * @return
 	 */
-	public String addFlow(String businessid,int userid,String desc,User user);
+	public String addFlow(String businessid,int userid,String desc);
 	
 	public boolean auditFlow(Flow flow,int userid,int audit);
 	
@@ -29,12 +29,12 @@ public interface FlowService {
 	 * @param transactionid
 	 * @return
 	 */
-	public Flow getFlow(String transactionid,User user);
+	public Flow getFlow(String transactionid);
 	
 	public List<Flow> selectFlow(Flow flow);
 	
-	public List<Flow> findUserFlow(FlowStep flowStep,User user);
+	public List<Flow> findUserFlow(FlowStep flowStep);
 	
-	public List<Flow> findMyFlow(Flow flow,User user);
+	public List<Flow> findMyFlow(Flow flow);
 }
 

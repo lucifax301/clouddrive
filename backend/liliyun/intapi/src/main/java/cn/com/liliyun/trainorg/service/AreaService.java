@@ -9,19 +9,19 @@ import cn.com.liliyun.trainorg.model.Area;
 
 public interface AreaService {
 
-	ResultBean insert(Area area);
+	public ResultBean insert(Area area);
 
-	ResultBean selectByPrimaryKey(Area area);
+	public ResultBean selectByPrimaryKey(Area area);
 
-	ResultBean updateByPrimaryKey(Area area);
+	public ResultBean updateByPrimaryKey(Area area);
 
-	ResultBean deleteById(Area area);
+	public ResultBean deleteById(Area area);
 	
-	ResultBean selectList(Area area);
+	public ResultBean selectList(Area area);
 	
 	public List<Area> selectAllList(Area area) ;
 	
-	Area selectOne(Area area);
+	public Area selectOne(Area area);
 	
 	public Map<Integer,MapDTO> getMap(Area area);
 }

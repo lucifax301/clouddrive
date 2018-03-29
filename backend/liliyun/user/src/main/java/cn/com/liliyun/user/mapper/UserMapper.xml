@@ -534,4 +534,68 @@
      limit 1
   </select>
   
+  <select id="listRoleUser" resultType="cn.com.liliyun.user.model.User">
+		select id, username, realname, mobile, status ,issuper, ctime
+		from t_user where 1 = 1
+		<if test="dblink != null">
+			and dblink = #{dblink,jdbcType=VARCHAR}
+		</if>
+		 <choose>
+	     	<when test="list != null and list.size() > 0">
+	        	and id in 
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+	      			#{item}
+	   			</foreach>
+	        </when>
+	      	<otherwise>
+	            and id = -1 
+	        </otherwise>
+         </choose> 
+	</select>
+	
+	<select id="listNotRoleUser" resultType="cn.com.liliyun.user.model.User">
+		select id, username, realname, mobile, status ,issuper, ctime
+		from t_user where 1 = 1
+		<if test="dblink != null"> 
+			and dblink = #{dblink,jdbcType=VARCHAR}
+		</if> 
+		<if test=" list != null and list.size() > 0 ">
+				and id not in 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+	        	#{item}
+	        </foreach>
+        </if>
+	</select>
+	
+	<update id="insertRoleUser">
+		update t_user set roleid = #{roleId,jdbcType=INTEGER}
+		where id = #{userId,jdbcType=INTEGER}
+	</update>
+	
+	<update id="delRoleUser" parameterType="cn.com.liliyun.user.model.RoleUser">
+		update t_user set roleid = null
+		where id = #{userId,jdbcType=INTEGER} and roleid=#{roleId,jdbcType=INTEGER}
+	</update>
+	
+	<select id="listRoleUserIds" resultType="integer" parameterType="cn.com.liliyun.user.model.RoleUser">
+		select id
+		from t_user 
+			where roleid=#{roleId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="listRoleUserCount" resultType="map">
+		select roleid,count(id) as count from t_user where roleid in
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+		group by roleid
+	</select>
+	
+	<select id="getRoleUserTotal" resultType="java.lang.Integer">
+		select
+			count(id) 
+			from 
+		t_user
+		where roleid=#{roleId,jdbcType=INTEGER}	
+	</select>
 </mapper>

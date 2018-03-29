@@ -28,8 +28,7 @@ public class Marketing extends BaseModel implements Serializable {
 	private String message;
 	private Timestamp  utime;
 	private Timestamp ltime;
-	private long cuid ;
-	private long muid  ;
+	
 	private Timestamp ctime;
 	private Timestamp mtime;
 	
@@ -123,18 +122,7 @@ public class Marketing extends BaseModel implements Serializable {
 	public void setLtime(Timestamp ltime) {
 		this.ltime = ltime;
 	}
-	public long getCuid() {
-		return cuid;
-	}
-	public void setCuid(long cuid) {
-		this.cuid = cuid;
-	}
-	public long getMuid() {
-		return muid;
-	}
-	public void setMuid(long muid) {
-		this.muid = muid;
-	}
+	
 	public Timestamp getCtime() {
 		return ctime;
 	}

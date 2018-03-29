@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.liliyun.common.model.RequestContext;
+import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.common.util.StringUtil;
 import cn.com.liliyun.flow.mapper.FlowMapper;
@@ -36,9 +38,9 @@ public class FlowServiceImpl implements FlowService {
 	private UserService userService;
 	
 	@Override
-	public Flow getFlow(String transactionid,User user){
+	public Flow getFlow(String transactionid){
 		Flow flow=new Flow();
-		flow.setDblink(user.getDblink());
+		
 		flow.setTransactionid(transactionid);
 		return flowMapper.getByTransaction(flow);
 	}
@@ -78,8 +80,9 @@ public class FlowServiceImpl implements FlowService {
 	 * 获取用户待办或者已经办事项
 	 */
 	@Override
-	public List<Flow> findUserFlow(FlowStep flowStep,User user){
+	public List<Flow> findUserFlow(FlowStep flowStep){
 		PageUtil.startPage(flowStep);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		flowStep.setUserid(user.getId());
 		return flowMapper.listUserFlow(flowStep);
 	}
@@ -91,8 +94,9 @@ public class FlowServiceImpl implements FlowService {
 	 * @return
 	 */
 	@Override
-	public List<Flow> findMyFlow(Flow flow,User user){
+	public List<Flow> findMyFlow(Flow flow){
 		PageUtil.startPage(flow);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		flow.setFuserid(user.getId());
 		return flowMapper.listMyFlow(flow);
 	}
@@ -244,12 +248,12 @@ public class FlowServiceImpl implements FlowService {
 	}
 	
 	@Override
-	public String addFlow(String businessid,int userid,String desc,User user) {
+	public String addFlow(String businessid,int userid,String desc) {
 		if(businessid==null){
 			return StringUtil.getUUID();
 		}
 		FlowTemplate flowTemplateParam=new FlowTemplate();
-		flowTemplateParam.setDblink(user.getDblink());
+		
 		flowTemplateParam.setBusinessid(businessid);
 		FlowTemplate flowTemplate= flowTemplateMapper.getByBusiness(flowTemplateParam);
 		if(flowTemplate!=null){
@@ -278,14 +282,14 @@ public class FlowServiceImpl implements FlowService {
 					flow.setDescription(desc);
 					flow.setTemplateid(flowTemplate.getId());
 					flow.setTransactionid(transactionid);
-					flow.setDblink(user.getDblink());
+					
 					flowMapper.addFlow(flow);
 					
 					FlowStep flowstep=new FlowStep();
 					flowstep.setFlowid(flow.getId());
 					flowstep.setStep(1);
 					flowstep.setUserid(nextuser.getId());
-					flowstep.setDblink(user.getDblink());
+					
 					flowStepMapper.add(flowstep);
 					
 					return transactionid;

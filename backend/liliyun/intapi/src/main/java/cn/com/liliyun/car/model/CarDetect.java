@@ -19,8 +19,6 @@ public class CarDetect extends BaseModel implements Serializable {
 
     private String cname;
 
-    private Long cuid;
-
     private String detectYear;
 
     private Date detectDate;
@@ -62,14 +60,7 @@ public class CarDetect extends BaseModel implements Serializable {
     public void setCname(String cname) {
         this.cname = cname == null ? null : cname.trim();
     }
-
-    public Long getCuid() {
-        return cuid;
-    }
-
-    public void setCuid(Long cuid) {
-        this.cuid = cuid;
-    }
+    
 
     public String getDetectYear() {
         return detectYear;

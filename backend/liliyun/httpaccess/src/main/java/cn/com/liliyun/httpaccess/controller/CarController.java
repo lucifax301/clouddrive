@@ -71,72 +71,28 @@ public class CarController extends BaseController {
 
 	@RequestMapping(value = "/getCarList")
 	public ResultBean getCarList(Car car) {
-		logger.info("********************************* coachName : " + car.getCoachName());
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarList(car);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.getCarList(car);
 	}
 	
 	@RequestMapping(value = "/getCar")
 	public ResultBean getCar(Car car) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCar(car);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCar Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.getCar(car);
+		
 	}
 	
 	@RequestMapping(value = "/addCar")
 	public ResultBean addCar(HttpServletRequest request, Car car) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCar(getUser(request), car);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController addCar Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCar(car);
 	}
 	
 	@RequestMapping(value = "/updateCar")
 	public ResultBean updateCar(HttpServletRequest request, Car car) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCar(getUser(request), car);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController updateCar Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCar(car);
+		
 	}
 	@RequestMapping(value = "/deleteCar")
 	public ResultBean deleteCar(Car car) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.deleteCar(car);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController deleteCar Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.deleteCar(car);
 	}
 	
 	 @RequestMapping(value = "/exportCar")
@@ -162,17 +118,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarAnnualList")
 	public ResultBean getCarAnnualList(CarAnnual carAnnual) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarAnnualList(carAnnual);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarAnnualList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-
-		return r;
+		return carService.getCarAnnualList(carAnnual);
 	}
 	
 	/**
@@ -182,17 +128,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarAnnual")
 	public ResultBean getCarAnnual(CarAnnual carAnnual) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarAnnual(carAnnual);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarAnnual Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarAnnual(carAnnual);
 	}
 
 	/**
@@ -202,16 +138,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/addCarAnnual")
 	public ResultBean addCarAnnual(CarAnnual carAnnual) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCarAnnual(carAnnual);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController addCarAnnual Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCarAnnual(carAnnual);
 	}
 
 	/**
@@ -221,16 +148,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateCarAnnual")
 	public ResultBean updateCarAnnual(CarAnnual carAnnual) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCarAnnual(carAnnual);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController updateCarAnnual Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCarAnnual(carAnnual);
 	}
 	
 	/**
@@ -240,16 +158,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/deleteCarAnnual")
 	public ResultBean deleteCarAnnual(CarAnnual carAnnual) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.deleteCarAnnual(carAnnual);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController deleteCarAnnual Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.deleteCarAnnual(carAnnual);
 	}
 	
 	/**
@@ -259,17 +168,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarDetectList")
 	public ResultBean getCarDetectList(CarDetect carDetect) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarDetectList(carDetect);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarDetectList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarDetectList(carDetect);
 	}
 	
 	/**
@@ -279,17 +178,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarDetect")
 	public ResultBean getCarDetect(CarDetect carDetect) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarDetect(carDetect);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarDetect Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarDetect(carDetect);
 	}
 	
 	/**
@@ -299,16 +188,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/addCarDetect")
 	public ResultBean addCarDetect(CarDetect carDetect) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCarDetect(carDetect);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController addCarDetect Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCarDetect(carDetect);
 	}
 	
 	/**
@@ -318,16 +198,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateCarDetect")
 	public ResultBean updateCarDetect(CarDetect carDetect) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCarDetect(carDetect);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController updateCarDetect Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCarDetect(carDetect);
 	}
 	
 	/**
@@ -337,16 +208,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/deleteCarDetect")
 	public ResultBean deleteCarDetect(CarDetect carDetect) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.deleteCarDetect(carDetect);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController deleteCarDetect Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.deleteCarDetect(carDetect);
 	}
 	
 	
@@ -358,16 +220,8 @@ public class CarController extends BaseController {
 	@RequestMapping(value = "/getCarInsuranceList")
 	public ResultBean getCarInsuranceList(CarInsurance carInsurance) {
 		ResultBean r = new ResultBean();
-		try {
-			List<CarInsurance> list = carService.getCarInsuranceList(carInsurance);
-			r.setResult(new PageInfo<>(list));
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarInsuranceList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
+		List<CarInsurance> list = carService.getCarInsuranceList(carInsurance);
+		r.setResult(new PageInfo<>(list));
 		return r;
 	}
 	
@@ -431,17 +285,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarInsurance")
 	public ResultBean getCarInsurance(CarInsurance carInsurance) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarInsurance(carInsurance);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarInsurance Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarInsurance(carInsurance);
 	}
 	
 	/**
@@ -451,16 +295,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/addCarInsurance")
 	public ResultBean addCarInsurance(CarInsurance carInsurance) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCarInsurance(carInsurance);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController addCarInsurance Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCarInsurance(carInsurance);
 	}
 	
 	/**
@@ -470,16 +305,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateCarInsurance")
 	public ResultBean updateCarInsurance(CarInsurance carInsurance) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCarInsurance(carInsurance);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController updateCarInsurance Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCarInsurance(carInsurance);
 	}
 	
 	/**
@@ -489,16 +315,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/deleteCarInsurance")
 	public ResultBean deleteCarInsurance(CarInsurance carInsurance) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.deleteCarInsurance(carInsurance);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController deleteCarInsurance Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.deleteCarInsurance(carInsurance);
 	}
 	
 	
@@ -509,17 +326,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarRepairList")
 	public ResultBean getCarRepairList(CarRepair carRepair) {
-		ResultBean r = new ResultBean();
-		try {
-			 r = carService.getCarRepairList(carRepair);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarRepairList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarRepairList(carRepair);
 	}
 	
 	/**
@@ -529,17 +336,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarRepair")
 	public ResultBean getCarRepair(CarRepair carRepair) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarRepair(carRepair);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarRepair Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarRepair(carRepair);
 	}
 	
 	/**
@@ -567,16 +364,7 @@ public class CarController extends BaseController {
 		}
 		carRepair.setMoney(money);
 		carRepair.setParts(array.toJSONString());
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCarRepair(carRepair);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController addCarRepair Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCarRepair(carRepair);
 	}
 	
 	/**
@@ -605,16 +393,7 @@ public class CarController extends BaseController {
 		}
 		carRepair.setMoney(money);
 		carRepair.setParts(array.toJSONString());
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCarRepair(carRepair);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController updateCarRepair Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCarRepair(carRepair);
 	}
 	
 	/**
@@ -624,16 +403,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/deleteCarRepair")
 	public ResultBean deleteCarRepair(CarRepair carRepair) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.deleteCarRepair(carRepair);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController deleteCarRepair Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.deleteCarRepair(carRepair);
 	}
 	
 	/**
@@ -643,17 +413,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarTaxList")
 	public ResultBean getCarTaxList(CarTax carTax) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarTaxList(carTax);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarTaxList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarTaxList(carTax);
 	}
 	
 	/**
@@ -663,17 +423,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarTax")
 	public ResultBean getCarTax(CarTax carTax) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarTax(carTax);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarTax Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarTax(carTax);
 	}
 	
 	/**
@@ -683,16 +433,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/addCarTax")
 	public ResultBean addCarTax(CarTax carTax) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCarTax(carTax);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController addCarTax Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCarTax(carTax);
 	}
 	
 	/**
@@ -702,16 +443,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateCarTax")
 	public ResultBean updateCarTax(CarTax carTax) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCarTax(carTax);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController updateCarTax Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCarTax(carTax);
 	}
 	
 	/**
@@ -721,16 +453,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/deleteCarTax")
 	public ResultBean deleteCarTax(CarTax carTax) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.deleteCarTax(carTax);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController deleteCarTax Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.deleteCarTax(carTax);
 	}
 	
 	/**
@@ -740,17 +463,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarOilwearList")
 	public ResultBean getCarOilwearList(CarOilwear carOilwear) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarOilwearList(carOilwear);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarOilwearList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarOilwearList(carOilwear);
 	}
 	
 	/**
@@ -760,17 +473,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarOilwear")
 	public ResultBean getCarOilwear(CarOilwear carOilwear) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarOilwear(carOilwear);
-		} catch (Exception e) {
-			logger.error( "*********************************** CarController getCarTax Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		
-		return r;
+		return carService.getCarOilwear(carOilwear);
 	}
 	
 	/**
@@ -780,16 +483,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/addCarOilwear")
 	public ResultBean addCarOilwear(CarOilwear carOilwear) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCarOilwear(carOilwear);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController addCarOilwear Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCarOilwear(carOilwear);
 	}
 	
 	/**
@@ -799,16 +493,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateCarOilwear")
 	public ResultBean updateCarOilwear(CarOilwear carOilwear) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCarOilwear(carOilwear);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController updateCarOilwear Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCarOilwear(carOilwear);
 	}
 	
 	/**
@@ -818,16 +503,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/deleteCarOilwear")
 	public ResultBean deleteCarOilwear(CarOilwear carOilwear) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.deleteCarOilwear(carOilwear);
-		} catch (Exception e) {
-			logger.error("*********************************** CarController deleteCarOilwear Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.deleteCarOilwear(carOilwear);
 	}
 
 	/**
@@ -845,9 +521,8 @@ public class CarController extends BaseController {
 		ResultBean r = new ResultBean();
 		List <CarOilwearImport> list = null;
 		try {
-			User user = AccessWebUtil.getSessionUser(request);
 			list = ExcelImportUtil.importExcel(file.getInputStream(), CarOilwearImport.class, new ImportParams());
-			r=carService.importCarOilwear(list,user);
+			r=carService.importCarOilwear(list);
 		} catch (ExcelImportException e) {
 			r.setCode(100);
 			r.setMsg("数据解析错误,请检查导入数据模板!");
@@ -863,15 +538,8 @@ public class CarController extends BaseController {
 	@RequestMapping(value = "/getCarAccidentList", method = RequestMethod.GET)
 	public ResultBean getCarAccidentList(CarAccident carAccident, HttpServletRequest request) {
 		ResultBean r = new ResultBean();
-		try {
-			List<CarAccident> list = carService.getCarAccidentList(carAccident, getUser(request));
-			r.setResult(new PageInfo<>(list));
-		} catch (Exception e) {
-			logger.error("*********************************** CarController getCarAccidentList Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
+		List<CarAccident> list = carService.getCarAccidentList(carAccident);
+		r.setResult(new PageInfo<>(list));
 		return r;
 	}
 	
@@ -879,7 +547,7 @@ public class CarController extends BaseController {
 	public ResponseEntity<byte[]> getCarAccidentListExport(CarAccident carAccident, HttpServletRequest request) throws IOException {
 		java.text.SimpleDateFormat format=new java.text.SimpleDateFormat("yyyy-MM-dd");
 		List<Area> areas= areaService.selectAllList(new Area());
-		List<CarAccident> list = carService.getCarAccidentList(carAccident, getUser(request));
+		List<CarAccident> list = carService.getCarAccidentList(carAccident);
 		
 		for(CarAccident acc:list){
 			if(acc.getAccidenttype().intValue()==1){
@@ -938,16 +606,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/getCarAccident", method = RequestMethod.GET)
 	public ResultBean getCarAccident(CarAccident carAccident, HttpServletRequest request) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.getCarAccident(carAccident, getUser(request));
-		} catch (Exception e) {
-			logger.error("*********************************** CarController getCarAccident Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.getCarAccident(carAccident);
 	}
 	
 	/**
@@ -957,16 +616,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/addCarAccident", method = RequestMethod.POST)
 	public ResultBean addCarAccident(CarAccident carAccident, HttpServletRequest request) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.addCarAccident(carAccident, getUser(request));
-		} catch (Exception e) {
-			logger.error("*********************************** CarController addCarAccident Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.addCarAccident(carAccident);
 	}
 	
 	/**
@@ -976,16 +626,7 @@ public class CarController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateCarAccident", method = RequestMethod.POST)
 	public ResultBean updateCarAccident(CarAccident carAccident, HttpServletRequest request) {
-		ResultBean r = new ResultBean();
-		try {
-			r = carService.updateCarAccident(carAccident, getUser(request));
-		} catch (Exception e) {
-			logger.error("*********************************** CarController updateCarAccident Error : " + e.getMessage());
-			r.setCode(ResultCode.ERRORCODE.EXCEPTION);
-			r.setMsg(ResultCode.ERRORINFO.EXCEPTION);
-			e.printStackTrace();
-		}
-		return r;
+		return carService.updateCarAccident(carAccident);
 	}
 	
 	/**
@@ -996,7 +637,7 @@ public class CarController extends BaseController {
 	@RequestMapping(value = "/getCarAccidentExport")
 	public ResponseEntity<byte[]> getCarAccidentExport(CarAccident carAccident, HttpServletRequest request) {
 		try {
-			List<CarAccident> list = carService.getCarAccidentExport(carAccident, getUser(request));
+			List<CarAccident> list = carService.getCarAccidentExport(carAccident);
 			ExportParams params = new ExportParams("车辆事故理赔导记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
 	    	Workbook workbook = ExcelExportUtil.exportExcel(params, CarAccident.class, list);
 	    	ByteArrayOutputStream os = new ByteArrayOutputStream();

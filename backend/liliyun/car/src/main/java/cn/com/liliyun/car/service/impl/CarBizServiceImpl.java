@@ -27,6 +27,7 @@ import cn.com.liliyun.car.model.CarRemind;
 import cn.com.liliyun.car.model.CarScrap;
 import cn.com.liliyun.car.model.PartsSetting;
 import cn.com.liliyun.car.service.CarBizService;
+import cn.com.liliyun.common.CommonService;
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
@@ -42,7 +43,7 @@ import cn.com.liliyun.user.model.User;
 import com.github.pagehelper.PageInfo;
 
 @Service
-public class CarBizServiceImpl implements CarBizService {
+public class CarBizServiceImpl extends CommonService implements CarBizService {
 
 	private Logger logger = Logger.getLogger(CarBizServiceImpl.class);
 
@@ -103,7 +104,8 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean editMileage(User user,CarMileage mileage) {
+	public ResultBean editMileage(CarMileage mileage) {
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		ResultBean rb = new ResultBean();
 		mileage.setCuid(user.getId());
 		mileage.setCname(user.getRealname());
@@ -117,10 +119,9 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean getCarPartsList(CarParts carParts, User user) {
+	public ResultBean getCarPartsList(CarParts carParts) {
 		ResultBean r = new ResultBean();
 		
-		carParts.setDblink(user.getDblink());
 		PageUtil.startPage(carParts);
 		List<CarParts> list = carPartsMapper.selectList(carParts);
 		r.setResult(new PageInfo<>(list));
@@ -129,9 +130,9 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean addCarParts(CarParts carParts, User user) {
+	public ResultBean addCarParts(CarParts carParts) {
 		ResultBean r = new ResultBean();
-		
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		if (carParts.getCarid() == null || carParts.getPartstype() == null || carParts.getHandletime() == null){
 			r.setCode(HttpConstant.DATA_ERROR_COCE);
 			r.setMsg(HttpConstant.DATA_ERROR_MSG);
@@ -139,7 +140,7 @@ public class CarBizServiceImpl implements CarBizService {
 		}
 		boolean iscurrent = true, islatest = true;
 		CarParts cp = new CarParts();
-		cp.setDblink(user.getDblink());
+		
 		cp.setCarid(carParts.getCarid());
 		cp.setIscurrent((byte) 1);
 		List<CarParts> cpCurrents = carPartsMapper.selectList(cp);
@@ -171,7 +172,7 @@ public class CarBizServiceImpl implements CarBizService {
 			carPartsMapper.updateByCarOrTypeSelective(cp);
 		}
 		
-		carParts.setDblink(user.getDblink());
+		
 		carParts.setCuid(user.getId());
 		carParts.setCname(user.getRealname());
 		//设置记录为当前以及对应配件最新的记录
@@ -183,25 +184,25 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public List<CarParts> getCarPartsExport(CarParts carParts, User user) {
+	public List<CarParts> getCarPartsExport(CarParts carParts) {
 		return carPartsMapper.selectList(carParts);
 	}
 
 	@Override
-	public List<PartsSetting> getPartsSettings(User user) {
+	public List<PartsSetting> getPartsSettings() {
 		PartsSetting partsSetting = new PartsSetting();
-		partsSetting.setDblink(user.getDblink());
-		return partsSettingMapper.selectAll(partsSetting);
+		
+		return partsSettingMapper.selectAll(null);
 	}
 
 	@Override
-	public ResultBean setPartsSetting(List<PartsSetting> partsSettings, User user) {
+	public ResultBean setPartsSetting(List<PartsSetting> partsSettings) {
 		ResultBean r = new ResultBean();
 		
 		List addlist=new ArrayList();
 		List updatelist=new ArrayList();
 		for(PartsSetting ps: partsSettings){
-			ps.setDblink(user.getDblink());
+			
 			PartsSetting exist= partsSettingMapper.selectByPrimaryKey(ps);
 			if(exist!=null){
 				updatelist.add(ps);
@@ -212,7 +213,6 @@ public class CarBizServiceImpl implements CarBizService {
 		
 		if(addlist.size()>0){
 			Map<String, Object> map = new HashMap<>();
-			map.put("dblink", user.getDblink());
 			map.put("list", addlist);
 			
 			partsSettingMapper.batchInsertSelective(map);
@@ -220,7 +220,6 @@ public class CarBizServiceImpl implements CarBizService {
 		
 		if(updatelist.size()>0){
 			Map<String, Object> map = new HashMap<>();
-			map.put("dblink", user.getDblink());
 			map.put("list", updatelist);
 			
 			partsSettingMapper.updateByPrimaryKeySelectiveBatch(map);
@@ -230,10 +229,10 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean getPartsNotice(PartsSetting partsSetting, User user) {
+	public ResultBean getPartsNotice(PartsSetting partsSetting) {
 		ResultBean r = new ResultBean();
 		
-		partsSetting.setDblink(user.getDblink());
+		
 		List<PartsSetting> partsSettings = new ArrayList<>();
 		if (partsSetting.getPartstype() != null) {
 			partsSettings.add(partsSettingMapper.selectByPrimaryKey(partsSetting));
@@ -242,7 +241,7 @@ public class CarBizServiceImpl implements CarBizService {
 		}
 		PageUtil.startPage(partsSetting);
 		Map<String, Object> map = new HashMap<>();
-		map.put("dblink", user.getDblink());
+		
 		map.put("list", partsSettings);
 		if(partsSettings.size()>0){
 			List<CarPartsNotice> list = carPartsMapper.selectPartsNotice(map);
@@ -274,15 +273,16 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean editScrap(User user, CarScrap carScrap) {
+	public ResultBean editScrap( CarScrap carScrap) {
 		ResultBean rb = new ResultBean();
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		carScrap.setCuid(user.getId());
 		carScrap.setCname(user.getRealname());
 		carScrap.setCtime(new Date());
 		carScrap.setType(1);
 		carScrapMapper.insertSelective(carScrap);
 		Car car = new Car();
-		car.setDblink(user.getDblink());
+		
 		car.setCarId(carScrap.getCarid());
 		car.setAcceptDate(carScrap.getAcceptdate());
 		car.setRetireDate(carScrap.getRetiredate());
@@ -291,15 +291,16 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean addDelay(User user, CarScrap carScrap) {
+	public ResultBean addDelay( CarScrap carScrap) {
 		ResultBean rb = new ResultBean();
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		carScrap.setCuid(user.getId());
 		carScrap.setCname(user.getRealname());
 		carScrap.setCtime(new Date());
 		carScrap.setType(0);
 		carScrapMapper.insertSelective(carScrap);
 		Car car = new Car();
-		car.setDblink(user.getDblink());
+		
 		car.setCarId(carScrap.getCarid());
 		car.setDelayScrap(1);
 		carMapper.updateByPrimaryKeySelective(car);
@@ -307,14 +308,14 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean editDelay(User user, CarScrap carScrap) {
+	public ResultBean editDelay( CarScrap carScrap) {
 		ResultBean rb = new ResultBean();
 		carScrapMapper.updateByPrimaryKeySelective(carScrap);
 		return rb;
 	}
 
 	@Override
-	public List<CarRemind> listCarRemind(User user,CarCostRemind carCostRemind) {
+	public List<CarRemind> listCarRemind(CarCostRemind carCostRemind) {
 		CarCostRemind query = carCostRemindMapper.selectCost(carCostRemind);
 		if(query!=null){
 		carCostRemind.setAnnualcheck(query.getAnnualcheck());
@@ -327,7 +328,7 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean editCarParts(CarParts carParts, User user) {
+	public ResultBean editCarParts(CarParts carParts) {
 		ResultBean rb = new ResultBean();
 		carPartsMapper.updateByPrimaryKeySelective(carParts);
 		return rb;
@@ -339,10 +340,13 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public ResultBean addLog(CarLog carLog,User user, String bussinessid) {
+	public ResultBean addLog(CarLog carLog) {
 		ResultBean rb = new ResultBean();
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
+		String bussinessid = this.<String>getContextValue(ConstantUtil.SESSION_BUSINESS);
+		
 		String desc="车辆["+carLog.getCarno()+"]调动申请";
-		String transactionid= flowService.addFlow(bussinessid, user.getId(),desc,user);
+		String transactionid= flowService.addFlow(bussinessid, user.getId(),desc);
 		carLog.setCarid(user.getId());
 		carLog.setCname(user.getRealname());
 		carLog.setCtime(new Date());
@@ -374,7 +378,8 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public CarLog getLog(CarLog carLog,User user) {
+	public CarLog getLog(CarLog carLog) {
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		CarLog cl=carLogMapper.selectByPrimaryKey(carLog);
 		if(cl.getSubmitId().equals(user.getId().intValue())){
 			if (carLog.getAuditStatus() == 1) {// 业务还在等待审核中
@@ -384,7 +389,7 @@ public class CarBizServiceImpl implements CarBizService {
 			}
 		}else{
 			Flow flow = new Flow();
-			flow.setDblink(user.getDblink());
+			
 			flow.setTransactionid(cl.getTransactionId());
 			FlowStep fs = flowService.getLastFlowStepByTransactionid(flow);
 			if(fs==null){//没有审批流，可以直接审核
@@ -402,13 +407,13 @@ public class CarBizServiceImpl implements CarBizService {
 	}
 
 	@Override
-	public void updateAuditLog(CarLog carLog, User user, String bussinessid,
-			int i) {
+	public void updateAuditLog(CarLog carLog,int i) {
 		CarLog cl=carLogMapper.selectByPrimaryKey(carLog);
-		Flow flow= flowService.getFlow(cl.getTransactionId(),user);
+		Flow flow= flowService.getFlow(cl.getTransactionId());
+		User user = this.<User>getContextValue(ConstantUtil.USER_SESSION);
 		if(i==1){//通过审批
 			if(cl.getAuditStatus()==1){
-				flow.setDblink(user.getDblink());
+				
 				boolean next=(flow!=null)&&flowService.auditFlow(flow, user.getId(), ConstantUtil.AUDIT_ACCEPT);
 				if(!next){
 					Car queryCar=new Car();

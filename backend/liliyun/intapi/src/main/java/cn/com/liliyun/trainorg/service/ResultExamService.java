@@ -1,11 +1,11 @@
 package cn.com.liliyun.trainorg.service;
 
-import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.trainorg.model.*;
-import cn.com.liliyun.user.model.User;
-
 import java.util.List;
 import java.util.Map;
+
+import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.trainorg.model.ResultExam;
+import cn.com.liliyun.trainorg.model.ResultExamItem;
 
 /**
  * 考试成绩
@@ -17,9 +17,9 @@ public interface ResultExamService {
 
 	public List<ResultExamItem> listOfCoach(ResultExamItem resultExam);
 
-	public ResultBean add(User user, List<ResultExamItem> list);
+	public ResultBean add(List<ResultExamItem> list);
 
-	public Map <String,Object> importData(User user, List<ResultExamItem> list);
+	public Map <String,Object> importData(List<ResultExamItem> list);
 
 	public List<ResultExamItem> listItem(ResultExamItem resultExamItem);
 

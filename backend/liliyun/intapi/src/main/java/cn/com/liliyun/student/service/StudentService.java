@@ -63,13 +63,13 @@ public interface StudentService {
 	
 	public ResultBean editTheoryStudent(Integer theoryId, String[] ids, boolean isDel);
 	
-	public ResultBean updateTheory(TheoryLesson theoryLesson, String businessid);
+	public ResultBean updateTheory(TheoryLesson theoryLesson);
 	
-	public ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview, String businessid);
+	public ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview);
 	
 	public CoachStudent getCoachStudent(CoachStudent coachStudent);
 	
-	public ResultBean addStudentPauseApply(StudentPauseApply apply,String bussinessid );
+	public ResultBean addStudentPauseApply(StudentPauseApply apply);
 	
 	public ResultBean updateStudentPauseApply(StudentPauseApply apply);
 	
@@ -93,7 +93,7 @@ public interface StudentService {
 	
 	public ResultBean getTransfer(TransferStudent transferStudent);
 	
-	public ResultBean addTransfer(TransferStudent transferStudent, String businessid);
+	public ResultBean addTransfer(TransferStudent transferStudent);
 	
 	public ResultBean editTransfer(TransferStudent transferStudent);
 	

@@ -2,7 +2,6 @@ package cn.com.liliyun.car.manager;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import cn.com.liliyun.car.model.Car;
 import cn.com.liliyun.car.model.CarAccident;
@@ -12,8 +11,8 @@ import cn.com.liliyun.car.model.CarInsurance;
 import cn.com.liliyun.car.model.CarOilwear;
 import cn.com.liliyun.car.model.CarRepair;
 import cn.com.liliyun.car.model.CarTax;
-import cn.com.liliyun.importexcel.model.CarOilwearImport;
-import cn.com.liliyun.user.model.User;
+
+
 
 public interface ICarManager {
 	
@@ -23,9 +22,9 @@ public interface ICarManager {
 	
 	Car queryCarByCarno(Car car);
 
-	void addCar(User user,Car car);
+	void addCar(Car car);
 
-	void updateCar(User user,Car car);
+	void updateCar(Car car);
 
 	void deleteCar(Car car);
 

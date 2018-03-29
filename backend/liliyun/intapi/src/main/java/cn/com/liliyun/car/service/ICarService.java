@@ -14,7 +14,7 @@ import cn.com.liliyun.car.model.CarRepair;
 import cn.com.liliyun.car.model.CarTax;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.importexcel.model.CarOilwearImport;
-import cn.com.liliyun.user.model.User;
+
 
 /**
  * 
@@ -32,9 +32,9 @@ public interface ICarService {
 	
 	public ResultBean getCar(Car car);
 	
-	public ResultBean addCar(User user,Car car);
+	public ResultBean addCar(Car car);
 	
-	public ResultBean updateCar(User user,Car car);
+	public ResultBean updateCar(Car car);
 	
 	public ResultBean deleteCar(Car car);
 
@@ -99,7 +99,7 @@ public interface ICarService {
 	
 	public ResultBean deleteCarOilwear(CarOilwear carOilwear);
 	
-	public ResultBean importCarOilwear(List<CarOilwearImport> list, User user);
+	public ResultBean importCarOilwear(List<CarOilwearImport> list);
 	
 	
 	/**
@@ -138,15 +138,15 @@ public interface ICarService {
 	 * @param carAccident
 	 * @return
 	 */
-	public List<CarAccident> getCarAccidentList(CarAccident carAccident, User user);
+	public List<CarAccident> getCarAccidentList(CarAccident carAccident);
 	
-	public ResultBean getCarAccident(CarAccident carAccident, User user);
+	public ResultBean getCarAccident(CarAccident carAccident);
 	
-	public ResultBean addCarAccident(CarAccident carAccident, User user);
+	public ResultBean addCarAccident(CarAccident carAccident);
 	
-	public ResultBean updateCarAccident(CarAccident carAccident, User user);
+	public ResultBean updateCarAccident(CarAccident carAccident);
 	
-	public List<CarAccident> getCarAccidentExport(CarAccident carAccident, User user);
+	public List<CarAccident> getCarAccidentExport(CarAccident carAccident);
 
 
 }

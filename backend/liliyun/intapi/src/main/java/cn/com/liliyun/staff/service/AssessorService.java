@@ -4,7 +4,6 @@ import java.util.List;
 
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.staff.model.Assessor;
-import cn.com.liliyun.staff.model.Officer;
 
 
 public interface AssessorService {

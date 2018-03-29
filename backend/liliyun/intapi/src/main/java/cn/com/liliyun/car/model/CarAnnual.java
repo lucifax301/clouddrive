@@ -36,8 +36,6 @@ public class CarAnnual extends BaseModel implements Serializable {
 
     private String cname;
 
-    private Long cuid;
-
     private Date assertDate;
 
     private String remark;
@@ -140,15 +138,7 @@ public class CarAnnual extends BaseModel implements Serializable {
         this.cname = cname == null ? null : cname.trim();
     }
 
-    public Long getCuid() {
-        return cuid;
-    }
-
-    public void setCuid(Long cuid) {
-        this.cuid = cuid;
-    }
-
-    public Date getAssertDate() {
+        public Date getAssertDate() {
         return assertDate;
     }
 

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.com.liliyun.common.annotation.RequestAction;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.staff.model.Staff;
@@ -37,6 +38,7 @@ public class StaffController {
 	@Autowired
 	private StaffService staffService;
 	
+	@RequestAction(type=RequestAction.RequestActionType.ADD)
 	@RequestMapping(value="/add")
 	public ResultBean add(Staff staff, HttpServletRequest request) {
 		User user =  AccessWebUtil.getSessionUser(request);
@@ -45,10 +47,9 @@ public class StaffController {
 		return rb;
 	}
 	
+	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
 	@RequestMapping(value="/update")
 	public ResultBean update(Staff staff, HttpServletRequest request) {
-		User user =  AccessWebUtil.getSessionUser(request);
-		staff.setCuid(user.getId());
 		ResultBean rb= staffService.update(staff);
 		return rb;
 	}
@@ -79,8 +80,6 @@ public class StaffController {
 	
 	@RequestMapping(value="/list")
 	public ResultBean getList(Staff staff, HttpServletRequest request) {
-		User user =  AccessWebUtil.getSessionUser(request);
-		
 		ResultBean rb = new ResultBean();
 		
 		List <Staff> list = staffService.list(staff);
@@ -90,7 +89,6 @@ public class StaffController {
 	
 	@RequestMapping(value="/export")
 	public ResponseEntity<byte[]> export(Staff staff, HttpServletRequest request) throws IOException {
-		User user =  AccessWebUtil.getSessionUser(request);
 		
 		List <Staff> list = staffService.list(staff);
 		

@@ -1,5 +1,7 @@
 package cn.com.liliyun.httpaccess.interceptor;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,12 +9,13 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import cn.com.liliyun.common.annotation.RequestAction;
 import cn.com.liliyun.common.model.BaseModel;
-import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.user.model.User;
 
@@ -34,6 +37,10 @@ public class DblinkInterceptor {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		HttpSession session = request.getSession();
 		Object [] args = joinPoint.getArgs();
+		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();  
+        Method method = methodSignature.getMethod();
+        //Class cls = method.getDeclaringClass();
+        RequestAction requestAction = (RequestAction)method.getAnnotation(RequestAction.class);
 		for (Object o : args) {
 			if (o instanceof BaseModel) {
 				User user = (User)session.getAttribute(ConstantUtil.USER_SESSION);
@@ -43,7 +50,14 @@ public class DblinkInterceptor {
 					((BaseModel) o).setSchoolname(user.getSchoolname());
 					((BaseModel) o).setSchoolid(user.getSchoolid());
 					((BaseModel) o).setDomain(user.getDomain());
-
+					
+					if(requestAction!=null){
+						if(requestAction.type()==RequestAction.RequestActionType.ADD){
+							((BaseModel) o).setCuid(user.getId());
+						}else if(requestAction.type()==RequestAction.RequestActionType.UPDATE){
+							((BaseModel) o).setMuid(user.getId());
+						}
+					}
 				}
 			}
 		}

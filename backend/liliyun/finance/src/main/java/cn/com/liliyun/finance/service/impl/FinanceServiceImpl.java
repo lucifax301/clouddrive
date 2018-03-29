@@ -127,7 +127,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean addFinancePos(FinancePos financePos) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		FinancePos fp = financePosMapper.selectByPosnum(financePos);
 		if (fp != null){
 			return r;
@@ -143,7 +143,7 @@ public class FinanceServiceImpl implements FinanceService {
 	@Override
 	public ResultBean updateFinancePos(FinancePos financePos) {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		
 		FinancePos fp = financePosMapper.selectByPosnum(financePos);
 		if (fp != null){
@@ -161,7 +161,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean deleteFinancePos(FinancePos financePos) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financePos.setMuid(user.getId());
 		financePos.setMname(user.getRealname());
 		financePos.setMtime(new Date());
@@ -204,7 +204,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean addPosAccount(PosAccount posAccount) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		PosAccount pa = posAccountMapper.selectByAccount(posAccount);
 		if (pa != null) {
 			return r;
@@ -221,7 +221,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean deletePosAccount(PosAccount posAccount) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		posAccount.setMuid(user.getId());
 		posAccount.setMname(user.getRealname());
 		posAccount.setMtime(new Date());
@@ -245,7 +245,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean addCashAccount(CashAccount cashAccount) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		CashAccount ca = cashAccountMapper.selectByAccount(cashAccount);
 		if (ca != null) {
 			return r;
@@ -262,7 +262,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean deleteCashAccount(CashAccount cashAccount) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		cashAccount.setMuid(user.getId());
 		cashAccount.setMname(user.getRealname());
 		cashAccount.setMtime(new Date());
@@ -287,7 +287,7 @@ public class FinanceServiceImpl implements FinanceService {
 		ResultBean r = new ResultBean();
 		
 		FinanceSubject fs = new FinanceSubject();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		fs.setId(financeSubject.getId());
 		fs.setDisable(isdel?(byte) 1:(byte) 0);
 		fs.setMuid(user.getId());
@@ -308,7 +308,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean addFinanceSubject(FinanceSubject financeSubject) {
 		ResultBean r = new ResultBean();
 		
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeSubject.setCuid(user.getId());
 		financeSubject.setCname(user.getRealname());
 		financeSubject.setCtime(new Date());
@@ -320,7 +320,7 @@ public class FinanceServiceImpl implements FinanceService {
 	@Override
 	public int updateFinanceSubject(FinanceSubject financeSubject) {
 		int r = 0;
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeSubject.setMuid(user.getId());
 		financeSubject.setMname(user.getRealname());
 		financeSubject.setMtime(new Date());
@@ -354,7 +354,7 @@ public class FinanceServiceImpl implements FinanceService {
 			financeSubcharge.setPosnum(financePos.getPosnum());
 			financeSubcharge.setBankname(financePos.getBankname());
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		
 		financeSubcharge.setAreaid(user.getAreaid());
 		financeSubcharge.setStoreid(user.getStoreid());
@@ -381,7 +381,7 @@ public class FinanceServiceImpl implements FinanceService {
 			financeSubcharge.setPosnum(financePos.getPosnum());
 			financeSubcharge.setBankname(financePos.getBankname());
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeSubcharge.setMuid(user.getId());
 		financeSubcharge.setMname(user.getRealname());
 		financeSubcharge.setMtime(new Date());
@@ -393,7 +393,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public ResultBean deleteFinanceSubcharge(FinanceSubcharge financeSubcharge) {
 		ResultBean r = new ResultBean();
 		FinanceSubcharge fs = new FinanceSubcharge();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		fs.setIds(financeSubcharge.getIds());
 		fs.setMuid(user.getId());
 		fs.setMname(user.getRealname());
@@ -422,7 +422,7 @@ public class FinanceServiceImpl implements FinanceService {
 	@Override
 	public ResultBean addFinanceDeposit(FinanceDeposit financeDeposit) {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeDeposit.setAreaid(user.getAreaid());
 		financeDeposit.setStoreid(user.getStoreid());
 		financeDeposit.setIsconfirm((byte) 0);
@@ -436,7 +436,7 @@ public class FinanceServiceImpl implements FinanceService {
 	@Override
 	public ResultBean updateFinanceDeposit(FinanceDeposit financeDeposit, Integer isConfirm) {
 		ResultBean r = new ResultBean();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeDeposit.setMuid(user.getId());
 		financeDeposit.setMname(user.getRealname());
 		if (isConfirm == 1) {
@@ -461,7 +461,7 @@ public class FinanceServiceImpl implements FinanceService {
 		FinanceDeposit fd = new FinanceDeposit();
 		fd.setIds(financeDeposit.getIds());
 		fd.setIsdel((byte) 1);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		fd.setMtime(new Date());
 		fd.setMuid(user.getId());
 		fd.setMname(user.getRealname());
@@ -503,7 +503,7 @@ public class FinanceServiceImpl implements FinanceService {
 			financeReceipt.setAreaid(student.getAreaid());
 			financeReceipt.setStoreid(student.getStoreid());
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeReceipt.setAreaid(student.getAreaid());
 		financeReceipt.setStoreid(student.getStoreid());
 		financeReceipt.setCuid(user.getId());
@@ -528,7 +528,7 @@ public class FinanceServiceImpl implements FinanceService {
 		if (fr.getModifystate() == 2) {
 			financeReceipt.setModifystate((byte) 4);
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeReceipt.setMtime(new Date());
 		financeReceipt.setMuid(user.getId());
 		financeReceipt.setMname(user.getRealname());
@@ -551,7 +551,7 @@ public class FinanceServiceImpl implements FinanceService {
 		} else if (isreview && fr.getModifystate() != 1) {
 			return r;
 		}
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (!isreview) {
 			fr.setModifystate((byte) 1);
 			fr.setApplier(user.getRealname());
@@ -559,7 +559,7 @@ public class FinanceServiceImpl implements FinanceService {
 			fr.setApplydate(new Date());
 			fr.setApplyreason(financeReceipt.getApplyreason());
 			String desc = "学员[" + fr.getStuname() + "]票据修改申请";
-			String transactionid = flowService.addFlow(businessid, user.getId(), desc,user);
+			String transactionid = flowService.addFlow(businessid, user.getId(), desc);
 			fr.setBusinessid(businessid);
 			fr.setTransactionid(transactionid);
 		} else {
@@ -569,7 +569,7 @@ public class FinanceServiceImpl implements FinanceService {
 			fr.setReviewdate(new Date());
 			fr.setReviewremark(financeReceipt.getReviewremark());
 			
-			Flow flow = flowService.getFlow(fr.getTransactionid(),user);
+			Flow flow = flowService.getFlow(fr.getTransactionid());
 			flow.setDblink(user.getDblink());
 			if (fr.getModifystate() == 2) { //申请通过
 				boolean next = (flow != null) && flowService.auditFlow(flow, user.getId(), ConstantUtil.AUDIT_ACCEPT);
@@ -588,7 +588,7 @@ public class FinanceServiceImpl implements FinanceService {
 		ResultBean r = new ResultBean();
 		int state = financeReceipt.getInvoicestate();
 		FinanceReceipt fr = new FinanceReceipt();
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		fr.setId(financeReceipt.getId());
 		fr.setInvoicestate((byte) state);
 		switch (state) {
@@ -675,7 +675,7 @@ public class FinanceServiceImpl implements FinanceService {
 		if (financeReceipt.getIds() == null || financeReceipt.getIds().trim().equals(""))
 			return r;
 		List<FinanceReceipt> list = financeReceiptMapper.selectList(financeReceipt);
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		financeReceipt.setIsconfirm((byte) 1);
 		financeReceipt.setConfirmdate(new Date());
 		financeReceipt.setConfirmname(user.getRealname());
@@ -826,7 +826,7 @@ public class FinanceServiceImpl implements FinanceService {
 		 * type = 2 : 北京技术
 		 * type = 3 : 银盛
 		 */
-		User user = RequestContext.get(ConstantUtil.USER_SESSION);
+		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		if (type == 1) {
 			while (rows.hasNext()) {
 				Row row = rows.next();

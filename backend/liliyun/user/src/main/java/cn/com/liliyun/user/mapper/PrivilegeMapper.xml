@@ -165,21 +165,7 @@
 		order by pid asc
 	</select>
 	
-	<select id="listUserPrivilege" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.User">
-		select distinct 
-		c.id, c.name, c.pid, c.url, c.ajax, c.type, c.enable, c.remark , c.menuorder, c.menulevel ,c.icon,c.privilege
-		from
-			t_role d
-			JOIN t_user a ON d.id = a.roleid
-			JOIN t_role_permission b ON a.roleid = b.role_id
-			JOIN t_permission c ON b.permission_id = c.id
-			WHERE a.id = #{id,jdbcType=INTEGER} and d.enable = 1 and must=0 and c.enable = 1 
-			union
-		select 
-		<include refid="Privilege_Base_Column_List" />
-			from t_permission where must=1
-			order by pid asc,menuorder asc
-	</select>
+	
 	
 	<select id="listUserRolePrivilege" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.Role">
 		select distinct 
@@ -196,21 +182,7 @@
 			order by pid asc,menuorder asc
 	</select>
 	
-	<select id="listUserBtn" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.User">
-		select distinct 
-		c.id, c.name, c.pid, c.url, c.ajax, c.type, c.enable, c.remark , c.menuorder, c.menulevel ,c.icon,c.privilege
-		from
-			t_role d
-			JOIN t_user a ON d.id = a.roleid
-			JOIN t_role_permission b ON a.roleid = b.role_id
-			JOIN t_permission c ON b.permission_id = c.id
-			WHERE a.id = #{id,jdbcType=INTEGER} and d.enable = 1 and must=0 and c.enable = 1 and c.menulevel=3
-			union
-		select 
-		<include refid="Privilege_Base_Column_List" />
-			from t_permission where must=1 and menulevel=3
-			order by pid asc,menuorder asc
-	</select>
+	
 	
 	<select id="listUserRoleBtn" resultMap="PrivilegeBaseResultMap" parameterType="cn.com.liliyun.user.model.Role">
 		select distinct 
@@ -275,54 +247,9 @@
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 
-	<update id="insertRoleUser">
-		update t_user set roleid = #{roleId,jdbcType=INTEGER}
-		where id = #{userId,jdbcType=INTEGER}
-	</update>
 	
-	<update id="delRoleUser" parameterType="cn.com.liliyun.user.model.RoleUser">
-		update t_user set roleid = null
-		where id = #{userId,jdbcType=INTEGER} and roleid=#{roleId,jdbcType=INTEGER}
-	</update>
 	
-	<select id="listRoleUserIds" resultType="integer" parameterType="cn.com.liliyun.user.model.RoleUser">
-		select id
-		from t_user 
-			where roleid=#{roleId,jdbcType=INTEGER}
-	</select>
 	
-	<select id="listRoleUser" resultType="cn.com.liliyun.user.model.User">
-		select id, username, realname, mobile, status ,issuper, ctime
-		from t_user where 1 = 1
-		<if test="dblink != null">
-			and dblink = #{dblink,jdbcType=VARCHAR}
-		</if>
-		 <choose>
-	     	<when test="list != null and list.size() > 0">
-	        	and id in 
-				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
-	      			#{item}
-	   			</foreach>
-	        </when>
-	      	<otherwise>
-	            and id = -1 
-	        </otherwise>
-         </choose> 
-	</select>
-	
-	<select id="listNotRoleUser" resultType="cn.com.liliyun.user.model.User">
-		select id, username, realname, mobile, status ,issuper, ctime
-		from t_user where 1 = 1
-		<if test="dblink != null"> 
-			and dblink = #{dblink,jdbcType=VARCHAR}
-		</if> 
-		<if test=" list != null and list.size() > 0 ">
-				and id not in 
-			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
-	        	#{item}
-	        </foreach>
-        </if>
-	</select>
 	
 	<select id="listRolePrivilegeCount" resultType="map">
 		select role_id,count(role_id) as count from t_role_permission where role_id in
@@ -332,20 +259,6 @@
 		group by role_Id
 	</select>
 	
-	<select id="listRoleUserCount" resultType="map">
-		select roleid,count(id) as count from t_user where roleid in
-		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
-        #{item}
-        </foreach>
-		group by roleid
-	</select>
 	
-	<select id="getRoleUserTotal" resultType="java.lang.Integer">
-		select
-			count(id) 
-			from 
-		t_user
-		where roleid=#{roleId,jdbcType=INTEGER}	
-	</select>
 	
 </mapper>
