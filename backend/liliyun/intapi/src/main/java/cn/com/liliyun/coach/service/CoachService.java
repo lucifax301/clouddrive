@@ -26,7 +26,7 @@ public interface CoachService {
 	
 	public List<HeadCoach> getHeadCoachList(Coach coach);
 	
-	public Map getCoachExtendById(Coach coach);
+	public Map<String,String> getCoachExtendById(Coach coach);
 	
 	/**
 	 * 更新教练车
@@ -81,7 +81,7 @@ public interface CoachService {
 	 * @param businessid
 	 * @return
 	 */
-	public ResultBean modCoachApply(Coach coach,Map extendsinfo,String businessid);
+	public ResultBean modCoachApply(Coach coach,Map extendsinfo);
 	
 	public CoachModApply getModApply(CoachModApply param);
 	

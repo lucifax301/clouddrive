@@ -45,9 +45,7 @@ public class Assessor extends BaseModel{
 	
 	private String teachpermitted;
 	
-	private Integer cuid;
 	
-	private Integer muid;
 	
 	private Date ctime;
 	
@@ -213,21 +211,7 @@ public class Assessor extends BaseModel{
 		this.teachpermitted = teachpermitted;
 	}
 
-	public Integer getCuid() {
-		return cuid;
-	}
-
-	public void setCuid(Integer cuid) {
-		this.cuid = cuid;
-	}
-
-	public Integer getMuid() {
-		return muid;
-	}
-
-	public void setMuid(Integer muid) {
-		this.muid = muid;
-	}
+	
 
 	public Date getCtime() {
 		return ctime;

@@ -39,7 +39,7 @@ import com.github.pagehelper.PageInfo;
 @Controller
 @ResponseBody
 @RequestMapping(value="/enrolindex")
-public class EnrolIndexController extends BaseController {
+public class EnrolIndexController extends ExportController {
 
 	Logger logger = Logger.getLogger(EnrolIndexController.class);
 
@@ -123,22 +123,7 @@ public class EnrolIndexController extends BaseController {
 		public ResponseEntity<byte[]> listAreaExport(AreaEnrolIndex index) throws IOException {
 			
 			List<AreaEnrolIndex> list= enrolIndexService.listAllAreaEnrollIndex(index);
-			
-			ExportParams params = new ExportParams("片区招生指标", "导出数据", ExcelType.XSSF);// title
-			// sheetname
-			// 文件格式
-			Workbook workbook = ExcelExportUtil.exportExcel(params, AreaEnrolIndex.class,
-			list);
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			workbook.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区招生指标" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
+			return this.export("片区招生指标", "片区招生指标", "导出数据", list, AreaEnrolIndex.class);
 		}
 		
 		@RequestMapping(value="/getarea")
@@ -180,8 +165,8 @@ public class EnrolIndexController extends BaseController {
 		 */
 		@RequestMapping(value="/editcoach")
 		public ResultBean editcoach(CoachEnrolIndex index) {
-			ResultBean resultBean = enrolIndexService.editCoachEnrolIndex(index);
-			return resultBean;
+			return enrolIndexService.editCoachEnrolIndex(index);
+			
 		}
 		
 		/**
@@ -191,8 +176,7 @@ public class EnrolIndexController extends BaseController {
 		 */
 		@RequestMapping(value="/getcoach")
 		public ResultBean getcoach(CoachEnrolIndex index){
-			ResultBean resultBean = enrolIndexService.getCoachEnrolIndex(index);
+			return enrolIndexService.getCoachEnrolIndex(index);
 			
-			return resultBean;
 		}
 }

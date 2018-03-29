@@ -38,6 +38,7 @@ import cn.com.liliyun.coach.model.HeadCoach;
 import cn.com.liliyun.coach.model.StudentAssign;
 import cn.com.liliyun.coach.service.CoachService;
 import cn.com.liliyun.coach.service.CoachSettingService;
+import cn.com.liliyun.common.CommonService;
 import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.model.ResultCode;
@@ -66,7 +67,7 @@ import com.github.pagehelper.PageInfo;
 
 @SuppressWarnings("rawtypes")
 @Service
-public class CoachServiceImpl implements CoachService {
+public class CoachServiceImpl extends CommonService implements CoachService {
 	Logger logger = Logger.getLogger(CoachServiceImpl.class);
 
 	@Autowired
@@ -979,7 +980,7 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public Map getCoachExtendById(Coach coach) {
+	public Map<String,String> getCoachExtendById(Coach coach) {
 		Map map = new HashMap();
 		CoachStore cs = new CoachStore();
 		cs.setCoachid(coach.getCoachid());
@@ -1188,9 +1189,9 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public ResultBean modCoachApply(Coach coach, 
-			Map extendsinfo, String businessid) {
+			Map extendsinfo) {
 		ResultBean rb = new ResultBean();
-
+		String businessid = this.<String>getContextValue(ConstantUtil.SESSION_BUSINESS);
 		CoachModApply param = new CoachModApply();
 		//param.setDblink(user.getDblink());
 		param.setCoachid(coach.getCoachid());

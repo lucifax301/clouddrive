@@ -50,31 +50,31 @@ public interface CoachSettingService {
 	 * 车型
 	 * @param type
 	 */
-	public void addCarType(CoachCarType type) throws Exception ;
+	public void addCarType(CoachCarType type)  ;
 	
-	public void deleteCarType(CoachCarType type) throws Exception ;
+	public void deleteCarType(CoachCarType type)  ;
 	
-	public List<CoachCarType> listCarType(CoachCarType type) throws Exception ;
+	public List<CoachCarType> listCarType(CoachCarType type)  ;
 	
-	public void saveCarType(String[] newtypes,User user) throws Exception;
+	public void saveCarType(String[] newtypes,User user) ;
 	
 	/**
 	 * 职务
 	 * @param type
 	 * @param log
-	 * @throws Exception
+	 * @
 	 */
-	public void addJob(CoachJob job) throws Exception ;
+	public void addJob(CoachJob job)  ;
 	
-	public void updateJob(CoachJob job) throws Exception ;
+	public void updateJob(CoachJob job)  ;
 	
-	public CoachJob getJob(CoachJob param) throws Exception ;
+	public CoachJob getJob(CoachJob param)  ;
 	
-	public void deleteJob(CoachJob job) throws Exception ;
+	public void deleteJob(CoachJob job)  ;
 	
-	public void updateJobStatus(CoachJob job) throws Exception ;
+	public void updateJobStatus(CoachJob job)  ;
 	
-	public List<CoachJob> listJob(CoachJob job) throws Exception ;
+	public List<CoachJob> listJob(CoachJob job)  ;
 	
-	public List<CoachJob> listAllJob(CoachJob job) throws Exception;
+	public List<CoachJob> listAllJob(CoachJob job) ;
 }

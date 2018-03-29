@@ -55,7 +55,7 @@ import cn.com.liliyun.user.model.User;
 @Controller
 @ResponseBody
 @RequestMapping(value="/enrolstat")
-public class EnrolStatController extends BaseController{
+public class EnrolStatController extends ExportController{
 
 	private static Logger log=Logger.getLogger(EnrolStatController.class);
 	
@@ -141,16 +141,9 @@ public class EnrolStatController extends BaseController{
 			
 			Workbook wb = getAreaDetailWorkbook(list,clss);
 			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
+			return this.export("片区统计", wb);
+			
+			
 		
 	}
 	
@@ -273,16 +266,9 @@ public class EnrolStatController extends BaseController{
 			
 			Workbook wb = getStoreDetailWorkbook(list,clss);
 			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区门店统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
+			return this.export("片区门店统计", wb);
+			
+			
 		
 	}
 	
@@ -418,32 +404,16 @@ public class EnrolStatController extends BaseController{
 	public static final String[] classHeader = { "招生指标", "招生小计", "退费人数", "实际招生","招生完成率","均价", "外地班均价","高端班指标","高端班完成率","高端班占比","手动挡","自动挡","自动挡占比"};
 	
 	@RequestMapping(value="/stat/class/export")
-	public ResponseEntity<byte[]> classStatExport(EnrolDetailParam param,HttpServletRequest request) {
+	public ResponseEntity<byte[]> classStatExport(EnrolDetailParam param,HttpServletRequest request) throws IOException {
 		
-		User user = AccessWebUtil.getSessionUser(request);
-		Map data=new HashMap();
-		try{
+		
 			List<EnrolClassStat> list= enrolStatService.statByClass(param);
-			Classinfo ci=new Classinfo();
-			ci.setDblink(user.getDblink());
-			List<Classinfo> clss= classinfoService.selectAllList(ci);
+			
+			List<Classinfo> clss= classinfoService.selectAllList(null);
 			
 			Workbook wb = getClassStatWorkbook(list,clss);
+			return this.export("班别统计", wb);
 			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
 	}
 	
 	public Workbook getClassStatWorkbook(List<EnrolClassStat> list,List<Classinfo> clss){
@@ -574,10 +544,6 @@ public class EnrolStatController extends BaseController{
 	@RequestMapping(value="/stat/channel/export")
 	public ResponseEntity<byte[]>  chanelStatExport(EnrolDetailParam param,HttpServletRequest request) throws IOException {
 		
-		
-		
-		Map data=new HashMap();
-		
 			List<EnrolChannelStat> list= enrolStatService.statByChannel(param);
 			
 			SalesChannel sc=new SalesChannel();
@@ -585,18 +551,9 @@ public class EnrolStatController extends BaseController{
 			List<SalesChannel> clss= salesChannelService.selectChannels(sc);
 			
 			Workbook wb = getChannelStatWorkbook(list,clss);
+			return this.export("渠道统计", wb);
 			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-		HttpStatus.CREATED);
-		
+			
 	}
 	
 	public Workbook getChannelStatWorkbook(List<EnrolChannelStat> list,List<SalesChannel> clss){
@@ -691,28 +648,13 @@ public class EnrolStatController extends BaseController{
 	}
 	
 	@RequestMapping(value="/performance/coach/export")
-	public ResponseEntity<byte[]> performanceCoachExport(PerformanceParam param,HttpServletRequest request) {
+	public ResponseEntity<byte[]> performanceCoachExport(PerformanceParam param,HttpServletRequest request) throws IOException {
 		ResultBean rb = new ResultBean();
 		
-		try{
 			List<CoachPerformanceStat> areastat=performanceService.coachstat(param);
 			Workbook wb = getPerformanceCoachWorkbook(areastat);
 			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
-		
+			return this.export("绩效考核", wb);
 	}
 	
 	public static final String[] performanceCoachHeader = { "片区", "门店", "员工姓名", "员工指标","招生人数","超额人数"};  

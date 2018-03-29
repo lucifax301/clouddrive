@@ -44,7 +44,7 @@ import cn.com.liliyun.user.model.User;
 @Controller
 @ResponseBody
 @RequestMapping(value="/customer")
-public class CustomerController extends BaseController{
+public class CustomerController extends ExportController{
 	Logger logger = Logger.getLogger(CustomerController.class);
 
 	@Autowired
@@ -182,16 +182,9 @@ public class CustomerController extends BaseController{
 				cr.setServicemodestr(servicemodeMap.get(cr.getServicemode()));
 			}
 		}
-		ExportParams params = new ExportParams("客户服务记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-    	Workbook workbook = ExcelExportUtil.exportExcel(params, CustomerRecord.class, list);
-    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-    	workbook.write(os);
-        HttpHeaders headers = new HttpHeaders();    
-        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String fileName = new String(("客户服务记录" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-        headers.setContentDispositionFormData("attachment", fileName);   
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
+		
+		return this.export("客户服务记录", "客户服务记录", "导出数据", list, CustomerRecord.class);
+		    
     }
     
     @RequestMapping(value = "addPotentialCustomer", method = RequestMethod.POST)
@@ -248,15 +241,7 @@ public class CustomerController extends BaseController{
 				pc.setInfosourcestr(infosourceMap.get(pc.getInfosource()) != null? infosourceMap.get(pc.getInfosource()) : "");
 			}
 		}
-		ExportParams params = new ExportParams("潜在客户管理记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-    	Workbook workbook = ExcelExportUtil.exportExcel(params, PotentialCustomer.class, list);
-    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-    	workbook.write(os);
-        HttpHeaders headers = new HttpHeaders();    
-        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String fileName = new String(("潜在客户管理记录" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-        headers.setContentDispositionFormData("attachment", fileName);   
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
+		
+		return this.export("潜在客户管理记录", "潜在客户管理记录", "导出数据", list, PotentialCustomer.class);
     }
 }

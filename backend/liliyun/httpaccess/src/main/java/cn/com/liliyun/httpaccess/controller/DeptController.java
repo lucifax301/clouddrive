@@ -1,41 +1,21 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.dubbo.common.json.JSON;
-import com.alibaba.dubbo.common.json.ParseException;
-import com.github.pagehelper.PageInfo;
-import com.qiniu.util.Json;
-
 
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.ExcelUtil;
 import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.staff.model.Staff;
 import cn.com.liliyun.staff.service.StaffService;
@@ -47,7 +27,10 @@ import cn.com.liliyun.user.model.AllRoleMenu;
 import cn.com.liliyun.user.model.Dept;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.service.DeptService;
-import cn.com.liliyun.user.service.UserService;
+
+import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.dubbo.common.json.ParseException;
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @ResponseBody

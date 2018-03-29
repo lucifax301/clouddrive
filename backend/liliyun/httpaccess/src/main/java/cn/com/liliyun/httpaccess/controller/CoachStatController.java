@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,7 +51,7 @@ import cn.com.liliyun.user.model.User;
 @Controller
 @ResponseBody
 @RequestMapping(value="/coachreport")
-public class CoachStatController extends BaseController{
+public class CoachStatController extends ExportController{
 	
 	private static Logger log=Logger.getLogger(CoachStatController.class);
 
@@ -62,42 +63,26 @@ public class CoachStatController extends BaseController{
 	 * @param param
 	 * @return
 	 */
+	@Description("片区统计")
 	@RequestMapping(value="/areastat")
 	public ResultBean areaStat(AreaStatParam param) {
 		ResultBean rb = new ResultBean();
-		try{
+		
 			List<AreaStat> areastat=coachStatService.statByArea(param);
 			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-		}
+		
 		return rb;
 	}
 	
 	@RequestMapping(value="/areastat/export")
-	public ResponseEntity<byte[]> areaStatExport(AreaStatParam param,HttpServletResponse response) {
-		try {
+	public ResponseEntity<byte[]> areaStatExport(AreaStatParam param,HttpServletResponse response) throws IOException {
+		
 			List<AreaStat> areastat=coachStatService.statByArea(param);
 			
 			Workbook wb = getAreaStatWorkbook(areastat);
+			return this.export("片区统计", wb);
 			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-			
-			//sendExcel(response, wb, "教练负荷片区统计");
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			return null;
-		}
+		
 	}
 	
 	protected void sendDataExcel(HttpServletResponse response, Workbook wb,String name) throws IOException {
@@ -193,39 +178,21 @@ public class CoachStatController extends BaseController{
 	@RequestMapping(value="/teachtypestat")
 	public ResultBean teachtypestat(AreaStatParam param) {
 		ResultBean rb = new ResultBean();
-		try{
+		
 			List<TeachTypeStat> areastat=coachStatService.statByTeachType(param);
 			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-		}
+		
 		return rb;
 	}
 	
 	public static final String[] teachHeader = { "带教类型", "带教车型", "片区", "学员数量","教练数量","车辆数量", "人均负荷","单车负荷"};  
 	
 	@RequestMapping(value="/teachtypestat/export")
-	public ResponseEntity<byte[]> teachtypestatExport(AreaStatParam param,HttpServletResponse response) {
-		ResultBean rb = new ResultBean();
-		try{
-			List<TeachTypeStat> areastat=coachStatService.statByTeachType(param);
-			Workbook wb = getTeachStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("带教类型" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
+	public ResponseEntity<byte[]> teachtypestatExport(AreaStatParam param,HttpServletResponse response) throws IOException {
+		
+		List<TeachTypeStat> areastat=coachStatService.statByTeachType(param);
+		Workbook wb = getTeachStatWorkbook(areastat);
+		return this.export("带教类型统计", wb);
 		
 	}
 	
@@ -315,40 +282,21 @@ public class CoachStatController extends BaseController{
 	public ResultBean coachstat(CoachStatParam param, HttpServletRequest request) {
 		User user = AccessWebUtil.getSessionUser(request);
 		ResultBean rb = new ResultBean();
-		try{
+		
 			List<CoachAreaStat> areastat=coachStatService.statByCoach(param);
 			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-		}
+		
 		return rb;
 	}
 	
 	public static final String[] coachHeader = { "片区", "门店", "教练姓名", "阶段一","阶段二","阶段三", "阶段四","合计"};
 	
 	@RequestMapping(value="/coachstat/export")
-	public ResponseEntity<byte[]> coachstatExport(CoachStatParam param, HttpServletRequest request) {
+	public ResponseEntity<byte[]> coachstatExport(CoachStatParam param, HttpServletRequest request) throws IOException {
+		List<CoachAreaStat> areastat=coachStatService.statByCoach(param);
+		Workbook wb = getCoachStatWorkbook(areastat);
 		
-		ResultBean rb = new ResultBean();
-		try{
-			List<CoachAreaStat> areastat=coachStatService.statByCoach(param);
-			Workbook wb = getCoachStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("教练统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
+		return this.export("教练统计", wb);
 		
 	}
 	
@@ -448,27 +396,11 @@ public class CoachStatController extends BaseController{
 	public static final String[] headcoachHeader = { "片区", "教学组长", "教练姓名", "阶段一","阶段二","阶段三", "阶段四","合计"};
 	
 	@RequestMapping(value="/headcoachstat/export")
-	public ResponseEntity<byte[]> headcoachstatExport(HeadCoachStatParam param, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
-		ResultBean rb = new ResultBean();
-		try{
-			List<HeadCoachAreaStat> areastat=coachStatService.statByHeadCoach(param);
-			Workbook wb = getHeadCoachStatWorkbook(areastat);
+	public ResponseEntity<byte[]> headcoachstatExport(HeadCoachStatParam param, HttpServletRequest request) throws IOException {
+		List<HeadCoachAreaStat> areastat=coachStatService.statByHeadCoach(param);
+		Workbook wb = getHeadCoachStatWorkbook(areastat);
 			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("组长统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
+		return this.export("组长统计", wb);
 		
 	}
 	

@@ -1,11 +1,8 @@
 
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,21 +10,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.jeecgframework.poi.excel.ExcelExportUtil;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.enmus.ExcelType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.github.pagehelper.PageInfo;
 
 import cn.com.liliyun.car.model.CarCostRemind;
 import cn.com.liliyun.car.model.CarLog;
@@ -42,16 +30,16 @@ import cn.com.liliyun.car.service.CarBizService;
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
-import cn.com.liliyun.common.util.HttpConstant;
-import cn.com.liliyun.trainorg.model.Area;
 import cn.com.liliyun.trainorg.service.AreaService;
 import cn.com.liliyun.user.model.User;
+
+import com.github.pagehelper.PageInfo;
 
 
 @Controller
 @ResponseBody
 @RequestMapping(value = "/carbiz")
-public class CarBizController extends BaseController {
+public class CarBizController extends ExportController {
 
 	private Logger logger = Logger.getLogger(CarBizController.class);
 
@@ -94,9 +82,6 @@ public class CarBizController extends BaseController {
 	@RequestMapping(value = "/addLog")
 	public ResultBean addLog(CarLog carLog,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		String bussinessid = (String) request.getSession().getAttribute(
-				ConstantUtil.SESSION_BUSINESS);
-		User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
 		carBizService.addLog(carLog);
 		return rb;
 	}
@@ -176,33 +161,19 @@ public class CarBizController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/getCarPartsExport")
-	public ResponseEntity<byte[]> getCarPartsExport(CarParts carParts, HttpServletRequest request) {
-		try {
-			List<CarParts> list = carBizService.getCarPartsExport(carParts);
-			Map<Integer, String> parttypeMap = new HashMap<>();
-			parttypeMap.put(1, "轮胎");
-			parttypeMap.put(2, "机油");
-			parttypeMap.put(3, "时规带");
-			parttypeMap.put(4, "二保");
-			parttypeMap.put(5, "电池");
-			for(CarParts cp : list) {
-				cp.setPartstypestr(parttypeMap.get(cp.getPartstype()));
-			}
-			ExportParams params = new ExportParams("更换配件记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-	    	Workbook workbook = ExcelExportUtil.exportExcel(params, CarParts.class, list);
-	    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	    	workbook.write(os);
-	        HttpHeaders headers = new HttpHeaders();    
-	        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	        String fileName = new String(("更换配件记录" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	        headers.setContentDispositionFormData("attachment", fileName);   
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
-		} catch (IOException e) {
-			logger.error("*********************************** CarController getCarAccidentExport Error : " + e.getMessage());
-			e.printStackTrace();
-			return null;
+	public ResponseEntity<byte[]> getCarPartsExport(CarParts carParts, HttpServletRequest request)throws IOException {
+		List<CarParts> list = carBizService.getCarPartsExport(carParts);
+		Map<Integer, String> parttypeMap = new HashMap<>();
+		parttypeMap.put(1, "轮胎");
+		parttypeMap.put(2, "机油");
+		parttypeMap.put(3, "时规带");
+		parttypeMap.put(4, "二保");
+		parttypeMap.put(5, "电池");
+		for(CarParts cp : list) {
+			cp.setPartstypestr(parttypeMap.get(cp.getPartstype()));
 		}
+		
+		return this.export("更换配件记录", "更换配件记录", "导出数据", list, CarParts.class);
 	}
 	
 	@RequestMapping(value = "/setPartsSetting", method = RequestMethod.POST)
@@ -252,40 +223,23 @@ public class CarBizController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/getPartsNoticeExport")
-	public ResponseEntity<byte[]> getPartsNoticeExport(PartsSetting partsSetting, HttpServletRequest request) {
-		try {
-			partsSetting.setPageNo(-1);
-			@SuppressWarnings("unchecked")
-			List<CarPartsNotice> list = ((PageInfo<CarPartsNotice>) carBizService.getPartsNotice(partsSetting).getResult()).getList();
-			User user = (User) request.getSession().getAttribute(ConstantUtil.USER_SESSION);
-			Area area=new Area();
-			area.setDblink(user.getDblink());
-			Map<Integer, MapDTO> areaMap = areaService.getMap(area);
-			
-			Map<Integer, String> parttypeMap = new HashMap<>();
-			parttypeMap.put(1, "轮胎");
-			parttypeMap.put(2, "机油");
-			parttypeMap.put(3, "时规带");
-			parttypeMap.put(4, "二保");
-			parttypeMap.put(5, "电池");
-			for(CarPartsNotice cpn : list) {
-				cpn.setPartstypestr(parttypeMap.get(cpn.getPartstype()));
-				cpn.setAreastr(areaMap.get(cpn.getAreaid()) != null? areaMap.get(cpn.getAreaid()).getName() : "");
-			}
-			ExportParams params = new ExportParams("配件更换提醒", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-	    	Workbook workbook = ExcelExportUtil.exportExcel(params, CarPartsNotice.class, list);
-	    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	    	workbook.write(os);
-	        HttpHeaders headers = new HttpHeaders();    
-	        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	        String fileName = new String(("配件更换提醒" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	        headers.setContentDispositionFormData("attachment", fileName);   
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
-		} catch (IOException e) {
-			logger.error("*********************************** CarController getCarAccidentExport Error : " + e.getMessage());
-			e.printStackTrace();
-			return null;
+	public ResponseEntity<byte[]> getPartsNoticeExport(PartsSetting partsSetting, HttpServletRequest request) throws IOException {
+		partsSetting.setPageNo(-1);
+		@SuppressWarnings("unchecked")
+		List<CarPartsNotice> list = ((PageInfo<CarPartsNotice>) carBizService.getPartsNotice(partsSetting).getResult()).getList();
+		
+		Map<Integer, MapDTO> areaMap = areaService.getMap(null);
+		Map<Integer, String> parttypeMap = new HashMap<>();
+		parttypeMap.put(1, "轮胎");
+		parttypeMap.put(2, "机油");
+		parttypeMap.put(3, "时规带");
+		parttypeMap.put(4, "二保");
+		parttypeMap.put(5, "电池");
+		for(CarPartsNotice cpn : list) {
+			cpn.setPartstypestr(parttypeMap.get(cpn.getPartstype()));
+			cpn.setAreastr(areaMap.get(cpn.getAreaid()) != null? areaMap.get(cpn.getAreaid()).getName() : "");
 		}
+		
+		return this.export("配件更换提醒", "配件更换提醒", "导出数据", list, CarPartsNotice.class);
 	}
 }

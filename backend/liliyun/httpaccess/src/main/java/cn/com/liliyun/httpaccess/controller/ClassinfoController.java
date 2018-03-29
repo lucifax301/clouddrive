@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.trainorg.model.Classinfo;
 import cn.com.liliyun.trainorg.service.ClassinfoService;
-import cn.com.liliyun.user.model.User;
 
 @Controller
 @ResponseBody
@@ -23,10 +21,6 @@ public class ClassinfoController extends BaseController {
 	
 	@RequestMapping(value="/list")
 	public ResultBean getList(Classinfo classinfo,HttpServletRequest request) {
-		User loginuser = AccessWebUtil.getSessionUser(request);
-		
-//		classinfo.setStatus(1);
-//		classinfo.setPageNo(-1);
 		return classinfoService.selectList(classinfo);
 	}
 	

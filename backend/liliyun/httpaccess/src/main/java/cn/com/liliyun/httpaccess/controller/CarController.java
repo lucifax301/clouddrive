@@ -1,25 +1,14 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.jeecgframework.poi.excel.ExcelExportUtil;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.entity.ImportParams;
-import org.jeecgframework.poi.excel.entity.enmus.ExcelType;
-import org.jeecgframework.poi.exception.excel.ExcelImportException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,13 +29,9 @@ import cn.com.liliyun.car.model.CarTax;
 import cn.com.liliyun.car.service.ICarService;
 import cn.com.liliyun.common.model.BaseModel;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.model.ResultCode;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.importexcel.model.CarOilwearImport;
-import cn.com.liliyun.importexcel.model.Flownum;
 import cn.com.liliyun.trainorg.model.Area;
 import cn.com.liliyun.trainorg.service.AreaService;
-import cn.com.liliyun.user.model.User;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -60,7 +45,7 @@ import com.github.pagehelper.PageInfo;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/car")
-public class CarController extends BaseController {
+public class CarController extends ExportController {
 
 	private Logger logger = Logger.getLogger(CarController.class);
 
@@ -98,15 +83,7 @@ public class CarController extends BaseController {
 	 @RequestMapping(value = "/exportCar")
 	 public ResponseEntity<byte[]> exportCar(Car car) throws IOException {
     	List<CarExport> list = carService.getList(car); //获取数据
-    	ExportParams params = new ExportParams("车辆信息导出数据", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-    	Workbook workbook = ExcelExportUtil.exportExcel(params, CarExport.class, list);
-    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-    	workbook.write(os);
-        HttpHeaders headers = new HttpHeaders();    
-        String fileName = new String("车辆基础信息.xlsx".getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-        headers.setContentDispositionFormData("attachment", fileName);   
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
+    	return this.export("车辆信息数据", "车辆信息数据", "导出数据", list, CarExport.class);
      }
 	
 	
@@ -241,21 +218,9 @@ public class CarController extends BaseController {
 			ci.setPaidName(b.toString());
 		}
 		
-		ExportParams params = new ExportParams("保险数据", "导出数据", ExcelType.XSSF);// title
-		// sheetname
-		// 文件格式
-		Workbook workbook = ExcelExportUtil.exportExcel(params, CarInsurance.class,
-		list);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		workbook.write(os);
-		HttpHeaders headers = new HttpHeaders();
-		String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String fileName = new String(
-		("保险记录" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-		headers.setContentDispositionFormData("attachment", fileName);
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-		HttpStatus.CREATED);
+		return this.export("保险数据", "保险数据", "导出数据", list, CarInsurance.class);
+		
+		
 	}
 	
 	private String paidvalue(String str){
@@ -514,21 +479,12 @@ public class CarController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/importCarOilwear",method=RequestMethod.POST)
 	public ResultBean importCarOilwear(@RequestParam("file") MultipartFile file,
 			HttpServletRequest request,BaseModel model) throws Exception {
-		ResultBean r = new ResultBean();
-		List <CarOilwearImport> list = null;
-		try {
-			list = ExcelImportUtil.importExcel(file.getInputStream(), CarOilwearImport.class, new ImportParams());
-			r=carService.importCarOilwear(list);
-		} catch (ExcelImportException e) {
-			r.setCode(100);
-			r.setMsg("数据解析错误,请检查导入数据模板!");
-			return r;
-		}
-		return r;
+		List <CarOilwearImport> list = ExcelImportUtil.importExcel(file.getInputStream(), CarOilwearImport.class, new ImportParams());
+		return carService.importCarOilwear(list);
+		
 	}
 	/**
 	 * 获取车辆事故理赔列表
@@ -581,21 +537,7 @@ public class CarController extends BaseController {
 			acc.setAccidentdatestr(format.format(acc.getAccidentdate()));
 		}
 		
-		ExportParams params = new ExportParams("车辆事故数据", "导出数据", ExcelType.XSSF);// title
-		// sheetname
-		// 文件格式
-		Workbook workbook = ExcelExportUtil.exportExcel(params, CarAccident.class,
-		list);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		workbook.write(os);
-		HttpHeaders headers = new HttpHeaders();
-		String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String fileName = new String(
-		("车辆事故记录" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-		headers.setContentDispositionFormData("attachment", fileName);
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-		HttpStatus.CREATED);
+		return this.export("车辆事故数据", "车辆事故数据", "导出数据", list, CarAccident.class);
 		
 	}
 	
@@ -635,23 +577,8 @@ public class CarController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getCarAccidentExport")
-	public ResponseEntity<byte[]> getCarAccidentExport(CarAccident carAccident, HttpServletRequest request) {
-		try {
-			List<CarAccident> list = carService.getCarAccidentExport(carAccident);
-			ExportParams params = new ExportParams("车辆事故理赔导记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-	    	Workbook workbook = ExcelExportUtil.exportExcel(params, CarAccident.class, list);
-	    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	    	workbook.write(os);
-	        HttpHeaders headers = new HttpHeaders();    
-	        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	        String fileName = new String(("车辆事故理赔导记录" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	        headers.setContentDispositionFormData("attachment", fileName);   
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
-		} catch (Exception e) {
-			logger.error("*********************************** CarController getCarAccidentExport Error : " + e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-	}
+	public ResponseEntity<byte[]> getCarAccidentExport(CarAccident carAccident, HttpServletRequest request) throws IOException {
+		List<CarAccident> list = carService.getCarAccidentExport(carAccident);
+		return this.export("车辆事故理赔导记录", "车辆事故理赔导记录", "导出数据", list, CarAccident.class);
+}
 }

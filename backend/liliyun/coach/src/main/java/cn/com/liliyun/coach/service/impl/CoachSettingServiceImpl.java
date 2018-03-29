@@ -423,7 +423,7 @@ public class CoachSettingServiceImpl extends CommonService implements CoachSetti
 	}
 
 	@Override
-	public void addJob(CoachJob job) throws Exception {
+	public void addJob(CoachJob job)  {
 		try{
 			jobMapper.addJob(job);
 		}catch(Exception ex){
@@ -433,7 +433,7 @@ public class CoachSettingServiceImpl extends CommonService implements CoachSetti
 	}
 
 	@Override
-	public void updateJob(CoachJob job) throws Exception {
+	public void updateJob(CoachJob job)  {
 		try{
 			CoachJob oldone= jobMapper.getJob(job);
 			CoachJob newone=new CoachJob();
@@ -443,13 +443,13 @@ public class CoachSettingServiceImpl extends CommonService implements CoachSetti
 			jobMapper.updateJob( newone);
 		}catch(Exception ex){
 			logger.error(getMethodName()+" error:",ex);
-			throw ex;
+			throw new RuntimeException(ex);
 		}
 		
 	}
 
 	@Override
-	public CoachJob getJob(CoachJob param) throws Exception {
+	public CoachJob getJob(CoachJob param)  {
 		try{
 			return jobMapper.getJob(param);
 		}catch(Exception ex){
@@ -459,7 +459,7 @@ public class CoachSettingServiceImpl extends CommonService implements CoachSetti
 	}
 
 	@Override
-	public void deleteJob(CoachJob job) throws Exception {
+	public void deleteJob(CoachJob job)  {
 		
 		try{
 			if(job.getIds()!=null&&!job.getIds().equals("")){
@@ -480,7 +480,7 @@ public class CoachSettingServiceImpl extends CommonService implements CoachSetti
 	}
 
 	@Override
-	public List<CoachJob> listJob(CoachJob job) throws Exception {
+	public List<CoachJob> listJob(CoachJob job)  {
 		try{
 			PageUtil.startPage(job);
 			List<CoachJob> jobs= jobMapper.listJob(job);
@@ -502,7 +502,7 @@ public class CoachSettingServiceImpl extends CommonService implements CoachSetti
 	}
 	
 	@Override
-	public List<CoachJob> listAllJob(CoachJob job) throws Exception {
+	public List<CoachJob> listAllJob(CoachJob job)  {
 		try{
 			
 			List<CoachJob> jobs= jobMapper.listJob(job);
@@ -524,7 +524,7 @@ public class CoachSettingServiceImpl extends CommonService implements CoachSetti
 	}
 
 	@Override
-	public void updateJobStatus(CoachJob job) throws Exception {
+	public void updateJobStatus(CoachJob job)  {
 		jobMapper.updateJobStatus(job);
 		
 	}
