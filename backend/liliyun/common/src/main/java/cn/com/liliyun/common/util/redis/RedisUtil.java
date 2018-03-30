@@ -39,6 +39,24 @@ public class RedisUtil
 		this.redisUtilRemote = redisUtilRemote;
 	}
 	
+	public <T> void set(final byte[] key, final byte[] value,final int liveSecond)
+    {
+        redisTemplate.execute(new RedisCallback<T>()
+        {
+            @SuppressWarnings("unchecked")
+			@Override
+            public T doInRedis(RedisConnection connection) throws DataAccessException
+            {
+                connection.set(key,value);
+                if (liveSecond > 0) {
+                    connection.expire(key, liveSecond);
+                }
+                
+                return null;
+            }
+        });
+    }
+	
 	public <T> void set(final String key, final T value,final int liveSecond)
     {
         redisTemplate.execute(new RedisCallback<T>()
@@ -85,6 +103,24 @@ public class RedisUtil
         });
     }
     
+    public <T> Boolean setNX(final byte[] key, final byte[] value,final int liveSecond)
+    {
+        return redisTemplate.execute(new RedisCallback<Boolean>()
+        {
+            @SuppressWarnings("unchecked")
+			@Override
+            public Boolean doInRedis(RedisConnection connection) throws DataAccessException
+            {
+                Boolean r =  connection.setNX(key, value);
+                if (liveSecond > 0) {
+                    connection.expire(key, liveSecond);
+                }
+                
+                return r;
+            }
+        });
+    }
+    
     public <T> Boolean setNX(final String key, final T value)
     {
         return redisTemplate.execute(new RedisCallback<Boolean>()
@@ -116,6 +152,22 @@ public class RedisUtil
                 	r=((RedisSerializer<T>)redisTemplate.getValueSerializer()).deserialize(value);
                 }
                 return r;
+            }
+        });
+    }
+    
+    public byte[] get(final byte[] key)
+    {
+        return redisTemplate.execute(new RedisCallback<byte[]>()
+        {
+            @SuppressWarnings("unchecked")
+			@Override
+            public byte[] doInRedis(RedisConnection connection) throws DataAccessException
+            {
+                byte[] keys = key;
+                byte[] value = connection.get(keys);
+                
+                return value;
             }
         });
     }
