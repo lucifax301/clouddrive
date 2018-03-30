@@ -8,11 +8,11 @@ import cn.com.liliyun.common.util.HttpConstant;
  * 业务与接入层之间传递的实体
  * 返回给前端信息的封装
  */
-public class ResultBean<T> implements Serializable{
+public class ResultBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private T result;
+	private Object result;
 	private int code;
 	private String msg;
 	
@@ -47,7 +47,7 @@ public class ResultBean<T> implements Serializable{
 		this.msg = HttpConstant.SUCCESS_MSG;
 	}
 	
-	public ResultBean(T result){
+	public ResultBean(Object result){
 		this();
 		this.result=result;
 	}
@@ -68,11 +68,11 @@ public class ResultBean<T> implements Serializable{
 
 	
 
-	public T getResult() {
+	public Object getResult() {
 		return result;
 	}
 
-	public void setResult(T result) {
+	public void setResult(Object result) {
 		this.result = result;
 	}
 

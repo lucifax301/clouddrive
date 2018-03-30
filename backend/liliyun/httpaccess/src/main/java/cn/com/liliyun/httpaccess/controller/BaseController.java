@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -26,6 +27,8 @@ import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.GsonUtil;
 import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.user.model.User;
+
+import com.github.pagehelper.PageInfo;
 
 public class BaseController {
 
@@ -178,5 +181,17 @@ public class BaseController {
 				throw new IOException(e.getMessage());
 			}
 		}
+	}
+	
+	public <T> ResultBean buildListResult(List<T> list){
+		ResultBean rb = new ResultBean();
+		rb.setResult(new PageInfo<T>(list));
+		return rb;
+	}
+	
+	public <T> ResultBean buildResult(T obj){
+		ResultBean rb = new ResultBean();
+		rb.setResult(obj);
+		return rb;
 	}
 }

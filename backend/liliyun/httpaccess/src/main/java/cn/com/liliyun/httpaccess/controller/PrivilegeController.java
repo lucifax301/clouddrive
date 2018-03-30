@@ -469,6 +469,7 @@ public class PrivilegeController extends BaseController {
 //		return menujson;
 //	}
 	
+	@SuppressWarnings("unused")
 	private JSONArray buildMenuJson(List<Privilege> privileges) {
 	JSONArray menulist = new JSONArray();
 	for (Privilege p1 : privileges) {

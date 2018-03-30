@@ -28,6 +28,7 @@ import com.github.pagehelper.PageInfo;
 import cn.com.liliyun.coach.model.CoachClassType;
 import cn.com.liliyun.coach.service.CoachSettingService;
 import cn.com.liliyun.common.dto.SelectDTO;
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.LogConstant;
@@ -48,7 +49,7 @@ import cn.com.liliyun.user.model.User;
 @Controller
 @ResponseBody
 @RequestMapping(value="/sales")
-public class SalesController extends BaseController{
+public class SalesController extends ExportController{
 
 	@Autowired
 	private SalesService salesService;
@@ -61,42 +62,33 @@ public class SalesController extends BaseController{
 	
 	@RequestMapping(value="/listAllClassType")
 	public ResultBean listAllClassType(SalesActivity activity,HttpServletRequest request){
-		String bussinessid = (String) request.getSession().getAttribute(
-				ConstantUtil.SESSION_BUSINESS);
+		Classinfo cp=new Classinfo();
+		cp.setStatus(0);
 		
-		User user = AccessWebUtil.getSessionUser(request);
-		try{
-			Classinfo cp=new Classinfo();
-			cp.setStatus(0);
-			cp.setDblink(user.getDblink());
-			List<Classinfo> clss= classinfoService.selectAllList(cp);
-			CoachClassType pcct= new CoachClassType();
-			pcct.setDblink(user.getDblink());
-			List<CoachClassType> list = coachSettingService.listAllClassType(pcct);
-			List result=new ArrayList();
-			for(Classinfo cls:clss){
-				SalesActivityClassinfo info=new SalesActivityClassinfo();
-				info.setC1flag(cls.getC1flag());
-				info.setC2flag(cls.getC2flag());
-				info.setClassinfoid(cls.getId());
-				info.setC1amount(cls.getC1amount());
-				info.setC2amount(cls.getC2amount());
-				info.setName(cls.getName());
-				for(CoachClassType type:list){
-					if(type.getId()==cls.getClasstypeid().intValue()){
-						info.setClasstype(type.getType());
-					}
+		List<Classinfo> clss= classinfoService.selectAllList(cp);
+		CoachClassType pcct= new CoachClassType();
+		
+		List<CoachClassType> list = coachSettingService.listAllClassType(pcct);
+		List result=new ArrayList();
+		for(Classinfo cls:clss){
+			SalesActivityClassinfo info=new SalesActivityClassinfo();
+			info.setC1flag(cls.getC1flag());
+			info.setC2flag(cls.getC2flag());
+			info.setClassinfoid(cls.getId());
+			info.setC1amount(cls.getC1amount());
+			info.setC2amount(cls.getC2amount());
+			info.setName(cls.getName());
+			for(CoachClassType type:list){
+				if(type.getId()==cls.getClasstypeid().intValue()){
+					info.setClasstype(type.getType());
 				}
-				result.add(info);
 			}
-			ResultBean rb = new ResultBean();
-			rb.setResult(new PageInfo<>(result));
-			return rb;
-		}catch(Exception ex){
-			ex.printStackTrace();
-			ResultBean rb = new ResultBean("系统异常");
-			return rb;
+			result.add(info);
 		}
+		ResultBean rb = new ResultBean();
+		rb.setResult(new PageInfo<>(result));
+		return rb;
+		
 	}
 	
 	@RequestMapping(value="/listEditAllClassType")

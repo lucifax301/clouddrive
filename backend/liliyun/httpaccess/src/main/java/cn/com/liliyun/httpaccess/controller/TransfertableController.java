@@ -1,22 +1,12 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.jeecgframework.poi.excel.ExcelExportUtil;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.enmus.ExcelType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,27 +23,25 @@ import com.github.pagehelper.PageInfo;
 @Controller
 @ResponseBody
 @RequestMapping(value="/transfertable")
-public class TransfertableController extends BaseController {
+public class TransfertableController extends ExportController {
 	
 	Logger logger = Logger.getLogger(TransfertableController.class);
 
 	@Autowired
 	private TransfertableService transfertableService;
 	
+	
 	@RequestMapping(value="/list")
 	public ResultBean list(HttpServletRequest request, Transfertable transfertable) {
-		ResultBean rb = new ResultBean();
 		List<Transfertable> list = transfertableService.list(transfertable);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<Transfertable>buildListResult(list);
+		
 	}
 	
 	@RequestMapping(value="/itemlist")
 	public ResultBean itemlist(HttpServletRequest request,TransfertableItem transfertableItem) {
-		ResultBean rb = new ResultBean();
 		List<TransfertableItem> list = transfertableService.listItem(transfertableItem);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<TransfertableItem>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/arealist")
@@ -142,16 +130,8 @@ public class TransfertableController extends BaseController {
 		TransfertableItem item  = new TransfertableItem();
 //		item.setTableid(transfertable.getId());
 	  	//List<TransfertableItem> list = transfertableService.itemList(item);
-		ExportParams params = new ExportParams("导出数据", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-		Workbook workbook = ExcelExportUtil.exportExcel(params, TransfertableItem.class, null);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		workbook.write(os);
-	    HttpHeaders headers = new HttpHeaders();
-	    String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	    String fileName = new String(("导出数据" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	    headers.setContentDispositionFormData("attachment", fileName);
-	    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-	    return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);
+		return this.export("导出数据", "导出数据", "导出数据", null, TransfertableItem.class);
+		
 	}
 
 }

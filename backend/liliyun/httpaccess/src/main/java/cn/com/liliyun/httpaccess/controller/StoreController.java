@@ -12,14 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.HttpConstant;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.trainorg.service.StoreService;
-import cn.com.liliyun.user.model.User;
+
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @ResponseBody
@@ -52,17 +49,13 @@ public class StoreController extends BaseController {
 	
 	@RequestMapping(value="/listall")
 	public ResultBean listall(Store store, HttpServletRequest request) {
-		User user =  AccessWebUtil.getSessionUser(request);
-		ResultBean rb = new ResultBean();
 		boolean isStorePage = true;
 		List <Store> list = storeService.selectList(store,  isStorePage);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<Store>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/delete")
 	public ResultBean deleteById(Store store, HttpServletRequest request) {
-		User user =  AccessWebUtil.getSessionUser(request);
 		return storeService.deleteById(store);
 	}
 	

@@ -34,12 +34,10 @@ import cn.com.liliyun.coach.model.StudentAssign;
 import cn.com.liliyun.coach.service.CoachService;
 import cn.com.liliyun.common.annotation.RequestAction;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.ExcelUtil;
 import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.user.model.User;
 
-import com.github.pagehelper.PageInfo;
 import com.qiniu.api.auth.AuthException;
 
 @Controller
@@ -50,22 +48,16 @@ public class CoachController extends ExportController {
 
 	@RequestMapping(value = "/coach/list")
 	@ResponseBody
-	public ResultBean<PageInfo<Coach>> getList(Coach coach, HttpServletRequest request) {
+	public ResultBean getList(Coach coach, HttpServletRequest request) {
 		List<Coach> list = coachService.getCoachList(coach);
-		PageInfo<Coach> pagedResult = new PageInfo<Coach>(list);
-		ResultBean<PageInfo<Coach>> resultBean = new ResultBean<PageInfo<Coach>>(pagedResult);
-
-		return resultBean;
+		return this.<Coach>buildListResult(list);
 	}
 
 	@RequestMapping(value = "/coach/listnoassign")
 	@ResponseBody
-	public ResultBean<PageInfo<Coach>> getListNoassign(Coach coach, HttpServletRequest request) {
+	public ResultBean getListNoassign(Coach coach, HttpServletRequest request) {
 		List<Coach> list = coachService.getNoAssignCoachList(coach);
-		PageInfo<Coach> pagedResult = new PageInfo<Coach>(list);
-		ResultBean<PageInfo<Coach>> resultBean = new ResultBean<PageInfo<Coach>>(pagedResult);
-		
-		return resultBean;
+		return this.<Coach>buildListResult(list);
 	}
 	
 	@RequestMapping(value = "/coach/export")
@@ -74,7 +66,6 @@ public class CoachController extends ExportController {
 		return this.export("教练导出数据", "教练导出数据", "导出数据", list, Coach.class);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/coach/deleteCoach")
 	@ResponseBody
 	public ResultBean deleteById(Coach coach) {
@@ -85,21 +76,19 @@ public class CoachController extends ExportController {
 
 	@RequestMapping(value = "/coach/getCoach")
 	@ResponseBody
-	public ResultBean<Coach> getCoachById(Coach coach) {
+	public ResultBean getCoachById(Coach coach) {
 		Coach coachResult = coachService.getCoachById(coach);
-		ResultBean<Coach> resultBean = new ResultBean<Coach>(coachResult);
-		return resultBean;
+		return this.<Coach>buildResult(coachResult);
 	}
 
 	@RequestMapping(value = "/coach/extendinfo")
 	@ResponseBody
-	public ResultBean<Map<String,String>> getCoachExtendById(Coach coach,HttpServletRequest request) {
+	public ResultBean getCoachExtendById(Coach coach,HttpServletRequest request) {
 		Map<String,String> map = coachService.getCoachExtendById(coach);
-		ResultBean<Map<String,String>> resultBean = new ResultBean<Map<String,String>>(map);
-		return resultBean;
+		return this.<Map<String,String>>buildResult(map);
+		
 	}
 
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/coach/addCoach")
 	@ResponseBody
 	public ResultBean addCoach(Coach coach, HttpServletRequest request) {
@@ -110,14 +99,10 @@ public class CoachController extends ExportController {
 
 	@RequestMapping(value = "/coach/listhead")
 	@ResponseBody
-	public ResultBean<PageInfo<HeadCoach>> getHeadList(Coach coach,HttpServletRequest request) {
+	public ResultBean getHeadList(Coach coach,HttpServletRequest request) {
 		List<HeadCoach> list = coachService.getHeadCoachList(coach);
-		PageInfo<HeadCoach> pagedResult = new PageInfo<HeadCoach>(list);
-		ResultBean<PageInfo<HeadCoach>> resultBean = new ResultBean<PageInfo<HeadCoach>>(pagedResult);
-		return resultBean;
+		return this.<HeadCoach>buildListResult(list);
 	}
-
-	
 
 	// update
 	@RequestMapping(value = "/coach/updateCoachById")
@@ -156,35 +141,29 @@ public class CoachController extends ExportController {
 		}
 	}
 
+	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
 	@RequestMapping(value = "/coach/updateCoach")
 	@ResponseBody
 	public ResultBean updateCoach(Coach coach, HttpServletRequest request)
 			throws AuthException, JSONException {
-		
-		User user = AccessWebUtil.getSessionUser(request);
 		Map extendsinfo = new HashMap();
 		processExt(extendsinfo, request);
-		coach.setMuid(user.getId());
 		return coachService.updateCoach(coach,  extendsinfo);
 	}
 
+	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
 	@RequestMapping(value = "/coach/updateCoachTeachState")
 	@ResponseBody
 	public ResultBean updateCoachTeachState(Coach coach,
 			HttpServletRequest request) throws AuthException, JSONException {
-		User user = AccessWebUtil.getSessionUser(request);
-
-		coach.setMuid(user.getId());
 		return coachService.updateCoachTeachState(coach);
 	}
 
+	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
 	@RequestMapping(value = "/coach/updateCoachEmploystatus")
 	@ResponseBody
 	public ResultBean updateCoachEmploystatus(Coach coach,
 			HttpServletRequest request) throws AuthException, JSONException {
-		User user = AccessWebUtil.getSessionUser(request);
-
-		coach.setMuid(user.getId());
 		return coachService.updateCoachEmploystatus(coach);
 	}
 
@@ -290,8 +269,6 @@ public class CoachController extends ExportController {
 	@RequestMapping(value = "/coach/stuAssignRecord")
 	@ResponseBody
 	public ResultBean stuAssignRecord(StudentAssign studentAssign, HttpServletRequest request) {
-		User user = AccessWebUtil.getSessionUser(request);
-		
 		return coachService.getStuAssignRecord(studentAssign);
 		
 	}
@@ -326,11 +303,8 @@ public class CoachController extends ExportController {
 	@RequestMapping(value = "/coach/getModApply")
 	@ResponseBody
 	public ResultBean getModApply(CoachModApply apply, HttpServletRequest request) {
-		
-		ResultBean resultBean = new ResultBean();
 		CoachModApply result = coachService.getModApply(apply);
-		resultBean.setResult(result);
-		return resultBean;
+		return this.<CoachModApply>buildResult(result);
 	}
 
 	@RequestMapping(value = "/coach/getCoachModinfo")
@@ -345,13 +319,10 @@ public class CoachController extends ExportController {
 	@RequestMapping(value = "/coach/getCoachModinfoextendinfo")
 	@ResponseBody
 	public ResultBean getCoachModinfoextendinfo(Coach coach, HttpServletRequest request) {
-		
 		String applyid = request.getParameter("applyid");
-		ResultBean resultBean = new ResultBean();
 		Map map = coachService.getCoachModExtendinfo(coach,
 				Integer.parseInt(applyid));
-		resultBean.setResult(map);
-		return resultBean;
+		return this.<Map>buildResult(map);
 	}
 	
 	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
@@ -380,7 +351,6 @@ public class CoachController extends ExportController {
 	@ResponseBody
 	public ResultBean batchAuditModApply(HttpServletRequest request) {
 
-		User user = AccessWebUtil.getSessionUser(request);
 		String applyids = request.getParameter("applyids");
 		String state = request.getParameter("state");
 		
@@ -421,10 +391,8 @@ public class CoachController extends ExportController {
 		String headcoachid = request.getParameter("headcoachid");
 		String coachidstr = request.getParameter("coachid");
 		String coachid[] = coachidstr.split(",");
-		ResultBean resultBean = coachService.assignCoach(
+		return coachService.assignCoach(
 				Integer.parseInt(headcoachid), null, coachid);
-
-		return resultBean;
 	}
 
 	@RequestMapping(value = "/coach/batchupdate")
@@ -441,11 +409,8 @@ public class CoachController extends ExportController {
 	@RequestMapping(value = "/coach/getCoachLoadStudentInfo")
 	@ResponseBody
 	public ResultBean getCoachLoadStudentInfo(CoachLoadStudentInfo param){
-			ResultBean rb=new ResultBean();
-			List<CoachLoadStudentInfo> list= coachService.getCoachLoadStudentInfo(param);
-			rb.setResult(new PageInfo<>(list));
-			return rb;
-		
+		List<CoachLoadStudentInfo> list= coachService.getCoachLoadStudentInfo(param);
+		return this.<CoachLoadStudentInfo>buildListResult(list);
 	}
 	
 	@RequestMapping(value = "/coach/assignList")
