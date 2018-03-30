@@ -3,6 +3,7 @@ package cn.com.liliyun.httpaccess.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,23 +23,26 @@ import org.springframework.web.bind.annotation.InitBinder;
 
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
-import cn.com.liliyun.common.util.DateUtil;
 import cn.com.liliyun.common.util.GsonUtil;
 import cn.com.liliyun.common.util.HttpConstant;
-import cn.com.liliyun.common.util.NetworkUtil;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
-import cn.com.liliyun.log.model.LogCommon;
 import cn.com.liliyun.user.model.User;
 
 public class BaseController {
 
 	protected static final String SECRET = "6b1019d9561c548037b37023d7a0451b"; 
 
-	@ExceptionHandler(RuntimeException.class)  
+	/**
+	 * 统计集中处理exception
+	 * @param request
+	 * @param response
+	 * @param ex
+	 */
+	@ExceptionHandler({RuntimeException.class,Exception.class})  
     public void exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {  
-		ex.printStackTrace();
+		//ex.printStackTrace();
+		System.out.println("exceptionHandler");
         ResultBean rb = new ResultBean(HttpConstant.ERROR_CODE,HttpConstant.ERROR_MSG);
-    	printJson(response, rb);
+    	printJson(response, rb,ex);
     }
 	
 	/**
@@ -109,16 +113,25 @@ public class BaseController {
 		return System.currentTimeMillis()/1000L;
 	}
 	
-	protected void printJson(HttpServletResponse response,ResultBean rb) {
+	protected void printJson(HttpServletResponse response,ResultBean rb,Exception ex) {
 		response.setContentType("application/json"); 
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = null;
+
+		if(ex!=null){
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			rb.setStack(sw.toString());
+		}
 		try {
 			out = response.getWriter();
+			out.print(GsonUtil.serialNulls(rb));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		out.print(GsonUtil.serialNulls(rb));
+		
 		out.flush();
 		out.close();
 	}

@@ -48,7 +48,7 @@ import cn.com.liliyun.trainorg.service.StoreService;
 
 @Controller
 @ResponseBody
-public class FinanceReceiptController extends BaseController {
+public class FinanceReceiptController extends ExportController {
 
 	@Autowired
 	private FinanceService financeService;
@@ -106,34 +106,18 @@ public class FinanceReceiptController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/financeSubcharge/export")
-	public  ResponseEntity<byte[]> exportFinanceSubchargeList(FinanceSubcharge financeSubcharge, HttpServletRequest request) {
-		try {
-			
-			List<FinanceSubcharge> list = financeService.getFinanceSubchargeExport(financeSubcharge);
-			
-			
-			Map<Integer, MapDTO> area = areaService.getMap(null);
-			
-			Map<Integer, MapDTO> store = storeService.getMap(null);
-			
-			for(FinanceSubcharge fs : list) {
-				fs.setAreastr(area.get(fs.getAreaid())!=null?area.get(fs.getAreaid()).getName():"");
-				fs.setStorestr(store.get(fs.getStoreid())!=null?store.get(fs.getStoreid()).getName():"");
-			}
-			ExportParams params = new ExportParams("代收费用记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-	    	Workbook workbook = ExcelExportUtil.exportExcel(params, FinanceSubcharge.class, list);
-	    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	    	workbook.write(os);
-	        HttpHeaders headers = new HttpHeaders();    
-	        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	        String fileName = new String(("代收费用记录" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	        headers.setContentDispositionFormData("attachment", fileName);   
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+	public  ResponseEntity<byte[]> exportFinanceSubchargeList(FinanceSubcharge financeSubcharge, HttpServletRequest request) throws IOException {
+		List<FinanceSubcharge> list = financeService.getFinanceSubchargeExport(financeSubcharge);
+		
+		Map<Integer, MapDTO> area = areaService.getMap(null);
+		Map<Integer, MapDTO> store = storeService.getMap(null);
+		
+		for(FinanceSubcharge fs : list) {
+			fs.setAreastr(area.get(fs.getAreaid())!=null?area.get(fs.getAreaid()).getName():"");
+			fs.setStorestr(store.get(fs.getStoreid())!=null?store.get(fs.getStoreid()).getName():"");
 		}
+		
+		return this.export("代收费用记录", "代收费用记录", "导出数据", list, FinanceSubcharge.class);
 	}
 	
 	@RequestMapping(value = "/financeDeposit/list", method = RequestMethod.GET)
@@ -161,32 +145,19 @@ public class FinanceReceiptController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/financeDeposit/export")
-	public  ResponseEntity<byte[]> exportFinanceDepositList(FinanceDeposit financeDeposit, HttpServletRequest request) {
-		try {
-			
-			List<FinanceDeposit> list = financeService.getFinanceDepositExport(financeDeposit);
-			
-			Map<Integer, MapDTO> area = areaService.getMap(null);
-			
-			Map<Integer, MapDTO> store = storeService.getMap(null);
-			for(FinanceDeposit fd : list) {
-				fd.setAreastr(area.get(fd.getAreaid())!=null?area.get(fd.getAreaid()).getName():"");
-				fd.setStorestr(store.get(fd.getStoreid())!=null?store.get(fd.getStoreid()).getName():"");
-			}
-			ExportParams params = new ExportParams("现金存款记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-	    	Workbook workbook = ExcelExportUtil.exportExcel(params, FinanceDeposit.class, list);
-	    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	    	workbook.write(os);
-	        HttpHeaders headers = new HttpHeaders();    
-	        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	        String fileName = new String(("现金存款记录" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	        headers.setContentDispositionFormData("attachment", fileName);   
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+	public  ResponseEntity<byte[]> exportFinanceDepositList(FinanceDeposit financeDeposit, HttpServletRequest request) throws IOException {
+		List<FinanceDeposit> list = financeService.getFinanceDepositExport(financeDeposit);
+		
+		Map<Integer, MapDTO> area = areaService.getMap(null);
+		
+		Map<Integer, MapDTO> store = storeService.getMap(null);
+		for(FinanceDeposit fd : list) {
+			fd.setAreastr(area.get(fd.getAreaid())!=null?area.get(fd.getAreaid()).getName():"");
+			fd.setStorestr(store.get(fd.getStoreid())!=null?store.get(fd.getStoreid()).getName():"");
 		}
+		
+		return this.export("现金存款记录", "现金存款记录", "导出数据", list, FinanceDeposit.class);
+			
 	}
 	
 	@RequestMapping(value = "/financeReceipt/list", method = RequestMethod.GET)
@@ -232,50 +203,28 @@ public class FinanceReceiptController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/financeReceipt/export")
-	public  ResponseEntity<byte[]> exportFinanceReceiptList(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		try {
-			
-			List<FinanceReceipt> list = financeService.getFinanceReceiptExport(financeReceipt);
-			
-			Map<Integer, MapDTO> area = areaService.getMap(null);
-			
-			Map<Integer, MapDTO> store = storeService.getMap(null);
-			
-			
-			
-			Map<Integer, MapDTO> subject = financeService.getMap(null);
-			for(FinanceReceipt fr : list) {
-				fr.setAreastr(area.get(fr.getAreaid())!=null?area.get(fr.getAreaid()).getName():"");
-				fr.setStorestr(store.get(fr.getStoreid())!=null?store.get(fr.getStoreid()).getName():"");
-				fr.setTypestr(subject.get(fr.getType())!=null?subject.get(fr.getType()).getName():"");
-			}
-			ExportParams params = new ExportParams("学员票据记录", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-	    	Workbook workbook = ExcelExportUtil.exportExcel(params, FinanceReceipt.class, list);
-	    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	    	workbook.write(os);
-	        HttpHeaders headers = new HttpHeaders();    
-	        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	        String fileName = new String(("学员票据记录" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	        headers.setContentDispositionFormData("attachment", fileName);   
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+	public  ResponseEntity<byte[]> exportFinanceReceiptList(FinanceReceipt financeReceipt, HttpServletRequest request) throws IOException {
+		List<FinanceReceipt> list = financeService.getFinanceReceiptExport(financeReceipt);
+		Map<Integer, MapDTO> area = areaService.getMap(null);
+		Map<Integer, MapDTO> store = storeService.getMap(null);
+		
+		Map<Integer, MapDTO> subject = financeService.getMap(null);
+		for(FinanceReceipt fr : list) {
+			fr.setAreastr(area.get(fr.getAreaid())!=null?area.get(fr.getAreaid()).getName():"");
+			fr.setStorestr(store.get(fr.getStoreid())!=null?store.get(fr.getStoreid()).getName():"");
+			fr.setTypestr(subject.get(fr.getType())!=null?subject.get(fr.getType()).getName():"");
 		}
+		
+		return this.export("学员票据记录", "学员票据记录", "导出数据", list, FinanceReceipt.class);
 	}
 	
 	@RequestMapping(value = "/financeReceipt/invoiceexport")
-	public  ResponseEntity<byte[]> exportFinanceReceiptInvoice(FinanceReceipt financeReceipt, HttpServletRequest request) {
-		try {
-			
+	public  ResponseEntity<byte[]> exportFinanceReceiptInvoice(FinanceReceipt financeReceipt, HttpServletRequest request) throws IOException {
 			List<FinanceInvoiceDTO> list = financeService.getFinanceInvoiceExport(financeReceipt);
 			
 			Map<Integer, MapDTO> area = areaService.getMap(null);
 			
 			Map<Integer, MapDTO> store = storeService.getMap(null);
-			
-			
 			Map<Integer, MapDTO> subject = financeService.getMap(null);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			DecimalFormat df_bill = new DecimalFormat("0000");
@@ -292,20 +241,10 @@ public class FinanceReceiptController extends BaseController {
 				fidto.setIsdiscount("0");
 				billnum++;
 			}
-			ExportParams params = new ExportParams(null, "财务机打发票表", ExcelType.XSSF);//title sheetname 文件格式
-	    	Workbook workbook = ExcelExportUtil.exportExcel(params, FinanceInvoiceDTO.class, list);
-	    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	    	workbook.write(os);
-	        HttpHeaders headers = new HttpHeaders();    
-	        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	        String fileName = new String(("财务机打发票表" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	        headers.setContentDispositionFormData("attachment", fileName);   
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+			
+			return this.export("财务机打发票表", "财务机打发票表", "财务机打发票表", list, FinanceInvoiceDTO.class);
+			
+			
 	}
 	
 	@RequestMapping(value = "/financeReceipt/import", method = RequestMethod.POST)

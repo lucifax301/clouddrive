@@ -36,7 +36,7 @@ import com.github.pagehelper.PageInfo;
 @Controller
 @ResponseBody
 @RequestMapping(value="/marketing")
-public class MarketingController extends BaseController{
+public class MarketingController extends ExportController{
 	Logger logger = Logger.getLogger(MarketingController.class);
 
 	@Autowired
@@ -91,16 +91,8 @@ public class MarketingController extends BaseController{
 		// 文件格式
 		Workbook workbook = ExcelExportUtil.exportExcel(params, MarketActivity.class,
 		list);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		workbook.write(os);
-		HttpHeaders headers = new HttpHeaders();
-		String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String fileName = new String(
-		("市场活动数据" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-		headers.setContentDispositionFormData("attachment", fileName);
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-		HttpStatus.CREATED);
+		return this.export("市场活动数据", workbook);
+		
 	}
 	
 	@RequestMapping(value="/getmarket")

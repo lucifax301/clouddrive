@@ -1,8 +1,6 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +14,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +45,7 @@ import cn.com.liliyun.report.service.KpiStatService;
 @Controller
 @ResponseBody
 @RequestMapping(value="/report/kpi")
-public class KpiStatController extends BaseController{
+public class KpiStatController extends ExportController{
 
 	@Autowired
 	private KpiStatService kpiStatService;
@@ -58,41 +53,19 @@ public class KpiStatController extends BaseController{
 	@RequestMapping(value="/areastat")
 	public ResultBean areaStat(KpiAreaStatParam param) {
 		ResultBean rb = new ResultBean();
-		try{
-			List<KpiAreaStat> areastat=kpiStatService.statByArea(param);
-			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-			rb.setMsg("系统出错");
-		}
+		
+		List<KpiAreaStat> areastat=kpiStatService.statByArea(param);
+		rb.setResult(areastat);
+		
 		return rb;
 	}
 	
 	
 	@RequestMapping(value="/areastat/export")
-	public ResponseEntity<byte[]> areaStatExport(KpiAreaStatParam param) {
-		
-		try{
-			List<KpiAreaStat> areastat=kpiStatService.statByArea(param);
-
-			Workbook wb = getAreaStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区成绩统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);	
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
-		
+	public ResponseEntity<byte[]> areaStatExport(KpiAreaStatParam param) throws IOException {
+		List<KpiAreaStat> areastat=kpiStatService.statByArea(param);
+		Workbook wb = getAreaStatWorkbook(areastat);
+		return this.export("片区成绩统计", wb);
 	}
 	
 	public static final String[] areaHeader = { "片区", "考试科目", "实到人数", "合格人数","未到人数","取消人数", "其他","合格率","及格率","未到率","取消率"}; 
@@ -160,38 +133,18 @@ public class KpiStatController extends BaseController{
 	@RequestMapping(value="/classstat")
 	public ResultBean classStat(KpiClassStatParam param) {
 		ResultBean rb = new ResultBean();
-		try{
-			List<KpiClassStat> areastat=kpiStatService.statByClass(param);
-			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-			rb.setMsg("系统出错");
-		}
+		
+		List<KpiClassStat> areastat=kpiStatService.statByClass(param);
+		rb.setResult(areastat);
+		
 		return rb;
 	}
 	
 	@RequestMapping(value="/classstat/export")
-	public ResponseEntity<byte[]> classStatExport(KpiClassStatParam param) {
-		
-		try{
-			List<KpiClassStat> areastat=kpiStatService.statByClass(param);
-			Workbook wb = getClassStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("班别成绩统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
+	public ResponseEntity<byte[]> classStatExport(KpiClassStatParam param) throws IOException {
+		List<KpiClassStat> areastat=kpiStatService.statByClass(param);
+		Workbook wb = getClassStatWorkbook(areastat);
+		return this.export("班别成绩统计", wb);
 		
 	}
 	
@@ -276,41 +229,20 @@ public class KpiStatController extends BaseController{
 	public ResultBean coachStat(KpiCoachStatParam param, HttpServletRequest request) {
 		
 		ResultBean rb = new ResultBean();
-		try{
-			List<KpiCoachStat> areastat=kpiStatService.statByCoach(param);
-			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-			rb.setMsg("系统出错");
-		}
+		
+		List<KpiCoachStat> areastat=kpiStatService.statByCoach(param);
+		rb.setResult(areastat);
+		
 		return rb;
 	}
 	
 	@RequestMapping(value="/coachstat/export")
-	public ResponseEntity<byte[]> coachStatExport(KpiCoachStatParam param, HttpServletRequest request) {
+	public ResponseEntity<byte[]> coachStatExport(KpiCoachStatParam param, HttpServletRequest request) throws IOException {
+		List<KpiCoachStat> areastat=kpiStatService.statByCoach(param);
 		
-		ResultBean rb = new ResultBean();
-		try{
-			List<KpiCoachStat> areastat=kpiStatService.statByCoach(param);
+		Workbook wb = getCoachStatWorkbook(areastat);
 			
-			Workbook wb = getCoachStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("教练统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
-		
+		return this.export("教练统计", wb);
 	}
 	
 	public static final String[] coachHeader = { "教练","带教类型","片区","门店", "考试科目", "实到人数", "合格人数","未到人数","取消人数", "其他","合格率","及格率","未到率","取消率"};  
@@ -399,41 +331,19 @@ public class KpiStatController extends BaseController{
 	public ResultBean storeStat(KpiStoreStatParam param, HttpServletRequest request) {
 		
 		ResultBean rb = new ResultBean();
-		try{
-			List<KpiStoreStat> areastat=kpiStatService.statByStore(param);
-			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-			rb.setMsg("系统出错");
-		}
+		
+		List<KpiStoreStat> areastat=kpiStatService.statByStore(param);
+		rb.setResult(areastat);
+		
 		return rb;
 	}
 	
 	@RequestMapping(value="/storestat/export")
-	public ResponseEntity<byte[]> storeStatExport(KpiStoreStatParam param, HttpServletRequest request) {
-		
-		ResultBean rb = new ResultBean();
-		try{
-			List<KpiStoreStat> areastat=kpiStatService.statByStore(param);
+	public ResponseEntity<byte[]> storeStatExport(KpiStoreStatParam param, HttpServletRequest request) throws IOException {
+		List<KpiStoreStat> areastat=kpiStatService.statByStore(param);
 			
-			Workbook wb = getStoreStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("门店成绩统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
-		
+		Workbook wb = getStoreStatWorkbook(areastat);
+		return this.export("门店成绩统计", wb);
 	}
 	
 	public static final String[] storeHeader = { "门店","片区", "考试科目", "实到人数", "合格人数","未到人数","取消人数", "其他","合格率","及格率","未到率","取消率"}; 
@@ -503,39 +413,20 @@ public class KpiStatController extends BaseController{
 	@RequestMapping(value="/headcoachstat")
 	public ResultBean headCoachStat(KpiHeadCoachStatParam param) {
 		ResultBean rb = new ResultBean();
-		try{
-			List<KpiHeadCoachStat> areastat=kpiStatService.statByHeadCoach(param);
-			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-		}
+		
+		List<KpiHeadCoachStat> areastat=kpiStatService.statByHeadCoach(param);
+		rb.setResult(areastat);
+		
 		return rb;
 	}
 	
 	@RequestMapping(value="/headcoachstat/export")
-	public ResponseEntity<byte[]> headCoachStatExport(KpiHeadCoachStatParam param) {
-		ResultBean rb = new ResultBean();
-		try{
-			List<KpiHeadCoachStat> areastat=kpiStatService.statByHeadCoach(param);
-			
-			Workbook wb = getHeadCoachStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("片区成绩统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
+	public ResponseEntity<byte[]> headCoachStatExport(KpiHeadCoachStatParam param) throws IOException {
 		
+		List<KpiHeadCoachStat> areastat=kpiStatService.statByHeadCoach(param);
+			
+		Workbook wb = getHeadCoachStatWorkbook(areastat);
+		return this.export("片区成绩统计", wb);
 	}
 	
 	public static final String[] headcoachHeader = { "教学组长姓名","片区", "考试科目", "实到人数", "合格人数","未到人数","取消人数", "其他","合格率","及格率","未到率","取消率"}; 
@@ -605,40 +496,19 @@ public class KpiStatController extends BaseController{
 	@RequestMapping(value="/examstat")
 	public ResultBean examStat(KpiExamStatParam param) {
 		ResultBean rb = new ResultBean();
-		try{
-			List<KpiExamStat> areastat=kpiStatService.statByExam(param);
-			rb.setResult(areastat);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb.setCode(1);
-			rb.setMsg("系统出错");
-		}
+		
+		List<KpiExamStat> areastat=kpiStatService.statByExam(param);
+		rb.setResult(areastat);
+		
 		return rb;
 	}
 	
 	@RequestMapping(value="/examstat/export")
-	public ResponseEntity<byte[]> examStatExport(KpiExamStatParam param) {
-		ResultBean rb = new ResultBean();
-		try{
-			List<KpiExamStat> areastat=kpiStatService.statByExam(param);
+	public ResponseEntity<byte[]> examStatExport(KpiExamStatParam param) throws IOException {
+		List<KpiExamStat> areastat=kpiStatService.statByExam(param);
 			
-			Workbook wb = getExamStatWorkbook(areastat);
-			
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			wb.write(os);
-			HttpHeaders headers = new HttpHeaders();
-			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-			String fileName = new String(
-			("考场成绩统计" + time + ".xlsx").getBytes("UTF-8"), "iso-8859-1"); // 生成文件名
-			headers.setContentDispositionFormData("attachment", fileName);
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			return new ResponseEntity<byte[]>(os.toByteArray(), headers,
-			HttpStatus.CREATED);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return null;
-		}
-		
+		Workbook wb = getExamStatWorkbook(areastat);
+		return this.export("考场成绩统计", wb);
 	}
 	
 	public static final String[] examHeader = { "考场","片区", "考试科目", "实到人数", "合格人数","未到人数","取消人数", "其他","合格率","及格率","未到率","取消率"}; 

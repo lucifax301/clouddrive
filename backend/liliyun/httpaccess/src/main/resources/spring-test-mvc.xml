@@ -18,7 +18,7 @@
 	
 	<context:annotation-config />
 	   
-	<context:component-scan base-package="cn.com.liliyun,org.jeecgframework.poi.excel.view">
+	<context:component-scan base-package="org.jeecgframework.poi.excel.view">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
 

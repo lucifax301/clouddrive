@@ -142,7 +142,7 @@ public class LoginController extends BaseController {
 	}
 	
 	private String getPassword(HttpServletRequest request,String pwd,long id) throws UnsupportedEncodingException{
-		System.out.println("===========pwd:"+pwd);
+		
 		String ramdon = pwd.substring(pwd.length()-6, pwd.length());
 		String orignPwd = request.getParameter("password");
 		return EncryptUtil.SHA1(orignPwd + ramdon) + "*" + id;

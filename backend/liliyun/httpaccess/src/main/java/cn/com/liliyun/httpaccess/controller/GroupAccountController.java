@@ -72,7 +72,7 @@ public class GroupAccountController extends BaseController {
 		for(int i=0;i<str.length;i++){  
 		    array[i]=Integer.parseInt(str[i]);
 		}
-		logger.info("==array[]==="+array.length);
+		
 		List<CoachAccount> list = new ArrayList<>();
 		for (int i : array) {
 			CoachAccount ca = new CoachAccount();
@@ -85,8 +85,7 @@ public class GroupAccountController extends BaseController {
 		User user = getUser(request);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("list",list);
-		map.put("dblink", user.getDblink());
-		map.put("mgrdb", user.getMgrdb());
+		
 		return coachAccountService.addCoachAccount(map);
 	}
 	

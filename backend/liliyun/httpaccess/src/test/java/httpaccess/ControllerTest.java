@@ -7,28 +7,55 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import cn.com.liliyun.httpaccess.controller.LoginController;
-import cn.com.liliyun.httpaccess.controller.UserController;
+import cn.com.liliyun.httpaccess.test.TestController;
 import cn.com.liliyun.user.model.User;
 
 @RunWith(SpringJUnit4ClassRunner.class) // 整合 
-@ContextConfiguration(locations={"classpath:spring-init.xml","classpath:spring-mvc.xml"}) // 加载配置
+//@ContextConfiguration(locations={"classpath:spring-init.xml","classpath:spring-mvc.xml"}) // 加载配置
+@ContextConfiguration(locations={"classpath:spring-test-init.xml","classpath:spring-test-mvc.xml"}) // 加载配置
+@WebAppConfiguration("classpath:")
 public class ControllerTest {
 
 	// 模拟request,response  
     
+//    @Autowired
+//    private UserController userController;
+//	
+//    @Autowired
+//    private LoginController loginController;
     @Autowired
-    private UserController userController;
+    TestController TestController;
 	
+//	@Test
+//    public void testLogin() throws Exception {   
+//	    MockHttpServletRequest request = new MockHttpServletRequest();
+//		MockHttpServletResponse response = new MockHttpServletResponse();
+//		User user = new User();
+//		loginController.login(user,"",1, request, response);
+//    } 
+    
     @Autowired
-    private LoginController loginController;
-	
-	@Test
-    public void testLogin() {   
+    private WebApplicationContext wac;
+    @Test
+    public void testLogin() throws Exception {   
 	    MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		User user = new User();
-		//loginController.login(user, request, response);
-    }  
+		//TestController.edit(null);
+		
+		MockMvc mockMvc =MockMvcBuilders.webAppContextSetup(wac).build();
+		ResultActions resultActions = mockMvc.perform((MockMvcRequestBuilders.get("/test/edit").param("id", "1")));
+		MvcResult mvcResult = resultActions.andReturn();
+        String result = mvcResult.getResponse().getContentAsString();
+        System.out.println("response:" + result);
+		
+    } 
 }
