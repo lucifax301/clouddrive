@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -34,6 +37,7 @@ public class DblinkInterceptor {
 
 	@Before("controllerAspect()")
 	public void injectDbInfo(JoinPoint joinPoint) {
+		System.out.println("dblink已经记录下操作日志@Before 方法执行前");
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		HttpSession session = request.getSession();
 		Object [] args = joinPoint.getArgs();
@@ -62,4 +66,16 @@ public class DblinkInterceptor {
 			}
 		}
 	}
+	
+	@Around("controllerAspect()")
+    public void around(ProceedingJoinPoint pjp) throws Throwable{
+		System.out.println("dblink已经记录下操作日志@Around 方法执行前");
+        pjp.proceed();
+       
+    }
+
+    @After("controllerAspect()")
+    public void after() {
+        System.out.println("dblink已经记录下操作日志@After 方法执行后");
+    }
 }

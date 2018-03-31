@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 
+import cn.com.liliyun.common.annotation.ActionDescription;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.LogConstant;
 import cn.com.liliyun.httpaccess.util.AccessWebUtil;
@@ -34,36 +36,21 @@ public class SalesChannelController extends BaseController{
 	@RequestMapping(value="/list")
 	@ResponseBody
 	public ResultBean listChannel(SalesChannel channel) {
-		ResultBean rb = new ResultBean();
-		try{
-			List<SalesChannel> list = salesChannelService.selectChannels(channel);
-			rb.setResult(new PageInfo<>(list));
-		}catch(Exception ex){
-			rb.setCode(1);
-		}
-		return rb;
+		List<SalesChannel> list = salesChannelService.selectChannels(channel);
+		return this.<SalesChannel>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/listall")
 	@ResponseBody
 	public ResultBean listAllChannel(SalesChannel channel) {
-		ResultBean rb = new ResultBean();
-		try{
-			List<SalesChannel> list = salesChannelService.selectAllChannels(channel);
-			rb.setResult(new PageInfo<>(list));
-		}catch(Exception ex){
-			rb.setCode(1);
-		}
-		return rb;
+		List<SalesChannel> list = salesChannelService.selectAllChannels(channel);
+		return this.<SalesChannel>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/add")
 	@ResponseBody
 	public ResultBean addChannel(HttpServletRequest request){
-		ResultBean rb = new ResultBean();
-		try{
-			
-			
+		
 			String channel=request.getParameter("channel");
 			String coachflag=request.getParameter("coachflag");
 			String staffflag=request.getParameter("staffflag");
@@ -80,36 +67,22 @@ public class SalesChannelController extends BaseController{
 				cct.setStaffflag(Integer.parseInt(staffflag));
 			}
 			
-			salesChannelService.addChannel(cct);
-		}catch(Exception ex){
-			logger.error(ex);
-			ex.printStackTrace();
-			rb.setCode(1);
-		}
-		return rb;
+		salesChannelService.addChannel(cct);
+		return new ResultBean();
 	}
 	
 	@RequestMapping(value="/delete")
 	@ResponseBody
 	public ResultBean deleteChannel(SalesChannel channel) {
-		ResultBean rb = null;
-		try{
-			rb=salesChannelService.delChannel(channel);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			rb=new ResultBean();
-			rb.setCode(1);
-		}
-		return rb;
+		return salesChannelService.delChannel(channel);
+		
 	}
 	
+	@ActionDescription(description="",error="更新渠道出错")
 	@RequestMapping(value="/update")
 	@ResponseBody
 	public ResultBean updateChannel(HttpServletRequest request) {
-		
-		try{
-			
-			String channel=request.getParameter("channel");
+		String channel=request.getParameter("channel");
 			String data=request.getParameter("channels");
 			String coachflag=request.getParameter("coachflag");
 			String staffflag=request.getParameter("staffflag");
@@ -129,11 +102,7 @@ public class SalesChannelController extends BaseController{
 			
 			salesChannelService.updateChannel(cct);
 			return new ResultBean();
-		}catch(Exception ex){
-			ex.printStackTrace();
-			ResultBean rb = new ResultBean("更新渠道出错");
-			return rb;
-		}
+		
 		
 	}
 	

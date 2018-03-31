@@ -44,7 +44,7 @@ public class BaseController {
     public void exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {  
 		//ex.printStackTrace();
 		System.out.println("exceptionHandler");
-        ResultBean rb = new ResultBean(HttpConstant.ERROR_CODE,HttpConstant.ERROR_MSG);
+        ResultBean rb = new ResultBean(HttpConstant.ERROR_CODE,HttpConstant.ERROR_MSG+":"+ex.getMessage());
     	printJson(response, rb,ex);
     }
 	

@@ -25,6 +25,8 @@
 		<!--  <context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.test.TestController" />-->
 		<context:include-filter type="regex" expression="cn\.com\.liliyun\.httpaccess\.test.*" />
 		
+		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.interceptor.ControllerInterceptor" />
+		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.interceptor.DblinkInterceptor" />
 	</context:component-scan>
 	
 	<bean id="devProperties" class="cn.com.liliyun.httpaccess.util.DevProperties">
