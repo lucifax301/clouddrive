@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import cn.com.liliyun.common.model.ResultBean;
+import cn.com.liliyun.common.util.ApplicationContextUtil;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.GsonUtil;
 import cn.com.liliyun.common.util.HttpConstant;
@@ -194,4 +196,16 @@ public class BaseController {
 		rb.setResult(obj);
 		return rb;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getBean(Class<T> cls){
+		T bean =(T) services.get(cls);
+		if(bean==null){
+			bean = ApplicationContextUtil.getBean(cls);
+			services.putIfAbsent(cls, bean);
+		}
+		return bean;
+	}
+	
+	private ConcurrentHashMap<Class<?>,Object> services = new ConcurrentHashMap<Class<?>,Object>(2);
 }

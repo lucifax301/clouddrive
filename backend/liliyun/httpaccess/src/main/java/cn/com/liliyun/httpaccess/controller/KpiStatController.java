@@ -90,7 +90,7 @@ public class KpiStatController extends ExportController{
 				// 遍历集合数据，产生数据行 
 				int i=1;
 				int firststartrow=1;
-				int firstendrow=1;
+				//int firstendrow=1;
 				for (KpiAreaStat vo:list) {  
 				      
 				    List<KpiAreaStatRecord> list2=vo.getData();

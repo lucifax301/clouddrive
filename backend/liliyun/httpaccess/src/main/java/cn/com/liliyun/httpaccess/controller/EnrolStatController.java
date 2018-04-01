@@ -1,10 +1,7 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,18 +18,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.LogConstant;
 import cn.com.liliyun.httpaccess.util.AccessWebUtil;
-import cn.com.liliyun.log.model.LogCommon;
 import cn.com.liliyun.market.model.CoachItemPerformanceStat;
 import cn.com.liliyun.market.model.CoachPerformanceStat;
 import cn.com.liliyun.market.model.CoachStorePerformanceStat;
@@ -57,7 +49,7 @@ import cn.com.liliyun.user.model.User;
 @RequestMapping(value="/enrolstat")
 public class EnrolStatController extends ExportController{
 
-	private static Logger log=Logger.getLogger(EnrolStatController.class);
+	//private static Logger log=Logger.getLogger(EnrolStatController.class);
 	
 	@Autowired
 	private EnrolDetailService enrolDetailService;

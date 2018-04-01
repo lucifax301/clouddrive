@@ -132,7 +132,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		int roleid= user.getRoleid();
 		Role role=new Role();
 		role.setId(roleid);
-		role.setDblink(user.getDblink());
+		
 		List<Privilege> privileges = privilegeMapper.listUserRoleBtn(role);
 		
 		return privileges;
@@ -140,11 +140,10 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
 
 	public List<Privilege> getUserPrivilege(User user) {
-		//List<Privilege> privileges = privilegeMapper.listUserPrivilege(user);
 		int roleid= user.getRoleid();
 		Role role=new Role();
 		role.setId(roleid);
-		role.setDblink(user.getDblink());
+		
 		List<Privilege> privileges = privilegeMapper.listUserRolePrivilege(role);
 		return merge(privileges,false);
 	}
@@ -153,7 +152,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		int roleid= user.getRoleid();
 		Role role=new Role();
 		role.setId(roleid);
-		role.setDblink(user.getDblink());
 		//List<Privilege> privileges = privilegeMapper.listUserPrivilege(user);
 		List<Privilege> privileges = privilegeMapper.listUserRolePrivilege(role);
 		return privileges;
@@ -169,7 +167,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 				if (item[i] == null || item[i].equals(""))
 					continue;
 				RolePrivilege p = new RolePrivilege();
-				p.setDblink(role.getDblink());
+				
 				p.setPrivilegeId(Integer.parseInt(item[i]));
 				privileges.add(p);
 			}
@@ -186,7 +184,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		if(rolePrivileges!=null&&rolePrivileges.size()>0){
 			Map<String, Object> params = new HashMap<>();
 			params.put("list", rolePrivileges);
-			params.put("dblink", role.getDblink());
 			
 			privilegeMapper.insertRolePrivilege(params);
 		}
@@ -235,7 +232,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		}
 		Map<String, Object> params = new HashMap<>();
 		params.put("list", rolePrivileges);
-		params.put("dblink", role.getDblink());
 		
 		privilegeMapper.insertRolePrivilege(params);
 		privilegeMapper.updateRole(role);
@@ -281,7 +277,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 			}
 			Map<String, Object> params = new HashMap<>();
 			params.put("ids", ids);
-			params.put("dblink", role.getDblink());
 			
 			List<Map> c1 = privilegeMapper.listRolePrivilegeCount(params);
 			List<Map> c2 = userMapper.listRoleUserCount(params);
@@ -327,8 +322,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		}
 		if (roleUsers.size() == 0) {
 			RoleUser params = roleUsers.get(0);
-			params.setDblink(roleUser.getDblink());
-			params.setMgrdb(roleUser.getMgrdb());
 			return userMapper.insertRoleUser(params);
 		} else
 			return 0;
@@ -344,7 +337,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		List <Integer> ids = userMapper.listRoleUserIds(roleUser);
 		Map<String, Object> params = new HashMap<>();
 		params.put("list", ids);
-		params.put("dblink", roleUser.getDblink());
 		
 		PageHelper.startPage(roleUser.getPageNo(), roleUser.getPageSize());
 		List <User> users = userMapper.listRoleUser(params);
@@ -356,7 +348,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		List <Integer> ids = userMapper.listRoleUserIds(roleUser);
 		Map<String, Object> params = new HashMap<>();
 		params.put("list", ids);
-		params.put("dblink", roleUser.getDblink());
 		
 		PageHelper.startPage(roleUser.getPageNo(), roleUser.getPageSize());
 		List <User>	users = userMapper.listNotRoleUser(params);
@@ -369,11 +360,10 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	@Override
-	public int delPrivilege(Privilege privilege, User user) {
+	public int delPrivilege(Privilege privilege) {
 		String [] ids = privilege.getIds().split(",");
 		for (String id : ids) {
 			privilege.setId(Integer.parseInt(id));
-			privilege.setDblink(user.getDblink());
 			privilegeMapper.delPrivilege(privilege);
 		}
 		return ids.length;

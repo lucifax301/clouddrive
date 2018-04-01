@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.com.liliyun.common.annotation.RequestAction;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.trainorg.model.ProxyDealer;
@@ -47,6 +48,7 @@ public class ProxyDealerController extends BaseController {
 		return proxyDealerService.insertSelective(proxyDealer);
 	}
 	
+	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
 	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public ResultBean updateScope(ProxyDealer proxyDealer,HttpServletRequest request) {
 		User user = AccessWebUtil.getSessionUser(request);

@@ -9,9 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.finance.model.FinanceFee;
 import cn.com.liliyun.finance.model.FinanceFeeDTO;
@@ -21,6 +18,8 @@ import cn.com.liliyun.finance.service.FinanceFeeService;
 import cn.com.liliyun.student.dto.StudentMoneyDTO;
 import cn.com.liliyun.student.model.Student;
 import cn.com.liliyun.student.service.StudentService;
+
+import com.alibaba.fastjson.JSONObject;
 
 @Controller
 @ResponseBody
@@ -35,42 +34,35 @@ public class FinanceFeeController extends BaseController {
 	
 	@RequestMapping(value="/list")
 	public ResultBean list(HttpServletRequest request,FinanceFee financeFee) {
-		ResultBean rb = new ResultBean();
 		List <FinanceFee> list = financeFeeService.selectList( financeFee);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<FinanceFee>buildListResult(list);
 	}
 
 	@RequestMapping(value="/listitem")
 	public ResultBean itemList(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
-		ResultBean rb = new ResultBean();
 		List <FinanceFeeItem> list = financeFeeService.selectItemList( financeFeeItem);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<FinanceFeeItem>buildListResult(list);
+		
 	}
 
 	@RequestMapping(value="/listallitem")
 	public ResultBean itemAllList(HttpServletRequest request,FinanceFeeItem financeFeeItem) {
-		ResultBean rb = new ResultBean();
 		List <FinanceFeeItem> list = financeFeeService.selectAllItemList( financeFeeItem);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<FinanceFeeItem>buildListResult(list);
+		
 	}
 	
 	@RequestMapping(value="/listowe")
 	public ResultBean listOwe(HttpServletRequest request,StudentMoneyDTO dto) {
-		ResultBean rb = new ResultBean();
 		List <StudentMoneyDTO> list = studentService.selectOweList( dto);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<StudentMoneyDTO>buildListResult(list);
+		
 	}
 	
 	@RequestMapping(value="/listpay")
 	public ResultBean listPay(HttpServletRequest request,FinancePay financePay) {
-		ResultBean rb = new ResultBean();
 		List <FinancePay> list = financeFeeService.selectPay( financePay);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<FinancePay>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/delitem")

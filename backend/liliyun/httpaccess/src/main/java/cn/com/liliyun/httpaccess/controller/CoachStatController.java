@@ -1,15 +1,11 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,9 +16,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +46,7 @@ import cn.com.liliyun.user.model.User;
 @RequestMapping(value="/coachreport")
 public class CoachStatController extends ExportController{
 	
-	private static Logger log=Logger.getLogger(CoachStatController.class);
+	//private static Logger log=Logger.getLogger(CoachStatController.class);
 
 	@Autowired
 	private CoachStatService coachStatService;

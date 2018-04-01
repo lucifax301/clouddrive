@@ -82,7 +82,7 @@ public class GroupAccountController extends BaseController {
 			ca.setStatus(coachAccount.getStatus());
 			list.add(ca);
 		}
-		User user = getUser(request);
+		
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("list",list);
 		

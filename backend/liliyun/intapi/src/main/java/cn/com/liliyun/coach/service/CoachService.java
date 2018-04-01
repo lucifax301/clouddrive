@@ -102,7 +102,7 @@ public interface CoachService {
 	
 	public List<CoachLoadStudentInfo> getCoachLoadStudentInfo(CoachLoadStudentInfo info);
 	
-	public Map getCoachModExtendinfo(Coach coach,int applyid);
+	public Map<String,String> getCoachModExtendinfo(Coach coach,int applyid);
 	
 	public Map<Integer, Integer> getStoreCoachNumBatch(List<Integer> storeids);
 	

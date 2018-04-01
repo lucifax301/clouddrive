@@ -70,32 +70,19 @@ public class DeptController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ResultBean add(Dept dept) {
-		try{
-			if(dept.getId()==null){
-				ResultBean rb=deptService.addDept(dept);
-				return rb;
-			}
-			else{
-				ResultBean rb=deptService.updateDept(dept);
-				return rb;
-			}
-			
-		}catch(Exception ex){
-			access.warn(ex);
-			return new ResultBean("保存部门出错");
+		
+		if(dept.getId()==null){
+			return deptService.addDept(dept);
+		}
+		else{
+			return deptService.updateDept(dept);
 		}
 	} 
 	
 	
 	@RequestMapping(value="/del")
 	public ResultBean del(Dept dept) {
-		try{
-			ResultBean rb=deptService.delDept(dept);
-			return rb;
-		}catch(Exception ex){
-			access.warn(ex);
-			return new ResultBean("删除部门出错");
-		}
+		return deptService.delDept(dept);
 	} 
 	
 	@RequestMapping(value="/listDeptAreaStore")

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping(value = "/car")
 public class CarController extends ExportController {
 
-	private Logger logger = Logger.getLogger(CarController.class);
+	//private Logger logger = Logger.getLogger(CarController.class);
 
 	@Autowired
 	private ICarService carService;

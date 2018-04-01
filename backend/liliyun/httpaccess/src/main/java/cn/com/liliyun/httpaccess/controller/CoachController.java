@@ -112,7 +112,7 @@ public class CoachController extends ExportController {
 		
 		User user = AccessWebUtil.getSessionUser(request);
 
-		Map extendsinfo = new HashMap();
+		Map<String,String[]> extendsinfo = new HashMap<String,String[]>();
 		processExt(extendsinfo, request);
 		coach.setMuid(user.getId());
 		ResultBean resultBean = new ResultBean();
@@ -146,7 +146,7 @@ public class CoachController extends ExportController {
 	@ResponseBody
 	public ResultBean updateCoach(Coach coach, HttpServletRequest request)
 			throws AuthException, JSONException {
-		Map extendsinfo = new HashMap();
+		Map<String,String[]> extendsinfo = new HashMap<String,String[]>();
 		processExt(extendsinfo, request);
 		return coachService.updateCoach(coach,  extendsinfo);
 	}
@@ -286,7 +286,7 @@ public class CoachController extends ExportController {
 	@ResponseBody
 	public ResultBean modApply(Coach coach, HttpServletRequest request)
 			throws AuthException, JSONException {
-		Map extendsinfo = new HashMap();
+		Map<String,String[]> extendsinfo = new HashMap<String,String[]>();
 		processExt(extendsinfo, request);
 		
 		return coachService.modCoachApply(coach, 
@@ -320,9 +320,9 @@ public class CoachController extends ExportController {
 	@ResponseBody
 	public ResultBean getCoachModinfoextendinfo(Coach coach, HttpServletRequest request) {
 		String applyid = request.getParameter("applyid");
-		Map map = coachService.getCoachModExtendinfo(coach,
+		Map<String,String> map = coachService.getCoachModExtendinfo(coach,
 				Integer.parseInt(applyid));
-		return this.<Map>buildResult(map);
+		return this.<Map<String,String>>buildResult(map);
 	}
 	
 	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
@@ -330,7 +330,7 @@ public class CoachController extends ExportController {
 	@ResponseBody
 	public ResultBean modApplyUpdate(Coach coach, HttpServletRequest request) {
 		String applyid = request.getParameter("applyid");
-		Map extendsinfo = new HashMap();
+		Map<String,String[]> extendsinfo = new HashMap<String,String[]>();
 		processExt(extendsinfo, request);
 		return coachService.updateModCoachApply(coach, 
 				extendsinfo,  Integer.parseInt(applyid));

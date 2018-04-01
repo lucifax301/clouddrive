@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.dubbo.common.json.ParseException;
 
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.PageUtil;
@@ -61,12 +62,18 @@ public class StaffServiceImpl implements StaffService {
 		return new ResultBean();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Staff get(Staff staff) throws Exception {
-		Staff exist=staffMapper.selectByPrimaryKey(staff);
-		Map detailinf= JSON.parse(exist.getDetail(), Map.class);
-		exist.setDetailinfo(detailinf);
-		return exist;
+	public Staff get(Staff staff){
+		try{
+			Staff exist=staffMapper.selectByPrimaryKey(staff);
+			Map detailinf = JSON.parse(exist.getDetail(), Map.class);
+			
+			exist.setDetailinfo(detailinf);
+			return exist;
+		}catch(ParseException e){
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -76,7 +83,7 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
-	public StaffVo getStaffVo(Staff staff) throws Exception {
+	public StaffVo getStaffVo(Staff staff)  {
 		return staffMapper.selectStaffVo(staff);
 	}
 	

@@ -19,9 +19,6 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.entity.enmus.ExcelType;
 import org.jeecgframework.poi.exception.excel.ExcelImportException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +33,6 @@ import cn.com.liliyun.trainorg.model.OrderExamItem;
 import cn.com.liliyun.trainorg.service.OrderExamService;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 
 
 /**
@@ -45,25 +41,21 @@ import com.github.pagehelper.PageInfo;
 @Controller
 @ResponseBody
 @RequestMapping(value="/orderexam")
-public class OrderExamController extends BaseController {
+public class OrderExamController extends ExportController {
 	
 	@Autowired
 	private OrderExamService orderExamService;
 	
 	@RequestMapping(value="/list")
 	public ResultBean list(OrderExam orderExam) {
-		ResultBean rb = new ResultBean();
 		List <OrderExam> list = orderExamService.list(orderExam);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<OrderExam>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/itemlist")
 	public ResultBean itemList(OrderExamItem orderExamItem) {
-		ResultBean rb = new ResultBean();
 		List <OrderExamItem> list = orderExamService.listItem(orderExamItem);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<OrderExamItem>buildListResult(list);
 	}
 
 	@RequestMapping(value="/get")
@@ -76,10 +68,8 @@ public class OrderExamController extends BaseController {
 	
 	@RequestMapping(value="/listOfCoach")
 	public ResultBean listOfCoach(OrderExamItem orderExam) {
-		ResultBean rb = new ResultBean();
 		List <OrderExamItem> list = orderExamService.listOfCoach(orderExam);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<OrderExamItem>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/add")
@@ -122,16 +112,7 @@ public class OrderExamController extends BaseController {
 	public ResponseEntity<byte[]> export(OrderExam orderExam) throws IOException {
 		orderExam.setPageNo(-1);
 	  	List<OrderExam> list = orderExamService.list(orderExam);
-		ExportParams params = new ExportParams("导出数据", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-		Workbook workbook = ExcelExportUtil.exportExcel(params, OrderExam.class, list);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		workbook.write(os);
-	    HttpHeaders headers = new HttpHeaders();    
-	    String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	    String fileName = new String(("导出数据" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	    headers.setContentDispositionFormData("attachment", fileName);   
-	    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-	    return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);
+	  	return this.export("导出数据", "导出数据", "导出数据", list, OrderExam.class);
 	}
 	
 }

@@ -1,9 +1,6 @@
 package cn.com.liliyun.httpaccess.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.jeecgframework.poi.excel.ExcelExportUtil;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.enmus.ExcelType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,19 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.HttpConstant;
-import cn.com.liliyun.finance.model.FinanceSubject;
 import cn.com.liliyun.market.model.CustomerRecord;
 import cn.com.liliyun.market.model.PotentialCustomer;
 import cn.com.liliyun.market.service.CustomerService;
-import cn.com.liliyun.student.model.Student;
-import cn.com.liliyun.trainorg.model.Area;
 import cn.com.liliyun.trainorg.model.Classinfo;
-import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.trainorg.service.AreaService;
 import cn.com.liliyun.trainorg.service.ClassinfoService;
 import cn.com.liliyun.trainorg.service.StoreService;
-import cn.com.liliyun.user.model.User;
 
 @Controller
 @ResponseBody

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +26,7 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping(value="/coachSetting")
 public class CoachSettingController extends BaseController{
 
-	private static Logger logger=Logger.getLogger(CoachSettingController.class);
+	//private static Logger logger=Logger.getLogger(CoachSettingController.class);
 	
 	@Autowired
 	private CoachSettingService coachSettingService;
@@ -251,12 +250,8 @@ public class CoachSettingController extends BaseController{
 	
 	@RequestMapping(value="/deleteJob")
 	public ResultBean deleteJob(CoachJob job,HttpServletRequest request) {
-		String ids=request.getParameter("ids");
-		
 		ResultBean rb = new ResultBean();
-		
-			coachSettingService.deleteJob(job);
-		
+		coachSettingService.deleteJob(job);
 		return rb;
 	}
 	
@@ -264,7 +259,7 @@ public class CoachSettingController extends BaseController{
 	public ResultBean updateJob(CoachJob job,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		
-			coachSettingService.updateJob(job);
+		coachSettingService.updateJob(job);
 		
 		return rb;
 	}

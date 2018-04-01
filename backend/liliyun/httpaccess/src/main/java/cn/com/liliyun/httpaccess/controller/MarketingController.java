@@ -25,8 +25,6 @@ import cn.com.liliyun.market.model.MarketActivity;
 import cn.com.liliyun.market.service.MarketService;
 import cn.com.liliyun.trainorg.model.Marketing;
 
-import com.github.pagehelper.PageInfo;
-
 @Controller
 @ResponseBody
 @RequestMapping(value="/marketing")
@@ -67,13 +65,8 @@ public class MarketingController extends ExportController{
 	//列表
 	@RequestMapping(value="/listmarket")
 	public ResultBean geMarketList(MarketActivity activity,HttpServletRequest request) {
-		
-		ResultBean resultBean = new ResultBean();
 		List<MarketActivity> list= marketService.listActivity(activity);
-		PageInfo<MarketActivity> pagedResult = new PageInfo<>(list);
-		resultBean.setResult(pagedResult);
-		resultBean.setCode(0);
-		return resultBean;
+		return this.<MarketActivity>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/listmarket/export")

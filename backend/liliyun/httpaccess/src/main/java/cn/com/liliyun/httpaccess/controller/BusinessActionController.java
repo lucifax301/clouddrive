@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.com.liliyun.business.model.ActionBusiness;
 import cn.com.liliyun.business.service.BusinessService;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
-import cn.com.liliyun.user.model.User;
 
 @Controller
 @ResponseBody
@@ -80,15 +78,7 @@ public class BusinessActionController {
 	@ResponseBody
 	public ResultBean delbusiness(ActionBusiness business, HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
-		try {
-			User user = AccessWebUtil.getSessionUser(request);
-			businessService.delActionBusiness(business);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			
-			rb.setMsg("删除审批业务出错");
-			rb.setCode(400);
-		}
+		businessService.delActionBusiness(business);
 		return rb;
 	}
 }

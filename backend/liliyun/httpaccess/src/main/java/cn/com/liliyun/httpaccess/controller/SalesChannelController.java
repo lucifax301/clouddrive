@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 @ResponseBody
 @RequestMapping(value="/saleschannel")
 public class SalesChannelController extends BaseController{
-
-	private static Logger logger=Logger.getLogger(SalesChannelController.class);
+	
 	
 	@Autowired
 	private SalesChannelService salesChannelService;

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,9 +28,7 @@ import cn.com.liliyun.car.model.PartsSettingDto;
 import cn.com.liliyun.car.service.CarBizService;
 import cn.com.liliyun.common.dto.MapDTO;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.trainorg.service.AreaService;
-import cn.com.liliyun.user.model.User;
 
 import com.github.pagehelper.PageInfo;
 
@@ -41,7 +38,7 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping(value = "/carbiz")
 public class CarBizController extends ExportController {
 
-	private Logger logger = Logger.getLogger(CarBizController.class);
+	//private Logger logger = Logger.getLogger(CarBizController.class);
 
 	@Autowired
 	private CarBizService carBizService;

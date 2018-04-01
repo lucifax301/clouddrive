@@ -48,9 +48,7 @@ public class ExamareaController extends BaseController{
 	@RequestMapping(value="/listall")
 	public ResultBean listall(Examarea trainarea) {
 		List<Examarea> list= examareaService.getListAll(trainarea);
-		ResultBean rb=new ResultBean();
-		rb.setResult(list);
-		return rb;
+		return this.<Examarea>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/delete")

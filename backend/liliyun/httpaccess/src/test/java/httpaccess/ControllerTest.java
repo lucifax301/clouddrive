@@ -52,8 +52,10 @@ public class ControllerTest {
     
     
     @Test
-    public void testLogin() throws Exception {   
-    	
+    public void testLogin() throws Exception { 
+    	int a,b,c;
+    	a=b=c=10;
+    	System.out.println("#################"+a+" "+b+" "+c);
 	    MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		User user = new User();

@@ -15,18 +15,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.LogUtil;
 import cn.com.liliyun.httpaccess.util.AccessWebUtil;
 import cn.com.liliyun.user.model.Privilege;
 import cn.com.liliyun.user.model.Role;
 import cn.com.liliyun.user.model.RoleUser;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.service.PrivilegeService;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 
 /*
  * 用户权限
@@ -49,16 +48,12 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean allprivilege(Privilege privilege) {
 		ResultBean rb = new ResultBean();
-		try {
-			List<Privilege> privileges = privilegeService.getAllPrivilege(privilege);
-			Map <String,Object> data = new HashMap<String, Object>();
-			data.put("list", privileges);
-			rb.setResult(data);
-		} catch (Exception ex) {
-			logger.warn(ex.getStackTrace());
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		List<Privilege> privileges = privilegeService.getAllPrivilege(privilege);
+		Map <String,Object> data = new HashMap<String, Object>();
+		data.put("list", privileges);
+		rb.setResult(data);
+		
 		return rb;
 	}
 
@@ -70,21 +65,13 @@ public class PrivilegeController extends BaseController {
 	@RequestMapping(value = "/editPrivilege", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultBean editprivilege(Privilege privilege) {
-		ResultBean rb = new ResultBean();
-		try {
-			if (privilege.getId() == null) {
-				privilegeService.insertPrivilege(privilege);
-			} else {
-				privilegeService.updatePrivilege(privilege);
-			}
-			
-		} catch (Exception ex) {
-			logger.warn(ex.getStackTrace());
-			ex.printStackTrace();
-			rb.setMsg("error");
-			rb.setCode(400);
+		if (privilege.getId() == null) {
+			privilegeService.insertPrivilege(privilege);
+		} else {
+			privilegeService.updatePrivilege(privilege);
 		}
-		return rb;
+		
+		return new ResultBean();
 	}
 	
 	/**
@@ -95,16 +82,9 @@ public class PrivilegeController extends BaseController {
 	@RequestMapping(value = "/delPrivilege", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultBean delPrivilege(Privilege privilege, HttpServletRequest request) {
-		ResultBean rb = new ResultBean();
-		try {
-			User user = AccessWebUtil.getSessionUser(request);
-			privilegeService.delPrivilege(privilege, user);
-		} catch (Exception ex) {
-			logger.warn(ex.getStackTrace()); 
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
-		return rb;
+		privilegeService.delPrivilege(privilege);
+		
+		return new ResultBean();
 	}
 	
 	/**
@@ -118,16 +98,12 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean addRole(Role role, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			User user = AccessWebUtil.getSessionUser(request);
-			role.setCreator(user.getRealname());
-			role.setIsAdmin(0);
-			privilegeService.insertRole(role);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		User user = AccessWebUtil.getSessionUser(request);
+		role.setCreator(user.getRealname());
+		role.setIsAdmin(0);
+		privilegeService.insertRole(role);
+		
 		return rb;
 	}
 
@@ -142,16 +118,12 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean updateRole(Role role, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
+		
 			User user = AccessWebUtil.getSessionUser(request);
 			role.setUpdator(user.getRealname());
 			role.setUpdateTime(new java.util.Date());
 			privilegeService.updateRole(role);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
 		return rb;
 	}
 
@@ -166,13 +138,9 @@ public class PrivilegeController extends BaseController {
     @ResponseBody
     public ResultBean delRole(Role role,HttpServletRequest request,HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try{
-			privilegeService.delRole(role);
-		}catch(Exception ex){
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		privilegeService.delRole(role);
+		
 		return rb;
 	}
 
@@ -187,17 +155,13 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean activeRole(Role role, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			role.setEnable(1);
-			User user = AccessWebUtil.getSessionUser(request);
-			role.setUpdator(user.getRealname());
-			role.setUpdateTime(new java.util.Date());
-			privilegeService.enable(role);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		role.setEnable(1);
+		User user = AccessWebUtil.getSessionUser(request);
+		role.setUpdator(user.getRealname());
+		role.setUpdateTime(new java.util.Date());
+		privilegeService.enable(role);
+		
 		return rb;
 	}
 
@@ -212,17 +176,13 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean inactiveRole(Role role, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			role.setEnable(0);
-			User user = AccessWebUtil.getSessionUser(request);
-			role.setUpdator(user.getRealname());
-			role.setUpdateTime(new java.util.Date());
-			privilegeService.enable(role);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		role.setEnable(0);
+		User user = AccessWebUtil.getSessionUser(request);
+		role.setUpdator(user.getRealname());
+		role.setUpdateTime(new java.util.Date());
+		privilegeService.enable(role);
+		
 		return rb;
 	}
 
@@ -237,14 +197,10 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean getRole(Role role, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			Role roledata = privilegeService.getRole(role);
-			rb.setResult(roledata);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		Role roledata = privilegeService.getRole(role);
+		rb.setResult(roledata);
+		
 		return rb;
 	}
 
@@ -260,15 +216,11 @@ public class PrivilegeController extends BaseController {
 	public ResultBean getUserPrivilege(User user, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
 		Integer id = AccessWebUtil.getSessionUser(request).getId();
-		try {
-			user.setId(id);
-			List<Privilege> privileges = privilegeService.getAllDevPrivilege(new Privilege());
-			rb.setResult(privileges);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		user.setId(id);
+		List<Privilege> privileges = privilegeService.getAllDevPrivilege(new Privilege());
+		rb.setResult(privileges);
+		
 		return rb;
 	}
 
@@ -284,14 +236,10 @@ public class PrivilegeController extends BaseController {
 	public ResultBean listRole(Role role, HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "isPage", defaultValue = "1") Integer isPage) {
 		ResultBean rb = new ResultBean();
-		try {
-			PageInfo <Role> data = privilegeService.listRole(role, isPage==0);
-			rb.setResult(data);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		PageInfo <Role> data = privilegeService.listRole(role, isPage==0);
+		rb.setResult(data);
+		
 		return rb;
 	}
 
@@ -306,17 +254,13 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean addRoleUser(RoleUser roleUser, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			int code = privilegeService.insertRoleUser(roleUser);
-			if (code == 0) {
-				rb.setMsg("更新角色失败！");
-				rb.setCode(400);
-			}
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
+		
+		int code = privilegeService.insertRoleUser(roleUser);
+		if (code == 0) {
+			rb.setMsg("更新角色失败！");
 			rb.setCode(400);
 		}
+		
 		return rb;
 	}
 
@@ -331,13 +275,9 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean delRoleUser(RoleUser roleUser, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			privilegeService.delRoleUser(roleUser);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		privilegeService.delRoleUser(roleUser);
+		
 		return rb;
 	}
 
@@ -352,14 +292,10 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean listRoleUser(RoleUser roleUser, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			PageInfo <User> users = privilegeService.listRoleUser(roleUser);
-			rb.setResult(users);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		PageInfo <User> users = privilegeService.listRoleUser(roleUser);
+		rb.setResult(users);
+		
 		return rb;
 	}
 	
@@ -374,14 +310,10 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public ResultBean listNotRoleUser(RoleUser roleUser, HttpServletRequest request, HttpServletResponse response) {
 		ResultBean rb = new ResultBean();
-		try {
-			PageInfo <User> users = privilegeService.listNotRoleUser(roleUser);
-			rb.setResult(users);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		PageInfo <User> users = privilegeService.listNotRoleUser(roleUser);
+		rb.setResult(users);
+		
 		return rb;
 	}
 
@@ -397,16 +329,10 @@ public class PrivilegeController extends BaseController {
 	public ResultBean getUserMenu(User user,Privilege privilege,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		User loginuser = AccessWebUtil.getSessionUser(request);
-		try {
-//			user.setId(loginuser.getId());
-			List<Privilege> privileges = privilegeService.getUserPrivilege(loginuser);
-//			List<Privilege> privileges = privilegeService.getAllDevPrivilege(privilege);
-			rb.setResult(privileges);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		List<Privilege> privileges = privilegeService.getUserPrivilege(loginuser);
+
+		rb.setResult(privileges);
 		return rb;
 	}
 	
@@ -415,16 +341,10 @@ public class PrivilegeController extends BaseController {
 	public ResultBean getUserBtn(User user,Privilege privilege,HttpServletRequest request) {
 		ResultBean rb = new ResultBean();
 		User loginuser = AccessWebUtil.getSessionUser(request);
-		try {
-//			user.setId(loginuser.getId());
-			//List<Privilege> privileges = privilegeService.getUserPrivilege(loginuser);
-			List<Privilege> privileges = privilegeService.getAllBtn(loginuser);
-			rb.setResult(privileges);
-		} catch (Exception ex) {
-			logger.warn(LogUtil.getStackMsg(ex));
-			rb.setMsg("error");
-			rb.setCode(400);
-		}
+		
+		List<Privilege> privileges = privilegeService.getAllBtn(loginuser);
+		rb.setResult(privileges);
+		
 		return rb;
 	}
 	

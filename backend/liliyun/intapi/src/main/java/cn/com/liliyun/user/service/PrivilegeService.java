@@ -19,7 +19,7 @@ public interface PrivilegeService {
 
 	public void insertRole(Role role) ;
 	
-	public int delPrivilege(Privilege privilege, User user) ;
+	public int delPrivilege(Privilege privilege) ;
 	
 	public int insertPrivilege(Privilege privilege) ;
 	
