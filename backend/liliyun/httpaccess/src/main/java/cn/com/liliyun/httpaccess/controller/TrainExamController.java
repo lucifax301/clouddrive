@@ -19,9 +19,6 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.entity.enmus.ExcelType;
 import org.jeecgframework.poi.exception.excel.ExcelImportException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,13 +27,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.trainorg.model.TrainExam;
 import cn.com.liliyun.trainorg.model.TrainExamItem;
 import cn.com.liliyun.trainorg.service.TrainExamService;
+
+import com.alibaba.fastjson.JSONObject;
 
 
 /**
@@ -45,33 +41,27 @@ import cn.com.liliyun.trainorg.service.TrainExamService;
 @Controller
 @ResponseBody
 @RequestMapping(value="/trainexam")
-public class TrainExamController extends BaseController {
+public class TrainExamController extends ExportController {
 	
 	@Autowired
 	private TrainExamService trainExamService;
 	
 	@RequestMapping(value="/list",method=RequestMethod.GET)
 	public ResultBean list(HttpServletRequest request,TrainExam trainExam) {
-		ResultBean rb = new ResultBean();
 		List <TrainExam> list = trainExamService.list(trainExam);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<TrainExam>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/itemlist",method=RequestMethod.GET)
 	public ResultBean itemList(HttpServletRequest request,TrainExamItem trainExamItem) {
-		ResultBean rb = new ResultBean();
 		List <TrainExamItem> list = trainExamService.listItem(trainExamItem);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<TrainExamItem>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/listOfCoach",method=RequestMethod.GET)
 	public ResultBean listOfCoach(HttpServletRequest request,TrainExamItem trainExam) {
-		ResultBean rb = new ResultBean();
 		List <TrainExamItem> list = trainExamService.listOfCoach(trainExam);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<TrainExamItem>buildListResult(list);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
@@ -114,16 +104,8 @@ public class TrainExamController extends BaseController {
 	public ResponseEntity<byte[]> export(TrainExam trainExam) throws IOException {
 		trainExam.setPageNo(-1);
 	  	List<TrainExam> list = trainExamService.list(trainExam);
-		ExportParams params = new ExportParams("导出数据", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-		Workbook workbook = ExcelExportUtil.exportExcel(params, TrainExam.class, list);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		workbook.write(os);
-	    HttpHeaders headers = new HttpHeaders();
-	    String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	    String fileName = new String(("导出数据" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-	    headers.setContentDispositionFormData("attachment", fileName);   
-	    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-	    return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);
+		return this.export("导出数据", "导出数据", "导出数据", list, TrainExam.class);
+		
 	}
 	
 }

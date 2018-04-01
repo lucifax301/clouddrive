@@ -62,13 +62,11 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value="/add")
 	public ResultBean addUser(User user) {
-		ResultBean rb = null;
 		if (user.getId() == null) {
-			rb = userService.saveUser(user);
+			return userService.saveUser(user);
 		} else {
-			rb = userService.updateUser(user);
+			return userService.updateUser(user);
 		}
-		return rb;
 	} 
 	
 	
@@ -94,9 +92,7 @@ public class UserController extends BaseController {
 	
 	@RequestMapping(value="/updatepwd")
 	public ResultBean updatepwd(User user,HttpServletRequest request) {
-		ResultBean rb = new ResultBean();
 		User curuser =  AccessWebUtil.getSessionUser(request);
-		
 		return userService.changepwd(user, curuser);
 		
 		

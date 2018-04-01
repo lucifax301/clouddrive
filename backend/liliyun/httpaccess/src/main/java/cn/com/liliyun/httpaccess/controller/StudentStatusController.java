@@ -20,13 +20,12 @@ public class StudentStatusController extends BaseController {
 
 	@RequestMapping(value="/edit")
 	public ResultBean edit(StudentStatus studentStatus) {
-		ResultBean rb;
 		if (studentStatus.getId() == null) {
-			rb = studentStatusService.addStudentStatus(studentStatus);
+			return studentStatusService.addStudentStatus(studentStatus);
 		} else {
-			rb = studentStatusService.updateStudentStatus(studentStatus);
+			return studentStatusService.updateStudentStatus(studentStatus);
 		}
-		return rb;
+		
 	}
 
 	@RequestMapping(value="/list")

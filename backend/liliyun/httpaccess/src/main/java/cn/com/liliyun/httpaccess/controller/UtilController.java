@@ -10,6 +10,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.qiniu.api.auth.AuthException;
 import com.qiniu.api.io.PutRet;
 
 import cn.com.liliyun.common.model.ResultBean;
@@ -54,9 +56,10 @@ public class UtilController {
     }
     
     @RequestMapping(value="/uploadImg", method=RequestMethod.POST)
-    public ResultBean uploadImg(@RequestParam("file") MultipartFile mfile, @RequestParam(value = "id", required = false) String id) {
+    public ResultBean uploadImg(@RequestParam("file") MultipartFile mfile, @RequestParam(value = "id", required = false) String id)
+    throws IOException, AuthException, JSONException{
     	ResultBean r = new ResultBean();
-    	try {
+    	
     		//生成随机数列作为文件命名，避免高并发时文件互相覆盖
     		Long timestamp = new Date().getTime();
     		Integer random = new Random().nextInt(1000);
@@ -70,11 +73,7 @@ public class UtilController {
     		result.put("download", 0);
     		r.setResult(result);
     		file.delete();
-    	} catch(Exception e) {
-    		e.printStackTrace();
-    		r.setCode(HttpConstant.ERROR_CODE);
-    		r.setMsg(HttpConstant.ERROR_MSG);
-    	}
+    	
     	return r;
     }
 	

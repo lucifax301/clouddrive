@@ -18,9 +18,9 @@ public interface StaffService {
 	
 	public ResultBean updateByPrimaryKeySelective(Staff staff);
 	
-	public Staff get(Staff staff) throws Exception;
+	public Staff get(Staff staff);
 	
-	public StaffVo getStaffVo(Staff staff) throws Exception;
+	public StaffVo getStaffVo(Staff staff) ;
 
 	public List<Staff> getAppStafflist(Staff staff);
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.student.model.Student;
 import cn.com.liliyun.student.model.TransferStudent;
 import cn.com.liliyun.student.service.StudentService;

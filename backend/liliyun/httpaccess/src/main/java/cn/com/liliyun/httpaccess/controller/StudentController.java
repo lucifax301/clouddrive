@@ -57,12 +57,10 @@ import cn.com.liliyun.trainorg.service.AreaService;
 import cn.com.liliyun.trainorg.service.ClassinfoService;
 import cn.com.liliyun.trainorg.service.StoreService;
 
-import com.github.pagehelper.PageInfo;
-
 @Controller
 @ResponseBody
 @RequestMapping(value="/student")
-public class StudentController extends BaseController {
+public class StudentController extends ExportController {
 	
 	Logger logger = Logger.getLogger(StudentController.class);
 
@@ -85,13 +83,12 @@ public class StudentController extends BaseController {
 	//编辑
 	@RequestMapping(value="/edit", method=RequestMethod.POST)
 	public ResultBean addStudent(HttpServletRequest request,Student student){
-		ResultBean rb;
 		if (student.getId() == null) {
-			rb = studentService.addStudent(student);
+			return studentService.addStudent(student);
 		} else {
-			rb = studentService.updateStudent(student);
+			return studentService.updateStudent(student);
 		}
-		return rb;
+		
 	}
 	
 	//删除
@@ -195,9 +192,7 @@ public class StudentController extends BaseController {
 	public ResultBean stuofcoach(CoachStudent coachStudent){
 		coachStudent.setIsvalid(1);
 		List<Student> list=studentService.getCoachStudentList(coachStudent);
-		ResultBean rb=new ResultBean();
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<Student>buildListResult(list);
 	}
 	
 	//下载
@@ -237,16 +232,8 @@ public class StudentController extends BaseController {
     		s.setClassname(classes.get(s.getClassid()) != null ? classes.get(s.getClassid()).getName() : "");
     		s.setApplyexamname(s.getApplyexam() == null ? "" : ApplyExam.getName(s.getApplyexam(),s.getApplystatus()));
     	}
-    	ExportParams params = new ExportParams("学员导出数据", "导出数据", ExcelType.XSSF);//title sheetname 文件格式
-    	Workbook workbook = ExcelExportUtil.exportExcel(params, Student.class, list);
-    	ByteArrayOutputStream os = new ByteArrayOutputStream();
-    	workbook.write(os);
-        HttpHeaders headers = new HttpHeaders();    
-        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String fileName = new String(("学员导出数据" + time + ".xlsx").getBytes("UTF-8"),"iso-8859-1"); //生成文件名
-        headers.setContentDispositionFormData("attachment", fileName);   
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);   
-        return new ResponseEntity<byte[]>(os.toByteArray(), headers, HttpStatus.CREATED);    
+    	
+    	return this.export("学员导出数据", "学员导出数据", "导出数据", list, Student.class);
     }
 	
 	//获取理论课列表

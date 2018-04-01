@@ -4,13 +4,16 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 	http://www.springframework.org/schema/context 
 	http://www.springframework.org/schema/context/spring-context-4.0.xsd
 	http://www.springframework.org/schema/aop 
-	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 	<!-- 支持标注 -->
 	<context:annotation-config />
@@ -24,12 +27,14 @@
 		<!--  <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
 		<!--  <context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.test.TestController" />-->
 		<context:include-filter type="regex" expression="cn\.com\.liliyun\.httpaccess\.test.*" />
-		
+		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.interceptor.DblinkInterceptor" />		
 		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.interceptor.ControllerInterceptor" />
-		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.interceptor.DblinkInterceptor" />
+		<context:include-filter type="assignable" expression="cn.com.liliyun.common.util.ApplicationContextUtil" />
+		
 	</context:component-scan>
 	
 	<bean id="devProperties" class="cn.com.liliyun.httpaccess.util.DevProperties">
 		<property name="dev" value="0" />
 	</bean>
+	
 </beans>

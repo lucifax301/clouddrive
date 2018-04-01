@@ -6,22 +6,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.annotation.ActionDescription;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.LogConstant;
-import cn.com.liliyun.httpaccess.util.AccessWebUtil;
-import cn.com.liliyun.log.model.LogCommon;
 import cn.com.liliyun.market.model.SalesChannel;
 import cn.com.liliyun.market.service.SalesChannelService;
-import cn.com.liliyun.user.model.User;
+
+import com.alibaba.fastjson.JSONObject;
 
 @Controller
 @ResponseBody
@@ -109,13 +103,7 @@ public class SalesChannelController extends BaseController{
 	@RequestMapping(value="/updateChannelStatus")
 	@ResponseBody
 	public ResultBean updateChannelStatus(SalesChannel channel,HttpServletRequest request) {
-		ResultBean rb = new ResultBean();
-		try{
-			
-			salesChannelService.updateChannelStatus(channel);
-		}catch(Exception ex){
-			rb.setCode(1);
-		}
-		return rb;
+		return	salesChannelService.updateChannelStatus(channel);
+		
 	}
 }

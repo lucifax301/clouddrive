@@ -16,8 +16,6 @@ import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.trainorg.model.Store;
 import cn.com.liliyun.trainorg.service.StoreService;
 
-import com.github.pagehelper.PageInfo;
-
 @Controller
 @ResponseBody
 @RequestMapping(value="/store")
@@ -39,12 +37,10 @@ public class StoreController extends BaseController {
 	
 	@RequestMapping(value="/list")
 	public ResultBean getList(Store store, HttpServletRequest request) {
-		
-		ResultBean rb = new ResultBean();
 		store.setPageNo(-1);
 		List <Store> list = storeService.selectList(store);
-		rb.setResult(new PageInfo<>(list));
-		return rb;
+		return this.<Store>buildListResult(list);
+		
 	}
 	
 	@RequestMapping(value="/listall")

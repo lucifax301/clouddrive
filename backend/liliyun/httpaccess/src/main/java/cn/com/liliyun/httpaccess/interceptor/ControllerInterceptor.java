@@ -46,8 +46,8 @@ public class ControllerInterceptor {
 		}catch(Throwable e){
 			System.out.println("############cat exception");
 			ActionDescription description = (ActionDescription)method.getAnnotation(ActionDescription.class);
-			throw new RuntimeException(description.error());
-			
+			throw new RuntimeException(description.error()+":"+e.toString(),e);
+			//throw e;
 		}
         
     }

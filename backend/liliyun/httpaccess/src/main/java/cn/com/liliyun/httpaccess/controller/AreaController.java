@@ -3,6 +3,7 @@ package cn.com.liliyun.httpaccess.controller;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import cn.com.liliyun.common.model.ResultBean;
-import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.trainorg.model.Area;
 import cn.com.liliyun.trainorg.service.AreaService;
+
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 @Controller
 @ResponseBody
@@ -34,13 +35,11 @@ public class AreaController extends BaseController {
 	
 	@RequestMapping(value="/edit")
 	public ResultBean edit(Area area) {
-		ResultBean rb;
 		if (area.getId() == null) {
-			rb = areaService.insert(area);
+			return areaService.insert(area);
 		} else {
-			rb = areaService.updateByPrimaryKey(area);
+			return areaService.updateByPrimaryKey(area);
 		}
-		return rb;
 	}
 	
 	//查询所有正常状态的片区,不分页
@@ -81,9 +80,10 @@ public class AreaController extends BaseController {
 	}
 	
 	@RequestMapping(value="/region")
-	public ResultBean regionlist(@RequestParam(value = "level", required = false, defaultValue = "0") Integer level, HttpServletRequest request) {
+	public ResultBean regionlist(@RequestParam(value = "level", required = false, defaultValue = "0") Integer level,
+			HttpServletRequest request) throws IOException {
 		ResultBean r = new ResultBean();
-		try {
+		
 			File file = ResourceUtils.getFile("classpath:region.json");
 			FileInputStream fis = new FileInputStream(file);   
 			InputStreamReader isr = new InputStreamReader(fis, "UTF-8");   
@@ -92,7 +92,7 @@ public class AreaController extends BaseController {
 			while ((line = br.readLine()) != null) {   
 				json += line;   
 			}   
-            
+			br.close();
 			Gson gson = new Gson();
 			Map<Integer, List<Map<String, String>>> map = gson.fromJson(json, new TypeToken<Map<Integer, List<Map<String, String>>>>() {
 				private static final long serialVersionUID = 1L;}.getType());
@@ -104,11 +104,7 @@ public class AreaController extends BaseController {
 				r.setResult(map.get(level));
 			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			r.setCode(HttpConstant.ERROR_CODE);
-			r.setMsg(HttpConstant.ERROR_MSG);
-		}
+		
 		return r;
 	}
 }

@@ -127,7 +127,7 @@ public class TransfertableController extends ExportController {
 	
 	@RequestMapping(value="/export")
 	public ResponseEntity<byte[]> export(Transfertable transfertable) throws IOException {
-		TransfertableItem item  = new TransfertableItem();
+		//TransfertableItem item  = new TransfertableItem();
 //		item.setTableid(transfertable.getId());
 	  	//List<TransfertableItem> list = transfertableService.itemList(item);
 		return this.export("导出数据", "导出数据", "导出数据", null, TransfertableItem.class);

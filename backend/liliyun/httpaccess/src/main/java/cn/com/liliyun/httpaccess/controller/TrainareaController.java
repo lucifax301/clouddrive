@@ -20,13 +20,12 @@ public class TrainareaController extends BaseController {
 	
 	@RequestMapping(value="/edit")
 	public ResultBean edit(Trainarea trainarea) {
-		ResultBean rb;
 		if (trainarea.getId() == null) {
-			rb = trainareaService.addTrainarea(trainarea);
+			return trainareaService.addTrainarea(trainarea);
 		} else {
-			rb = trainareaService.updateTrainarea(trainarea);
+			return trainareaService.updateTrainarea(trainarea);
 		}
-		return rb;
+		
 	}
 	
 	@RequestMapping(value="/list")

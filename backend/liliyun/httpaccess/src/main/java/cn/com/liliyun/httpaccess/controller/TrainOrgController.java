@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.github.pagehelper.PageInfo;
-
-import cn.com.liliyun.common.model.BaseModel;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ExcelUtil;
 import cn.com.liliyun.student.model.Student;
