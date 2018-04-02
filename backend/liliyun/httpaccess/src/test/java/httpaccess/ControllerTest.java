@@ -1,5 +1,8 @@
 package httpaccess;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +56,9 @@ public class ControllerTest {
     
     @Test
     public void testLogin() throws Exception { 
+    	RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+		String name = bean.getName();
+		System.out.println("##########@@@@@@@@@@@@"+name);
     	int a,b,c;
     	a=b=c=10;
     	System.out.println("#################"+a+" "+b+" "+c);
