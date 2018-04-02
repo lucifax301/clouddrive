@@ -11,6 +11,7 @@ import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ApplicationContextUtil;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.httpaccess.controller.BaseController;
+import cn.com.liliyun.httpaccess.util.TestServiceImpl;
 import cn.com.liliyun.trainorg.model.Trainarea;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.service.UserService;
@@ -21,12 +22,14 @@ import cn.com.liliyun.user.service.UserService;
 public class TestController extends BaseController {
 
 //	@Autowired
-//	TestService userService;
+	//TestService userService=get(TestService.class);
 	
 	@ActionDescription(description="ok",error="failed")
 	@RequestMapping(value="/edit")
 	public ResultBean edit(Trainarea trainarea) {
 		//TestService userService=ApplicationContextUtil.getBean(TestService.class);
+		TestService userService=get(TestService.class);
+		userService.dotest3();
 		ResultBean rb = new ResultBean();
 		User user = RequestContext.getValue(ConstantUtil.USER_SESSION);
 		System.out.println(user);
@@ -34,5 +37,9 @@ public class TestController extends BaseController {
 		throw new RuntimeException("testerror");
 		System.out.println("dotest----------------");
 		return rb;
+	}
+	
+	private TestService get(Class cls){
+		return this.getBean(cls);
 	}
 }

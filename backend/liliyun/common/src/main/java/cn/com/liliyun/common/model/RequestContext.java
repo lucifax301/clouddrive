@@ -5,6 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RequestContext {
 
+	private String traceId;
+	
+	private String ip;
+	
 	private Map<String,Object> data = new ConcurrentHashMap<String,Object>(2);
 	
 	private static ThreadLocal<RequestContext> current = new ThreadLocal<RequestContext>();
@@ -50,4 +54,22 @@ public class RequestContext {
 	public static void set(RequestContext rc){
 		current.set(rc);
 	}
+
+	public String getTraceId() {
+		return traceId;
+	}
+
+	public void setTraceId(String traceId) {
+		this.traceId = traceId;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	
+	
 }

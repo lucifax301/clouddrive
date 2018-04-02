@@ -30,7 +30,8 @@
 		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.interceptor.DblinkInterceptor" />		
 		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.interceptor.ControllerInterceptor" />
 		<context:include-filter type="assignable" expression="cn.com.liliyun.common.util.ApplicationContextUtil" />
-		
+		<context:include-filter type="assignable" expression="cn.com.liliyun.httpaccess.util.TestServiceImpl" />
+		<context:include-filter type="assignable" expression="cn.com.liliyun.common.interceptor.ServiceInterceptor" />
 	</context:component-scan>
 	
 	<bean id="devProperties" class="cn.com.liliyun.httpaccess.util.DevProperties">

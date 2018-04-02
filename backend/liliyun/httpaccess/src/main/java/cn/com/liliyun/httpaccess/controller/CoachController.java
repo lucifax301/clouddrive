@@ -105,16 +105,14 @@ public class CoachController extends ExportController {
 	}
 
 	// update
+	@RequestAction(type=RequestAction.RequestActionType.UPDATE)
 	@RequestMapping(value = "/coach/updateCoachById")
 	@ResponseBody
 	public ResultBean updateCoachById(Coach coach, HttpServletRequest request)
 			throws AuthException, JSONException {
-		
-		User user = AccessWebUtil.getSessionUser(request);
-
 		Map<String,String[]> extendsinfo = new HashMap<String,String[]>();
 		processExt(extendsinfo, request);
-		coach.setMuid(user.getId());
+		
 		ResultBean resultBean = new ResultBean();
 		coachService.updateCoach(coach,  extendsinfo);
 		return resultBean;

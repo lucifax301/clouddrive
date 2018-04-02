@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.com.liliyun.common.model.RequestContext;
+import cn.com.liliyun.common.util.TraceUtil;
 
 /**
  * mvc最外层拦截器 ，创建和释放RequestContext
@@ -19,7 +20,10 @@ public class ActionInterceptorAdapter extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		System.out.println("###### create RequestContext");
-		RequestContext.create();
+		RequestContext rc = RequestContext.create();
+		String traceId = TraceUtil.createTraceIdString();
+		rc.setTraceId(traceId);
+		rc.setIp(request.getRemoteAddr());
 		return true;
 	}
 	

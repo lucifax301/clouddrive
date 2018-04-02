@@ -16,17 +16,17 @@ import cn.com.liliyun.common.model.ResultBean;
 
 public interface CoachService {
 	
-	public ResultBean addCoach(Coach coach,Map extendsinfo);
+	ResultBean addCoach(Coach coach,Map extendsinfo);
 	
-	public List<Coach> getCoachList(Coach coach);
+	List<Coach> getCoachList(Coach coach);
 	
-	public List<Coach> getExportCoachList(Coach coach);
+	List<Coach> getExportCoachList(Coach coach);
 	
-	public List<Coach> getNoAssignCoachList(Coach coach);
+	List<Coach> getNoAssignCoachList(Coach coach);
 	
-	public List<HeadCoach> getHeadCoachList(Coach coach);
+	List<HeadCoach> getHeadCoachList(Coach coach);
 	
-	public Map<String,String> getCoachExtendById(Coach coach);
+	Map<String,String> getCoachExtendById(Coach coach);
 	
 	/**
 	 * 更新教练车
@@ -34,43 +34,43 @@ public interface CoachService {
 	 * @param carno
 	 * @return
 	 */
-	//public ResultBean updateCoachCar(int coachid,String carno,User user);
+	//ResultBean updateCoachCar(int coachid,String carno,User user);
 	/**
 	 * 增加教练负荷学员数
 	 * @param coachid
 	 * @return
 	 */
-	public ResultBean incrementCoachStudent(int coachid);
+	ResultBean incrementCoachStudent(int coachid);
 	/**
 	 * 减少教练负荷学员数
 	 * @param coachid
 	 * @return
 	 */
-	public ResultBean decrementCoachStudent(int coachid);
+	ResultBean decrementCoachStudent(int coachid);
 	
-	public ResultBean updateCoach(Coach coach,Map extendsinfo);
+	ResultBean updateCoach(Coach coach,Map extendsinfo);
 	
-	public ResultBean updateCoachTeachState(Coach coach);
+	ResultBean updateCoachTeachState(Coach coach);
 	
-	public ResultBean updateCoachEmploystatus(Coach coach);
+	ResultBean updateCoachEmploystatus(Coach coach);
 	
-	public void deleteById(Coach coach);
+	void deleteById(Coach coach);
 	
-	public Coach getCoachById(Coach coach);
+	Coach getCoachById(Coach coach);
 	
-	public ResultBean getCoachModinfo(Coach coach,int applyid);
+	ResultBean getCoachModinfo(Coach coach,int applyid);
 	
-	public void importCoach(Coach coach,List<Coach> list);
+	void importCoach(Coach coach,List<Coach> list);
 	
-	public Integer getCount(Coach coach);
+	Integer getCount(Coach coach);
 	
-	public ResultBean getNotStuListOfCoach(CoachStudentDTO CoachStudentDTO);
+	ResultBean getNotStuListOfCoach(CoachStudentDTO CoachStudentDTO);
 	
-	public ResultBean getStuListOfCoach(CoachStudentDTO CoachStudentDTO);
+	ResultBean getStuListOfCoach(CoachStudentDTO CoachStudentDTO);
 	
-	public ResultBean getStuAssignRecord(StudentAssign studentAssign) ;
+	ResultBean getStuAssignRecord(StudentAssign studentAssign) ;
 	
-	public List<StudentAssign> getAllStuAssignRecord(StudentAssign studentAssign) ;
+	List<StudentAssign> getAllStuAssignRecord(StudentAssign studentAssign) ;
 	
 	/**
 	 * 教练信息修改申请
@@ -81,30 +81,30 @@ public interface CoachService {
 	 * @param businessid
 	 * @return
 	 */
-	public ResultBean modCoachApply(Coach coach,Map extendsinfo);
+	ResultBean modCoachApply(Coach coach,Map extendsinfo);
 	
-	public CoachModApply getModApply(CoachModApply param);
+	CoachModApply getModApply(CoachModApply param);
 	
-	public ResultBean updateModCoachApply(Coach coach,Map extendsinfo,int applyid);
+	ResultBean updateModCoachApply(Coach coach,Map extendsinfo,int applyid);
 	
-	public ResultBean listModCoachApply(CoachModApplyParam param);
+	ResultBean listModCoachApply(CoachModApplyParam param);
 	
-	public ResultBean auditModCoachApply(int applyid,int state);
+	ResultBean auditModCoachApply(int applyid,int state);
 	
-	public ResultBean batchAuditModCoachApply(String[] applyid,int state);
+	ResultBean batchAuditModCoachApply(String[] applyid,int state);
 	
-	public ResultBean assignCoach(int headcoachid,String coachid[],String delcoachid[]);
+	ResultBean assignCoach(int headcoachid,String coachid[],String delcoachid[]);
 	
-	public ResultBean batchUpdateCoach(String coachid[],Coach coach ,
+	ResultBean batchUpdateCoach(String coachid[],Coach coach ,
 			 String classinfoid[]);
 	
-	public Map<Integer, CoachClassinfo> selectCoachClassBatch(List<Integer> ids);
+	Map<Integer, CoachClassinfo> selectCoachClassBatch(List<Integer> ids);
 	
-	public List<CoachLoadStudentInfo> getCoachLoadStudentInfo(CoachLoadStudentInfo info);
+	List<CoachLoadStudentInfo> getCoachLoadStudentInfo(CoachLoadStudentInfo info);
 	
-	public Map<String,String> getCoachModExtendinfo(Coach coach,int applyid);
+	Map<String,String> getCoachModExtendinfo(Coach coach,int applyid);
 	
-	public Map<Integer, Integer> getStoreCoachNumBatch(List<Integer> storeids);
+	Map<Integer, Integer> getStoreCoachNumBatch(List<Integer> storeids);
 	
-	public ResultBean assignList(Coach coach, Integer studentid);
+	ResultBean assignList(Coach coach, Integer studentid);
 }
