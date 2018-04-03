@@ -12,11 +12,11 @@ import cn.com.liliyun.coach.model.stat.TeachTypeStat;
 
 public interface CoachStatService {
 
-	public List<AreaStat> statByArea(AreaStatParam param) ;
+	List<AreaStat> statByArea(AreaStatParam param) ;
 	
-	public List<TeachTypeStat> statByTeachType(AreaStatParam param) ;
+	List<TeachTypeStat> statByTeachType(AreaStatParam param) ;
 	
-	public List<CoachAreaStat> statByCoach(CoachStatParam param)  ;
+	List<CoachAreaStat> statByCoach(CoachStatParam param)  ;
 	
-	public List<HeadCoachAreaStat> statByHeadCoach(HeadCoachStatParam param);
+	List<HeadCoachAreaStat> statByHeadCoach(HeadCoachStatParam param);
 }

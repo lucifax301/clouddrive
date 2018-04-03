@@ -8,44 +8,43 @@ import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.flow.model.Flow;
 import cn.com.liliyun.flow.model.FlowStep;
 import cn.com.liliyun.flow.model.FlowTemplate;
-import cn.com.liliyun.user.model.User;
 
 public interface BusinessService {
 
-	public ResultBean addBusiness(Business business);
+	ResultBean addBusiness(Business business);
 	
-	public List<Business> listBusiness(Business business);
+	List<Business> listBusiness(Business business);
 	
-	public ResultBean delBusiness(Business business);
+	ResultBean delBusiness(Business business);
 	
-	public ResultBean updateBusiness(Business business);
-	
-	
-	
-	public ResultBean addActionBusiness(ActionBusiness actionBusiness);
-	
-	public ResultBean updateActionBusiness(ActionBusiness actionBusiness);
-	
-	public ActionBusiness getActionBusiness(ActionBusiness actionBusiness);
-	
-	public List<ActionBusiness> listActionBusiness(ActionBusiness actionBusiness);
-	
-	public ResultBean delActionBusiness(ActionBusiness actionBusiness);
+	ResultBean updateBusiness(Business business);
 	
 	
-	public ResultBean addFlowTemplate(FlowTemplate flowTemplate);
 	
-	public ResultBean delFlowTemplate(FlowTemplate flowTemplate);
+	ResultBean addActionBusiness(ActionBusiness actionBusiness);
 	
-	public List<FlowTemplate> listFlowTemplate(FlowTemplate flowTemplate);
+	ResultBean updateActionBusiness(ActionBusiness actionBusiness);
 	
-	public FlowTemplate getFlowTemplate(FlowTemplate flowTemplate);
+	ActionBusiness getActionBusiness(ActionBusiness actionBusiness);
 	
-	public ResultBean updateFlowTemplate(FlowTemplate flowTemplate);
+	List<ActionBusiness> listActionBusiness(ActionBusiness actionBusiness);
 	
-	public List<Flow> findUserFlow(FlowStep flowStep);
+	ResultBean delActionBusiness(ActionBusiness actionBusiness);
 	
-	public List<Flow> findMyFlow(Flow flow);
 	
-	public List<FlowStep> listFlowStep(FlowStep flowStep);
+	ResultBean addFlowTemplate(FlowTemplate flowTemplate);
+	
+	ResultBean delFlowTemplate(FlowTemplate flowTemplate);
+	
+	List<FlowTemplate> listFlowTemplate(FlowTemplate flowTemplate);
+	
+	FlowTemplate getFlowTemplate(FlowTemplate flowTemplate);
+	
+	ResultBean updateFlowTemplate(FlowTemplate flowTemplate);
+	
+	List<Flow> findUserFlow(FlowStep flowStep);
+	
+	List<Flow> findMyFlow(Flow flow);
+	
+	List<FlowStep> listFlowStep(FlowStep flowStep);
 }

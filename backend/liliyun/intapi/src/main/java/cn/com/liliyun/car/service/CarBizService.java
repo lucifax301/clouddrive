@@ -29,21 +29,21 @@ public interface CarBizService {
 	
 	List<CarLog> getCarLogList(CarLog carLog);
 	
-	public ResultBean getCarPartsList(CarParts carParts);
+	ResultBean getCarPartsList(CarParts carParts);
 	
-	public ResultBean addCarParts(CarParts carParts);
+	ResultBean addCarParts(CarParts carParts);
 	
-	public List<CarParts> getCarPartsExport(CarParts carParts);
+	List<CarParts> getCarPartsExport(CarParts carParts);
 	
-	public List<PartsSetting> getPartsSettings();
+	List<PartsSetting> getPartsSettings();
 
-	public ResultBean setPartsSetting(List<PartsSetting> partsSettings);
+	ResultBean setPartsSetting(List<PartsSetting> partsSettings);
 	
-	public ResultBean getPartsNotice(PartsSetting partsSetting);
+	ResultBean getPartsNotice(PartsSetting partsSetting);
 
-	public ResultBean editCarParts(CarParts carParts);
+	ResultBean editCarParts(CarParts carParts);
 
-	public Integer getCount(Car car);
+	Integer getCount(Car car);
 
 	ResultBean addLog(CarLog carLog);
 

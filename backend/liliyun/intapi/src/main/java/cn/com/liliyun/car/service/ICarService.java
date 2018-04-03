@@ -28,78 +28,78 @@ public interface ICarService {
 	 * @param car
 	 * @return
 	 */
-	public ResultBean getCarList(Car car);
+	ResultBean getCarList(Car car);
 	
-	public ResultBean getCar(Car car);
+	ResultBean getCar(Car car);
 	
-	public ResultBean addCar(Car car);
+	ResultBean addCar(Car car);
 	
-	public ResultBean updateCar(Car car);
+	ResultBean updateCar(Car car);
 	
-	public ResultBean deleteCar(Car car);
+	ResultBean deleteCar(Car car);
 
-	public List<CarExport> getList(Car car);
+	List<CarExport> getList(Car car);
 	
 	/**
 	 * 年审记录操作
 	 * @param CarAnnual
 	 * @return
 	 */
-	public ResultBean getCarAnnualList(CarAnnual carAnnual);
+	ResultBean getCarAnnualList(CarAnnual carAnnual);
 	
-	public ResultBean getCarAnnual(CarAnnual carAnnual);
+	ResultBean getCarAnnual(CarAnnual carAnnual);
 	
-	public ResultBean addCarAnnual(CarAnnual ccarAnnual);
+	ResultBean addCarAnnual(CarAnnual ccarAnnual);
 	
-	public ResultBean updateCarAnnual(CarAnnual carAnnual);
+	ResultBean updateCarAnnual(CarAnnual carAnnual);
 	
-	public ResultBean deleteCarAnnual(CarAnnual carAnnual);
+	ResultBean deleteCarAnnual(CarAnnual carAnnual);
 	
 	/**
 	 * 黄绿标检测
 	 * @param carDetect
 	 * @return
 	 */
-	public ResultBean getCarDetectList(CarDetect carDetect);
+	ResultBean getCarDetectList(CarDetect carDetect);
 	
-	public ResultBean getCarDetect(CarDetect carDetect);
+	ResultBean getCarDetect(CarDetect carDetect);
 	
-	public ResultBean addCarDetect(CarDetect carDetect);
+	ResultBean addCarDetect(CarDetect carDetect);
 	
-	public ResultBean updateCarDetect(CarDetect carDetect);
+	ResultBean updateCarDetect(CarDetect carDetect);
 	
-	public ResultBean deleteCarDetect(CarDetect carDetect);
+	ResultBean deleteCarDetect(CarDetect carDetect);
 	
 	/**
 	 * 保险信息
 	 * @param CarInsurance
 	 * @return
 	 */
-	public List<CarInsurance> getCarInsuranceList(CarInsurance carInsurance);
+	List<CarInsurance> getCarInsuranceList(CarInsurance carInsurance);
 	
-	public ResultBean getCarInsurance(CarInsurance carInsurance);
+	ResultBean getCarInsurance(CarInsurance carInsurance);
 	
-	public ResultBean addCarInsurance(CarInsurance carInsurance);
+	ResultBean addCarInsurance(CarInsurance carInsurance);
 	
-	public ResultBean updateCarInsurance(CarInsurance carInsurance);
+	ResultBean updateCarInsurance(CarInsurance carInsurance);
 	
-	public ResultBean deleteCarInsurance(CarInsurance carInsurance);
+	ResultBean deleteCarInsurance(CarInsurance carInsurance);
 	
 	
 	/**
 	 * 油耗记录
 	 */
-	public ResultBean getCarOilwearList(CarOilwear carOilwear);
+	ResultBean getCarOilwearList(CarOilwear carOilwear);
 	
-	public ResultBean getCarOilwear(CarOilwear carOilwear);
+	ResultBean getCarOilwear(CarOilwear carOilwear);
 	
-	public ResultBean addCarOilwear(CarOilwear carOilwear);
+	ResultBean addCarOilwear(CarOilwear carOilwear);
 	
-	public ResultBean updateCarOilwear(CarOilwear carOilwear);
+	ResultBean updateCarOilwear(CarOilwear carOilwear);
 	
-	public ResultBean deleteCarOilwear(CarOilwear carOilwear);
+	ResultBean deleteCarOilwear(CarOilwear carOilwear);
 	
-	public ResultBean importCarOilwear(List<CarOilwearImport> list);
+	ResultBean importCarOilwear(List<CarOilwearImport> list);
 	
 	
 	/**
@@ -107,30 +107,30 @@ public interface ICarService {
 	 * @param CarRepair
 	 * @return
 	 */
-	public ResultBean getCarRepairList(CarRepair carRepair);
+	ResultBean getCarRepairList(CarRepair carRepair);
 	
-	public ResultBean getCarRepair(CarRepair carRepair);
+	ResultBean getCarRepair(CarRepair carRepair);
 	
-	public ResultBean addCarRepair(CarRepair carRepair);
+	ResultBean addCarRepair(CarRepair carRepair);
 	
-	public ResultBean updateCarRepair(CarRepair carRepair);
+	ResultBean updateCarRepair(CarRepair carRepair);
 	
-	public ResultBean deleteCarRepair(CarRepair carRepair);
+	ResultBean deleteCarRepair(CarRepair carRepair);
 	
 	/**
 	 * 车船税
 	 * @param carTax
 	 * @return
 	 */
-	public ResultBean getCarTaxList(CarTax carTax);
+	ResultBean getCarTaxList(CarTax carTax);
 	
-	public ResultBean getCarTax(CarTax carTax);
+	ResultBean getCarTax(CarTax carTax);
 	
-	public ResultBean addCarTax(CarTax carTax);
+	ResultBean addCarTax(CarTax carTax);
 	
-	public ResultBean updateCarTax(CarTax carTax);
+	ResultBean updateCarTax(CarTax carTax);
 	
-	public ResultBean deleteCarTax(CarTax carTax);
+	ResultBean deleteCarTax(CarTax carTax);
 
 	
 	/**
@@ -138,15 +138,15 @@ public interface ICarService {
 	 * @param carAccident
 	 * @return
 	 */
-	public List<CarAccident> getCarAccidentList(CarAccident carAccident);
+	List<CarAccident> getCarAccidentList(CarAccident carAccident);
 	
-	public ResultBean getCarAccident(CarAccident carAccident);
+	ResultBean getCarAccident(CarAccident carAccident);
 	
-	public ResultBean addCarAccident(CarAccident carAccident);
+	ResultBean addCarAccident(CarAccident carAccident);
 	
-	public ResultBean updateCarAccident(CarAccident carAccident);
+	ResultBean updateCarAccident(CarAccident carAccident);
 	
-	public List<CarAccident> getCarAccidentExport(CarAccident carAccident);
+	List<CarAccident> getCarAccidentExport(CarAccident carAccident);
 
 
 }
