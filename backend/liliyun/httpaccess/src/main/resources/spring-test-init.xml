@@ -14,7 +14,8 @@
 	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 	http://code.alibabatech.com/schema/dubbo 
 	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
-
+	
+	<!--  <aop:aspectj-autoproxy proxy-target-class="true"/>-->
 	<!-- 支持标注 -->
 	<context:annotation-config />
 	<!--  	
@@ -38,4 +39,6 @@
 		<property name="dev" value="0" />
 	</bean>
 	
+	<!--  <bean class="cn.com.liliyun.common.util.InstantiationTracingBeanPostProcessor"/>-->
+	<bean class="cn.com.liliyun.common.util.TraceBeanPostProcessor"/>
 </beans>

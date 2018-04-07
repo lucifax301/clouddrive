@@ -18,8 +18,8 @@ import cn.com.liliyun.common.trace.Trace;
  * @author lilixc
  * 不能嵌套拦截
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class ServiceInterceptor {
 
 	//拦截所有Servie注解的类的方法
