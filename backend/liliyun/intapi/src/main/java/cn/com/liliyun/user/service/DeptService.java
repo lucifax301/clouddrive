@@ -7,13 +7,13 @@ import cn.com.liliyun.user.model.Dept;
 
 public interface DeptService {
 
-	public ResultBean addDept(Dept dept);
+	ResultBean addDept(Dept dept);
 	
-	public ResultBean updateDept(Dept dept);
+	ResultBean updateDept(Dept dept);
 	
-	public List<Dept> selectList(Dept dept);
+	List<Dept> selectList(Dept dept);
 	
-	public List<Dept> selectAllList(Dept dept);
+	List<Dept> selectAllList(Dept dept);
 	
-	public ResultBean delDept(Dept dept);
+	ResultBean delDept(Dept dept);
 }

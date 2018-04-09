@@ -10,12 +10,12 @@ import cn.com.liliyun.user.model.Register;
  */
 public interface RegisterService {
 	
-	public ResultBean saveRegister(Register register);
+	ResultBean saveRegister(Register register);
 	
-	public ResultBean getList(Register register);
+	ResultBean getList(Register register);
 	
-	public ResultBean sendCodeMail(Register register);
+	ResultBean sendCodeMail(Register register);
 	
-	public ResultBean checkRegister(Register register);
+	ResultBean checkRegister(Register register);
 	
 }

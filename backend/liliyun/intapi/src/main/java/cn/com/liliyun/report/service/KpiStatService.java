@@ -14,19 +14,18 @@ import cn.com.liliyun.report.model.KpiHeadCoachStat;
 import cn.com.liliyun.report.model.KpiHeadCoachStatParam;
 import cn.com.liliyun.report.model.KpiStoreStat;
 import cn.com.liliyun.report.model.KpiStoreStatParam;
-import cn.com.liliyun.user.model.User;
 
 public interface KpiStatService {
 
-	public List<KpiAreaStat> statByArea(KpiAreaStatParam param);
+	List<KpiAreaStat> statByArea(KpiAreaStatParam param);
 	
-	public List<KpiClassStat> statByClass(KpiClassStatParam param);
+	List<KpiClassStat> statByClass(KpiClassStatParam param);
 	
-	public List<KpiCoachStat> statByCoach(KpiCoachStatParam param) ;
+	List<KpiCoachStat> statByCoach(KpiCoachStatParam param) ;
 	
-	public List<KpiStoreStat> statByStore(KpiStoreStatParam param);
+	List<KpiStoreStat> statByStore(KpiStoreStatParam param);
 	
-	public List<KpiHeadCoachStat> statByHeadCoach(KpiHeadCoachStatParam param);
+	List<KpiHeadCoachStat> statByHeadCoach(KpiHeadCoachStatParam param);
 	
-	public List<KpiExamStat> statByExam(KpiExamStatParam param);
+	List<KpiExamStat> statByExam(KpiExamStatParam param);
 }

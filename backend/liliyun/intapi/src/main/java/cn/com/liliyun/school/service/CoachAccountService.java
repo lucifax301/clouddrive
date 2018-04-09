@@ -19,29 +19,29 @@ import cn.com.liliyun.school.model.Recharge;
 public interface CoachAccountService {
 	
 	//集团账号部分
-	public ResultBean addCoachAccount(Map map);
+	ResultBean addCoachAccount(Map map);
 	
-	public ResultBean deleteCoachAccount(CoachAccount coachAccount);
+	ResultBean deleteCoachAccount(CoachAccount coachAccount);
 	
-	public ResultBean updateCoachAccount(CoachAccount coachAccount);
+	ResultBean updateCoachAccount(CoachAccount coachAccount);
 	
-	public ResultBean getList(CoachAccount coachAccount);
+	ResultBean getList(CoachAccount coachAccount);
 	
-	public ResultBean getCoachAccountByid(CoachAccount coachAccount);
+	ResultBean getCoachAccountByid(CoachAccount coachAccount);
 	
 	//充值部分
-	public ResultBean addRecharge(Recharge recharge);
+	ResultBean addRecharge(Recharge recharge);
 	//查询充值记录
-	public ResultBean selectAllRecord(Recharge recharge);
+	ResultBean selectAllRecord(Recharge recharge);
 	
-	public ResultBean selectNotAccountCoach(Coach coach);
+	ResultBean selectNotAccountCoach(Coach coach);
 	
 	//处理微信回调
-	public String wxNotify(Map<String, String> m);
+	String wxNotify(Map<String, String> m);
 	//处理微信回调
-	public void alipayNotify(HttpServletRequest request);
+	void alipayNotify(HttpServletRequest request);
 	//查询app余额
-	public ResultBean getBalance(AccountBalanceDTO accountBalanceDTO);
+	ResultBean getBalance(AccountBalanceDTO accountBalanceDTO);
 
 	
 }

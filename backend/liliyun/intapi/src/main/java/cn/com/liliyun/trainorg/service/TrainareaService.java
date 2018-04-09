@@ -10,16 +10,16 @@ import cn.com.liliyun.trainorg.model.Trainarea;
  */
 public interface TrainareaService {
 	
-	public ResultBean addTrainarea(Trainarea trainarea);
+	ResultBean addTrainarea(Trainarea trainarea);
 	
-	public ResultBean deleteTrainarea(Trainarea trainarea);
+	ResultBean deleteTrainarea(Trainarea trainarea);
 	
-	public ResultBean updateTrainarea(Trainarea trainarea);
+	ResultBean updateTrainarea(Trainarea trainarea);
 	
-	public ResultBean getList(Trainarea trainarea);
+	ResultBean getList(Trainarea trainarea);
 	
-	public ResultBean getTrainareaById(Trainarea trainarea);
+	ResultBean getTrainareaById(Trainarea trainarea);
 	
-	public Integer getCount(Trainarea trainarea);
+	Integer getCount(Trainarea trainarea);
 	
 }

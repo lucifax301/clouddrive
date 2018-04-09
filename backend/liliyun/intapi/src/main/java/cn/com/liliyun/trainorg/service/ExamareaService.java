@@ -7,15 +7,15 @@ import cn.com.liliyun.trainorg.model.Examarea;
 
 public interface ExamareaService {
 
-	public ResultBean addExamarea(Examarea trainarea);
+	ResultBean addExamarea(Examarea trainarea);
 	
-	public ResultBean deleteExamarea(Examarea trainarea);
+	ResultBean deleteExamarea(Examarea trainarea);
 	
-	public ResultBean updateExamarea(Examarea trainarea);
+	ResultBean updateExamarea(Examarea trainarea);
 	
-	public ResultBean getList(Examarea trainarea);
+	ResultBean getList(Examarea trainarea);
 	
-	public List<Examarea> getListAll(Examarea trainarea);
+	List<Examarea> getListAll(Examarea trainarea);
 	
-	public ResultBean getExamareaById(Examarea trainarea);
+	ResultBean getExamareaById(Examarea trainarea);
 }

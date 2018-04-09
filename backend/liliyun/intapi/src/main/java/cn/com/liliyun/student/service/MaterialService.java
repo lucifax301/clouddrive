@@ -9,25 +9,25 @@ import cn.com.liliyun.student.model.MaterialItem;
 
 public interface MaterialService {
 
-	public List <Material> list(Material material);
+	List <Material> list(Material material);
 	
-	public List <MaterialItem> listItem(MaterialItem materialItem);
+	List <MaterialItem> listItem(MaterialItem materialItem);
 	
-	public ResultBean doLearncard(List <MaterialItem> list);
+	ResultBean doLearncard(List <MaterialItem> list);
 	
-	public ResultBean doApplyStamp(List <MaterialItem> list);
+	ResultBean doApplyStamp(List <MaterialItem> list);
 	
-	public ResultBean doSchoolStamp(List <MaterialItem> list);
+	ResultBean doSchoolStamp(List <MaterialItem> list);
 	
-	public ResultBean doTribillStamp(List <MaterialItem> list);
+	ResultBean doTribillStamp(List <MaterialItem> list);
 	
-	public ResultBean doTribillPrint(List <MaterialItem> list);
+	ResultBean doTribillPrint(List <MaterialItem> list);
 	
-	public ResultBean doRepayMaterial(List <MaterialItem> list);
+	ResultBean doRepayMaterial(List <MaterialItem> list);
 	
-	public ResultBean doRtnMaterial(List <MaterialItem> list);
+	ResultBean doRtnMaterial(List <MaterialItem> list);
 	
-	public ResultBean doLicense(List <MaterialItem> list);
+	ResultBean doLicense(List <MaterialItem> list);
 	
-	public Map<String, Object> importIcCard(List <MaterialItem> list);
+	Map<String, Object> importIcCard(List <MaterialItem> list);
 }

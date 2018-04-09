@@ -9,29 +9,29 @@ import cn.com.liliyun.trainorg.model.Classinfo;
 
 public interface ClassinfoService {
 
-	public ResultBean addClass(Classinfo classinfo);
+	ResultBean addClass(Classinfo classinfo);
 
-	public ResultBean updateClass(Classinfo classinfo);
+	ResultBean updateClass(Classinfo classinfo);
 	
-	public ResultBean updateStatus(Classinfo classinfo);
+	ResultBean updateStatus(Classinfo classinfo);
 
-	public ResultBean deleteClass(Classinfo classinfo);
+	ResultBean deleteClass(Classinfo classinfo);
 	
-	public void deleteClassByType(Classinfo classinfo);
+	void deleteClassByType(Classinfo classinfo);
 	
-	public ResultBean selectList(Classinfo classinfo);
+	ResultBean selectList(Classinfo classinfo);
 	
-	public ResultBean selectListAll(Classinfo classinfo);
+	ResultBean selectListAll(Classinfo classinfo);
 	
-	public ResultBean selectOne(Classinfo classinfo);
+	ResultBean selectOne(Classinfo classinfo);
 	
-	public Classinfo get(Classinfo classinfo);
+	Classinfo get(Classinfo classinfo);
 	
-	public List<Classinfo> selectAllList(Classinfo classinfo) ;
+	List<Classinfo> selectAllList(Classinfo classinfo) ;
 	
-	public Map<Integer,MapDTO> getMap(Classinfo classinfo);
+	Map<Integer,MapDTO> getMap(Classinfo classinfo);
 	
-	public void batchAddClass(Map classinfo);
+	void batchAddClass(Map classinfo);
 	
-	public void batchDelClass(Map classinfo);
+	void batchDelClass(Map classinfo);
 }

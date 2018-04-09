@@ -8,13 +8,13 @@ import cn.com.liliyun.staff.model.Officer;
 
 public interface OfficerService {
 
-	public List<Officer> list(Officer officer);
+	List<Officer> list(Officer officer);
 	
-	public ResultBean add(Officer officer);
+	ResultBean add(Officer officer);
 	
-	public ResultBean del(Officer officer);
+	ResultBean del(Officer officer);
 	
-	public ResultBean update(Officer officer);
+	ResultBean update(Officer officer);
 	
-	public Officer get(Officer officer);
+	Officer get(Officer officer);
 }

@@ -6,13 +6,13 @@ import cn.com.liliyun.user.model.Dic;
 
 public interface SystemService {
 
-	public void addDic(Dic dic);
+	void addDic(Dic dic);
 	
-	public void updateDic(Dic dic);
+	void updateDic(Dic dic);
 	
-	public List<Dic> selectList(Dic dic);
+	List<Dic> selectList(Dic dic);
 	
-	public List<Dic> selectValidList(Dic dic);
+	List<Dic> selectValidList(Dic dic);
 	
-	public void delDic(Dic dic);
+	void delDic(Dic dic);
 }

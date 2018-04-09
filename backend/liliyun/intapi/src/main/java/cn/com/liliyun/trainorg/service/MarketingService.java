@@ -8,20 +8,20 @@ import cn.com.liliyun.trainorg.model.Visit;
 
 public interface MarketingService {
 	
-	public ResultBean addMarket(Marketing marketing);
+	ResultBean addMarket(Marketing marketing);
 	
-	public ResultBean deleteMarket(Marketing marketing);
+	ResultBean deleteMarket(Marketing marketing);
 	
-	public ResultBean updateMarket(Marketing marketing);
+	ResultBean updateMarket(Marketing marketing);
 		
-	public ResultBean getMarketList(Marketing marketing);
+	ResultBean getMarketList(Marketing marketing);
 	
-	public ResultBean getMarketingById(Marketing marketing);
+	ResultBean getMarketingById(Marketing marketing);
 	
 	//新增回访
-	public ResultBean addVisit(Visit visit);
+	ResultBean addVisit(Visit visit);
 	//回访列表
-	public ResultBean getVisitList(Visit visit);
+	ResultBean getVisitList(Visit visit);
 	
-	public void improtExcel(Marketing marketing,List list);
+	void improtExcel(Marketing marketing,List list);
 }

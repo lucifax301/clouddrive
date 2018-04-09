@@ -14,21 +14,21 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ComplainService {
 	
-	public void addComplain(Complain complain);
+	void addComplain(Complain complain);
 	
-	public void updateComplain(Complain complain);
+	void updateComplain(Complain complain);
 	
-	public PageInfo<Complain> getComplainList(Complain complain);
+	PageInfo<Complain> getComplainList(Complain complain);
 	
 	void deleteById(Complain complain);
 	
-	public Complain getComplainById(Complain complain);
+	Complain getComplainById(Complain complain);
 	
 	//int getCount(Complain complain);
 
-	public void importComplain(Complain complain, List<Complain> list);
+	void importComplain(Complain complain, List<Complain> list);
 	
-	public PageInfo<ComplainReturn> getReturnList(ComplainReturn complainReturn);
+	PageInfo<ComplainReturn> getReturnList(ComplainReturn complainReturn);
 	
-	public void addComplainReturn(ComplainReturn complainReturn);
+	void addComplainReturn(ComplainReturn complainReturn);
 }

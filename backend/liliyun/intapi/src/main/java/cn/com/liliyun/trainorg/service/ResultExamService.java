@@ -13,24 +13,24 @@ import cn.com.liliyun.trainorg.model.ResultExamItem;
  */
 public interface ResultExamService {
 
-	public List<ResultExam> list(ResultExam resultExam);
+	List<ResultExam> list(ResultExam resultExam);
 
-	public List<ResultExamItem> listOfCoach(ResultExamItem resultExam);
+	List<ResultExamItem> listOfCoach(ResultExamItem resultExam);
 
-	public ResultBean add(List<ResultExamItem> list);
+	ResultBean add(List<ResultExamItem> list);
 
-	public Map <String,Object> importData(List<ResultExamItem> list);
+	Map <String,Object> importData(List<ResultExamItem> list);
 
-	public List<ResultExamItem> listItem(ResultExamItem resultExamItem);
+	List<ResultExamItem> listItem(ResultExamItem resultExamItem);
 
-//	public List<TrainExamItemVo> getExamTime(TrainExamItemVo vo);
+//	List<TrainExamItemVo> getExamTime(TrainExamItemVo vo);
 //
-//	public List<TrainExamItemVo> getExamCase(TrainExamItemVo vo);
+//	List<TrainExamItemVo> getExamCase(TrainExamItemVo vo);
 //
-//	public List<TrainExamItemVo> getWaitCase(TrainExamItemVo vo);
+//	List<TrainExamItemVo> getWaitCase(TrainExamItemVo vo);
 //
-//	public List<TrainExamItemDetailVo> getWaitCaseDetail(TrainExamItemDetailVo vo);
+//	List<TrainExamItemDetailVo> getWaitCaseDetail(TrainExamItemDetailVo vo);
 //
-//	public List<TrainExamItemYearVo> getWaitCaseYear(TrainExamItemYearVo vo);
+//	List<TrainExamItemYearVo> getWaitCaseYear(TrainExamItemYearVo vo);
 	
 }

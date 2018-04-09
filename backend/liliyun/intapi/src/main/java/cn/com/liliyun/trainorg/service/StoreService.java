@@ -14,26 +14,26 @@ import cn.com.liliyun.trainorg.model.Store;
  */
 public interface StoreService {
 	
-	public ResultBean insert(Store store);
+	ResultBean insert(Store store);
 
-	public ResultBean selectByPrimaryKey(Store store);
+	ResultBean selectByPrimaryKey(Store store);
 	
-	public ResultBean updateByPrimaryKeySelective(Store store);
+	ResultBean updateByPrimaryKeySelective(Store store);
 
-	public ResultBean updateByPrimaryKey(Store store);
+	ResultBean updateByPrimaryKey(Store store);
 
-	public ResultBean deleteById(Store store);
+	ResultBean deleteById(Store store);
 	
-	public List<Store> selectList(Store store);
+	List<Store> selectList(Store store);
 	
-	public List<Store> selectList(Store store, Boolean isStorePage);
+	List<Store> selectList(Store store, Boolean isStorePage);
 	
-	public List<Store> selectAllList(Store store);
+	List<Store> selectAllList(Store store);
 	
-	public Store selectOne(Store store);
+	Store selectOne(Store store);
 	
-	public int getCount(Store store);
+	int getCount(Store store);
 	
-	public Map<Integer,MapDTO> getMap(Store store);
+	Map<Integer,MapDTO> getMap(Store store);
 	
 }

@@ -8,7 +8,6 @@ import cn.com.liliyun.finance.model.FinanceFeeDTO;
 import cn.com.liliyun.finance.model.FinanceFeeItem;
 import cn.com.liliyun.finance.model.FinancePay;
 import cn.com.liliyun.student.model.Student;
-import cn.com.liliyun.user.model.User;
 
 public interface FinanceFeeService {
 	

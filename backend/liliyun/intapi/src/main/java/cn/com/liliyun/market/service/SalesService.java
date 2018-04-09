@@ -8,20 +8,20 @@ import cn.com.liliyun.market.model.SalesActivityClassinfo;
 
 public interface SalesService {
 
-	public ResultBean addSalesActivity(SalesActivity activity,String businessid);
+	ResultBean addSalesActivity(SalesActivity activity,String businessid);
 	
-	public List<SalesActivity> listActivity(SalesActivity activity);
+	List<SalesActivity> listActivity(SalesActivity activity);
 	
-	public List<SalesActivity> listMatchActivity(SalesActivityClassinfo activity);
+	List<SalesActivity> listMatchActivity(SalesActivityClassinfo activity);
 	
-	public ResultBean updateSalesActivity(SalesActivity activity);
+	ResultBean updateSalesActivity(SalesActivity activity);
 	
-	public SalesActivity getSalesActivity(SalesActivity activity);
+	SalesActivity getSalesActivity(SalesActivity activity);
 	
-	public ResultBean auditSalesActivity(SalesActivity activity);
+	ResultBean auditSalesActivity(SalesActivity activity);
 	
-	public ResultBean batchSalesMarketActivity(String[] applyid,int state);	
+	ResultBean batchSalesMarketActivity(String[] applyid,int state);	
 	
-	public SalesActivityClassinfo getMatchActivityClass(SalesActivityClassinfo activity);
+	SalesActivityClassinfo getMatchActivityClass(SalesActivityClassinfo activity);
 	
 }

@@ -6,7 +6,6 @@ import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.market.model.AreaEnrolIndex;
 import cn.com.liliyun.market.model.CSEnrolIndex;
 import cn.com.liliyun.market.model.CoachEnrolIndex;
-import cn.com.liliyun.user.model.User;
 
 public interface EnrolIndexService {
 
@@ -17,33 +16,33 @@ public interface EnrolIndexService {
 	 * @param user
 	 * @return
 	 */
-	public ResultBean addAreaEnrollIndex(AreaEnrolIndex index);
+	ResultBean addAreaEnrollIndex(AreaEnrolIndex index);
 	
-	public ResultBean updateAreaEnrollIndex(AreaEnrolIndex index);
+	ResultBean updateAreaEnrollIndex(AreaEnrolIndex index);
 	
-	public ResultBean delAreaEnrollIndex(AreaEnrolIndex index);
+	ResultBean delAreaEnrollIndex(AreaEnrolIndex index);
 	
-	public AreaEnrolIndex getAreaEnrollIndex(AreaEnrolIndex index);
+	AreaEnrolIndex getAreaEnrollIndex(AreaEnrolIndex index);
 	
-	public List<AreaEnrolIndex> listAreaEnrollIndex(AreaEnrolIndex index);
+	List<AreaEnrolIndex> listAreaEnrollIndex(AreaEnrolIndex index);
 	
-	public List<AreaEnrolIndex> listAllAreaEnrollIndex(AreaEnrolIndex index);
+	List<AreaEnrolIndex> listAllAreaEnrollIndex(AreaEnrolIndex index);
 	
 	/**
 	 * Ա������ָ�����
 	 * @param index
 	 * @return
 	 */
-	public ResultBean editCSEnrolIndex(CSEnrolIndex index);
+	ResultBean editCSEnrolIndex(CSEnrolIndex index);
 	
-	public CSEnrolIndex getLastCSEnrolIndex();
+	CSEnrolIndex getLastCSEnrolIndex();
 	
-	public ResultBean getCSEnrolIndex(CSEnrolIndex index);
+	ResultBean getCSEnrolIndex(CSEnrolIndex index);
 	
 	
-	public ResultBean editCoachEnrolIndex(CoachEnrolIndex index);
+	ResultBean editCoachEnrolIndex(CoachEnrolIndex index);
 	
-	public CoachEnrolIndex getLastCoachEnrolIndex();
+	CoachEnrolIndex getLastCoachEnrolIndex();
 	
-	public ResultBean getCoachEnrolIndex(CoachEnrolIndex index);
+	ResultBean getCoachEnrolIndex(CoachEnrolIndex index);
 }

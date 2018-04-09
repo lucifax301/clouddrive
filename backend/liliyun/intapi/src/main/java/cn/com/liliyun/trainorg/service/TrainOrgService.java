@@ -13,23 +13,23 @@ import cn.com.liliyun.trainorg.model.Personnel;
  */
 public interface TrainOrgService {
 	
-	public ResultBean addPersonnel(Personnel personnel);
+	ResultBean addPersonnel(Personnel personnel);
 	
-	public ResultBean deletePersonnel(Personnel personnel);
+	ResultBean deletePersonnel(Personnel personnel);
 	
-	public ResultBean updatePersonnel(Personnel personnel);
+	ResultBean updatePersonnel(Personnel personnel);
 	
-	public ResultBean getPersonnelByers(Personnel personnel);
+	ResultBean getPersonnelByers(Personnel personnel);
 	
-	public ResultBean getPersonnelList(Personnel personnel);
+	ResultBean getPersonnelList(Personnel personnel);
 	
-	public Personnel getPersonnelByid(Personnel personnel);
+	Personnel getPersonnelByid(Personnel personnel);
 	
 	//void addUser(User u);
 	
 	//List <User> getAll(PageModel pageModel);
-	public Map getExcelData(String path);
+	Map getExcelData(String path);
 	
-	public void improtExcel(List list);
+	void improtExcel(List list);
 	
 }

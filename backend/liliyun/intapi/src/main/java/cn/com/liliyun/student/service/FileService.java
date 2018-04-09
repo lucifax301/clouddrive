@@ -8,12 +8,12 @@ import cn.com.liliyun.student.model.FileItem;
 
 public interface FileService {
 
-	public List<File> list(File file);
+	List<File> list(File file);
 	
-	public ResultBean doHandleFile(List <FileItem> list);
+	ResultBean doHandleFile(List <FileItem> list);
 	
-	public List <FileItem> listItem(FileItem fileItem);
+	List <FileItem> listItem(FileItem fileItem);
 	
-	public ResultBean doStuFile(List <FileItem> list);
+	ResultBean doStuFile(List <FileItem> list);
 	
 }

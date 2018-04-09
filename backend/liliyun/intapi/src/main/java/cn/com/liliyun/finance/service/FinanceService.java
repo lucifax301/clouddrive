@@ -21,105 +21,104 @@ import cn.com.liliyun.finance.model.FinanceSubcharge;
 import cn.com.liliyun.finance.model.FinanceSubject;
 import cn.com.liliyun.finance.model.PosAccount;
 import cn.com.liliyun.student.dto.StudentApplyStat;
-import cn.com.liliyun.user.model.User;
 
 public interface FinanceService {
 	
-	public ResultBean getFinancePosList(FinancePos financePos);
+	ResultBean getFinancePosList(FinancePos financePos);
 	
-	public ResultBean getPoscompanyList(FinancePos financePos);
+	ResultBean getPoscompanyList(FinancePos financePos);
 	
-	public ResultBean addFinancePos(FinancePos financePos);
+	ResultBean addFinancePos(FinancePos financePos);
 	
-	public ResultBean updateFinancePos(FinancePos financePos);
+	ResultBean updateFinancePos(FinancePos financePos);
 	
-	public ResultBean deleteFinancePos(FinancePos financePos);
+	ResultBean deleteFinancePos(FinancePos financePos);
 	
-	public List<FinancePos> getFinancePosExport(FinancePos financePos);
+	List<FinancePos> getFinancePosExport(FinancePos financePos);
 	
-	public ResultBean getPosAccountList(PosAccount posAccount);
+	ResultBean getPosAccountList(PosAccount posAccount);
 
-	public FinancePos getFinancePos(FinancePos financePos);
+	FinancePos getFinancePos(FinancePos financePos);
 	
-	public ResultBean addPosAccount(PosAccount posAccount);
+	ResultBean addPosAccount(PosAccount posAccount);
 	
-	public ResultBean deletePosAccount(PosAccount posAccount);
+	ResultBean deletePosAccount(PosAccount posAccount);
 	
-	public ResultBean getCashAccountList(CashAccount cashAccount);
+	ResultBean getCashAccountList(CashAccount cashAccount);
 	
-	public ResultBean addCashAccount(CashAccount cashAccount);
+	ResultBean addCashAccount(CashAccount cashAccount);
 	
-	public ResultBean deleteCashAccount(CashAccount cashAccount);
+	ResultBean deleteCashAccount(CashAccount cashAccount);
 
-	public ResultBean getFinanceSubjectList(FinanceSubject financeSubject);
+	ResultBean getFinanceSubjectList(FinanceSubject financeSubject);
 	
-	public ResultBean addFinanceSubject(FinanceSubject financeSubject);
+	ResultBean addFinanceSubject(FinanceSubject financeSubject);
 	
-	public ResultBean deleteFinanceSubject(FinanceSubject financeSubject, Boolean isdel);
+	ResultBean deleteFinanceSubject(FinanceSubject financeSubject, Boolean isdel);
 
-	public int updateFinanceSubject(FinanceSubject financeSubject);
+	int updateFinanceSubject(FinanceSubject financeSubject);
 
-	public ResultBean getFinanceSubchargeList(FinanceSubcharge financeSubcharge);
+	ResultBean getFinanceSubchargeList(FinanceSubcharge financeSubcharge);
 
-	public ResultBean addFinanceSubcharge(FinanceSubcharge financeSubcharge);
+	ResultBean addFinanceSubcharge(FinanceSubcharge financeSubcharge);
 
-	public ResultBean updateFinanceSubcharge(FinanceSubcharge financeSubcharge);
+	ResultBean updateFinanceSubcharge(FinanceSubcharge financeSubcharge);
 
-	public ResultBean deleteFinanceSubcharge(FinanceSubcharge financeSubcharge);
+	ResultBean deleteFinanceSubcharge(FinanceSubcharge financeSubcharge);
 
-	public List<FinanceSubcharge> getFinanceSubchargeExport(FinanceSubcharge financeSubcharge);
+	List<FinanceSubcharge> getFinanceSubchargeExport(FinanceSubcharge financeSubcharge);
 
-	public ResultBean getFinanceDepositList(FinanceDeposit financeDeposit);
+	ResultBean getFinanceDepositList(FinanceDeposit financeDeposit);
 
-	public ResultBean addFinanceDeposit(FinanceDeposit financeDeposit);
+	ResultBean addFinanceDeposit(FinanceDeposit financeDeposit);
 
-	public ResultBean updateFinanceDeposit(FinanceDeposit financeDeposit, Integer isConfirm);
+	ResultBean updateFinanceDeposit(FinanceDeposit financeDeposit, Integer isConfirm);
 
-	public ResultBean deleteFinanceDeposit(FinanceDeposit financeDeposit);
+	ResultBean deleteFinanceDeposit(FinanceDeposit financeDeposit);
 
-	public List<FinanceDeposit> getFinanceDepositExport(FinanceDeposit financeDeposit);
+	List<FinanceDeposit> getFinanceDepositExport(FinanceDeposit financeDeposit);
 
-	public ResultBean selectIncome(FinanceIncome financeIncome);
+	ResultBean selectIncome(FinanceIncome financeIncome);
 
-	public ResultBean getFinanceReceiptList(FinanceReceipt financeReceipt);
+	ResultBean getFinanceReceiptList(FinanceReceipt financeReceipt);
 
-	public ResultBean addFinanceReceipt(FinanceReceipt financeReceipt);
+	ResultBean addFinanceReceipt(FinanceReceipt financeReceipt);
 
-	public ResultBean updateFinanceReceipt(FinanceReceipt financeReceipt);
+	ResultBean updateFinanceReceipt(FinanceReceipt financeReceipt);
 
-	public ResultBean updateFinanceReceiptApply(FinanceReceipt financeReceipt, Boolean isreview, String businessid);
+	ResultBean updateFinanceReceiptApply(FinanceReceipt financeReceipt, Boolean isreview, String businessid);
 
-	public ResultBean updateFinanceReceiptInvoiceState(FinanceReceipt financeReceipt);
+	ResultBean updateFinanceReceiptInvoiceState(FinanceReceipt financeReceipt);
 
-	public List<FinanceReceipt> getFinanceReceiptExport(FinanceReceipt financeReceipt);
+	List<FinanceReceipt> getFinanceReceiptExport(FinanceReceipt financeReceipt);
 
-	public Map<Integer, MapDTO> getMap(FinanceSubject financeSubject);
+	Map<Integer, MapDTO> getMap(FinanceSubject financeSubject);
 
-	public List<FinanceInvoiceDTO> getFinanceInvoiceExport(FinanceReceipt financeReceipt);
+	List<FinanceInvoiceDTO> getFinanceInvoiceExport(FinanceReceipt financeReceipt);
 
-	public ResultBean addFinanceReceiptInvoice(List <FinanceInvoiceImport> list);
+	ResultBean addFinanceReceiptInvoice(List <FinanceInvoiceImport> list);
 
-	public ResultBean updateFinanceReceiptConfirm(FinanceReceipt financeReceipt);
+	ResultBean updateFinanceReceiptConfirm(FinanceReceipt financeReceipt);
 	
-	public ResultBean getFinanceCashStatList(FinanceDeposit financeDeposit);
+	ResultBean getFinanceCashStatList(FinanceDeposit financeDeposit);
 	
-	public ResultBean addFinancePosFlow(Workbook workbook, Integer type) throws ParseException;
+	ResultBean addFinancePosFlow(Workbook workbook, Integer type) throws ParseException;
 	
-	public ResultBean getFinancePosFlowList(FinancePosFlow financePosFlow);
+	ResultBean getFinancePosFlowList(FinancePosFlow financePosFlow);
 	
-	public ResultBean getStorePayStatist(FinanceReceipt financeReceipt);
+	ResultBean getStorePayStatist(FinanceReceipt financeReceipt);
 
-	public ResultBean getPosbanknameList(FinancePos financePos);
+	ResultBean getPosbanknameList(FinancePos financePos);
 	
-	public ResultBean getBankPosStoreStatList(FinanceReceipt financeReceipt);
+	ResultBean getBankPosStoreStatList(FinanceReceipt financeReceipt);
 	
-	public ResultBean getStoreTypeStatList(FinanceReceipt financeReceipt);
+	ResultBean getStoreTypeStatList(FinanceReceipt financeReceipt);
 	
-	public ResultBean getTypeStoreStatList(FinanceReceipt financeReceipt);
+	ResultBean getTypeStoreStatList(FinanceReceipt financeReceipt);
 	
-	public ResultBean getCompanyPosStoreStatList(FinanceReceipt financeReceipt);
+	ResultBean getCompanyPosStoreStatList(FinanceReceipt financeReceipt);
 	
-	public ResultBean getApplyStatList(StudentApplyStat studentApplyStat);
+	ResultBean getApplyStatList(StudentApplyStat studentApplyStat);
 	
 	/**
 	 * ����ͳ��
@@ -127,7 +126,7 @@ public interface FinanceService {
 	 * @param user
 	 * @return
 	 */
-	public Map<String, Object> getIncomeStat(FinanceAppStat financeAppStat);
+	Map<String, Object> getIncomeStat(FinanceAppStat financeAppStat);
 	
 	/**
 	 * ֧��ͳ��
@@ -135,7 +134,7 @@ public interface FinanceService {
 	 * @param user
 	 * @return
 	 */
-	public Map<String, Object> getOutcomeStat(FinanceAppStat financeAppStat);
+	Map<String, Object> getOutcomeStat(FinanceAppStat financeAppStat);
 	
 	/**
 	 * Ƿ��ͳ��
@@ -143,5 +142,5 @@ public interface FinanceService {
 	 * @param user
 	 * @return
 	 */
-	public Map<String, Object> getOwemoneyStat(FinanceAppStat financeAppStat);
+	Map<String, Object> getOwemoneyStat(FinanceAppStat financeAppStat);
 }

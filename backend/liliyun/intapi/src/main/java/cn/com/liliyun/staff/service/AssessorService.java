@@ -8,13 +8,13 @@ import cn.com.liliyun.staff.model.Assessor;
 
 public interface AssessorService {
 
-	public List<Assessor> list(Assessor assessor);
+	List<Assessor> list(Assessor assessor);
 	
-	public ResultBean add(Assessor assessor);
+	ResultBean add(Assessor assessor);
 	
-	public ResultBean del(Assessor assessor);
+	ResultBean del(Assessor assessor);
 	
-	public ResultBean update(Assessor assessor);
+	ResultBean update(Assessor assessor);
 	
-	public Assessor get(Assessor assessor);
+	Assessor get(Assessor assessor);
 }

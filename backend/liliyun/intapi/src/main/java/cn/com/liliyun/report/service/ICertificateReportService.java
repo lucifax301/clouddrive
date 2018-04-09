@@ -13,14 +13,14 @@ import cn.com.liliyun.trainorg.model.TrainExamItemYearVo;
  */
 public interface ICertificateReportService {
 
-	public List<TrainExamItemVo> getExamTime(TrainExamItemVo trainExamItem);
+	List<TrainExamItemVo> getExamTime(TrainExamItemVo trainExamItem);
 
-	public List<TrainExamItemVo> getExamCase(TrainExamItemVo trainExamItem);
+	List<TrainExamItemVo> getExamCase(TrainExamItemVo trainExamItem);
 
-	public List<TrainExamItemVo> getWaitCase(TrainExamItemVo trainExamItem);
+	List<TrainExamItemVo> getWaitCase(TrainExamItemVo trainExamItem);
 
-	public List<TrainExamItemDetailVo> getWaitCaseDetail(TrainExamItemDetailVo trainExamItem);
+	List<TrainExamItemDetailVo> getWaitCaseDetail(TrainExamItemDetailVo trainExamItem);
 
-	public List<TrainExamItemYearVo> getWaitCaseYear(TrainExamItemYearVo trainExamItemYearVo);
+	List<TrainExamItemYearVo> getWaitCaseYear(TrainExamItemYearVo trainExamItemYearVo);
 
 }

@@ -8,19 +8,19 @@ import cn.com.liliyun.staff.vo.StaffVo;
 
 public interface StaffService {
 
-	public List<Staff> list(Staff staff);
+	List<Staff> list(Staff staff);
 	
-	public ResultBean add(Staff staff);
+	ResultBean add(Staff staff);
 	
-	public ResultBean del(Staff staff);
+	ResultBean del(Staff staff);
 	
-	public ResultBean update(Staff staff);
+	ResultBean update(Staff staff);
 	
-	public ResultBean updateByPrimaryKeySelective(Staff staff);
+	ResultBean updateByPrimaryKeySelective(Staff staff);
 	
-	public Staff get(Staff staff);
+	Staff get(Staff staff);
 	
-	public StaffVo getStaffVo(Staff staff) ;
+	StaffVo getStaffVo(Staff staff) ;
 
-	public List<Staff> getAppStafflist(Staff staff);
+	List<Staff> getAppStafflist(Staff staff);
 }

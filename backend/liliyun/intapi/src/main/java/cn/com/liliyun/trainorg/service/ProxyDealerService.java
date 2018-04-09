@@ -5,19 +5,19 @@ import cn.com.liliyun.trainorg.model.ProxyDealer;
 
 public interface ProxyDealerService {
 
-	public ResultBean deleteByPrimaryKey(ProxyDealer record);
+	ResultBean deleteByPrimaryKey(ProxyDealer record);
 
-	public ResultBean insertSelective(ProxyDealer record);
+	ResultBean insertSelective(ProxyDealer record);
 
-	public ResultBean selectByPrimaryKey(ProxyDealer record);
+	ResultBean selectByPrimaryKey(ProxyDealer record);
 
-	public ResultBean updateByPrimaryKeySelective(ProxyDealer record);
+	ResultBean updateByPrimaryKeySelective(ProxyDealer record);
 
-	public ResultBean getList(ProxyDealer proxyDealer);
+	ResultBean getList(ProxyDealer proxyDealer);
 
-	public ResultBean checkMutliName(ProxyDealer proxyDealer);
+	ResultBean checkMutliName(ProxyDealer proxyDealer);
 	
-	public ResultBean onlyUpdateStatus(ProxyDealer record);
+	ResultBean onlyUpdateStatus(ProxyDealer record);
 
-	public ResultBean getAllByScopeId(ProxyDealer proxyDealer);
+	ResultBean getAllByScopeId(ProxyDealer proxyDealer);
 }

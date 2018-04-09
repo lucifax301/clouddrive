@@ -21,103 +21,103 @@ import cn.com.liliyun.theory.model.TheoryStudent;
 
 public interface StudentService {
 	
-	public ResultBean addStudent(Student student);
+	ResultBean addStudent(Student student);
 	
-	public ResultBean deleteStudent(Student student);
+	ResultBean deleteStudent(Student student);
 	
-	public ResultBean updateStudentWithCheck(Student student);
+	ResultBean updateStudentWithCheck(Student student);
 	
-	public ResultBean doUpdateStudentAfterCheck(Student student);
+	ResultBean doUpdateStudentAfterCheck(Student student);
 	
-	public ResultBean updateStudent(Student student);
+	ResultBean updateStudent(Student student);
 	
-	public ResultBean checkStudent(Student student);
+	ResultBean checkStudent(Student student);
 	
-	public Student getStudent(Student student);
+	Student getStudent(Student student);
 	
-	public ResultBean getStudentList(Student student);
+	ResultBean getStudentList(Student student);
 	
-	public ResultBean getEnrolStudentList(Student student);
+	ResultBean getEnrolStudentList(Student student);
 	
-	public List <Student> getList(Student student);
+	List <Student> getList(Student student);
 	
-	public List <Student> getAllList(Student student);
+	List <Student> getAllList(Student student);
 	
-	public Integer getClassStudentOne(Student student);
+	Integer getClassStudentOne(Student student);
 
-	public Integer getCount(Student student);
+	Integer getCount(Student student);
 
-	public List<CountDTO> get7count(Student student);
+	List<CountDTO> get7count(Student student);
 
-    public Map<String, Object> importFlownum(Map<String, Object> params);
+    Map<String, Object> importFlownum(Map<String, Object> params);
 
-	public ResultBean getTheoryList(TheoryLesson theoryLesson);
+	ResultBean getTheoryList(TheoryLesson theoryLesson);
 	
-	public ResultBean getTheory(TheoryLessonStoreDto theoryLesson, boolean isReview);
+	ResultBean getTheory(TheoryLessonStoreDto theoryLesson, boolean isReview);
 	
-	public ResultBean getTheoryStores();
+	ResultBean getTheoryStores();
 	
-	public ResultBean getTheoryStudents(Student student);
+	ResultBean getTheoryStudents(Student student);
 	
-	public ResultBean addTheory(TheoryLesson theoryLesson, String stores);
+	ResultBean addTheory(TheoryLesson theoryLesson, String stores);
 	
-	public ResultBean editTheoryStudent(Integer theoryId, String[] ids, boolean isDel);
+	ResultBean editTheoryStudent(Integer theoryId, String[] ids, boolean isDel);
 	
-	public ResultBean updateTheory(TheoryLesson theoryLesson);
+	ResultBean updateTheory(TheoryLesson theoryLesson);
 	
-	public ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview);
+	ResultBean addCoachStudent(CoachStudent coachStudent, Boolean isreview);
 	
-	public CoachStudent getCoachStudent(CoachStudent coachStudent);
+	CoachStudent getCoachStudent(CoachStudent coachStudent);
 	
-	public ResultBean addStudentPauseApply(StudentPauseApply apply);
+	ResultBean addStudentPauseApply(StudentPauseApply apply);
 	
-	public ResultBean updateStudentPauseApply(StudentPauseApply apply);
+	ResultBean updateStudentPauseApply(StudentPauseApply apply);
 	
-	public ResultBean listStudentPauseApply(StudentPauseApplyParam param);
+	ResultBean listStudentPauseApply(StudentPauseApplyParam param);
 	
-	public ResultBean getStudentPauseApply(StudentPauseApply apply);
+	ResultBean getStudentPauseApply(StudentPauseApply apply);
 	
-	public ResultBean getStudentPauseApplyByTransaction(StudentPauseApply apply);
+	ResultBean getStudentPauseApplyByTransaction(StudentPauseApply apply);
 
-	public ResultBean getStudentPauseApplyByStuId(StudentPauseApply apply);
+	ResultBean getStudentPauseApplyByStuId(StudentPauseApply apply);
 	
-	public String theoryLessonText(Integer theoryid, Integer type);
+	String theoryLessonText(Integer theoryid, Integer type);
 	
-	public ResultBean updateStudentPauseApplyStatus(StudentPauseApply apply);
+	ResultBean updateStudentPauseApplyStatus(StudentPauseApply apply);
 	
-	public List<TheoryStudentExport> theoryStudentExport(TheoryStudent theoryStudent);
+	List<TheoryStudentExport> theoryStudentExport(TheoryStudent theoryStudent);
 
-	public List<Student> getCoachStudentList(CoachStudent coachStudent);
+	List<Student> getCoachStudentList(CoachStudent coachStudent);
 
-	public ResultBean getTransferList(TransferStudent transferStudent, Boolean isChosen);
+	ResultBean getTransferList(TransferStudent transferStudent, Boolean isChosen);
 	
-	public ResultBean getTransfer(TransferStudent transferStudent);
+	ResultBean getTransfer(TransferStudent transferStudent);
 	
-	public ResultBean addTransfer(TransferStudent transferStudent);
+	ResultBean addTransfer(TransferStudent transferStudent);
 	
-	public ResultBean editTransfer(TransferStudent transferStudent);
+	ResultBean editTransfer(TransferStudent transferStudent);
 	
-	public ResultBean getTStudentList(Student student);
+	ResultBean getTStudentList(Student student);
 
-	public ResultBean getStudentCoach(StudentCoachDTO studetCoach);
+	ResultBean getStudentCoach(StudentCoachDTO studetCoach);
 
-	public void saveStudentStatusLog(StudentStatusLog statusLog);
+	void saveStudentStatusLog(StudentStatusLog statusLog);
 
-	public void saveLogBatch(List <StudentStatusLog> list);
+	void saveLogBatch(List <StudentStatusLog> list);
 
-	public void updateStudentBatch(List <Student> list);
+	void updateStudentBatch(List <Student> list);
 
-	public ResultBean getChangeLogList(StudentStatusLog statusLog);
+	ResultBean getChangeLogList(StudentStatusLog statusLog);
 	
-	public StudentMoney getStudentMoney(StudentMoney studentMoney);
+	StudentMoney getStudentMoney(StudentMoney studentMoney);
 
-	public ResultBean updateStudentMoney(StudentMoney studentMoney);
+	ResultBean updateStudentMoney(StudentMoney studentMoney);
 
 	List <StudentMoneyDTO> selectOweList(StudentMoneyDTO dto);
 
-	public ResultBean calcMoney(StudentCalcMoneyDTO dto);
+	ResultBean calcMoney(StudentCalcMoneyDTO dto);
 
-	public List<StudentApplyStat> selectApplyStat(StudentApplyStat studentApplyStat);
+	List<StudentApplyStat> selectApplyStat(StudentApplyStat studentApplyStat);
 
-	public void updateReceiptStudentMoney(List<StudentMoney> list, String ids);
+	void updateReceiptStudentMoney(List<StudentMoney> list, String ids);
 }
