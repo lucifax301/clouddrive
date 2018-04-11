@@ -15,24 +15,28 @@
 							<option value="0">全部</option>
 						</select>
 					</div>
+					<!--
 					<label class="row-label">带教职务：</label>
 					<div class="row-input">
 						<select name="jobid" id="job" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="teachjoblist" data-optiontype="id,job">
 							<option value="0">全部</option>
 						</select>
 					</div>
+					-->
 					<label class="row-label">带教车型：</label>
 					<div class="row-input">
 						<select name="teachcartype" id="teachcartype" data-toggle="selectpicker" data-width="100%" size="15" data-datajson="cartypelist" data-optiontype="type,type">
 							<option value="0">全部</option>
 						</select>
 					</div>
+					<!--
 					<label class="row-label">带教类型：</label>
 					<div class="row-input">
 						<select name="teachtypeid" id="teachtype" data-toggle="selectpicker" size="15" data-width="100%" data-datajson="teachtypelist" data-optiontype="id,type">
 							<option value="0">全部</option>
 						</select>
 					</div>
+					-->
 					<label class="row-label">供职状态：</label>
 
 					<div class="row-input">
@@ -84,7 +88,8 @@
 		list: $.CurrentNavtab.find('#datagrid-list').datagrid({
 			gridTitle: '教练列表',
 			toolbarItem: 'add,edit',
-			toolbarCustom: "<button class='btn-blue' id='modifyBtn' style='' data-privilege='030101_datagrid-list_11' onclick='coach_list.batchmodify()'>批量修改</button> <button class='btn-blue' id='modifyBtn' style='' data-privilege='030101_datagrid-list_12' onclick='coach_list.applymodify()'>申请修改</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(1)' >正常分配</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(2)'>暂停分配</button> <button class='btn-blue' id='modifyBtn' data-privilege='030101_datagrid-list_15' onclick='coach_list.setemploystatus(1)' >离职</button>",
+			//toolbarCustom: "<button class='btn-blue' id='modifyBtn' style='' data-privilege='030101_datagrid-list_11' onclick='coach_list.batchmodify()'>批量修改</button> <button class='btn-blue' id='modifyBtn' style='' data-privilege='030101_datagrid-list_12' onclick='coach_list.applymodify()'>申请修改</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(1)' >正常分配</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(2)'>暂停分配</button> <button class='btn-blue' id='modifyBtn' data-privilege='030101_datagrid-list_15' onclick='coach_list.setemploystatus(1)' >离职</button>",
+			toolbarCustom: "<button class='btn-blue' id='modifyBtn' style='' data-privilege='030101_datagrid-list_11' onclick='coach_list.batchmodify()'>批量修改</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(1)' >正常分配</button> <button class='btn-blue' data-privilege='030101_datagrid-list_13' onclick='coach_list.setTeachState(2)'>暂停分配</button> <button class='btn-blue' id='modifyBtn' data-privilege='030101_datagrid-list_15' onclick='coach_list.setemploystatus(1)' >离职</button>",
 			paging: {
 				pageSize: 15,
 				selectPageSize: '15,50,100,500'
@@ -127,22 +132,26 @@
 					label: '片区',
 					align: 'center',
 					render: formatAreaCell
-				}, {
-					name: 'jobid',
-					label: '带教职务',
-					align: 'center',
-					render:function(value){
-						return clz.configRender({name:'teachjoblist',val:value,key:'id',dataname:'job'})
-					}
-				}, {
+				}, 
+//				{
+//					name: 'jobid',
+//					label: '带教职务',
+//					align: 'center',
+//					render:function(value){
+//						return clz.configRender({name:'teachjoblist',val:value,key:'id',dataname:'job'})
+//					}
+//				}, 
+				{
 					name: 'teachcartype',
 					label: '带教车型',
 					align: 'center'
-				}, {
-					name: 'teachtype',
-					label: '带教类型',
-					align: 'center'
-				}, {
+				}, 
+//				{
+//					name: 'teachtype',
+//					label: '带教类型',
+//					align: 'center'
+//				}, 
+				{
 					name: 'carno',
 					label: '教练车',
 					align: 'center'

@@ -1,9 +1,6 @@
 package cn.com.liliyun.market.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.PageInfo;
-
 import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
-import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.common.util.PageUtil;
 import cn.com.liliyun.market.mapper.CustomerRecordMapper;
 //import cn.com.liliyun.market.mapper.CustomerStatMapper;
@@ -26,6 +20,8 @@ import cn.com.liliyun.market.model.CustomerStat;
 import cn.com.liliyun.market.model.PotentialCustomer;
 import cn.com.liliyun.market.service.CustomerService;
 import cn.com.liliyun.user.model.User;
+
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {

@@ -140,7 +140,7 @@
 					</div>
 				</div>
 			</div>
-
+			<!--
 			<div class="widget-box">
 				<div class="widget-title">
 					<span class="icon"> <i class="fa fa-th"></i> </span>
@@ -235,7 +235,7 @@
 					</div>
 				</div>
 			</div>
-
+			-->
 			<div class="widget-box">
 				<div class="widget-title">
 					<span class="icon"> <i class="fa fa-th"></i> </span>
@@ -244,7 +244,7 @@
 				<div class="widget-content nopadding">
 					<div class="bjui-row col-3">
 
-						
+						<!--
 						<label class="row-label">带教类型</label>
 						<div class="row-input">
 							<select name="teachtypeid" data-toggle="selectpicker" data-width="100%" data-datajson="teachtypelist" data-optiontype="id,type">
@@ -259,6 +259,7 @@
 
 							</select>
 						</div>
+						-->
 						<label class="row-label">带教车型</label>
 						<div class="row-input">
 							<select name="teachcartype" data-toggle="selectpicker" data-width="100%" data-datajson="cartypelist" data-optiontype="type,type">
@@ -361,10 +362,10 @@
 						coach_object.areaid = $(this).val()
 						coach_edit.showstore(coach_object, info)
 					});
-					if(data.fingerprint) {
-						$.CurrentNavtab.find("#viewFingerprint").attr("src", "http://obqfnhv9x.bkt.clouddn.com/" + data.fingerprint);
-						$.CurrentNavtab.find('#uploadDiv').hide();
-					}
+//					if(data.fingerprint) {
+//						$.CurrentNavtab.find("#viewFingerprint").attr("src", "http://obqfnhv9x.bkt.clouddn.com/" + data.fingerprint);
+//						$.CurrentNavtab.find('#uploadDiv').hide();
+//					}
 				}
 			})
 		},

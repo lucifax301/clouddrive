@@ -1,6 +1,7 @@
 package cn.com.liliyun.common.interceptor;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -18,8 +19,8 @@ import cn.com.liliyun.common.trace.Trace;
  * @author lilixc
  * 不能嵌套拦截
  */
-//@Aspect
-//@Component
+@Aspect
+@Component
 public class ServiceInterceptor {
 
 	//拦截所有Servie注解的类的方法
@@ -31,7 +32,7 @@ public class ServiceInterceptor {
 	public void beforeMethod(JoinPoint joinPoint) {
 		MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
 		Method method = methodSignature.getMethod();
-		System.out.println("beforeMethod"+method.getName());
+		System.out.println("beforeMethod "+method.getName()+" at time:"+new Date());
 		InnerTrace innerTrace =Trace.createTrace();
 		innerTrace.setMethodName(method.getName());
 		System.out.println(innerTrace);
@@ -59,7 +60,7 @@ public class ServiceInterceptor {
     public void afterMethod(JoinPoint joinPoint) {
     	MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
 		Method method = methodSignature.getMethod();
-		System.out.println("afterMethod"+method.getName());
+		System.out.println("endMethod "+method.getName()+" at time:"+new Date());
 		InnerTrace innerTrace = Trace.endTrace();
 		System.out.println(innerTrace);
     }

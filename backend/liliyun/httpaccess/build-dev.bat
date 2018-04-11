@@ -7,7 +7,6 @@ call mvn  package -Plocaldev -DskipTests --settings e:\settings.xml
 
 xcopy /Y /S target\classes\cn target\httpaccess\WEB-INF\classes\cn
 xcopy /Y /S ..\coach\target\classes\cn target\httpaccess\WEB-INF\classes\cn
-xcopy /Y /S ..\coach\target\classes\com target\httpaccess\WEB-INF\classes\com
 xcopy /Y /S ..\student\target\classes\cn target\httpaccess\WEB-INF\classes\cn
 xcopy /Y /S ..\trainorg\target\classes\cn target\httpaccess\WEB-INF\classes\cn
 xcopy /Y /S ..\user\target\classes\cn target\httpaccess\WEB-INF\classes\cn

@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.EncryptUtil;
@@ -177,14 +178,20 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(password);
 		user = userMapper.selectOne(user);
 		if (user != null) {
+			try{
 			String dblink = user.getDblink();
+			RequestContext.putValue(ConstantUtil.USER_SESSION, user);
 			Role role = new Role();
 			role.setDblink(dblink);
 			role.setId(user.getRoleid());
 			role = privilegeMapper.getRole(role);
 			user.setRolename(role.getRolename());
-			List <Privilege> privileges = privilegeService.getUserPrivilegeList(user); //privilegeMapper.listUserPrivilege(user);
-			user.setPrivileges(privileges);
+			
+				
+				List <Privilege> privileges = privilegeService.getUserPrivilegeList(user); //privilegeMapper.listUserPrivilege(user);
+				user.setPrivileges(privileges);
+			
+			
 			if (user.getAreaid() != null) {
 				Area area = new Area();
 				area.setDblink(dblink);
@@ -221,7 +228,10 @@ public class UserServiceImpl implements UserService {
 				}
 				
 			}
-		}
+			}finally{
+				RequestContext.set(null);
+			}
+		}//end user not null
 		return user;
 	}
 

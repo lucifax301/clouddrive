@@ -30,19 +30,19 @@ public class ControllerInterceptor {
 
 	@Before("controllerAspect()")
 	public void injectDbInfo(JoinPoint joinPoint) {
-		System.out.println("已经记录下操作日志@Before 方法执行前");
+		System.out.println("controllerAspect 已经记录下操作日志@Before 方法执行前");
 		
 	}
 	
 	@Around("controllerAspect()")
-    public void around(ProceedingJoinPoint pjp) throws Throwable{
-		System.out.println("已经记录下操作日志@Around 方法执行前");
+    public Object around(ProceedingJoinPoint pjp) throws Throwable{
+		System.out.println("controllerAspect 已经记录下操作日志@Around 方法执行前");
 		 MethodSignature methodSignature = (MethodSignature)pjp.getSignature();
 		 Method method = methodSignature.getMethod();
 		
 		try{
 			
-        pjp.proceed();
+         return pjp.proceed();
 		}catch(Throwable e){
 			System.out.println("############cat exception");
 			ActionDescription description = (ActionDescription)method.getAnnotation(ActionDescription.class);
@@ -54,6 +54,6 @@ public class ControllerInterceptor {
 
     @After("controllerAspect()")
     public void after() {
-        System.out.println("已经记录下操作日志@After 方法执行后");
+        System.out.println("controllerAspect 已经记录下操作日志@After 方法执行后");
     }
 }

@@ -62,6 +62,7 @@
 	
 	<!-- 用户登录验证拦截器-->
  	<mvc:interceptors>
+ 		<!-- before controller aop -->
  		<mvc:interceptor>
             <mvc:mapping path="/**" />   
 

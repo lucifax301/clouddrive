@@ -68,9 +68,9 @@ public class DblinkInterceptor {
 	}
 	
 	@Around("controllerAspect()")
-    public void around(ProceedingJoinPoint pjp) throws Throwable{
+    public Object around(ProceedingJoinPoint pjp) throws Throwable{
 		System.out.println("dblink已经记录下操作日志@Around 方法执行前");
-        pjp.proceed();
+        return pjp.proceed();
        
     }
 

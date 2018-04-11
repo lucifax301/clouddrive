@@ -103,11 +103,11 @@ public class RedisUtil
         });
     }
     
-    public <T> Boolean setNX(final byte[] key, final byte[] value,final int liveSecond)
+    public Boolean setNX(final byte[] key, final byte[] value,final int liveSecond)
     {
         return redisTemplate.execute(new RedisCallback<Boolean>()
         {
-            @SuppressWarnings("unchecked")
+            
 			@Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException
             {

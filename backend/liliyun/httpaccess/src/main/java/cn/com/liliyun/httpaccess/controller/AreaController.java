@@ -45,8 +45,8 @@ public class AreaController extends BaseController {
 	//查询所有正常状态的片区,不分页
 	@RequestMapping(value="/list")
 	public ResultBean list(Area area) {
-		area.setStatus((byte)1);
-		area.setPageNo(-1);
+//		area.setStatus((byte)1);
+//		area.setPageNo(-1);
 		return areaService.selectList(area);
 	}
 	

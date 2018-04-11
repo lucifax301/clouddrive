@@ -16,22 +16,23 @@
 
 	<!-- 支持标注 -->
 	<context:annotation-config />
-	
+	<aop:aspectj-autoproxy/>
 	<context:component-scan base-package="cn.com.liliyun">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
-
+	<!-- dao aop -->
 	<bean id="daoInterceptor" class="cn.com.liliyun.common.interceptor.DaoInterceptor"></bean>
 	<bean id="daoAspect" class="cn.com.liliyun.common.interceptor.DaoAspect"></bean>
 	<aop:config>
 		<!--  <aop:pointcut expression="execution(public * cn.com.liliyun.student.mapper.TheoryLessonMapper.selectByPrimaryKey(..))" id="testpointcut"/>-->
-		<aop:pointcut expression="execution(public * cn.com.liliyun.*.mapper.*.*(..))" id="testpointcut"/>
+		<aop:pointcut expression="execution(public * cn.com.liliyun.*.mapper.*.*(..))" id="daopointcut"/>
 		<!--  
 		<aop:aspect id="testAspect" ref="daoAspect">
 		<aop:before method="before"  pointcut-ref="testpointcut"/>
 		</aop:aspect>
 		-->
-		<aop:advisor advice-ref="daoInterceptor" pointcut-ref="testpointcut"/>
+		<aop:advisor advice-ref="daoInterceptor" pointcut-ref="daopointcut"/>
 	</aop:config>
-	
+	<!-- service method aop -->
+	<bean class="cn.com.liliyun.common.util.TraceBeanPostProcessor"/>
 </beans>
