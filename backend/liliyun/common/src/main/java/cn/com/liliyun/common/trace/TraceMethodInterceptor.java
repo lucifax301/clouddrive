@@ -14,14 +14,14 @@ public class TraceMethodInterceptor implements MethodInterceptor {
 		// TODO Auto-generated method stub
 		
 		try{
-			System.out.println("beforeMethod "+method.getName()+" at time:"+new Date());
+			System.out.println("TraceMethodInterceptor beforeMethod "+method.getName()+" at time:"+new Date());
 			InnerTrace innerTrace =Trace.createTrace();
 			innerTrace.setMethodName(method.getName());
 			Object obj = methodProxy.invokeSuper(o, objects);
 		
 			return obj;
 		}finally{
-			System.out.println("endMethod "+method.getName()+" at time:"+new Date());
+			System.out.println("TraceMethodInterceptor endMethod "+method.getName()+" at time:"+new Date());
 			InnerTrace innerTrace = Trace.endTrace();
 		}
 	}

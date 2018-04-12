@@ -197,15 +197,16 @@ public class BaseController {
 		return rb;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T> T getBean(Class<T> cls){
-		T bean =(T) services.get(cls);
-		if(bean==null){
-			bean = ApplicationContextUtil.getBean(cls);
-			services.putIfAbsent(cls, bean);
-		}
-		return bean;
-	}
-	
-	private ConcurrentHashMap<Class<?>,Object> services = new ConcurrentHashMap<Class<?>,Object>(2);
+//	@SuppressWarnings("unchecked")
+//	public <T> T getBean(Class<T> cls){
+//		T bean =(T) services.get(cls);
+//		if(bean==null){
+//			bean = ApplicationContextUtil.getBean(cls);
+//			services.putIfAbsent(cls, bean);
+//		}
+//		return bean;
+//	}
+//	
+//	
+//	private ConcurrentHashMap<Class<?>,Object> services = new ConcurrentHashMap<Class<?>,Object>(2);
 }
