@@ -66,7 +66,7 @@
  		<mvc:interceptor>
             <mvc:mapping path="/**" />   
 
-            <mvc:exclude-mapping path="/open/**" />
+            
             <bean class="cn.com.liliyun.httpaccess.interceptor.ActionInterceptorAdapter" />       
             
         </mvc:interceptor>

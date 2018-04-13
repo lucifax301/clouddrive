@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.liliyun.car.mapper.FuelMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.liliyun.car.model.Fuel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="cuid" property="cuid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, status
+  </sql>
+  
+  <select id="list" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.Fuel" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_fuel
+    where isdel=0
+  </select>
+  
+  <select id="getByName" resultMap="BaseResultMap" parameterType="cn.com.liliyun.car.model.Fuel" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_fuel
+    where name=#{name} and isdel=0
+  </select>
+  
+  
+  <update id="delete" parameterType="cn.com.liliyun.car.model.Fuel" >
+    update t_fuel set isdel=1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="cn.com.liliyun.car.model.Fuel" >
+    insert into t_fuel (name, cuid, ctime)
+    values (#{name}, #{cuid},now())
+  </insert>
+  
+  
+  <update id="updateStatus" parameterType="cn.com.liliyun.car.model.Fuel" >
+    update t_fuel
+    set status = #{status,jdbcType=INTEGER}
+      
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="update" parameterType="cn.com.liliyun.car.model.Fuel" >
+    update t_fuel
+    set name = #{name}
+      
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
