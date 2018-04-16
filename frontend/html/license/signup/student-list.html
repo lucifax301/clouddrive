@@ -87,10 +87,10 @@
             {name:'applydate',label:'报名时间',align:'center',render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}},
             {name:'classid',label:'报考班别',align:'center',render:function(value,data){return clz.configRender({name:'classlist',val:value,key:'id',dataname:'name'})}},
             {name:'traintype',label:'准驾车型',align:'center'},
-            {name:'applyexam',label:'学车状态',align:'center',render:function(value,data) {
-                return studentStatus(data.applyexam,data.applystatus);
-            }},
-            {name:'status',label:'学员状态',align:'center',render:function(value,data){return clz.configRender({name:'studentstatuslist',val:value,key:'id',dataname:'name'})}}
+            //{name:'applyexam',label:'学车状态',align:'center',render:function(value,data) {
+            //    return studentStatus(data.applyexam,data.applystatus);
+            //}},
+            {name:'status',label:'学员状态',align:'center',type:'select', items: statusdata, render:function(value,data){return clz.configRender({name:'studentstatuslist',val:value,key:'id',dataname:'name'})}}
         ],
         editMode: {navtab:{id:'navtab-student',title:'学员信息',onClose:function(){license_signup_list.datagrid('refresh',true)}}},
         add_url : "html/license/signup/student-add.html",

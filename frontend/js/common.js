@@ -5,7 +5,7 @@
 
 
 
-var storedata,areadata,classdata,businessdata,roledata,btndata,subjectdata;
+var storedata,areadata,classdata,businessdata,roledata,btndata,subjectdata,statusdata;
 $(window).ready(function(){
     //获取菜单
 
@@ -201,6 +201,30 @@ $(window).ready(function(){
         type : 'GET',
         okCallback: function(json, options) {
             subjectdata = json.result.list;
+        }
+    });
+    
+    BJUI.ajax('doajax', {
+        url: config.openBasePath + "studentstatus/list?pageNo=-1",
+        type : 'GET',
+        okCallback: function(json, options) {
+            tmpstatusdata = json.result.list;
+                json=new Array()
+
+            for(var i = 0;i<tmpstatusdata.length;i++){
+                var skey=tmpstatusdata[i].id;
+                var sval=tmpstatusdata[i].name;
+                console.log('skey:'+skey);
+                var ojson={};
+                ojson[skey.toString()]=sval;
+                console.log(ojson);
+                //json.push({
+                //    skey:sval
+                //})
+                json.push(ojson)
+            }
+
+            statusdata=json
         }
     });
 

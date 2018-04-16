@@ -159,8 +159,8 @@ public class StudentServiceImpl extends CommonService implements StudentService 
 	@Autowired
 	private FlowService flowService;
 
-	@Value("${data.synch}")
-	private boolean DATA_SYNCH;
+//	@Value("${data.synch}")
+//	private boolean DATA_SYNCH;
 
 	@Override
 	public ResultBean addStudent(Student student) {
@@ -179,6 +179,7 @@ public class StudentServiceImpl extends CommonService implements StudentService 
         student.setStoreid(user.getStoreid());
         student.setCuid(user.getId());
         student.setCname(user.getRealname());
+        student.setStatus(1);
 
         //计算费用
         Classinfo classinfo = new Classinfo();

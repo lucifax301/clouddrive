@@ -87,6 +87,7 @@
         <result column="channel" property="channel" jdbcType="INTEGER"/>
         <result column="learncard" property="learncard" jdbcType="VARCHAR"/>
         <result column="xid" property="xid" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
 		id, stunum, inscode, cardtype, idcard, name, sex, qq, height, nationality, phone,
@@ -98,7 +99,7 @@
         contractmoney, isvalid, areaid, storeid, checktime, checkstatus, bussource, isinternal,
         infosource, remark, billname, billnum, billtype, posnum, couponnum, couponmoney,
         carddate, recuid, recname, stabletime, etabletime, learnstatus, islocal, iccard,
-        cname, mname, reccoachid, reccoachname, channel, learncard, xid
+        cname, mname, reccoachid, reccoachname, channel, learncard, xid,status
 	</sql>
 
     <sql id="Theory_Export_Column">
@@ -308,7 +309,7 @@
       learnstatus, islocal, iccard,
       cname, mname, reccoachid,
       reccoachname, channel,
-      learncard, xid)
+      learncard, xid,status)
     values (#{id,jdbcType=INTEGER}, #{stunum,jdbcType=VARCHAR}, #{inscode,jdbcType=CHAR},
       #{cardtype,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
       #{sex,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{height,jdbcType=INTEGER}, #{nationality,jdbcType=INTEGER},
@@ -336,7 +337,7 @@
       #{learnstatus,jdbcType=INTEGER}, #{islocal,jdbcType=INTEGER}, #{iccard,jdbcType=VARCHAR},
       #{cname,jdbcType=VARCHAR}, #{mname,jdbcType=VARCHAR}, #{reccoachid,jdbcType=INTEGER},
       #{reccoachname,jdbcType=VARCHAR}, #{channel,jdbcType=INTEGER},
-      #{learncard,jdbcType=VARCHAR}, #{xid,jdbcType=INTEGER})
+      #{learncard,jdbcType=VARCHAR}, #{xid,jdbcType=INTEGER},#{status,jdbcType=INTEGER})
 	</insert>
     <insert id="insertSelective" parameterType="cn.com.liliyun.student.model.Student"
             useGeneratedKeys="true" keyProperty="id">
@@ -597,6 +598,9 @@
             <if test="xid != null">
                 xid,
             </if>
+            <if test="status != null">
+                status,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -853,6 +857,9 @@
             </if>
             <if test="xid != null">
                 #{xid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -1111,6 +1118,9 @@
             <if test="xid != null">
                 xid = #{xid,jdbcType=INTEGER},
             </if>
+            <if test="status != null">
+                xid = #{status,jdbcType=INTEGER},
+            </if>
         </set>
         where
         <choose>
@@ -1207,7 +1217,8 @@
           reccoachname = #{reccoachname,jdbcType=VARCHAR},
           channel = #{channel,jdbcType=INTEGER},
           learncard = #{learncard,jdbcType=VARCHAR},
-          xid = #{xid,jdbcType=INTEGER}
+          xid = #{xid,jdbcType=INTEGER},
+          status = #{status,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
 	</update>
 

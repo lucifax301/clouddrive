@@ -70,7 +70,8 @@
 	var grid = $.CurrentNavtab.find('#transfer-list').datagrid({
 		gridTitle: '学员转店列表',
 		toolbarItem: '',
-		toolbarCustom: "<button class='btn-blue ml5' data-privilege='020204_datagrid-list_01' data-icon='plus' onclick='addTransfer()'>新增</button>",
+		//toolbarCustom: "<button class='btn-blue ml5' data-privilege='020204_datagrid-list_01' data-icon='plus' onclick='addTransfer()'>新增</button>",
+		toolbarCustom: "<button class='btn-blue ml5' data-icon='plus' onclick='addTransfer()'>新增</button>",
 		paging: { pageSize: 15, selectPageSize: '15,50,100,500' },
 		height: '75%',
 		showCheckboxcol: false,

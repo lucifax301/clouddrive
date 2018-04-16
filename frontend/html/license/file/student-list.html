@@ -114,9 +114,12 @@
     var license_file_list = $.CurrentNavtab.find('#datagrid-list').datagrid({
         gridTitle: '学员档案管理信息列表',
         toolbarCustom:
-        "<button data-privilege='020306_datagrid-list_11' class='btn-blue ml5' data-icon='edit' onclick='license_file.hanldefile()'>受理档案</button>" +
-        "<button data-privilege='020306_datagrid-list_12' class='btn-blue ml5' data-icon='edit' onclick='license_file.roadfile()'>路考档案</button>" +
-        "<button data-privilege='020306_datagrid-list_13' class='btn-blue ml5' data-icon='edit' onclick='license_file.studentfile()'>学员档案</button>",
+//      "<button data-privilege='020306_datagrid-list_11' class='btn-blue ml5' data-icon='edit' onclick='license_file.hanldefile()'>受理档案</button>" +
+//      "<button data-privilege='020306_datagrid-list_12' class='btn-blue ml5' data-icon='edit' onclick='license_file.roadfile()'>路考档案</button>" +
+//      "<button data-privilege='020306_datagrid-list_13' class='btn-blue ml5' data-icon='edit' onclick='license_file.studentfile()'>学员档案</button>",
+		"<button class='btn-blue ml5' data-icon='edit' onclick='license_file.hanldefile()'>受理档案</button>" +
+        "<button class='btn-blue ml5' data-icon='edit' onclick='license_file.roadfile()'>路考档案</button>" +
+        "<button class='btn-blue ml5' data-icon='edit' onclick='license_file.studentfile()'>学员档案</button>",
         paging: {pageSize: 15, selectPageSize: '15,50,100,500'},
         height: '80%',
         toolbarItem: '',

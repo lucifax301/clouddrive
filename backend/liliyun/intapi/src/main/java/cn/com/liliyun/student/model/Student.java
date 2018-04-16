@@ -66,6 +66,8 @@ public class Student extends BaseModel implements Serializable {
 	private Integer completetime;
 
 	private Integer recordtype;
+	
+	private Integer status;
 
 	private Integer applyexam;
 
@@ -224,6 +226,14 @@ public class Student extends BaseModel implements Serializable {
 	private String coachname;
 	
 	
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
 	public String getCoachname() {
 		return coachname;
