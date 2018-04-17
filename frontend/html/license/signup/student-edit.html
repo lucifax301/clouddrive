@@ -312,7 +312,11 @@
 				<div class="bjui-row col-4">
 					<label class="row-label">报名门店:</label>
 					<div class="row-input">
-						<input type="text" name="storename" readonly="">
+						<!--<input type="text" name="storename" readonly="">-->
+						<select id="storeid" disabled="true" name="storeid" 
+							data-toggle="selectpicker" data-width="100%" data-rule="required"
+								data-dataurl="/httpaccess/store/list?pageNo=-1" data-optiontype="id,name">
+						</select>
 					</div>
 					<label class="row-label">门店编号:</label>
 					<div class="row-input">
@@ -377,8 +381,8 @@
                     data.paydate = clz.filter.time({date:new Date(),type:'yyyy-MM-dd'});
                     data.ctime = clz.filter.time({date:new Date(),type:'yyyy-MM-dd'});
                     data.username = json.result.username;
-                    data.storename = json.result.storename;
-                    data.storenum = json.result.storenum;
+                    //data.storename = json.result.storename;
+                    //data.storenum = json.result.storenum;
                     formdata = data;
                 }
             });

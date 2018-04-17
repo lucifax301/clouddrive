@@ -169,25 +169,6 @@
 					label: '带教状态',
 					align: 'center',
 					render: teachstate_status
-				},{
-					name: 'coachnum',
-					label: '送审状态',
-					align: 'center',
-					render: function(value){
-						if(value!=''){
-							return '审核过'
-						}else{
-							return '未审核'
-						}
-					}
-				},{
-					name: 'coachnum',
-					label: '操作',
-					align: 'center',
-					render: function(value,data){
-						//return "<button class='btn-blue' style=''  onclick='coach_list.dosync("+JSON.stringify(data)+")'>审核</button>";
-						return "";
-					}
 				}
 
 			],
@@ -318,17 +299,6 @@
 
 				}
 			})
-		},
-		dosync:function(info){
-			BJUI.ajax('doajax', {
-									url: config.openBasePath + "/sync/onecoach",
-									loadingmask: true,
-									data: info,
-									okCallback: function(json, options) {
-										BJUI.alertmsg('ok', '提交成功！', {})
-										
-									}
-								})
 		},
 		applymodify: function() {
 			var data = coach_list.list.data('selectedDatas');
