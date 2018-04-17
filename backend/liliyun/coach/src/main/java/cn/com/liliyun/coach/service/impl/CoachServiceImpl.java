@@ -124,15 +124,16 @@ public class CoachServiceImpl extends CommonService implements CoachService {
 			return r;
 		}
 
-		Coach coa = new Coach();
-		
-		coa.setDrilicence(coach.getDrilicence());
-		List listd = coachMapper.selectByterm(coa);
-		if (listd.size() > 0) {
-			r.setCode(3);
-			r.setMsg("驾驶证号码已存在!");
-			return r;
-		}
+		//comment 驾驶证验证取消 20180417  
+//		Coach coa = new Coach();
+//		
+//		coa.setDrilicence(coach.getDrilicence());
+//		List listd = coachMapper.selectByterm(coa);
+//		if (listd.size() > 0) {
+//			r.setCode(3);
+//			r.setMsg("驾驶证号码已存在!");
+//			return r;
+//		}
 
 		Coach coac = new Coach();
 		

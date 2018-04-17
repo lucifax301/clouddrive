@@ -18,6 +18,7 @@ import cn.com.liliyun.common.model.RequestContext;
 import cn.com.liliyun.common.model.ResultBean;
 import cn.com.liliyun.common.util.ConstantUtil;
 import cn.com.liliyun.common.util.GsonUtil;
+import cn.com.liliyun.common.util.HttpConstant;
 import cn.com.liliyun.httpaccess.util.DevProperties;
 import cn.com.liliyun.user.model.User;
 import cn.com.liliyun.user.service.UserService;
@@ -135,6 +136,7 @@ public class PrivilageInterceptor extends HandlerInterceptorAdapter {
 	
 	private void printJson(HttpServletResponse response,String msg, Exception ex) {
 		ResultBean rb = new ResultBean(msg);
+		rb.setCode(HttpConstant.NEED_LOGIN_COCE);
 		response.setContentType("application/json"); 
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = null;
