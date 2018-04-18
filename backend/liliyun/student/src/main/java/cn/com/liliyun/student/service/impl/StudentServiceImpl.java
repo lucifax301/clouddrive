@@ -323,9 +323,13 @@ public class StudentServiceImpl extends CommonService implements StudentService 
 
 	@Override
 	public ResultBean updateStudent(Student student) {
-	    
-        studentMapper.updateByPrimaryKeySelective(student);
-		return new ResultBean();
+		Student exist = studentMapper.selectByPrimaryKey(student);
+		if(exist!=null){
+			studentMapper.updateByPrimaryKeySelective(student);
+			return new ResultBean();
+		}else{
+			return new ResultBean(ConstantUtil.STUDENT_NOTEXIST);
+		}
 	}
 
 	@Override

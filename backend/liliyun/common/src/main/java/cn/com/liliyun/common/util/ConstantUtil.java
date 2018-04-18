@@ -65,4 +65,6 @@ public class ConstantUtil {
 	public static final int STAFF_CS=5;
 	//顶班客服
 	public static final int STAFF_VICE_CS=6;
+	
+	public static final String STUDENT_NOTEXIST = "学员不存在";
 }
