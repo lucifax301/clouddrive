@@ -1,0 +1,92 @@
+<div class="bjui-pageContent">
+    <form class="datagrid-edit-form" data-toggle="validate" id="view-form">
+		
+        <div class="bjui-row col-4" >	
+
+				<div class="row-label" style="width: 20px;margin-left: 30px;"></div>
+				<label class="row-label">学员:</label>
+				<div class="row-input" >
+					<input type="text" name="name" id="studentname"  data-width="100%" readonly="readonly">
+				</div>
+				<br>
+	
+				<div class="row-label" style="width: 20px;margin-left: 30px;"></div>
+				<label class="row-label">学车进度:</label>
+				<div class="row-input"  >
+					<select name="status" id="status" data-toggle="selectpicker" data-width="100%"
+		            data-datajson="studentstatuslist" data-optiontype = "id,name">
+		            </select>
+					
+				</div>
+				<br>
+				
+				
+				
+		</div>
+		<input type="hidden" id="id" name="id"/>
+	</form>
+
+</div>
+<div class="pl30 pr40">			
+			
+</div>
+     
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+		<li><button type="button" class="btn-default" data-icon="save" onclick="statussetting()">保存</button></li>
+    </ul>
+</div>
+<script>
+	
+	var data=clz.getWindowJson();
+	console.log("student")
+	console.log(data)
+	clz.CurrentDom_init({
+		current: 'Dialog',
+		url: config.openBasePath + 'student/edit',
+		form_name: 'view-form',
+		table_name: 'datagrid-list',
+		data: data
+		
+        
+	})
+	
+	
+	function statussetting(){
+		//if($.CurrentDialog.find('#view-form').isValid()){
+//		var ids="";
+//		$.each(data,function(j,n){
+//			ids=ids+ n.coachid + ","	
+//		})
+//		if(ids!=""){
+//			ids=ids.substr(0,ids.length-1);
+//		}
+//		console.log(ids);
+//		$("#ids").val(ids);
+		//var data1 = clz.parseForm($.CurrentDialog.find("#view-form"));
+		var data1 = $.CurrentDialog.find("#view-form").serializeArray();
+		BJUI.alertmsg('confirm', '确认提交修改吗？', {
+			displayPosition:'middlecenter' ,
+            okCall: function() {
+				BJUI.ajax('doajax', {
+                    url: config.openBasePath + "student/statusupdate",
+                    loadingmask: true,
+					data: data1,
+                    okCallback: function(json, options) {
+                        //console.log(json.result.list)
+						BJUI.alertmsg('ok', '修改成功！', {})
+						BJUI.dialog('closeCurrent');
+						//grid.datagrid('refresh',true);
+                    }
+                })
+			}
+		})
+		}
+	//}
+	
+	
+	
+</script>
+    

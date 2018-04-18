@@ -91,6 +91,12 @@ public class StudentController extends ExportController {
 		
 	}
 	
+	@RequestMapping(value="/statusupdate")
+	public ResultBean statusupdate(HttpServletRequest request,Student student){
+		return studentService.updateStudent(student);
+		
+	}
+	
 	//删除
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	public ResultBean delStudent(Student student){

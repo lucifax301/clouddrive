@@ -66,46 +66,75 @@
 </form>
 <table id="datagrid-list" class="table table-bordered" data-tabprivilege="datagrid-list"></table>
 <script type="text/javascript">
-	var license_signup_list = $.CurrentNavtab.find('#datagrid-list').datagrid({ 
-        gridTitle : '学员报名信息列表',
-        toolbarItem: 'add',
-        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
-        height: '80%',
-        showCheckboxcol: true,
-        showToolbar: true,
-        dataUrl: config.openBasePath + 'student/list',
-        columns: [
-            {name:'name',label:'学员姓名',align:'center',render:function(value, data){
-                return "<a href='html/common/student/student-view.html' data-toggle='navtab' data-options='{id:\"student-view-table"+data.id+"\" , title:\"查看学员信息\"}' data-more='" + JSON.stringify(data) + "'>" + value + "</a>"
-            }},
-           // {name:'id',label:'学员编号',align:'center'},
-            {name:'idcard',label:'证件号码',align:'center'},
-            {name:'phone',label:'手机号码',align:'center'},
-//           {name:'flownum',label:'流水号',align:'center'},
-            {name:'areaid',label:'片区',align:'center',render:function(value,data){return clz.configRender({name:'arealist',val:value,key:'id',dataname:'name'})}},
-            {name:'storeid',label:'门店',align:'center',render:function(value,data){return clz.configRender({name:'storelist',val:value,key:'id',dataname:'name'})}},
-            {name:'applydate',label:'报名时间',align:'center',render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}},
-            {name:'classid',label:'报考班别',align:'center',render:function(value,data){return clz.configRender({name:'classlist',val:value,key:'id',dataname:'name'})}},
-            {name:'traintype',label:'准驾车型',align:'center'},
-            //{name:'applyexam',label:'学车状态',align:'center',render:function(value,data) {
-            //    return studentStatus(data.applyexam,data.applystatus);
-            //}},
-            {name:'status',label:'学员状态',align:'center',type:'select', items: statusdata, render:function(value,data){return clz.configRender({name:'studentstatuslist',val:value,key:'id',dataname:'name'})}}
-        ],
-        editMode: {navtab:{id:'navtab-student',title:'学员信息',onClose:function(){license_signup_list.datagrid('refresh',true)}}},
-        add_url : "html/license/signup/student-add.html",
-        edit_url: "html/license/signup/student-edit.html",
-        delUrl : config.openBasePath + 'student/delete',
-		delPK : 'id',
-		afterSave:function() {
-			license_signup_list.datagrid('refresh',true);
-		},
-        beforeEdit : function() {
-            window.student_object = license_signup_list.data('selectedDatas')  == null ? null : license_signup_list.data('selectedDatas')[0];
-            return true;
-        },
-		afterDelete:function() {
-			license_signup_list.datagrid('refresh',true);
+	var license_signup_list = {
+		list: $.CurrentNavtab.find('#datagrid-list').datagrid({ 
+	        gridTitle : '学员报名信息列表',
+	        toolbarItem: 'add,edit',
+	        toolbarCustom: "<button class='btn-blue' id='modifyBtn' style=''  onclick='license_signup_list.statusmodify()'>进度修改</button>",
+	        paging: {pageSize:15, selectPageSize:'15,50,100,500'},
+	        height: '80%',
+	        showCheckboxcol: true,
+	        showToolbar: true,
+	        dataUrl: config.openBasePath + 'student/list',
+	        columns: [
+	            {name:'name',label:'学员姓名',align:'center',render:function(value, data){
+	                return "<a href='html/common/student/student-view.html' data-toggle='navtab' data-options='{id:\"student-view-table"+data.id+"\" , title:\"查看学员信息\"}' data-more='" + JSON.stringify(data) + "'>" + value + "</a>"
+	            }},
+	           // {name:'id',label:'学员编号',align:'center'},
+	            {name:'idcard',label:'证件号码',align:'center'},
+	            {name:'phone',label:'手机号码',align:'center'},
+	//           {name:'flownum',label:'流水号',align:'center'},
+	            {name:'areaid',label:'片区',align:'center',render:function(value,data){return clz.configRender({name:'arealist',val:value,key:'id',dataname:'name'})}},
+	            {name:'storeid',label:'门店',align:'center',render:function(value,data){return clz.configRender({name:'storelist',val:value,key:'id',dataname:'name'})}},
+	            {name:'applydate',label:'报名时间',align:'center',render:function(value){return clz.filter.time({date:value,type:'yyyy-MM-dd'})}},
+	            {name:'classid',label:'报考班别',align:'center',render:function(value,data){return clz.configRender({name:'classlist',val:value,key:'id',dataname:'name'})}},
+	            {name:'traintype',label:'准驾车型',align:'center'},
+	            //{name:'applyexam',label:'学车状态',align:'center',render:function(value,data) {
+	            //    return studentStatus(data.applyexam,data.applystatus);
+	            //}},
+	            {name:'status',label:'学员状态',align:'center',type:'select', items: statusdata, render:function(value,data){return clz.configRender({name:'studentstatuslist',val:value,key:'id',dataname:'name'})}}
+	        ],
+	        editMode: {navtab:{id:'navtab-student',title:'学员信息',onClose:function(){license_signup_list.list.datagrid('refresh',true)}}},
+	        add_url : "html/license/signup/student-add.html",
+	        edit_url: "html/license/signup/student-edit.html",
+	        delUrl : config.openBasePath + 'student/delete',
+			delPK : 'id',
+			afterSave:function() {
+				license_signup_list.list.datagrid('refresh',true);
+			},
+	        beforeEdit : function() {
+	            window.student_object = license_signup_list.list.data('selectedDatas')  == null ? null : license_signup_list.list.data('selectedDatas')[0];
+	            return true;
+	        },
+			afterDelete:function() {
+				license_signup_list.list.datagrid('refresh',true);
+			}
+	    }),
+    	statusmodify: function() {
+			var data = license_signup_list.list.data('selectedDatas');
+			console.log(data);
+			if(!clz.check_table_checked($.CurrentNavtab.find('#datagrid-list'))) {
+				BJUI.alertmsg('error', '没有选中数据！', {})
+				return
+			}
+			if(data.length > 1) {
+				BJUI.alertmsg('error', '请选择一个学员！', {})
+				return
+			}
+			console.log(data[0]);
+			clz.setWindowJson(data[0]);
+			BJUI.dialog({
+				id: 'apply_dialog',
+				width:640,
+				height: 480,
+				url: 'html/license/signup/status-setting.html',
+				title: '学车进度修改',
+				onClose: function() {
+					BJUI.navtab('refresh') //改为刷新本标签页
+				}
+
+			})
+
 		}
-    });
+		};
 </script>

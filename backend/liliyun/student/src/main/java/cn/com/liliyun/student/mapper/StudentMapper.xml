@@ -1119,7 +1119,7 @@
                 xid = #{xid,jdbcType=INTEGER},
             </if>
             <if test="status != null">
-                xid = #{status,jdbcType=INTEGER},
+                status = #{status,jdbcType=INTEGER},
             </if>
         </set>
         where
