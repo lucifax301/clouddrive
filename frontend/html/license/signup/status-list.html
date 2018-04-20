@@ -1,0 +1,46 @@
+<table id="status-datagrid" class="table table-bordered"></table>
+<script type="text/javascript">
+	var status_list = {
+		list(){ 
+			$.CurrentNavtab.find('#status-datagrid').datagrid({
+				showToolbar: false,
+				paging: false,
+				columns: [
+					{ name: 'name', label: '学员进度', align: 'center' }
+					
+				],
+				keys: {
+					children: 'children'
+				},
+				fieldSortable: false,
+				columnShowhide: false,
+				filterThead: true,
+				columnMenu: false,
+				isTree: 'name',
+				contextMenuH: false,
+				height: '98%',
+				addLocation: 'first',
+				showToolbar: true,
+				toolbarItem: 'add,|,edit ,|,cancel,|, del,|, save',
+				treeOptions: {
+					key: 'id',
+					expandAll: true,
+					add: true
+				},
+				afterSave: function() {
+					$.CurrentNavtab.find('#menu-datagrid').datagrid('refresh', true)
+				},
+				afterDelete: function() {
+					$.CurrentNavtab.find('#menu-datagrid').datagrid('refresh', true)
+				},
+				editUrl: config.openBasePath + 'studentstatus/edit',
+				editType: 'POST',
+				delPK: 'id',
+				delUrl: config.openBasePath + 'studentstatus/delete',
+				dataUrl: config.openBasePath + 'studentstatus/list?pageNo=-1'
+			})
+		}
+		
+	}
+	status_list.list();
+</script>
