@@ -27,7 +27,7 @@ public class InstantiationTracingBeanPostProcessor implements
 				if(service!=null){
 					Class<?> cls = context.getBean(name).getClass();
 					System.out.println("@@@@@@@bean"+cls);
-					Object newbean = TraceCGLibUtil.createBean(cls);
+					Object newbean = TraceCGLibUtil.createBean(cls,context.getBean(name));
 					
 				}
 				

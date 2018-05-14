@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Service;
 
 import cn.com.liliyun.common.annotation.ActionTrace;
+import cn.com.liliyun.common.util.ProxyObjectUtil;
 import cn.com.liliyun.common.util.TraceCGLibUtil;
 
 /**
@@ -30,7 +31,14 @@ public class TraceBeanPostProcessor implements BeanPostProcessor {
 		boolean isProxy = AopUtils.isAopProxy(bean);
 		if(isProxy){
 			Class<?> proxyedCls = bean.getClass().getSuperclass();
-			System.out.println("#################post bean:"+ proxyedCls);
+			System.out.println("#################post bean:"+ proxyedCls+" "+bean.getClass());
+			Object targetObject = null;
+			try {
+				targetObject = ProxyObjectUtil.getTarget(bean);
+				System.out.println(targetObject);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 			ActionTrace service = (ActionTrace) proxyedCls.getAnnotation(ActionTrace.class);
 			if(service!=null){
 				
@@ -41,7 +49,9 @@ public class TraceBeanPostProcessor implements BeanPostProcessor {
 				 * 正常循环依赖，而没有再次创建****ServiceCGLib$$*** 的情况下 bean和exposedObject都是原始被代理的实体
 				 * 但这里封装后exposedObject 是****ServiceCGLib$$***
 				 */
-				Object newbean = TraceCGLibUtil.createBean(proxyedCls);
+				Object newbean = TraceCGLibUtil.createBean(proxyedCls,targetObject);
+				System.out.println("@@@@@new newbean:"+newbean+" "+newbean.getClass()+" "+newbean.getClass().getSuperclass());
+				System.out.println("@@@@@new newbean:"+newbean);
 				return newbean;
 				
 			}
@@ -58,7 +68,7 @@ public class TraceBeanPostProcessor implements BeanPostProcessor {
 				 * 正常循环依赖，而没有再次创建****ServiceCGLib$$*** 的情况下 bean和exposedObject都是原始被代理的实体
 				 * 但这里封装后exposedObject 是****ServiceCGLib$$***
 				 */
-				Object newbean = TraceCGLibUtil.createBean(cls);
+				Object newbean = TraceCGLibUtil.createBean(cls,bean);
 				return newbean;
 				
 			}
